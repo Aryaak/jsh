@@ -210,5 +210,4 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Sirius' => App\Helpers\Sirius::class,
     ])->toArray(),
-
 ];

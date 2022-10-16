@@ -1,12 +1,3 @@
-/**
- * All this helper created by Fathul Husnan under Code: Sirius.
- * www.fathulhusnan.com
- * www.codesirius.com
- *
- * Created At  : 2021
- * Last Updated: August 31, 2022
- */
-
 // Useful Variable
 
 const Toast = Swal.mixin({
@@ -29,8 +20,8 @@ const Toast = Swal.mixin({
 
 const Confirm = Swal.mixin({
     customClass: {
-        confirmButton: 'btn btn-light-success',
-        cancelButton: 'btn btn-light-dark me-2',
+        confirmButton: 'btn btn-success btn-icon-text',
+        cancelButton: 'btn btn-info btn-icon-text me-2',
         title: 'confirm-title',
         popup: 'confirm-toast'
     },
@@ -44,8 +35,8 @@ const Confirm = Swal.mixin({
 
 const NegativeConfirm = Swal.mixin({
     customClass: {
-        confirmButton: 'btn btn-light-danger',
-        cancelButton: 'btn btn-light-dark me-2',
+        confirmButton: 'btn btn-danger btn-icon-text',
+        cancelButton: 'btn btn-info btn-icon-text me-2',
     },
     buttonsStyling: false,
     reverseButtons: true,
@@ -651,6 +642,12 @@ $(document).ready(function (e) {
     $(document).on('keyup input', '.to-unit', function (e) {
         const allowedKey = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         const input = $(this)
+        const decimals = $(this).parent().data('decimals') ?? 1
+        const ToUnit = new Intl.NumberFormat('id-ID', {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: decimals
+        });
         var lastCharacter = input.val().substr(input.val().length - 1) ?? 0;
 
         if (input.val() != '') {

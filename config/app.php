@@ -210,4 +210,12 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Sirius' => App\Helpers\Sirius::class,
     ])->toArray(),
+
+    /**
+     * -------------------------------------------------------------------------
+     * Custom app config
+     * -------------------------------------------------------------------------
+     */
+
+    'tiny_mce_key' => env('TINYMCE_API_KEY'),
 ];

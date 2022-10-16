@@ -61,6 +61,34 @@
 
                     <x-menu route="dashboard" icon="bx bx-home-circle">Dasbor</x-menu>
 
+                    {{-- Master Data --}}
+                    <x-menu-title>Master Data</x-menu-title>
+                    <x-menu route="dashboard" icon="bx bxs-building-house">Regional</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-building-house">Cabang</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-shapes">Jenis Jaminan</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-heart">Asuransi</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-discount">Rate Asuransi</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-user-account">Agen</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-discount">Rate Agen</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-bank">Bank</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-discount">Rate Bank</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-user-badge">Obligee</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-user-rectangle">Principle</x-menu>
+
+                    {{-- Transaksi --}}
+                    <x-menu-title>Transaksi</x-menu-title>
+                    <x-menu route="dashboard" icon="bx bxs-receipt">Surety Bond</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-bank">Bank Garansi</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-wallet">Pengeluaran</x-menu>
+
+                    {{-- Laporan --}}
+                    <x-menu-title>Laporan</x-menu-title>
+                    <x-menu route="dashboard" icon="bx bxs-file">Produksi</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-file">Keuangan</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-file">Sisa Agen</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-file">Pemasukan</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-file">Pengeluaran</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-file">Laba</x-menu>
                 </ul>
             </aside>
 
@@ -78,22 +106,18 @@
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         {{-- Breadcrumb --}}
                         @php
-                            $url = Request::url();
+                            $url = Str::replaceFirst(config('app.url'), '', Request::url());
                             $titles = explode('/', $url);
                             $real_titles = [];
                             $main_title = 'Dasbor';
-                            $after_admin = false;
                             foreach ($titles as $key => $title) {
-                                if ($after_admin) {
-                                    $title = Str::title(str_replace('-', ' ', $title));
-                                    if ($key != count($titles) - 1) {
-                                        $real_titles[] = $title;
-                                    }
-                                    else {
-                                        $main_title = $title;
-                                    }
+                                $title = Str::title(str_replace('-', ' ', $title));
+                                if ($key != count($titles) - 1) {
+                                    $real_titles[] = $title;
                                 }
-                                if ($title == 'admin') $after_admin = true;
+                                else {
+                                    $main_title = $title;
+                                }
                             }
                         @endphp
                         <div class="my-3">

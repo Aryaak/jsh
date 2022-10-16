@@ -1,7 +1,7 @@
 @isset ($link)
     <a href="{{ $link }}" {{ $attributes->merge(['class' => "btn btn-$face btn-$size"]) }}>
         @isset ($icon)
-            <i class="{{ $icon }} me-1"></i>
+            <i class="{{ $icon }} me-1 align-middle"></i>
         @endisset
         {{ $slot }}
     </a>

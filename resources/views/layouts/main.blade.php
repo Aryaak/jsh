@@ -75,11 +75,17 @@
                     <x-menu route="dashboard" icon="bx bxs-user-badge">Obligee</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-user-rectangle">Principle</x-menu>
 
-                    {{-- Transaksi --}}
-                    <x-menu-title>Transaksi</x-menu-title>
+                    {{-- Produk --}}
+                    <x-menu-title>Produk</x-menu-title>
                     <x-menu route="dashboard" icon="bx bxs-receipt">Surety Bond</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-bank">Bank Garansi</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-wallet">Pengeluaran</x-menu>
+
+                    {{-- Pengeluaran --}}
+                    <x-menu-title>Pengeluaran</x-menu-title>
+                    <x-menu route="dashboard" icon="bx bxs-wallet">Principle ke Cabang</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-wallet">Cabang ke Regional</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-wallet">Regional ke Asuransi</x-menu>
+                    <x-menu route="dashboard" icon="bx bxs-wallet">Cabang ke Agen</x-menu>
 
                     {{-- Laporan --}}
                     <x-menu-title>Laporan</x-menu-title>

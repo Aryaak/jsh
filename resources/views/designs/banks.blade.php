@@ -93,6 +93,12 @@
             const table = $("#table").DataTable()
         })
 
+        document.addEventListener('focusin', (e) => {
+            if (e.target.closest(".tox-tinymce, .tox-tinymce-aux, .moxman-window, .tam-assetmanager-root") !== null) {
+                e.stopImmediatePropagation();
+            }
+        });
+
         $("#create-new-template").click(function () {
             addNewTemplate('create')
         })

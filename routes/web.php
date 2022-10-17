@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DesignController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', fn () => view('welcome'))->name('dashboard');
+Route::get('/uploader/tinymce', null)->name('uploader.tinymce'); // tolong disesuaikan ya
+
+
+/**
+ * -------------------------------------------------------------------------
+ * Design Only Route
+ * -------------------------------------------------------------------------
+ */
+
+Route::get('/design/{page}', DesignController::class);

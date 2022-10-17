@@ -1,4 +1,9 @@
 // Useful Variable
+$.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 
 const Toast = Swal.mixin({
     toast: true,
@@ -316,60 +321,108 @@ function datatablesTranslate(attr = 'Data', verb = 'ditambahkan') {
         },
     }
 }
-
-function datatablesInit(selector, url, columns, orders = [1, 'asc'], translate, drawCallback = null, data = {}, withAction = true, withCheck = true, createdRow = null) {
-    if (withCheck) {
-        var column = [
-            { data: 'check', orderable: false, searchable: false, className: "text-center"},
-            { data: 'DT_RowIndex', orderable: false, searchable: false, className: "text-center"},
-        ]
-    }
-    else {
-        var column = [{ data: 'DT_RowIndex', orderable: false, searchable: false, className: "text-center"}]
-    }
-
-    columns.forEach(row => {
-        column.push(row)
-    });
-
-    if (withAction) {
-        column.push({ data: 'action', orderable: false, searchable: false, className: "text-center"})
-    }
-
-    return $(selector).DataTable({
-        dom: '<"table-responsive w-100"rt><"d-flex flex-column flex-lg-row justify-content-between align-items-center"ip>',
-        processing: true,
-        serverSide: true,
-        ajax: {
-            'url' : url,
-            'data' : data
+function dataTableInit(id,title,ajax,column,properties = {},translate = null,button = false,action = true){
+    let buttons = []
+    let dom = "<'row'<'col'l><'col'f>>rt<'row'<'col'i><'col mt-1'p>>"
+    if(button){
+      dom = "<'row'<'col'l><'col'f><'col-1 text-center'B>>rt<'row'<'col'i><'col mt-1'p>>"
+      buttons = [
+        {
+          extend: 'excelHtml5',
+          title: title,
+          className: 'btn-sm btn-outline-secondary',
+          exportOptions: {
+            columns: ':not(:last-child)',
+          }
         },
-        order: [
-            orders
-        ],
-        columns: column,
-        language: translate,
-        drawCallback: function(e) {
-            $('[data-bs-toggle="tooltip"]').tooltip()
-            $('.table-check').each(function(index) {
-                if ($.inArray($(this).val(), tableCheck) != -1) {
-                    $(this).prop('checked', true)
-                }
-                else {
-                    $(this).prop('checked', false)
-                }
-            });
-
-            $(selector + '-export-length').val(e.json.input.length)
-            $(selector + '-export-start').val(e.json.input.start)
-
-            if (typeof drawCallback == 'function') drawCallback()
-        },
-        createdRow: function (row, data, index) {
-            if (typeof createdRow == 'function') createdRow(row, data, index)
+        {
+          extend: 'pdfHtml5',
+          title: title,
+          className: 'btn-sm btn-outline-secondary',
+          exportOptions: {
+            columns: ':not(:last-child)',
+          },
+          customize: function(doc) {
+            doc.content[1].margin = [ 100, 0, 100, 0 ] //left, top, right, bottom
+          }
         }
-    })
+      ]
+    }
+    let columns = [{ data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false,width: '1%' }]
+    column.forEach(e => { columns = columns.concat(e) })
+    if(action){ columns = columns.concat([{ data: 'action', name: 'action', orderable: false, searchable: false,className: 'text-center' }]) }
+
+    let initParams = {
+      dom: dom,
+      buttons: buttons,
+      processing: true,
+      serverSide: true,
+      scrollCollapse: true,
+      pageLength : 10,
+      order: [[0,'asc']],
+      lengthMenu: [[10, 25, 50,100, -1], [10, 25, 50,100, "All"]],
+      pagingType: 'full_numbers',
+      ajax: ajax,
+      columns: columns,
+      language: translate ?? datatablesTranslate(title),
+    }
+    Object.keys(properties).forEach(key => { initParams[key] = properties[key] });
+    return $('#'+id).DataTable(initParams);
 }
+
+// function datatablesInit(selector, url, columns, orders = [1, 'asc'], translate, drawCallback = null, data = {}, withAction = true, withCheck = true, createdRow = null) {
+//     if (withCheck) {
+//         var column = [
+//             { data: 'check', orderable: false, searchable: false, className: "text-center"},
+//             { data: 'DT_RowIndex', orderable: false, searchable: false, className: "text-center"},
+//         ]
+//     }
+//     else {
+//         var column = [{ data: 'DT_RowIndex', orderable: false, searchable: false, className: "text-center"}]
+//     }
+
+//     columns.forEach(row => {
+//         column.push(row)
+//     });
+
+//     if (withAction) {
+//         column.push({ data: 'action', orderable: false, searchable: false, className: "text-center"})
+//     }
+
+//     return $(selector).DataTable({
+//         dom: '<"table-responsive w-100"rt><"d-flex flex-column flex-lg-row justify-content-between align-items-center"ip>',
+//         processing: true,
+//         serverSide: true,
+//         ajax: {
+//             'url' : url,
+//             'data' : data
+//         },
+//         order: [
+//             orders
+//         ],
+//         columns: column,
+//         language: translate,
+//         drawCallback: function(e) {
+//             $('[data-bs-toggle="tooltip"]').tooltip()
+//             $('.table-check').each(function(index) {
+//                 if ($.inArray($(this).val(), tableCheck) != -1) {
+//                     $(this).prop('checked', true)
+//                 }
+//                 else {
+//                     $(this).prop('checked', false)
+//                 }
+//             });
+
+//             $(selector + '-export-length').val(e.json.input.length)
+//             $(selector + '-export-start').val(e.json.input.start)
+
+//             if (typeof drawCallback == 'function') drawCallback()
+//         },
+//         createdRow: function (row, data, index) {
+//             if (typeof createdRow == 'function') createdRow(row, data, index)
+//         }
+//     })
+// }
 
 function dropzoneTranslate(attr = 'Berkas') {
     return {

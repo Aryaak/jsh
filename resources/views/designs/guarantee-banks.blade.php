@@ -16,7 +16,7 @@
                 <tr>
                     <th width="10px">No.</th>
                     <th>No. Kwitansi</th>
-                    <th>No. Bond</th>
+                    <th>No. Bank Garansi</th>
                     <th>No. Polis</th>
                     <th>Status BG</th>
                     <th>Status Sinkron</th>
@@ -52,7 +52,7 @@
                 <div class="col-lg-4 mb-4">
                     <x-card header="1. Data" smallHeader>
                         <x-form-input label="No. Kwitansi" id="create-receipt-number" name="receiptNumber" class="mb-3" required />
-                        <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
+                        <x-form-input label="No. Bank Garansi" id="create-guarantee-number" name="guaranteeNumber" class="mb-3" />
                         <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
                         <x-form-select label="Nama Agen" id="create-agent-id" :options="[]" name="agentId" class="mb-3" required/>
                         <x-form-select label="Nama Bank" id="create-bank-id" :options="[]" name="bankId" class="mb-3" required/>
@@ -329,8 +329,8 @@
                         <div id="show-receipt-number">-</div>
                     </div>
                     <div class="mb-3">
-                        <x-form-label>No. Bond</x-form-label>
-                        <div id="show-bond-number">-</div>
+                        <x-form-label>No. Bank Garansi</x-form-label>
+                        <div id="show-guarantee-number">-</div>
                     </div>
                     <div class="mb-3">
                         <x-form-label>No. Polis</x-form-label>
@@ -656,7 +656,10 @@
         </div>
 
         @slot('footer')
-            <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
+            <div class="d-flex justify-content-between w-100">
+                <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
+                <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
+            </div>
         @endslot
     </x-modal>
 
@@ -669,7 +672,7 @@
                 <div class="col-lg-4 mb-4">
                     <x-card header="1. Data" smallHeader>
                         <x-form-input label="No. Kwitansi" id="edit-receipt-number" name="receiptNumber" class="mb-3" required />
-                        <x-form-input label="No. Bond" id="edit-bond-number" name="bondNumber" class="mb-3" />
+                        <x-form-input label="No. Bank Garansi" id="edit-guarantee-number" name="guaranteeNumber" class="mb-3" />
                         <x-form-input label="No. Polis" id="edit-polish-number" name="polishNumber" class="mb-3" />
                         <x-form-select label="Nama Agen" id="edit-agent-id" :options="[]" name="agentId" class="mb-3" required/>
                         <x-form-select label="Nama Bank" id="edit-bank-id" :options="[]" name="bankId" class="mb-3" required/>
@@ -970,6 +973,29 @@
             <div class="d-flex justify-content-between w-100">
                 <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
                 <x-button id="edit-save" face="success" icon="bx bxs-save">Simpan</x-button>
+            </div>
+        @endslot
+    </x-modal>
+
+    <x-modal id="modal-status-histories" title="Riwayat Status">
+        <div class="pb-2 mb-2 text-center">
+            <b>No. Bank Garansi</b> <br>
+            <span id="status-histories-no-guarantee">-</span>
+        </div>
+        <div class="list-group" id="status-histories">
+            {{-- History Items --}}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bx bxs-circle me-2 align-middle text-success" style="font-size:.3em!important"></i>
+                    <span class="badge rounded-pill bg-label-success"><i class="bx bx-check me-1 align-middle"></i>Lunas</span>
+                </div>
+                <div><small>17/10/2022 12:00</small></div>
+            </div>
+        </div>
+
+        @slot('footer')
+            <div class="d-flex justify-content-between w-100">
+                <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
             </div>
         @endslot
     </x-modal>

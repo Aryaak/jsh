@@ -5,7 +5,7 @@
 @endpush
 
 @section('contents')
-    <div class="text-center">
+    <div class="text-center mt-4 mb-5">
         <h4 class="mb-2">Masuk</h4>
         <p class="mb-4">Silakan masukkan kredensial Anda.</p>
     </div>

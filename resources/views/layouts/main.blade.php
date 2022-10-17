@@ -80,8 +80,8 @@
                     <x-menu route="dashboard" icon="bx bxs-receipt">Surety Bond</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-bank">Bank Garansi</x-menu>
 
-                    {{-- Pengeluaran --}}
-                    <x-menu-title>Pengeluaran</x-menu-title>
+                    {{-- Pembayaran --}}
+                    <x-menu-title>Pembayaran</x-menu-title>
                     <x-menu route="dashboard" icon="bx bxs-wallet">Principle ke Cabang</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-wallet">Cabang ke Regional</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-wallet">Regional ke Asuransi</x-menu>

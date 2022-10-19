@@ -512,7 +512,7 @@ function dropzonePreview(dz, images, url, formSelector, formName){
     }
 }
 
-function select2Init(selector, url, minLength = 1, placeholder = "--  Pilih --", allowClear = false) {
+function select2Init(selector, url, minLength = 1,dropdownParent  = null, placeholder = "--  Pilih --", allowClear = false) {
     $(selector).select2({
         language: {
             errorLoading: function() { return "Terjadi masalah pada sistem." },
@@ -526,6 +526,7 @@ function select2Init(selector, url, minLength = 1, placeholder = "--  Pilih --",
         },
         allowClear: allowClear,
         minimumInputLength: minLength,
+        dropdownParent: dropdownParent,
         ajax: {
             url: url,
             type: 'get',
@@ -533,7 +534,7 @@ function select2Init(selector, url, minLength = 1, placeholder = "--  Pilih --",
             delay: 250,
             data: function(params) {
                 return {
-                    search: params.term
+                    search: params.term ?? ''
                 }
             },
             processResults: function(response) {

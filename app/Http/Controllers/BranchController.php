@@ -13,10 +13,10 @@ class BranchController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Branch::where('is_regional',false);
+            $data = Branch::with('regional')->where('is_regional',false);
             return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('action', 'datatables._actions')
+            ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }
         return view('master.branches');
@@ -45,6 +45,7 @@ class BranchController extends Controller
 
     public function show(Branch $branch)
     {
+        $branch->regional;
         return response()->json($this->showResponse($branch->toArray()));
     }
 

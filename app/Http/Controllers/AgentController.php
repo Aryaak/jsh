@@ -6,7 +6,7 @@ use App\Models\Agent;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 
-class AgentController
+class AgentController extends Controller
 {
     public function index(Request $request)
     {

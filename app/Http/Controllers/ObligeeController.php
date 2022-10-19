@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Obligee;
 use Illuminate\Http\Request;
 
-class ObligeeController
+class ObligeeController extends Controller
 {
     public function index()
     {

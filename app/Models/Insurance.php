@@ -1,14 +1,14 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
 
-class {{ class }} extends Model
+class Insurance extends Model
 {
     use HasFactory;
 
-    public $fillable = [];
+    public $fillable = ['name','alias','address','pc_name','pc_position'];
 }

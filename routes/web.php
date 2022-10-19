@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\RegionalController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ Route::get('/', fn () => view('welcome'))->name('dashboard');
 Route::get('/uploader/tinymce', null)->name('uploader.tinymce'); // tolong disesuaikan ya
 Route::resource('branches',BranchController::class);
 Route::resource('regionals',RegionalController::class);
+Route::resource('insurances',InsuranceController::class);
 
 /**
  * -------------------------------------------------------------------------

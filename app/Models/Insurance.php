@@ -31,5 +31,4 @@ class Insurance extends Model
     public function hapus(): bool{
         return $this->delete();
     }
-
 }

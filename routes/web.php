@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\InsuranceController;
@@ -22,6 +23,7 @@ Route::get('/uploader/tinymce', null)->name('uploader.tinymce'); // tolong dises
 Route::resource('branches',BranchController::class);
 Route::resource('regionals',RegionalController::class);
 Route::resource('insurances',InsuranceController::class);
+Route::resource('agents',AgentController::class);
 
 /**
  * -------------------------------------------------------------------------

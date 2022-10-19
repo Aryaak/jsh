@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AgentRate;
 use Illuminate\Http\Request;
 
-class AgentRateController
+class AgentRateController extends Controller
 {
     public function index()
     {

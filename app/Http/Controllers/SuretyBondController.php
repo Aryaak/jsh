@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SuretyBond;
 use Illuminate\Http\Request;
 
-class SuretyBondController
+class SuretyBondController extends Controller
 {
     public function index()
     {

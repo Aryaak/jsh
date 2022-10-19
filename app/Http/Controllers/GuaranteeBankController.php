@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GuaranteeBank;
 use Illuminate\Http\Request;
 
-class GuaranteeBankController
+class GuaranteeBankController extends Controller
 {
     public function index()
     {

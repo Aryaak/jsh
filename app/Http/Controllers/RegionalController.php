@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 
-class RegionalController
+class RegionalController extends Controller
 {
     public function index(Request $request)
     {

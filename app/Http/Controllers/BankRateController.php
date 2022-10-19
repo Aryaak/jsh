@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BankRate;
 use Illuminate\Http\Request;
 
-class BankRateController
+class BankRateController extends Controller
 {
     public function index()
     {

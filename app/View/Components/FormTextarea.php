@@ -17,7 +17,7 @@ class FormTextarea extends Component
         private ?string $readonly = null,
         private ?string $disabled = null,
         private ?string $autofocus = null,
-        private ?string $tinymce = null,
+        private bool $tinymce = false,
     ) {
         //
     }

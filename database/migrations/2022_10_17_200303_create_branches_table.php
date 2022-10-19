@@ -15,6 +15,9 @@ return new class extends Migration
             $table->boolean('is_regional');
             $table->string('jamsyar_username')->nullable()->comment('only for regional');
             $table->string('jamsyar_password')->nullable()->comment('only for regional');
+
+            $table->unsignedBigInteger('regional_id')->nullable();
+            $table->foreign('regional_id')->references('id')->on('branches');
             $table->timestamps();
         });
     }

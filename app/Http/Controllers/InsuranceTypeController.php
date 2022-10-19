@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InsuranceType;
 use Illuminate\Http\Request;
 
-class InsuranceTypeController
+class InsuranceTypeController extends Controller
 {
     public function index()
     {

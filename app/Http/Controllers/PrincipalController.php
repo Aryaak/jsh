@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Principal;
 use Illuminate\Http\Request;
 
-class PrincipalController
+class PrincipalController extends Controller
 {
     public function index()
     {

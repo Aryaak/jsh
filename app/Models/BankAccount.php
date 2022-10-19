@@ -1,14 +1,14 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
 
-class {{ class }} extends Model
+class BankAccount extends Model
 {
     use HasFactory;
 
-    public $fillable = [];
+    public $fillable = ['number','name','agent_id','bank_id'];
 }

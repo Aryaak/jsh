@@ -1,14 +1,14 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
 
-class {{ class }} extends Model
+class ScoringDetail extends Model
 {
     use HasFactory;
 
-    public $fillable = [];
+    public $fillable = ['text','value','scoring_id'];
 }

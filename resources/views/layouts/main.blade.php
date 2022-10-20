@@ -64,8 +64,8 @@
 
                     {{-- Master Data --}}
                     <x-menu-title>Master Data</x-menu-title>
-                    <x-menu route="dashboard" icon="bx bxs-building-house">Regional</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-building-house">Cabang</x-menu>
+                    <x-menu route="regionals.index" icon="bx bxs-building-house">Regional</x-menu>
+                    <x-menu route="branches.index" icon="bx bxs-building-house">Cabang</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-shapes">Jenis Jaminan</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-heart">Asuransi</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-discount">Rate Asuransi</x-menu>

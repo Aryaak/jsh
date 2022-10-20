@@ -27,7 +27,7 @@
 @section('modals')
     <x-modal id="modal-create" title="Tambah Cabang">
         <x-form id="form-create" method="post">
-            <x-form-select label="Regional" id="create-regional-id" :options="[]" name="regionalId" class="mb-3" required/>
+            <x-form-select label="Regional" id="create-regional-id" name="regionalId" class="mb-3" required/>
             <x-form-input id="create-name" name="name" label="Nama" />
         </x-form>
 
@@ -53,7 +53,7 @@
 
     <x-modal id="modal-edit" title="Ubah Cabang">
         <x-form id="form-edit" method="put">
-            <x-form-select label="Regional" id="edit-regional-id" :options="[]" name="regionalId" class="mb-3" required/>
+            <x-form-select label="Regional" id="edit-regional-id" name="regionalId" class="mb-3" required/>
             <x-form-input id="edit-name" name="name" label="Nama" required />
         </x-form>
 
@@ -70,18 +70,56 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        let table = null
+        let branch = null
         $(document).ready(function () {
-            const table = $("#table").DataTable()
-            $("#create-regional-id").select2({dropdownParent: $('#modal-create')})
-            $("#edit-regional-id").select2({dropdownParent: $('#modal-edit')})
+            table = dataTableInit('table','Cabang',{url : '{{ route('branches.index') }}'},[
+                {data: 'regional.name', name: 'regional.name'},
+                {data: 'name', name: 'name'},
+            ])
+            select2Init("#create-regional-id",'{{ route('select2.regional') }}',0,$('#modal-create'))
+            select2Init("#edit-regional-id",'{{ route('select2.regional') }}',0,$('#modal-edit'))
         })
-
+        $(document).on('click', '#create-save', function () {
+            loading()
+            let formData = new FormData(document.getElementById('form-create'))
+            formData.append('is_regional',0)
+            ajaxPost("{{ route('branches.store') }}",formData,'#modal-create',function(){
+                table.ajax.reload()
+            })
+        })
+        $(document).on('click', '#edit-save', function () {
+            loading()
+            let formData = new FormData(document.getElementById('form-edit'))
+            formData.append('is_regional',0)
+            ajaxPost("{{ route('branches.update','-id-') }}".replace('-id-',branch.id),formData,'#modal-edit',function(){
+                table.ajax.reload()
+            })
+        })
+        $(document).on('click', '.btn-show', function () {
+            ajaxGet("{{ route('branches.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+                if(response.success){
+                    branch = response.data
+                    $('#show-regional').html(branch.regional.name)
+                    $('#show-name').html(branch.name)
+                }
+            })
+        })
+        $(document).on('click', '.btn-edit', function () {
+            $('#edit-name').val(branch.name)
+            $('#edit-regional-id').append(new Option(branch.regional.name,branch.regional.id,true,true)).trigger('change');
+        })
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
                 title: "Yakin ingin menghapus Cabang?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    let formData = new FormData()
+                    formData.append('_method','delete')
+                    ajaxPost("{{ route('branches.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                        table.ajax.reload()
+                    })
                 }
             })
         })

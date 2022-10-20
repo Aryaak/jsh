@@ -5,6 +5,7 @@ use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\RegionalController;
+use App\Http\Controllers\Select2Controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,7 @@ Route::resource('regionals',RegionalController::class);
 Route::resource('insurances',InsuranceController::class);
 Route::resource('agents',AgentController::class);
 
+Route::get('select2/regional',[Select2Controller::class,'regional'])->name('select2.regional');
 /**
  * -------------------------------------------------------------------------
  * Design Only Route

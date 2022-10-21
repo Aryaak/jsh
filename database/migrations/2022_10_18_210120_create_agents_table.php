@@ -19,7 +19,9 @@ return new class extends Migration
             $table->boolean('is_verified');
             $table->string('jamsyar_username');
             $table->string('jamsyar_password');
-            $table->foreignId('branch_id')->constrained();
+
+            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches');
             $table->timestamps();
         });
     }

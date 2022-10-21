@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\AgentController;
+use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\Select2Controller;
 use Illuminate\Support\Facades\Route;
@@ -21,8 +24,13 @@ Route::get('/', fn () => view('welcome'))->name('dashboard');
 Route::get('/uploader/tinymce', null)->name('uploader.tinymce'); // tolong disesuaikan ya
 Route::resource('branches',BranchController::class);
 Route::resource('regionals',RegionalController::class);
+Route::resource('insurances',InsuranceController::class);
+Route::resource('agents',AgentController::class);
+Route::resource('bank_accounts',BankAccountController::class);
 
 Route::get('select2/regional',[Select2Controller::class,'regional'])->name('select2.regional');
+Route::get('select2/branch',[Select2Controller::class,'branch'])->name('select2.branch');
+Route::get('select2/bank',[Select2Controller::class,'bank'])->name('select2.bank');
 /**
  * -------------------------------------------------------------------------
  * Design Only Route

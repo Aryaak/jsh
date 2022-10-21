@@ -215,8 +215,6 @@
 
         $(document).on('click', '.btn-edit', function () {
             let formData = new FormData(document.getElementById('form-edit'))
-            formData.append("bank_account_id",agent.bank_accounts.id)
-            formData.append("agent_id",agent.id)
             $('#edit-branch-id').append(new Option(agent.branch.name,agent.branch.id,true,true)).trigger('change');
             $('#edit-name').val(agent.name)
             $('#edit-phone').val(agent.phone)
@@ -244,6 +242,8 @@
         $(document).on('click', '#edit-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-edit'))
+            formData.append("bank_account_id",agent.bank_accounts.id)
+            formData.append("agent_id",agent.id)
             if (document.getElementById('edit-is-verified').checked == false) {
                 formData.append('is_verified',1)
             }
@@ -258,9 +258,14 @@
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Agen?",
+                title: "Yakin ingin menghapus Agent?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    let formData = new FormData()
+                    formData.append('_method','delete')
+                    ajaxPost("{{ route('agents.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                        table.ajax.reload()
+                    })
                 }
             })
         })

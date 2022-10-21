@@ -93,16 +93,15 @@ class AgentController extends Controller
             );
 
             Agent::whereId($agent->id)->update($agent_data);
-            // $agent->ubah($agent_data);
 
-            // $bank_account_data = array(
-            //     'number' => $request->number,
-            //     'name' => $request->name_bank,
-            //     'agent_id' => $request->agent_id,
-            //     'bank_id' => $request->bank_id,
-            // );
-            // $bank_account = BankAccount::find($request->bank_account_id);
-            // $bank_account->ubah($bank_account_data);
+            $bank_account_data = array(
+                'number' => $request->number,
+                'name' => $request->name_bank,
+                'agent_id' => $request->agent_id,
+                'bank_id' => $request->bank_id,
+            );
+            $bank_account = BankAccount::find($request->bank_account_id);
+            BankAccount::whereId($bank_account->id)->update($bank_account_data);
 
             $http_code = 200;
             $response = $this->storeResponse();
@@ -117,5 +116,17 @@ class AgentController extends Controller
 
     public function destroy(Agent $agent)
     {
+        try {
+            BankAccount::whereId($agent->bank_accounts->id)->delete();
+            Agent::whereId($agent->id)->delete();
+            $http_code = 200;
+            $response = $this->destroyResponse();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
     }
 }

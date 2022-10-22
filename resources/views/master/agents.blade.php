@@ -106,7 +106,7 @@
             </div>
             <div class="col-sm-6">
                 <b>Status Aktif</b>: <br>
-                <span><x-badge id="show-is-active" face="label-danger" rounded>Tidak Aktif</x-badge></span>
+                <span><x-badge id="show-is-active" face="label-success" rounded>Tidak Aktif</x-badge></span>
             </div>
         </div>
 
@@ -200,6 +200,7 @@
                     $('#show-bank-owner').html(agent.bank_accounts.name)
                     if(agent.is_verified == 0){
                         $('#show-is-verified').html('Sudah')
+
                     }else{
                         $('#show-is-verified').html('Belum')
                     }

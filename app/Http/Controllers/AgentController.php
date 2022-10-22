@@ -43,12 +43,11 @@ class AgentController extends Controller
                 'branch_id' => $request->branch_id,
             );
 
-            Agent::create($agent);
-            $agent = Agent::latest()->first();
+            $agent_insert_data = Agent::create($agent);
             $bank_account = array(
                 'number' => $request->number,
                 'name' => $request->name_bank,
-                'agent_id' => $agent->id,
+                'agent_id' => $agent_insert_data->id,
                 'bank_id' => $request->bank_id,
             );
             BankAccount::create($bank_account);

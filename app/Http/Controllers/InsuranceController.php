@@ -6,6 +6,7 @@ use DB;
 use Exception;
 use App\Models\Insurance;
 use App\Http\Requests\InsuranceRequest;
+use App\Models\InsuranceType;
 use Illuminate\Http\Request;
 
 class InsuranceController extends Controller

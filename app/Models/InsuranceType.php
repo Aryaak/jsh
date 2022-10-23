@@ -21,6 +21,9 @@ class InsuranceType extends Model
     public function agent_rates(){
         return $this->hasMany(AgentRate::class);
     }
+    public function insurance_rates(){
+        return $this->hasMany(InsuranceRate::class);
+    }
     public static function buat(array $params): self{
         return self::create(self::fetch((object)$params));
     }

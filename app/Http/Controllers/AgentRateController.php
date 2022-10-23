@@ -6,6 +6,7 @@ use DB;
 use Exception;
 use App\Models\AgentRate;
 use Illuminate\Http\Request;
+use App\Http\Requests\AgentRateRequest;
 
 class AgentRateController extends Controller
 {
@@ -25,11 +26,11 @@ class AgentRateController extends Controller
     {
     }
 
-    public function store(Request $request)
+    public function store(AgentRateRequest $request)
     {
         try {
             DB::beginTransaction();
-            AgentRate::buat($request->all());
+            AgentRate::buat($request->validated());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -54,11 +55,11 @@ class AgentRateController extends Controller
     {
     }
 
-    public function update(Request $request, AgentRate $agentRate)
+    public function update(AgentRateRequest $request, AgentRate $agentRate)
     {
         try {
             DB::beginTransaction();
-            $agentRate->ubah($request->all());
+            $agentRate->ubah($request->validated());
             $http_code = 200;
             $response = $this->updateResponse();
             DB::commit();

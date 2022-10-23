@@ -68,7 +68,7 @@
                     <x-menu route="branches.index" icon="bx bxs-building-house">Cabang</x-menu>
                     <x-menu route="insurance-types.index" icon="bx bxs-shapes">Jenis Jaminan</x-menu>
                     <x-menu route="insurances.index" icon="bx bxs-heart">Asuransi</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-discount">Rate Asuransi</x-menu>
+                    <x-menu route="insurance-rates.index" icon="bx bxs-discount">Rate Asuransi</x-menu>
                     <x-menu route="agents.index" icon="bx bxs-user-account">Agen</x-menu>
                     <x-menu route="agent-rates.index" icon="bx bxs-discount">Rate Agen</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-bank">Bank</x-menu>

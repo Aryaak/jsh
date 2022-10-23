@@ -8,6 +8,7 @@ use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\InsuranceTypeController;
+use App\Http\Controllers\InsuranceRateController;
 use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\Select2Controller;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,7 @@ Route::resource('bank_accounts',BankAccountController::class);
 Route::apiResource('principals',PrincipalController::class);
 Route::apiResource('agent-rates',AgentRateController::class);
 Route::resource('insurance-types',InsuranceTypeController::class);
+Route::apiResource('insurance-rates',InsuranceRateController::class);
 
 Route::get('select2/regional',[Select2Controller::class,'regional'])->name('select2.regional');
 Route::get('select2/branch',[Select2Controller::class,'branch'])->name('select2.branch');

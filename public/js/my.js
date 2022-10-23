@@ -211,7 +211,10 @@ function ajaxErrorResponse(request, status, error) {
 
 function ajaxPost(url, data, modal = null, successCallback = null, errorCallback = null, withToast = true) {
     let formData = null
-    if(typeof data == 'object'){
+    if(data instanceof FormData){
+        formData = data
+    }
+    else if(typeof data === 'object'){
         formData = new FormData()
         for (var key in data) { formData.append(key, data[key]); }
     }else{

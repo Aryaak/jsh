@@ -70,7 +70,7 @@
                     <x-menu route="insurances.index" icon="bx bxs-heart">Asuransi</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-discount">Rate Asuransi</x-menu>
                     <x-menu route="agents.index" icon="bx bxs-user-account">Agen</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-discount">Rate Agen</x-menu>
+                    <x-menu route="agent-rates.index" icon="bx bxs-discount">Rate Agen</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-bank">Bank</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-discount">Rate Bank</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-user-badge">Obligee</x-menu>

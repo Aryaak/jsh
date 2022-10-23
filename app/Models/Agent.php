@@ -42,9 +42,11 @@ class Agent extends Model
         return $this->belongsTo(Branch::class,'branch_id');
     }
 
-    public function bank_accounts()
-    {
+    public function bank_accounts(){
         return $this->hasOne(BankAccount::class,'agent_id');
+    }
+    public function agent_rates(){
+        return $this->hasMany(AgentRate::class);
     }
 
     public static function buat(array $params): self{

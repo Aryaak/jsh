@@ -26,4 +26,16 @@ class Select2Controller extends Controller
     public function city(Request $request){
         return response()->json(Select2::city($request->search,$request->province_id));
     }
+
+    public function agent(Request $request){
+        return response()->json(Select2::agent($request->search));
+    }
+
+    public function insurance(Request $request){
+        return response()->json(Select2::insurance($request->search));
+    }
+
+    public function insuranceType(Request $request){
+        return response()->json(Select2::insuranceType($request->search));
+    }
 }

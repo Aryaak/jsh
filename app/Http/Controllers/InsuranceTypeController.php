@@ -31,9 +31,9 @@ class InsuranceTypeController extends Controller
         try {
             DB::beginTransaction();
             InsuranceType::buat($request->validated());
-            DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -57,9 +57,9 @@ class InsuranceTypeController extends Controller
         try {
             DB::beginTransaction();
             $insuranceType->ubah($request->all());
-            DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -74,9 +74,9 @@ class InsuranceTypeController extends Controller
         try {
             DB::beginTransaction();
             $insuranceType->hapus();
-            DB::commit();
             $http_code = 200;
             $response = $this->destroyResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());

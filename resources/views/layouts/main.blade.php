@@ -74,7 +74,7 @@
                     <x-menu route="dashboard" icon="bx bxs-bank">Bank</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-discount">Rate Bank</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-user-badge">Obligee</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-user-rectangle">Principle</x-menu>
+                    <x-menu route="principals.index" icon="bx bxs-user-rectangle">Principle</x-menu>
 
                     {{-- Produk --}}
                     <x-menu-title>Produk</x-menu-title>

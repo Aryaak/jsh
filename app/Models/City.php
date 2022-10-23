@@ -11,4 +11,11 @@ class City extends Model
     use HasFactory;
 
     public $fillable = ['name','province_id'];
+
+    public function principals(){
+        return $this->hasMany(Principal::class);
+    }
+    public function province(){
+        return $this->belongsTo(Province::class);
+    }
 }

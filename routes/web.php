@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\PrincipalController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
@@ -27,10 +28,13 @@ Route::resource('regionals',RegionalController::class);
 Route::resource('insurances',InsuranceController::class);
 Route::resource('agents',AgentController::class);
 Route::resource('bank_accounts',BankAccountController::class);
+Route::resource('principals',PrincipalController::class);
 
 Route::get('select2/regional',[Select2Controller::class,'regional'])->name('select2.regional');
 Route::get('select2/branch',[Select2Controller::class,'branch'])->name('select2.branch');
 Route::get('select2/bank',[Select2Controller::class,'bank'])->name('select2.bank');
+Route::get('select2/province',[Select2Controller::class,'province'])->name('select2.province');
+Route::get('select2/city',[Select2Controller::class,'city'])->name('select2.city');
 /**
  * -------------------------------------------------------------------------
  * Design Only Route

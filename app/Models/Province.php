@@ -11,4 +11,7 @@ class Province extends Model
     use HasFactory;
 
     public $fillable = ['name'];
+    public function cities(){
+        return $this->hasMany(City::class);
+    }
 }

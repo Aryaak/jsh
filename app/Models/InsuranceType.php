@@ -11,4 +11,21 @@ class InsuranceType extends Model
     use HasFactory;
 
     public $fillable = ['code','name'];
+
+    private static function fetch(object $args): array{
+        return [
+            'name' => $args->name,
+            'code' => $args->code,
+        ];
+    }
+
+    public static function buat(array $params): self{
+        return self::create(self::fetch((object)$params));
+    }
+    public function ubah(array $params): bool{
+        return $this->update(self::fetch((object)$params));
+    }
+    public function hapus(): bool{
+        return $this->delete();
+    }
 }

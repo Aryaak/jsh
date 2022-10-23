@@ -92,7 +92,7 @@
         let table = null
         let insurance = {}
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance',{url : '{{ route('insurances.index') }}'},[
+            table = dataTableInit('table','Insurance Type',{url : '{{ route('insurances.index') }}'},[
                 {data: 'name', name: 'name'},
                 {data: 'alias', name: 'alias'},
                 {data: 'address', name: 'address'},

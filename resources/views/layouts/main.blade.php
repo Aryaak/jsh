@@ -66,10 +66,10 @@
                     <x-menu-title>Master Data</x-menu-title>
                     <x-menu route="regionals.index" icon="bx bxs-building-house">Regional</x-menu>
                     <x-menu route="branches.index" icon="bx bxs-building-house">Cabang</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-shapes">Jenis Jaminan</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-heart">Asuransi</x-menu>
+                    <x-menu route="insurance-types.index" icon="bx bxs-shapes">Jenis Jaminan</x-menu>
+                    <x-menu route="insurances.index" icon="bx bxs-heart">Asuransi</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-discount">Rate Asuransi</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-user-account">Agen</x-menu>
+                    <x-menu route="agents.index" icon="bx bxs-user-account">Agen</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-discount">Rate Agen</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-bank">Bank</x-menu>
                     <x-menu route="dashboard" icon="bx bxs-discount">Rate Bank</x-menu>

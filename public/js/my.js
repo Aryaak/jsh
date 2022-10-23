@@ -210,10 +210,20 @@ function ajaxErrorResponse(request, status, error) {
 }
 
 function ajaxPost(url, data, modal = null, successCallback = null, errorCallback = null, withToast = true) {
+    let formData = null
+    if(data instanceof FormData){
+        formData = data
+    }
+    else if(typeof data === 'object'){
+        formData = new FormData()
+        for (var key in data) { formData.append(key, data[key]); }
+    }else{
+        formData = data
+    }
     $.ajax({
         type: "POST",
         url: url,
-        data: data,
+        data: formData,
         processData: false,
         contentType: false,
         cache: false,
@@ -512,7 +522,14 @@ function dropzonePreview(dz, images, url, formSelector, formName){
     }
 }
 
-function select2Init(selector, url, minLength = 1,dropdownParent  = null, placeholder = "--  Pilih --", allowClear = false) {
+function select2Init(selector, url, minLength = 1,dropdownParent  = null, placeholder = "--  Pilih --", allowClear = false,data = null) {
+    if(data == null){
+        data = function(params) {
+            return {
+                search: params.term ?? ''
+            }
+        }
+    }
     $(selector).select2({
         language: {
             errorLoading: function() { return "Terjadi masalah pada sistem." },
@@ -532,11 +549,7 @@ function select2Init(selector, url, minLength = 1,dropdownParent  = null, placeh
             type: 'get',
             dataType: 'json',
             delay: 250,
-            data: function(params) {
-                return {
-                    search: params.term ?? ''
-                }
-            },
+            data: data,
             processResults: function(response) {
                 return {
                     results: response
@@ -557,7 +570,9 @@ function select2Init(selector, url, minLength = 1,dropdownParent  = null, placeh
         }, 1)
     });
 }
-
+function select2SetVal(select2Id,optionId,optionText){
+    $('#'+select2Id).append(new Option(optionText,optionId,true,true)).trigger('change');
+}
 function sortableInit(zoneSelector = '.draggable-zone', draggableSelector = '.draggable', draggableHandleSelector = '.draggable-handle', mirrorAppendSelector = 'body', constrainDimensions = true) {
     var containers = document.querySelectorAll(zoneSelector);
 

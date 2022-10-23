@@ -11,4 +11,7 @@ class ScoringDetail extends Model
     use HasFactory;
 
     public $fillable = ['text','value','scoring_id'];
+    public function scoring(){
+        return $this->belongsTo(Scoring::class);
+    }
 }

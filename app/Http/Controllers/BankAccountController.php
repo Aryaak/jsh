@@ -23,9 +23,9 @@ class BankAccountController extends Controller
         try {
             DB::beginTransaction();
             BankAccount::buat($request->validated());
-            DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());

@@ -18,10 +18,22 @@
                     <th>Nama</th>
                     <th>Alamat</th>
                     <th>No. HP/Telp</th>
-                    {{-- <th>Status Sinkronisasi</th> --}}
+                    <th>Status Sinkronisasi</th>
                     <th width="80px">Tindakan</th>
                 </tr>
             @endslot
+            <tr>
+                <td>1</td>
+                <td>Tes</td>
+                <td>Tes</td>
+                <td>Tes</td>
+                <td><x-badge face="label-success">Sinkron</x-badge></td>
+                <td>
+                    <x-button type="icon" class="btn-sync" size="sm"  icon="bx bx-refresh" face="warning">Sinkronkan</x-button>
+                    <x-button type="icon" class="btn-show" data-bs-toggle="modal" data-bs-target="#modal-show" size="sm" icon="bx bx-search" face="info">Detail</x-button>
+                    <x-button type="icon" class="btn-delete" size="sm" icon="bx bxs-trash" face="danger">Hapus</x-button>
+                </td>
+            </tr>
         </x-table>
     </x-card>
 @endsection
@@ -40,8 +52,6 @@
                     <x-form-input label="Domisili" id="create-info-domicile" name="info[domicile]" class="mb-3" />
                     <x-form-select label="Provinsi" id="create-info-province-id" :options="[]" name="info[provinceId]" class="mb-3" required />
                     <x-form-select label="Kota" id="create-info-city-id" :options="[]" name="info[cityId]" class="mb-3" required />
-                    <x-form-input label="Jamsyar ID" id="create-info-jamsyar-id" name="info[jamsyarId]" class="mb-3" />
-                    <x-form-input label="Jamsyar Kode" id="create-info-jamsyar-code" name="info[jamsyarCode]" class="mb-3" />
                 </div>
                 <div class="col-md-6">
                     <x-form-input label="Nama PIC" id="create-info-pic-name" name="info[picName]" class="mb-3" />
@@ -191,10 +201,8 @@
                     <x-form-input label="Email" id="edit-info-email" name="info[email]" class="mb-3" type="email" />
                     <x-form-input label="No. HP/Telp" id="edit-info-phone" name="info[phone]" class="mb-3" />
                     <x-form-input label="Domisili" id="edit-info-domicile" name="info[domicile]" class="mb-3" />
-                    <x-form-select label="Provinsi" id="edit-info-province-id" name="info[provinceId]" class="mb-3" required />
-                    <x-form-select label="Kota" id="edit-info-city-id" name="info[cityId]" class="mb-3" required />
-                    <x-form-input label="Jamsyar ID" id="edit-info-jamsyar-id" name="info[jamsyarId]" class="mb-3" />
-                    <x-form-input label="Jamsyar Kode" id="edit-info-jamsyar-code" name="info[jamsyarCode]" class="mb-3" />
+                    <x-form-select label="Provinsi" id="edit-info-province-id" :options="[]" name="info[provinceId]" class="mb-3" required />
+                    <x-form-select label="Kota" id="edit-info-city-id" :options="[]" name="info[cityId]" class="mb-3" required />
                 </div>
                 <div class="col-md-6">
                     <x-form-input label="Nama PIC" id="edit-info-pic-name" name="info[picName]" class="mb-3" />
@@ -239,90 +247,18 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        let table = null
-        let principal = null
         $(document).ready(function () {
-            table = dataTableInit('table','Principal',{url : '{{ route('master.principals.index') }}'},[
-                {data: 'name', name: 'name'},
-                {data: 'address', name: 'address'},
-                {data: 'phone', name: 'phone'},
-                // {data: 'phone', name: 'phone'},
-            ])
+            const table = $("#table").DataTable()
+            $("#create-info-province-id, #create-info-city-id").select2({dropdownParent: $('#modal-create')})
+            $("#edit-info-province-id, #edit-info-city-id").select2({dropdownParent: $('#modal-edit')})
+        })
 
-            select2Init("#create-info-province-id, #edit-info-province-id",'{{ route('select2.province') }}',0,$('#modal-create'))
-            select2Init("#create-info-city-id",'{{ route('select2.city') }}',0,$('#modal-create'),'--  Pilih --',false,function(params){
-                return {
-                    search: params.term ?? '',
-                    province_id: $('#create-info-province-id').val()
-                }
-            })
-            select2Init("#edit-info-province-id",'{{ route('select2.province') }}',0,$('#modal-edit'))
-            select2Init("#edit-info-city-id",'{{ route('select2.city') }}',0,$('#modal-edit'),'--  Pilih --',false,function(params){
-                return {
-                    search: params.term ?? '',
-                    province_id: $('#edit-info-province-id').val()
-                }
-            })
-        })
-        $(document).on('click', '#create-save', function () {
-            ajaxPost("{{ route('master.principals.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
-                table.ajax.reload()
-                clearForm('#form-create')
-            })
-        })
-        $(document).on('click', '#edit-save', function () {
-            loading()
-            ajaxPost("{{ route('master.principals.update','-id-') }}".replace('-id-',principal.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
-                table.ajax.reload()
-            })
-        })
-        $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('master.principals.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
-                if(response.success){
-                    principal = response.data
-                    $('#show-name').html(principal.name)
-                    $('#show-email').html(principal.email)
-                    $('#show-phone').html(principal.phone)
-                    $('#show-domisile').html(principal.domisile)
-                    $('#show-province').html(principal.city.province.name)
-                    $('#show-city').html(principal.city.name)
-                    $('#show-address').html(principal.address)
-                    $('#show-jamsyar-id').html(principal.jamsyar_id)
-                    $('#show-pic-name').html(principal.pic_name)
-                    $('#show-pic-position').html(principal.pic_position)
-                    $('#show-npwp-number').html(principal.npwp_number)
-                    $('#show-npwp-expired-at').html(principal.npwp_expired_at)
-                    $('#show-nib-number').html(principal.nib_number)
-                    $('#show-nib-expired-at').html(principal.nib_expired_at)
-                    $('#show-status').html(principal.status)
-                    $('#show-jamsyar-code').html(principal.jamsyar_code)
-                }
-            })
-        })
-        $(document).on('click', '.btn-edit', function () {
-            $('#edit-info-name').val(principal.name)
-            $('#edit-info-email').val(principal.email)
-            $('#edit-info-phone').val(principal.phone)
-            $('#edit-info-domicile').val(principal.domicile)
-            select2SetVal('edit-info-province-id',principal.city.province.id,principal.city.province.name)
-            select2SetVal('edit-info-city-id',principal.city.id,principal.city.name)
-            $('#edit-info-pic-name').val(principal.pic_name)
-            $('#edit-info-pic-position').val(principal.pic_position)
-            $('#edit-info-npwp-number').val(principal.npwp_number)
-            $('#edit-info-npwp-expired-at').val(principal.npwp_expired_at)
-            $('#edit-info-nib-number').val(principal.nib_number)
-            $('#edit-info-nib-expired-at').val(principal.nib_expired_at)
-            $('#edit-info-address').val(principal.address)
-        })
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
                 title: "Yakin ingin menghapus Principal?",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    ajaxPost("{{ route('master.principals.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},'',function(){
-                        table.ajax.reload()
-                    })
                 }
             })
         })

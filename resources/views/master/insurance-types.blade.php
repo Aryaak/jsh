@@ -16,7 +16,7 @@
                     <th width="10px">No.</th>
                     <th>Kode</th>
                     <th>Nama</th>
-                    <th width="180px">Tindakan</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -52,8 +52,8 @@
 
     <x-modal id="modal-edit" title="Ubah Jenis Jaminan">
         <x-form id="form-edit" method="put">
-            <x-form-input id="create-code" name="code" label="Kode" class="mb-3" required />
-            <x-form-input id="create-name" name="name" label="Nama" class="mb-3" required />
+            <x-form-input id="edit-code" name="code" label="Kode" class="mb-3" required />
+            <x-form-input id="edit-name" name="name" label="Nama" class="mb-3" required />
         </x-form>
 
         @slot('footer')
@@ -71,30 +71,31 @@
         let table = null
         let insuranceType = {}
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance',{url : '{{ route('insurance-types.index') }}'},[
-                {data: 'name', name: 'name'},
+            table = dataTableInit('table','Insurance',{url : '{{ route('master.insurance-types.index') }}'},[
                 {data: 'code', name: 'code'},
+                {data: 'name', name: 'name'},
             ])
         })
 
         $(document).on('click', '#create-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-create'))
-            ajaxPost("{{ route('insurance-types.store') }}",formData,'#modal-create',function(){
+            ajaxPost("{{ route('master.insurance-types.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
+                clearForm('#form-create')
             })
         })
 
         $(document).on('click', '#edit-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-edit'))
-            ajaxPost("{{ route('insurance-types.update','-id-') }}".replace('-id-',insuranceType.id),formData,'#modal-edit',function(){
+            ajaxPost("{{ route('master.insurance-types.update','-id-') }}".replace('-id-',insuranceType.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
             })
         })
 
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('insurance-types.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('master.insurance-types.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     insuranceType = response.data
                     $('#show-name').html(insuranceType.name)
@@ -103,9 +104,9 @@
             })
         })
 
-        $(document).on('click', '.btn-show', function () {
+        $(document).on('click', '.btn-edit', function () {
             $('#edit-name').val(insuranceType.name)
-            $('#edit-code').val(insuranceType.alias)
+            $('#edit-code').val(insuranceType.code)
         })
 
         $(document).on('click', '.btn-delete', function () {
@@ -115,7 +116,7 @@
                 if (result.isConfirmed) {
                     let formData = new FormData()
                     formData.append('_method','delete')
-                    ajaxPost("{{ route('insurance-types.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                    ajaxPost("{{ route('master.insurance-types.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
                         table.ajax.reload()
                     })
                 }

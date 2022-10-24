@@ -63,20 +63,22 @@ class AgentController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Agent $agent)
+    public function show(Agent $agen)
     {
+        $agent = $agen;
         $agent->branch;
         $agent->bank_accounts->bank;
         // dd($agent);
         return response()->json($this->showResponse($agent->toArray()));
     }
 
-    public function edit(Agent $agent)
+    public function edit(Agent $agen)
     {
     }
 
-    public function update(Request $request, Agent $agent)
+    public function update(Request $request, Agent $agen)
     {
+        $agent = $agen;
         try {
             $agent_data = array(
                 'name' => $request->name,
@@ -113,8 +115,9 @@ class AgentController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(Agent $agent)
+    public function destroy(Agent $agen)
     {
+        $agent = $agen;
         try {
             BankAccount::whereId($agent->bank_accounts->id)->delete();
             Agent::whereId($agent->id)->delete();

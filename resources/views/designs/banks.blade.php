@@ -15,15 +15,15 @@
                 <tr>
                     <th width="10px">No.</th>
                     <th>Nama</th>
-                    <th width="150px">Tindakan</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
             <tr>
                 <td>1</td>
                 <td>Tes</td>
                 <td>
-                    <x-button class="btn-show" data-bs-toggle="modal" data-bs-target="#modal-show" size="sm" icon="bx bx-search" face="info">Detail</x-button>
-                    <x-button class="btn-delete" size="sm" icon="bx bxs-trash" face="danger">Hapus</x-button>
+                    <x-button type="icon" class="btn-show" data-bs-toggle="modal" data-bs-target="#modal-show" size="sm" icon="bx bx-search" face="info">Detail</x-button>
+                    <x-button type="icon" class="btn-delete" size="sm" icon="bx bxs-trash" face="danger">Hapus</x-button>
                 </td>
             </tr>
         </x-table>

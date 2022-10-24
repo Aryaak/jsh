@@ -21,7 +21,7 @@
                     <th>Nilai Rate</th>
                     <th>Biaya Polis</th>
                     <th>Material</th>
-                    <th width="150px">Tindakan</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -109,7 +109,7 @@
         let agentRate = null
         let table = null
         $(document).ready(function () {
-            table = dataTableInit('table','Rate Agen',{url : '{{ route('agent-rates.index') }}'},[
+            table = dataTableInit('table','Rate Agen',{url : '{{ route('master.agent-rates.index') }}'},[
                 {data: 'agent.name', name: 'agent.name'},
                 {data: 'insurance_type.name', name: 'insurance_type.name'},
                 {data: 'min_value', name: 'min_value'},
@@ -129,18 +129,19 @@
         })
         $(document).on('click', '#create-save', function () {
             loading()
-            ajaxPost("{{ route('agent-rates.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
+            ajaxPost("{{ route('master.agent-rates.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
                 table.ajax.reload()
+                clearForm('#form-create')
             })
         })
         $(document).on('click', '#edit-save', function () {
             loading()
-            ajaxPost("{{ route('agent-rates.update','-id-') }}".replace('-id-',agentRate.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
+            ajaxPost("{{ route('master.agent-rates.update','-id-') }}".replace('-id-',agentRate.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
                 table.ajax.reload()
             })
         })
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('agent-rates.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('master.agent-rates.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     agentRate = response.data
                     $('#show-agent').html(agentRate.agent.name)
@@ -170,7 +171,7 @@
                 title: "Yakin ingin menghapus Rate Agen?",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    ajaxPost("{{ route('agent-rates.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},null,function(){
+                    ajaxPost("{{ route('master.agent-rates.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},null,function(){
                         table.ajax.reload()
                     })
                 }

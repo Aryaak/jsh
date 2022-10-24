@@ -326,8 +326,10 @@ function datatablesTranslate(attr = 'Data', verb = 'ditambahkan') {
         "search": "Cari:",
         "thousands": ".",
         "paginate": {
+            "first": "Pertama",
             "next": ">",
-            "previous": "<"
+            "previous": "<",
+            "last": "Terakhir",
         },
     }
 }
@@ -370,11 +372,14 @@ function dataTableInit(id,title,ajax,column,properties = {},translate = null,but
       scrollCollapse: true,
       pageLength : 10,
       order: [[0,'asc']],
-      lengthMenu: [[10, 25, 50,100, -1], [10, 25, 50,100, "All"]],
+      lengthMenu: [[10, 25, 50,100, -1], [10, 25, 50,100, "Semua"]],
       pagingType: 'full_numbers',
       ajax: ajax,
       columns: columns,
       language: translate ?? datatablesTranslate(title),
+      drawCallback: function(e) {
+        $('[data-bs-toggle="tooltip"]').tooltip()
+      }
     }
     Object.keys(properties).forEach(key => { initParams[key] = properties[key] });
     return $('#'+id).DataTable(initParams);

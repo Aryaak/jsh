@@ -43,20 +43,22 @@ class AgentRateController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(AgentRate $agentRate)
+    public function show(AgentRate $rateAgen)
     {
+        $agentRate = $rateAgen;
         $agentRate->agent;
         $agentRate->insurance;
         $agentRate->insurance_type;
         return response()->json($this->showResponse($agentRate->toArray()));
     }
 
-    public function edit(AgentRate $agentRate)
+    public function edit(AgentRate $rateAgen)
     {
     }
 
-    public function update(AgentRateRequest $request, AgentRate $agentRate)
+    public function update(AgentRateRequest $request, AgentRate $rateAgen)
     {
+        $agentRate = $rateAgen;
         try {
             DB::beginTransaction();
             $agentRate->ubah($request->validated());
@@ -72,8 +74,9 @@ class AgentRateController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(AgentRate $agentRate)
+    public function destroy(AgentRate $rateAgen)
     {
+        $agentRate = $rateAgen;
         try {
             DB::beginTransaction();
             $agentRate->hapus();

@@ -15,8 +15,8 @@
                 <tr>
                     <th>No.</th>
                     <th>Nama</th>
-                    <th>Jamsyar Username`1</th>
-                    <th width="180px">Tindakan</th>
+                    <th>Jamsyar Username</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -28,7 +28,7 @@
         <x-form id="form-create" method="post">
             <x-form-input id="create-name" name="name" label="Nama" class="mb-3" required />
             <x-form-input id="create-jamsyar-username" name="jamsyar_username" label="Jamsyar Username" class="mb-3" required />
-            <x-form-input id="create-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" class="mb-3" required />
+            <x-form-input id="create-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" class="mb-3" type="password" required />
         </x-form>
 
         @slot('footer')
@@ -37,11 +37,11 @@
     </x-modal>
 
     <x-modal id="modal-show" title="Detail Regional">
-        <div>
+        <div class="border-bottom mb-2 pb-2">
             <b>Nama</b>: <br>
             <span id="show-name">-</span>
         </div>
-        <div>
+        <div class="border-bottom mb-2 pb-2">
             <b>Jamsyar Username</b>: <br>
             <span id="show-jamsyar-username">-</span>
         </div>
@@ -59,7 +59,7 @@
         <x-form id="form-edit" method="put">
             <x-form-input id="edit-name" name="name" label="Nama" class="mb-3" required />
             <x-form-input id="edit-jamsyar-username" name="jamsyar_username" label="Jamsyar Username" class="mb-3" required />
-            <x-form-input id="edit-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" class="mb-3" required />
+            <x-form-input id="edit-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" class="mb-3" type="password" required />
         </x-form>
 
         @slot('footer')
@@ -77,7 +77,7 @@
         let table = null
         let regional = {}
         $(document).ready(function () {
-            table = dataTableInit('table','Regional',{url : '{{ route('regionals.index') }}'},[
+            table = dataTableInit('table','Regional',{url : '{{ route('master.regionals.index') }}'},[
                 {data: 'name', name: 'name'},
                 {data: 'jamsyar_username', name: 'jamsyar_username'},
             ])
@@ -86,20 +86,21 @@
             loading()
             let formData = new FormData(document.getElementById('form-create'))
             formData.append('is_regional',1)
-            ajaxPost("{{ route('branches.store') }}",formData,'#modal-create',function(){
+            ajaxPost("{{ route('master.branches.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
+                clearForm('#form-create')
             })
         })
         $(document).on('click', '#edit-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-edit'))
             formData.append('is_regional',1)
-            ajaxPost("{{ route('branches.update','-id-') }}".replace('-id-',regional.id),formData,'#modal-edit',function(){
+            ajaxPost("{{ route('master.branches.update','-id-') }}".replace('-id-',regional.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
             })
         })
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('branches.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('master.branches.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     regional = response.data
                     $('#show-name').html(regional.name)
@@ -121,7 +122,7 @@
                 if (result.isConfirmed) {
                     let formData = new FormData()
                     formData.append('_method','delete')
-                    ajaxPost("{{ route('branches.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                    ajaxPost("{{ route('master.branches.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
                         table.ajax.reload()
                     })
                 }

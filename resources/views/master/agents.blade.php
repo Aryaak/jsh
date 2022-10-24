@@ -19,7 +19,7 @@
                     <th>Nama</th>
                     <th>No. HP</th>
                     <th>Email</th>
-                    <th width="180px">Tindakan</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -156,7 +156,7 @@
         let table = null
         let agent = null
         $(document).ready(function () {
-            table = dataTableInit('table','Agen',{url : '{{ route('agents.index') }}'},[
+            table = dataTableInit('table','Agen',{url : '{{ route('master.agents.index') }}'},[
                 {data: 'branch.name', name: 'branch.name'},
                 {data: 'name', name: 'name'},
                 {data: 'phone', name: 'phone'},
@@ -179,13 +179,14 @@
             if (document.getElementById('create-is-active').checked == false) {
                 formData.append('is_active',1)
             }
-            ajaxPost("{{ route('agents.store') }}",formData,'#modal-create',function(){
+            ajaxPost("{{ route('master.agents.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
+                clearForm('#form-create')
             })
         })
 
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('agents.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('master.agents.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     agent = response.data
                     $('#show-branch').html(agent.branch.name)
@@ -251,7 +252,7 @@
             if (document.getElementById('edit-is-active').checked == false) {
                 formData.append('is_active',1)
             }
-            ajaxPost("{{ route('agents.update','-id-') }}".replace('-id-',agent.id),formData,'#modal-edit',function(){
+            ajaxPost("{{ route('master.agents.update','-id-') }}".replace('-id-',agent.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
             })
         })
@@ -264,7 +265,7 @@
                 if (result.isConfirmed) {
                     let formData = new FormData()
                     formData.append('_method','delete')
-                    ajaxPost("{{ route('agents.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                    ajaxPost("{{ route('master.agents.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
                         table.ajax.reload()
                     })
                 }

@@ -19,7 +19,7 @@
                     <th>Alamat</th>
                     <th>Nama PIC</th>
                     <th>Jabatan PIC</th>
-                    <th width="180px">Tindakan</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -64,7 +64,7 @@
         </div>
 
         @slot('footer')
-            <x-button class="btn-show" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
+            <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
         @endslot
     </x-modal>
 
@@ -92,7 +92,7 @@
         let table = null
         let insurance = {}
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance Type',{url : '{{ route('insurances.index') }}'},[
+            table = dataTableInit('table','Insurance Type',{url : '{{ route('master.insurances.index') }}'},[
                 {data: 'name', name: 'name'},
                 {data: 'alias', name: 'alias'},
                 {data: 'address', name: 'address'},
@@ -104,21 +104,22 @@
         $(document).on('click', '#create-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-create'))
-            ajaxPost("{{ route('insurances.store') }}",formData,'#modal-create',function(){
+            ajaxPost("{{ route('master.insurances.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
+                clearForm('#form-create')
             })
         })
 
         $(document).on('click', '#edit-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-edit'))
-            ajaxPost("{{ route('insurances.update','-id-') }}".replace('-id-',insurance.id),formData,'#modal-edit',function(){
+            ajaxPost("{{ route('master.insurances.update','-id-') }}".replace('-id-',insurance.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
             })
         })
 
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('insurances.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('master.insurances.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     insurance = response.data
                     $('#show-name').html(insurance.name)
@@ -130,7 +131,7 @@
             })
         })
 
-        $(document).on('click', '.btn-show', function () {
+        $(document).on('click', '.btn-edit', function () {
             $('#edit-name').val(insurance.name)
             $('#edit-alias').val(insurance.alias)
             $('#edit-address').val(insurance.address)
@@ -145,7 +146,7 @@
                 if (result.isConfirmed) {
                     let formData = new FormData()
                     formData.append('_method','delete')
-                    ajaxPost("{{ route('insurances.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                    ajaxPost("{{ route('master.insurances.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
                         table.ajax.reload()
                     })
                 }

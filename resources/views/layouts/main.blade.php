@@ -63,39 +63,58 @@
                     <x-menu route="dashboard" icon="bx bx-home-circle">Dasbor</x-menu>
 
                     {{-- Master Data --}}
-                    <x-menu-title>Master Data</x-menu-title>
-                    <x-menu route="regionals.index" icon="bx bxs-building-house">Regional</x-menu>
-                    <x-menu route="branches.index" icon="bx bxs-building-house">Cabang</x-menu>
-                    <x-menu route="insurance-types.index" icon="bx bxs-shapes">Jenis Jaminan</x-menu>
-                    <x-menu route="insurances.index" icon="bx bxs-heart">Asuransi</x-menu>
-                    <x-menu route="insurance-rates.index" icon="bx bxs-discount">Rate Asuransi</x-menu>
-                    <x-menu route="agents.index" icon="bx bxs-user-account">Agen</x-menu>
-                    <x-menu route="agent-rates.index" icon="bx bxs-discount">Rate Agen</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-bank">Bank</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-discount">Rate Bank</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-user-badge">Obligee</x-menu>
-                    <x-menu route="principals.index" icon="bx bxs-user-rectangle">Principle</x-menu>
+                    <x-menu route="master.*" icon="bx bxs-data">
+                        Master Data
+                        @slot('submenus')
+                            <x-submenu route="master.regionals.index">Regional</x-submenu>
+                            <x-submenu route="master.branches.index">Cabang</x-submenu>
+                            <x-submenu route="master.insurance-types.index">Jenis Jaminan</x-submenu>
+                            <x-submenu route="master.insurances.index">Asuransi</x-submenu>
+                            <x-submenu route="master.insurance-rates.index">Rate Asuransi</x-submenu>
+                            <x-submenu route="master.agents.index">Agen</x-submenu>
+                            <x-submenu route="master.agent-rates.index">Rate Agen</x-submenu>
+                            <x-submenu route="dashboard">Bank</x-submenu>
+                            <x-submenu route="dashboard">Rate Bank</x-submenu>
+                            <x-submenu route="dashboard">Obligee</x-submenu>
+                            <x-submenu route="master.principals.index">Principal</x-submenu>
+                        @endslot
+                    </x-menu>
+
 
                     {{-- Produk --}}
-                    <x-menu-title>Produk</x-menu-title>
-                    <x-menu route="dashboard" icon="bx bxs-receipt">Surety Bond</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-bank">Bank Garansi</x-menu>
+                    <x-menu route="products.*" icon="bx bxs-receipt">
+                        Produk
+                        @slot('submenus')
+                            <x-submenu route="dashboard">Surety Bond</x-submenu>
+                            <x-submenu route="dashboard">Bank Garansi</x-submenu>
+                        @endslot
+                    </x-menu>
+
 
                     {{-- Pembayaran --}}
-                    <x-menu-title>Pembayaran</x-menu-title>
-                    <x-menu route="dashboard" icon="bx bxs-wallet">Principle ke Cabang</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-wallet">Cabang ke Regional</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-wallet">Regional ke Asuransi</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-wallet">Cabang ke Agen</x-menu>
+                    <x-menu route="payments.*" icon="bx bxs-wallet">
+                        Pembayaran
+                        @slot('submenus')
+                            <x-submenu route="dashboard" icon="bx bxs-wallet">Principal ke Cabang</x-submenu>
+                            <x-submenu route="dashboard" icon="bx bxs-wallet">Cabang ke Regional</x-submenu>
+                            <x-submenu route="dashboard" icon="bx bxs-wallet">Regional ke Asuransi</x-submenu>
+                            <x-submenu route="dashboard" icon="bx bxs-wallet">Cabang ke Agen</x-submenu>
+                        @endslot
+                    </x-menu>
+
 
                     {{-- Laporan --}}
-                    <x-menu-title>Laporan</x-menu-title>
-                    <x-menu route="dashboard" icon="bx bxs-file">Produksi</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-file">Keuangan</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-file">Sisa Agen</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-file">Pemasukan</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-file">Pengeluaran</x-menu>
-                    <x-menu route="dashboard" icon="bx bxs-file">Laba</x-menu>
+                    <x-menu route="payments.*" icon="bx bxs-file">
+                        Laporan
+                        @slot('submenus')
+                            <x-submenu route="dashboard">Produksi</x-submenu>
+                            <x-submenu route="dashboard">Keuangan</x-submenu>
+                            <x-submenu route="dashboard">Sisa Agen</x-submenu>
+                            <x-submenu route="dashboard">Pemasukan</x-submenu>
+                            <x-submenu route="dashboard">Pengeluaran</x-submenu>
+                            <x-submenu route="dashboard">Laba</x-submenu>
+                        @endslot
+                    </x-menu>
                 </ul>
             </aside>
 

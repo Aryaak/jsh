@@ -16,10 +16,10 @@
                 <tr>
                     <th width="10px">No.</th>
                     <th>Waktu Bayar</th>
-                    <th>Dari Principle</th>
+                    <th>Dari Principal</th>
                     <th>Ke Cabang</th>
                     <th>Nominal Bayar</th>
-                    <th width="150px">Tindakan</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
             <tr>
@@ -29,8 +29,8 @@
                 <td>Tes</td>
                 <td>Rp100.000.000,-</td>
                 <td>
-                    <x-button class="btn-show" data-bs-toggle="modal" data-bs-target="#modal-show" size="sm" icon="bx bx-search" face="info">Detail</x-button>
-                    <x-button class="btn-delete" size="sm" icon="bx bxs-trash" face="danger">Hapus</x-button>
+                    <x-button type="icon" class="btn-show" data-bs-toggle="modal" data-bs-target="#modal-show" size="sm" icon="bx bx-search" face="info">Detail</x-button>
+                    <x-button type="icon" class="btn-delete" size="sm" icon="bx bxs-trash" face="danger">Hapus</x-button>
                 </td>
             </tr>
         </x-table>
@@ -41,7 +41,7 @@
     <x-modal id="modal-create" title="Tambah Pembayaran">
         <x-form id="form-create" method="post">
             <x-form-input label="Waktu Bayar" id="create-datetime" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Dari Principle" id="create-principle-id" name="principleId" :options="[]" class="mb-3" required />
+            <x-form-select label="Dari Principal" id="create-principal-id" name="principalId" :options="[]" class="mb-3" required />
             <x-form-select label="Ke Cabang" id="create-branch-id" name="branchId" :options="[]" class="mb-3" required />
             <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="create-desc" name="desc" />
@@ -58,8 +58,8 @@
             <span id="show-datetime">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Dari Principle</b>: <br>
-            <span id="show-principle">-</span>
+            <b>Dari Principal</b>: <br>
+            <span id="show-principal">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Ke Cabang</b>: <br>
@@ -82,7 +82,7 @@
     <x-modal id="modal-edit" title="Ubah Pembayaran">
         <x-form id="form-edit" method="put">
             <x-form-input label="Waktu Bayar" id="edit-datetime" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Dari Principle" id="edit-principle-id" name="principleId" :options="[]" class="mb-3" required />
+            <x-form-select label="Dari Principal" id="edit-principal-id" name="principalId" :options="[]" class="mb-3" required />
             <x-form-select label="Ke Cabang" id="edit-branch-id" name="branchId" :options="[]" class="mb-3" required />
             <x-form-input label="Nominal Bayar" id="edit-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="edit-desc" name="desc" />
@@ -103,8 +103,8 @@
     <script>
         $(document).ready(function () {
             const table = $("#table").DataTable()
-            $("#create-principle-id, #create-branch-id").select2({dropdownParent: $('#modal-create')})
-            $("#edit-principle-id, #edit-branch-id").select2({dropdownParent: $('#modal-edit')})
+            $("#create-principal-id, #create-branch-id").select2({dropdownParent: $('#modal-create')})
+            $("#edit-principal-id, #edit-branch-id").select2({dropdownParent: $('#modal-edit')})
         })
 
         $(document).on('click', '.btn-delete', function () {

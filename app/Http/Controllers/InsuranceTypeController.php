@@ -43,8 +43,9 @@ class InsuranceTypeController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(InsuranceType $insuranceType)
+    public function show(InsuranceType $jenisJaminan)
     {
+        $insuranceType = $jenisJaminan;
         return response()->json($this->showResponse($insuranceType->toArray()));
     }
 
@@ -52,8 +53,9 @@ class InsuranceTypeController extends Controller
     {
     }
 
-    public function update(Request $request, InsuranceType $insuranceType)
+    public function update(Request $request, InsuranceType $jenisJaminan)
     {
+        $insuranceType = $jenisJaminan;
         try {
             DB::beginTransaction();
             $insuranceType->ubah($request->all());
@@ -69,8 +71,9 @@ class InsuranceTypeController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(InsuranceType $insuranceType)
+    public function destroy(InsuranceType $jenisJaminan)
     {
+        $insuranceType = $jenisJaminan;
         try {
             DB::beginTransaction();
             $insuranceType->hapus();

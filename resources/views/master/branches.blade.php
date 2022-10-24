@@ -14,10 +14,10 @@
         <x-table id="table">
             @slot('thead')
                 <tr>
-                    <th>No.</th>
+                    <th width="10px">No.</th>
                     <th>Regional</th>
                     <th>Nama</th>
-                    <th>Tindakan</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -73,7 +73,7 @@
         let table = null
         let branch = null
         $(document).ready(function () {
-            table = dataTableInit('table','Cabang',{url : '{{ route('branches.index') }}'},[
+            table = dataTableInit('table','Cabang',{url : '{{ route('master.branches.index') }}'},[
                 {data: 'regional.name', name: 'regional.name'},
                 {data: 'name', name: 'name'},
             ])
@@ -84,20 +84,21 @@
             loading()
             let formData = new FormData(document.getElementById('form-create'))
             formData.append('is_regional',0)
-            ajaxPost("{{ route('branches.store') }}",formData,'#modal-create',function(){
+            ajaxPost("{{ route('master.branches.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
+                clearForm('#form-create')
             })
         })
         $(document).on('click', '#edit-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-edit'))
             formData.append('is_regional',0)
-            ajaxPost("{{ route('branches.update','-id-') }}".replace('-id-',branch.id),formData,'#modal-edit',function(){
+            ajaxPost("{{ route('master.branches.update','-id-') }}".replace('-id-',branch.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
             })
         })
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('branches.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('master.branches.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     branch = response.data
                     $('#show-regional').html(branch.regional.name)
@@ -117,7 +118,7 @@
                 if (result.isConfirmed) {
                     let formData = new FormData()
                     formData.append('_method','delete')
-                    ajaxPost("{{ route('branches.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                    ajaxPost("{{ route('master.branches.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
                         table.ajax.reload()
                     })
                 }

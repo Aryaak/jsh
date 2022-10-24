@@ -15,35 +15,54 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Main Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
 |
 */
 
 Route::get('/', fn () => view('welcome'))->name('dashboard');
 Route::get('/uploader/tinymce', null)->name('uploader.tinymce'); // tolong disesuaikan ya
-Route::resource('branches',BranchController::class);
-Route::resource('regionals',RegionalController::class);
-Route::resource('insurances',InsuranceController::class);
-Route::resource('agents',AgentController::class);
-Route::resource('bank_accounts',BankAccountController::class);
-Route::apiResource('principals',PrincipalController::class);
-Route::apiResource('agent-rates',AgentRateController::class);
-Route::resource('insurance-types',InsuranceTypeController::class);
-Route::apiResource('insurance-rates',InsuranceRateController::class);
 
-Route::get('select2/regional',[Select2Controller::class,'regional'])->name('select2.regional');
-Route::get('select2/branch',[Select2Controller::class,'branch'])->name('select2.branch');
-Route::get('select2/bank',[Select2Controller::class,'bank'])->name('select2.bank');
-Route::get('select2/province',[Select2Controller::class,'province'])->name('select2.province');
-Route::get('select2/city',[Select2Controller::class,'city'])->name('select2.city');
-Route::get('select2/agent',[Select2Controller::class,'agent'])->name('select2.agent');
-Route::get('select2/insurance',[Select2Controller::class,'insurance'])->name('select2.insurance');
-Route::get('select2/insurance-type',[Select2Controller::class,'insuranceType'])->name('select2.insuranceType');
+Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
+    Route::resource('cabang',BranchController::class)->names('branches');
+    Route::resource('regional',RegionalController::class)->names('regionals');
+    Route::resource('asuransi',InsuranceController::class)->names('insurances');
+    Route::resource('agen',AgentController::class)->names('agents');
+    Route::apiResource('principal',PrincipalController::class)->names('principals');
+    Route::apiResource('rate-agen',AgentRateController::class)->names('agent-rates');
+    Route::resource('jenis-jaminan',InsuranceTypeController::class)->names('insurance-types');
+    Route::apiResource('rate-asuransi',InsuranceRateController::class)->names('insurance-rates');
+});
+
+Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
+    // Route untuk produk ....
+});
+
+Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
+    // Route untuk pembayaran ....
+});
+
+Route::group(['prefix' => '/laporan', 'as' => 'reports.'], function () {
+    // Route untuk laporan ....
+});
+
+/**
+ * -------------------------------------------------------------------------
+ * Select2 Route
+ * -------------------------------------------------------------------------
+ */
+
+Route::group(['prefix' => '/select2', 'as' => 'select2.'], function () {
+    Route::get('regional',[Select2Controller::class,'regional'])->name('regional');
+    Route::get('branch',[Select2Controller::class,'branch'])->name('branch');
+    Route::get('bank',[Select2Controller::class,'bank'])->name('bank');
+    Route::get('province',[Select2Controller::class,'province'])->name('province');
+    Route::get('city',[Select2Controller::class,'city'])->name('city');
+    Route::get('agent',[Select2Controller::class,'agent'])->name('agent');
+    Route::get('insurance',[Select2Controller::class,'insurance'])->name('insurance');
+    Route::get('insurance-type',[Select2Controller::class,'insuranceType'])->name('insuranceType');
+});
+
 /**
  * -------------------------------------------------------------------------
  * Design Only Route

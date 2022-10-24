@@ -43,19 +43,21 @@ class InsuranceRateController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(InsuranceRate $insuranceRate)
+    public function show(InsuranceRate $rateAsuransi)
     {
+        $insuranceRate = $rateAsuransi;
         $insuranceRate->insurance;
         $insuranceRate->insurance_type;
         return response()->json($this->showResponse($insuranceRate->toArray()));
     }
 
-    public function edit(InsuranceRate $insuranceRate)
+    public function edit(InsuranceRate $rateAsuransi)
     {
     }
 
-    public function update(InsuranceRateRequest $request, InsuranceRate $insuranceRate)
+    public function update(InsuranceRateRequest $request, InsuranceRate $rateAsuransi)
     {
+        $insuranceRate = $rateAsuransi;
         try {
             DB::beginTransaction();
             $insuranceRate->ubah($request->validated());
@@ -71,8 +73,9 @@ class InsuranceRateController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(InsuranceRate $insuranceRate)
+    public function destroy(InsuranceRate $rateAsuransi)
     {
+        $insuranceRate = $rateAsuransi;
         try {
             DB::beginTransaction();
             $insuranceRate->hapus();

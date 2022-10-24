@@ -21,7 +21,7 @@
                     <th>Nilai Rate</th>
                     <th>Biaya Polis</th>
                     <th>Material</th>
-                    <th width="150px">Tindakan</th>
+                    <th width="80px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -103,7 +103,7 @@
         let table = null
         let insuranceRate = null
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance Rate',{url : '{{ route('insurance-rates.index') }}'},[
+            table = dataTableInit('table','Insurance Rate',{url : '{{ route('master.insurance-rates.index') }}'},[
                 {data: 'insurance.name', name: 'insurance.name'},
                 {data: 'insurance_type.name', name: 'insurance_type.name'},
                 {data: 'min_value', name: 'min_value'},
@@ -119,18 +119,19 @@
         })
         $(document).on('click', '#create-save', function () {
             loading()
-            ajaxPost("{{ route('insurance-rates.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
+            ajaxPost("{{ route('master.insurance-rates.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
                 table.ajax.reload()
+                clearForm('#form-create')
             })
         })
         $(document).on('click', '#edit-save', function () {
             loading()
-            ajaxPost("{{ route('insurance-rates.update','-id-') }}".replace('-id-',insuranceRate.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
+            ajaxPost("{{ route('master.insurance-rates.update','-id-') }}".replace('-id-',insuranceRate.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
                 table.ajax.reload()
             })
         })
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('insurance-rates.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('master.insurance-rates.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     insuranceRate = response.data
                     $('#show-insurance').html(insuranceRate.insurance.name)
@@ -158,7 +159,7 @@
                 title: "Yakin ingin menghapus Rate Asuransi?",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    ajaxPost("{{ route('insurance-rates.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},null,function(){
+                    ajaxPost("{{ route('master.insurance-rates.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},null,function(){
                         table.ajax.reload()
                     })
                 }

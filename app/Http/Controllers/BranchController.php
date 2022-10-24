@@ -43,8 +43,9 @@ class BranchController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Branch $branch)
+    public function show(Branch $cabang)
     {
+        $branch = $cabang;
         $branch->regional;
         return response()->json($this->showResponse($branch->toArray()));
     }
@@ -53,8 +54,9 @@ class BranchController extends Controller
     {
     }
 
-    public function update(Request $request, Branch $branch)
+    public function update(Request $request, Branch $cabang)
     {
+        $branch = $cabang;
         try {
             DB::beginTransaction();
             $branch->ubah($request->all());
@@ -70,8 +72,9 @@ class BranchController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(Branch $branch)
+    public function destroy(Branch $cabang)
     {
+        $branch = $cabang;
         try {
             DB::beginTransaction();
             $branch->hapus();

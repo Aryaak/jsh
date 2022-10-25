@@ -30,28 +30,10 @@ class AgentController extends Controller
     public function store(AgentRequest $request)
     {
         try {
-            $agent = array(
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'address' => $request->address,
-                'identity_number' => $request->identity_number,
-                'is_active' => $request->is_active,
-                'is_verified' => $request->is_verified,
-                'jamsyar_username' => $request->jamsyar_username,
-                'jamsyar_password' => $request->jamsyar_password,
-                'branch_id' => $request->branch_id,
-            );
-
-            $agent_insert_data = Agent::create($agent);
-            $bank_account = array(
-                'number' => $request->number,
-                'name' => $request->name_bank,
-                'agent_id' => $agent_insert_data->id,
-                'bank_id' => $request->bank_id,
-            );
-            BankAccount::create($bank_account);
-
+            DB::beginTransaction();
+            $agent = Agent::buat($request->validated());
+            BankAccount::buat($request->validated(),$agent->id);
+            DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
         } catch (Exception $e) {
@@ -65,11 +47,9 @@ class AgentController extends Controller
 
     public function show(Agent $agen)
     {
-        $agent = $agen;
-        $agent->branch;
-        $agent->bank_accounts->bank;
-        // dd($agent);
-        return response()->json($this->showResponse($agent->toArray()));
+        $agen->branch;
+        $agen->bank_accounts->bank;
+        return response()->json($this->showResponse($agen->toArray()));
     }
 
     public function edit(Agent $agen)
@@ -78,32 +58,12 @@ class AgentController extends Controller
 
     public function update(Request $request, Agent $agen)
     {
-        $agent = $agen;
         try {
-            $agent_data = array(
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'address' => $request->address,
-                'identity_number' => $request->identity_number,
-                'is_active' => $request->is_active,
-                'is_verified' => $request->is_verified,
-                'jamsyar_username' => $request->jamsyar_username,
-                'jamsyar_password' => $request->jamsyar_password,
-                'branch_id' => $request->branch_id,
-            );
-
-            Agent::whereId($agent->id)->update($agent_data);
-
-            $bank_account_data = array(
-                'number' => $request->number,
-                'name' => $request->name_bank,
-                'agent_id' => $request->agent_id,
-                'bank_id' => $request->bank_id,
-            );
-            $bank_account = BankAccount::find($request->bank_account_id);
-            BankAccount::whereId($bank_account->id)->update($bank_account_data);
-
+            DB::beginTransaction();
+            $agen->ubah($request->all());
+            $bankaccount = $agen->bank_accounts;
+            $bankaccount->ubah($request->all(), $agen->id);
+            DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
         } catch (Exception $e) {
@@ -117,10 +77,12 @@ class AgentController extends Controller
 
     public function destroy(Agent $agen)
     {
-        $agent = $agen;
         try {
-            BankAccount::whereId($agent->bank_accounts->id)->delete();
-            Agent::whereId($agent->id)->delete();
+            DB::beginTransaction();
+            $bankaccount = $agen->bank_accounts;
+            $bankaccount->hapus();
+            $agen->hapus();
+            DB::commit();
             $http_code = 200;
             $response = $this->destroyResponse();
         } catch (Exception $e) {

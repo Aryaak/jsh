@@ -43,11 +43,11 @@
             <div class="row">
                 <div class="col-sm-6 mb-3">
                     <x-form-label for="create-is-verified">Sudah Diverifikasi?</x-form-label>
-                    <x-form-check id="create-is-verified" type="switch" name="is_verified" value=0></x-form-check>
+                    <x-form-check id="create-is-verified" type="switch" name="is_verified" value=1></x-form-check>
                 </div>
                 <div class="col-sm-6">
                     <x-form-label for="create-is-active">Status Aktif</x-form-label>
-                    <x-form-check id="create-is-active" type="switch" name="is_active" value=0></x-form-check>
+                    <x-form-check id="create-is-active" type="switch" name="is_active" value=1></x-form-check>
                 </div>
             </div>
         </x-form>
@@ -131,11 +131,11 @@
             <div class="row">
                 <div class="col-sm-6 mb-3">
                     <x-form-label for="edit-is-verified">Sudah Diverifikasi?</x-form-label>
-                    <x-form-check id="edit-is-verified" type="switch" name="is_verified" value=0></x-form-check>
+                    <x-form-check id="edit-is-verified" type="switch" name="is_verified" value=1></x-form-check>
                 </div>
                 <div class="col-sm-6">
                     <x-form-label for="edit-is-active">Status Aktif</x-form-label>
-                    <x-form-check id="edit-is-active" type="switch" name="is_active" value=0></x-form-check>
+                    <x-form-check id="edit-is-active" type="switch" name="is_active" value=1></x-form-check>
                 </div>
             </div>
         </x-form>
@@ -174,10 +174,10 @@
             loading()
             let formData = new FormData(document.getElementById('form-create'))
             if (document.getElementById('create-is-verified').checked == false) {
-                formData.append('is_verified',1)
+                formData.append('is_verified',0)
             }
             if (document.getElementById('create-is-active').checked == false) {
-                formData.append('is_active',1)
+                formData.append('is_active',0)
             }
             ajaxPost("{{ route('master.agents.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
@@ -199,14 +199,14 @@
                     $('#show-bank').html(agent.bank_accounts.bank.name)
                     $('#show-bank-number').html(agent.bank_accounts.number)
                     $('#show-bank-owner').html(agent.bank_accounts.name)
-                    if(agent.is_verified == 0){
+                    if(agent.is_verified == 1){
                         $('#show-is-verified').html('Sudah')
 
                     }else{
                         $('#show-is-verified').html('Belum')
                     }
 
-                    if(agent.is_active == 0){
+                    if(agent.is_active == 1){
                         $('#show-is-active').html("Sudah Aktif")
                     }else{
                         $('#show-is-active').html("Belum Aktif")
@@ -228,13 +228,13 @@
             $('#edit-bank-id').append(new Option(agent.bank_accounts.bank.name,agent.bank_accounts.bank.id,true,true)).trigger('change');
             $('#edit-bank-number').val(agent.bank_accounts.number)
             $('#edit-bank-owner-name').val(agent.bank_accounts.name)
-            if(agent.is_verified == 0){
+            if(agent.is_verified == 1){
                 document.getElementById("edit-is-verified").checked = true;
             }else{
                 document.getElementById("edit-is-verified").checked = false;
             }
 
-            if(agent.is_active == 0){
+            if(agent.is_active == 1){
                 document.getElementById("edit-is-active").checked = true;
             }else{
                 document.getElementById("edit-is-active").checked = false;
@@ -247,10 +247,10 @@
             formData.append("bank_account_id",agent.bank_accounts.id)
             formData.append("agent_id",agent.id)
             if (document.getElementById('edit-is-verified').checked == false) {
-                formData.append('is_verified',1)
+                formData.append('is_verified',0)
             }
             if (document.getElementById('edit-is-active').checked == false) {
-                formData.append('is_active',1)
+                formData.append('is_active',0)
             }
             ajaxPost("{{ route('master.agents.update','-id-') }}".replace('-id-',agent.id),formData,'#modal-edit',function(){
                 table.ajax.reload()

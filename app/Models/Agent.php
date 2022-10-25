@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Seeders\BankSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
@@ -50,10 +51,34 @@ class Agent extends Model
     }
 
     public static function buat(array $params): self{
-        return self::create(self::fetch((object)$params));
+        $agent = array(
+            'name' => $params['name'],
+            'phone' => $params['phone'],
+            'email' => $params['email'],
+            'address' => $params['address'],
+            'identity_number' => $params['identity_number'],
+            'is_active' => $params['is_active'],
+            'is_verified' => $params['is_verified'],
+            'jamsyar_username' => $params['jamsyar_username'],
+            'jamsyar_password' => $params['jamsyar_password'],
+            'branch_id' => $params['branch_id'],
+        );
+        return self::create(self::fetch((object)$agent));
     }
     public function ubah(array $params): bool{
-        return $this->update(self::fetch((object)$params));
+        $agent = array(
+            'name' => $params['name'],
+            'phone' => $params['phone'],
+            'email' => $params['email'],
+            'address' => $params['address'],
+            'identity_number' => $params['identity_number'],
+            'is_active' => $params['is_active'],
+            'is_verified' => $params['is_verified'],
+            'jamsyar_username' => $params['jamsyar_username'],
+            'jamsyar_password' => $params['jamsyar_password'],
+            'branch_id' => $params['branch_id'],
+        );
+        return $this->update(self::fetch((object)$agent));
     }
     public function hapus(): bool{
         return $this->delete();

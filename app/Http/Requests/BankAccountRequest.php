@@ -13,7 +13,7 @@ class BankAccountRequest extends FormRequest
     {
         return [
             'number' => 'required',
-            'name_bank' => 'required',
+            'name' => 'required',
             'agent_id' => 'required',
             'bank_id' => 'required',
         ];

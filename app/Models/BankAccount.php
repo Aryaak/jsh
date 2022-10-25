@@ -20,7 +20,7 @@ class BankAccount extends Model
     private static function fetch(object $args): array{
         return [
             'number' => $args->number,
-            'name' => $args->name_bank,
+            'name' => $args->name,
             'agent_id' => $args->agent_id,
             'bank_id' => $args->bank_id,
         ];
@@ -34,11 +34,23 @@ class BankAccount extends Model
         return $this->belongsTo(Bank::class,'bank_id');
     }
 
-    public static function buat(array $params): self{
-        return self::create(self::fetch((object)$params));
+    public static function buat(array $params, $id): self{
+        $bank_account = array(
+            'number' => $params['number'],
+            'name' => $params['name_bank'],
+            'agent_id' => $id,
+            'bank_id' => $params['bank_id'],
+        );
+        return self::create(self::fetch((object)$bank_account));
     }
-    public function ubah(array $params): bool{
-        return $this->update(self::fetch((object)$params));
+    public function ubah(array $params, $id): bool{
+        $bank_account = array(
+            'number' => $params['number'],
+            'name' => $params['name_bank'],
+            'agent_id' => $id,
+            'bank_id' => $params['bank_id'],
+        );
+        return $this->update(self::fetch((object)$bank_account));
     }
     public function hapus(): bool{
         return $this->delete();

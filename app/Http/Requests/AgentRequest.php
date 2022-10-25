@@ -22,6 +22,9 @@ class AgentRequest extends FormRequest
             'jamsyar_username' => 'required',
             'jamsyar_password' => 'required',
             'branch_id' => 'required',
+            'number' => 'required',
+            'name_bank' => 'required',
+            'bank_id' => 'required',
         ];
 
     }

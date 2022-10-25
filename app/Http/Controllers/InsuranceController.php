@@ -47,8 +47,7 @@ class InsuranceController extends Controller
 
     public function show(Insurance $asuransi)
     {
-        $insurance = $asuransi;
-        return response()->json($this->showResponse($insurance->toArray()));
+        return response()->json($this->showResponse($asuransi->toArray()));
     }
 
     public function edit(Insurance $asuransi)
@@ -57,10 +56,9 @@ class InsuranceController extends Controller
 
     public function update(Request $request, Insurance $asuransi)
     {
-        $insurance = $asuransi;
         try {
             DB::beginTransaction();
-            $insurance->ubah($request->all());
+            $asuransi->ubah($request->all());
             DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
@@ -75,10 +73,9 @@ class InsuranceController extends Controller
 
     public function destroy(Insurance $asuransi)
     {
-        $insurance = $asuransi;
         try {
             DB::beginTransaction();
-            $insurance->hapus();
+            $asuransi->hapus();
             DB::commit();
             $http_code = 200;
             $response = $this->destroyResponse();

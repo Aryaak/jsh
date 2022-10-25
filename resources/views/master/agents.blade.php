@@ -102,11 +102,11 @@
         <div class="row">
             <div class="col-sm-6">
                 <b>Sudah Diverifikasi</b>: <br>
-                <span><x-badge id="show-is-verified" face="label-success" rounded>Sudah</x-badge></span>
+                <span id="show-is-verified"><x-badge face="label-success" rounded>Sudah</x-badge></span>
             </div>
             <div class="col-sm-6">
                 <b>Status Aktif</b>: <br>
-                <span><x-badge id="show-is-active" face="label-success" rounded>Tidak Aktif</x-badge></span>
+                <span id="show-is-active"><x-badge face="label-success" rounded>Tidak Aktif</x-badge></span>
             </div>
         </div>
 
@@ -200,16 +200,25 @@
                     $('#show-bank-number').html(agent.bank_accounts.number)
                     $('#show-bank-owner').html(agent.bank_accounts.name)
                     if(agent.is_verified == 1){
-                        $('#show-is-verified').html('Sudah')
+                        $('#show-is-verified').html(`
+                            <x-badge face="label-success" rounded>Sudah</x-badge>
+                        `)
 
                     }else{
-                        $('#show-is-verified').html('Belum')
+                        $('#show-is-verified').html(`
+                            <x-badge face="label-danger" rounded>Belum</x-badge>
+                        `)
                     }
 
                     if(agent.is_active == 1){
-                        $('#show-is-active').html("Sudah Aktif")
+                        $('#show-is-active').html(`
+                            <x-badge face="label-success" rounded>Aktif</x-badge>
+                        `)
+
                     }else{
-                        $('#show-is-active').html("Belum Aktif")
+                        $('#show-is-active').html(`
+                            <x-badge face="label-danger" rounded>Belum Aktif</x-badge>
+                        `)
                     }
                 }
             })

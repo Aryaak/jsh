@@ -12,6 +12,7 @@ use App\Http\Controllers\InsuranceTypeController;
 use App\Http\Controllers\InsuranceRateController;
 use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\Select2Controller;
+use App\Http\Controllers\UploaderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', fn () => view('welcome'))->name('dashboard');
-Route::get('/uploader/tinymce', null)->name('uploader.tinymce'); // tolong disesuaikan ya
+Route::get('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
 
 Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::get('/', fn() => redirect(route('dashboard')));

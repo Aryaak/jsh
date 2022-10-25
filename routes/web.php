@@ -25,26 +25,34 @@ Route::get('/', fn () => view('welcome'))->name('dashboard');
 Route::get('/uploader/tinymce', null)->name('uploader.tinymce'); // tolong disesuaikan ya
 
 Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
-    Route::resource('cabang',BranchController::class)->names('branches');
-    Route::resource('regional',RegionalController::class)->names('regionals');
-    Route::resource('asuransi',InsuranceController::class)->names('insurances');
-    Route::resource('agen',AgentController::class)->names('agents');
+    Route::get('/', fn() => redirect(route('dashboard')));
+
+    Route::apiResource('cabang',BranchController::class)->names('branches');
+    Route::apiResource('regional',RegionalController::class)->names('regionals');
+    Route::apiResource('asuransi',InsuranceController::class)->names('insurances');
+    Route::apiResource('agen',AgentController::class)->names('agents');
     Route::apiResource('principal',PrincipalController::class)->names('principals');
     Route::apiResource('rate-agen',AgentRateController::class)->names('agent-rates');
-    Route::resource('jenis-jaminan',InsuranceTypeController::class)->names('insurance-types');
+    Route::apiResource('jenis-jaminan',InsuranceTypeController::class)->names('insurance-types');
     Route::apiResource('rate-asuransi',InsuranceRateController::class)->names('insurance-rates');
     Route::apiResource('rate-bank',BankRateController::class)->names('bank-rates');
 });
 
 Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
+    Route::get('/', fn() => redirect(route('dashboard')));
+
     // Route untuk produk ....
 });
 
 Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
+    Route::get('/', fn() => redirect(route('dashboard')));
+
     // Route untuk pembayaran ....
 });
 
 Route::group(['prefix' => '/laporan', 'as' => 'reports.'], function () {
+    Route::get('/', fn() => redirect(route('dashboard')));
+
     // Route untuk laporan ....
 });
 

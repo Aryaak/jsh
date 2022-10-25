@@ -128,14 +128,14 @@
 
         $(document).on('click', '#create-save', function () {
             loading()
-            ajaxPost("{{ route('master.bank-rates.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
+            ajaxPost("{{ route('master.bank-rates.store') }}",fetchFormData(new FormData(document.getElementById('form-create'))),'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
             })
         })
         $(document).on('click', '#edit-save', function () {
             loading()
-            ajaxPost("{{ route('master.bank-rates.update','-id-') }}".replace('-id-',bankRate.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
+            ajaxPost("{{ route('master.bank-rates.update','-id-') }}".replace('-id-',bankRate.id),fetchFormData(new FormData(document.getElementById('form-edit'))),'#modal-edit',function(){
                 table.ajax.reload()
             })
         })

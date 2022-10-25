@@ -74,7 +74,7 @@
                             <x-submenu route="master.agents.index">Agen</x-submenu>
                             <x-submenu route="master.agent-rates.index">Rate Agen</x-submenu>
                             <x-submenu route="dashboard">Bank</x-submenu>
-                            <x-submenu route="dashboard">Rate Bank</x-submenu>
+                            <x-submenu route="master.bank-rates.index">Rate Bank</x-submenu>
                             <x-submenu route="dashboard">Obligee</x-submenu>
                             <x-submenu route="master.principals.index">Principal</x-submenu>
                         @endslot

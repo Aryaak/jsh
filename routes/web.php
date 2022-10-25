@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AgentRateController;
+use App\Http\Controllers\BankRateController;
 use App\Http\Controllers\PrincipalController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\DesignController;
@@ -32,6 +33,7 @@ Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::apiResource('rate-agen',AgentRateController::class)->names('agent-rates');
     Route::resource('jenis-jaminan',InsuranceTypeController::class)->names('insurance-types');
     Route::apiResource('rate-asuransi',InsuranceRateController::class)->names('insurance-rates');
+    Route::apiResource('rate-bank',BankRateController::class)->names('bank-rates');
 });
 
 Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {

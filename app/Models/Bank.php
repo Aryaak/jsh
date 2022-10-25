@@ -20,11 +20,12 @@ class Bank extends Model
         ];
     }
 
-    public function bank_accounts()
-    {
+    public function bank_accounts(){
         return $this->hasMany(BankAccount::class);
     }
-
+    public function bank_rates(){
+        return $this->hasMany(BankRate::class);
+    }
     public static function buat(array $params): self{
         return self::create(self::fetch((object)$params));
     }

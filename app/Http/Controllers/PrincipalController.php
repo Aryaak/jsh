@@ -32,9 +32,9 @@ class PrincipalController extends Controller
         try {
             DB::beginTransaction();
             Principal::buat($request->all());
-            DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -59,9 +59,9 @@ class PrincipalController extends Controller
         try {
             DB::beginTransaction();
             $principal->ubah($request->all());
-            DB::commit();
             $http_code = 200;
             $response = $this->updateResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -76,9 +76,9 @@ class PrincipalController extends Controller
         try {
             DB::beginTransaction();
             $principal->hapus();
-            DB::commit();
             $http_code = 200;
             $response = $this->destroyResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());

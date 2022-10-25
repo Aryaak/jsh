@@ -14,7 +14,7 @@
         id="{{ $id }}"
         name="{{ $name }}"
         placeholder="{{ $placeholder ?? '' }}"
-        class="form-control @isset($tinymce) tinymce @endisset @error($name) is-invalid @enderror"
+        class="form-control @if($tinymce) tinymce @endif @error($name) is-invalid @enderror"
         @isset($required) required @endisset
         @isset($readonly) readonly @endisset
         @isset($disabled) disabled @endisset
@@ -28,8 +28,9 @@
     @enderror
 </div>
 
-@isset ($tinymce)
+@if ($tinymce)
     @pushOnce('js')
+        <script src="https://cdn.tiny.cloud/1/{{ config('app.tiny_mce_key') }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
         <script>
             $(document).ready(function() {
                 tinymce.init({
@@ -43,4 +44,4 @@
             })
         </script>
     @endPushOnce
-@endisset
+@endif

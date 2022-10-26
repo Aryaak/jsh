@@ -85,7 +85,7 @@
                     <x-menu route="products.*" icon="bx bxs-receipt">
                         Produk
                         @slot('submenus')
-                            <x-submenu route="dashboard">Surety Bond</x-submenu>
+                            <x-submenu route="products.surety-bonds.index">Surety Bond</x-submenu>
                             <x-submenu route="dashboard">Bank Garansi</x-submenu>
                         @endslot
                     </x-menu>

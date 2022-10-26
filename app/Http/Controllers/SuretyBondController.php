@@ -7,8 +7,16 @@ use Illuminate\Http\Request;
 
 class SuretyBondController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $data = SuretyBond::query();
+            return datatables()->of($data)
+            ->addIndexColumn()
+            ->editColumn('action', 'datatables.actions-show-delete')
+            ->toJson();
+        }
+        return view('product.surety-bonds');
     }
 
     public function create()

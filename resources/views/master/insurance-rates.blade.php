@@ -104,8 +104,8 @@
         let insuranceRate = null
         $(document).ready(function () {
             table = dataTableInit('table','Insurance Rate',{url : '{{ route('master.insurance-rates.index') }}'},[
-                {data: 'insurance.name', name: 'insurance.name'},
-                {data: 'insurance_type.name', name: 'insurance_type.name'},
+                {data: 'name', name: 'name'},
+                {data: 'insurance_type_name', name: 'insurance_type_name'},
                 {data: 'min_value', name: 'min_value'},
                 {data: 'rate_value', name: 'rate_value'},
                 {data: 'polish_cost', name: 'polish_cost'},

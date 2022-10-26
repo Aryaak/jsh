@@ -77,7 +77,7 @@ const ToRupiah = new Intl.NumberFormat('id-ID', {
 const ToUnit = new Intl.NumberFormat('id-ID', {
     style: 'decimal',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 1
+    maximumFractionDigits: 2
 });
 
 const ChartOptionToRupiah = {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Sirius;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,6 +17,10 @@ class InsuranceRateController extends Controller
             $data = InsuranceRate::with('insurance','insurance_type');
             return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('min_value', fn($rate) => Sirius::toRupiah($rate->min_value))
+            ->editColumn('polish_cost', fn($rate) => Sirius::toRupiah($rate->polish_cost))
+            ->editColumn('stamp_cost', fn($rate) => Sirius::toRupiah($rate->stamp_cost))
+            ->editColumn('rate_value', fn($rate) => str_replace('.', '.', $rate->rate_value))
             ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }

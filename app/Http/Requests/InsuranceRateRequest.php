@@ -21,4 +21,16 @@ class InsuranceRateRequest extends FormRequest
             'insuranceTypeId' => 'required'
         ];
     }
+    public function attributes()
+    {
+        return [
+            'minValue' => 'Nilai Minimal',
+            'rateValue' => 'Nilai Rate',
+            'polishCost' => 'Biaya Polish',
+            'stampCost' => 'Materai',
+            'desc' => 'Keterangan',
+            'insuranceId' => 'Nama Asuransi',
+            'insuranceTypeId' => 'Jenis Jaminan'
+        ];
+    }
 }

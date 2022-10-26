@@ -36,7 +36,7 @@ class Template extends Model
             $template = array(
                 'title' => $params['title'][$i],
                 'type' => $params['type'][$i],
-                'text' => "<p><i>TESTING</i></p>",
+                'text' => $params['text'][$i],
                 'bank_id' => $id
             );
             $data = self::create(self::fetch((object)$template));
@@ -47,7 +47,7 @@ class Template extends Model
         $template = array(
             'title' => $params['title'][$id_bank],
             'type' => $params['type'][$id_bank],
-            'text' => "<p><i>TESTING</i></p>",
+            'text' => $params['text'][$id_bank],
             'bank_id' => $id
         );
         return $this->update(self::fetch((object)$template));

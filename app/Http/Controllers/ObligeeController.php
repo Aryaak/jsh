@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Exception;
 use App\Models\Obligee;
 use Illuminate\Http\Request;
 
@@ -9,6 +11,7 @@ class ObligeeController extends Controller
 {
     public function index()
     {
+        return view('master.obligees');
     }
 
     public function create()

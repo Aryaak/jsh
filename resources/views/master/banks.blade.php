@@ -102,10 +102,8 @@
 
         $("#create-save").click(function () {
             loading()
+            tinymce.triggerSave();
             let formData = new FormData(document.getElementById('form-create'))
-            for (var pair of formData.entries()) {
-                console.log(pair[0]+ ', ' + pair[1]);
-            }
             ajaxPost("{{ route('master.banks.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
@@ -146,11 +144,10 @@
             let formData = new FormData(document.getElementById('form-edit'))
             $('#edit-name').val(bank.name)
             for (let i = 1; i <= bank.templates.length; i++) {
-                addNewTemplate('edit')
+                addNewTemplate('edit', bank.templates[i-1].text)
                 $('#edit-template-id-'+i).val(bank.templates[i-1].id)
                 $('#edit-template-title-'+i).val(bank.templates[i-1].title)
                 $('#edit-template-type-'+i).val(bank.templates[i-1].type)
-                $('#edit-template-text-'+i).val(bank.templates[i-1].text)
             }
         })
 
@@ -178,7 +175,7 @@
             })
         })
 
-        function addNewTemplate(createOrEdit) {
+        function addNewTemplate(createOrEdit, valueTemplate = '') {
             var counter = 0;
             var inputId = '';
 
@@ -207,7 +204,12 @@
                 plugins: 'image table lists fullscreen code',
                 menubar: 'file edit insert view table format table tools help',
                 toolbar: 'undo redo | styles | bold italic underline | numlist bullist | image | alignleft aligncenter alignright alignjustify | code fullscreen',
-                images_upload_handler: tinyMCEImageUploadHandler("{{ route('uploader.tinymce') }}", "{{ csrf_token() }}")
+                images_upload_handler: tinyMCEImageUploadHandler("{{ route('uploader.tinymce') }}", "{{ csrf_token() }}"),
+                setup: function (editor) {
+                    editor.on('init', function (e) {
+                        editor.setContent(valueTemplate);
+                    });
+                }
             });
         }
     </script>

@@ -13,7 +13,7 @@ class ProvinceSeeder extends Seeder
     {
         $params = [];
         foreach (Sirius::getAllProvince() as $province) {
-            $params[] = ['name' => $province]    ;
+            $params[] = ['name' => $province];
         }
         Province::insert($params);
         DB::table('provinces')->update(['created_at' => now(),'updated_at' => now()]);

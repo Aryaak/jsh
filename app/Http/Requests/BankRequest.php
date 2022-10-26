@@ -15,7 +15,7 @@ class BankRequest extends FormRequest
             'name' => 'required',
             'title' => 'required',
             'type' => 'required',
-            'text' => 'text'
+            'text' => 'required'
         ];
     }
 

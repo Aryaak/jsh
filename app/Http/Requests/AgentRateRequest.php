@@ -22,4 +22,17 @@ class AgentRateRequest extends FormRequest
             'insuranceTypeId' => 'required'
         ];
     }
+    public function attributes()
+    {
+        return [
+            'minValue' => 'Nilai Minimal',
+            'rateValue' => 'Nilai Rate',
+            'polishCost' => 'Biaya Polish',
+            'stampCost' => 'Materai',
+            'desc' => 'Keterangan',
+            'agentId' => 'Agen',
+            'insuranceId' => 'Nama Asuransi',
+            'insuranceTypeId' => 'Jenis Jaminan'
+        ];
+    }
 }

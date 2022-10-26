@@ -119,14 +119,14 @@
         })
         $(document).on('click', '#create-save', function () {
             loading()
-            ajaxPost("{{ route('master.insurance-rates.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
+            ajaxPost("{{ route('master.insurance-rates.store') }}",fetchFormData(new FormData(document.getElementById('form-create'))),'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
             })
         })
         $(document).on('click', '#edit-save', function () {
             loading()
-            ajaxPost("{{ route('master.insurance-rates.update','-id-') }}".replace('-id-',insuranceRate.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
+            ajaxPost("{{ route('master.insurance-rates.update','-id-') }}".replace('-id-',insuranceRate.id),fetchFormData(new FormData(document.getElementById('form-edit'))),'#modal-edit',function(){
                 table.ajax.reload()
             })
         })

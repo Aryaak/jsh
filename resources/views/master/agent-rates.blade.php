@@ -129,14 +129,14 @@
         })
         $(document).on('click', '#create-save', function () {
             loading()
-            ajaxPost("{{ route('master.agent-rates.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
+            ajaxPost("{{ route('master.agent-rates.store') }}",fetchFormData(new FormData(document.getElementById('form-create'))),'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
             })
         })
         $(document).on('click', '#edit-save', function () {
             loading()
-            ajaxPost("{{ route('master.agent-rates.update','-id-') }}".replace('-id-',agentRate.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
+            ajaxPost("{{ route('master.agent-rates.update','-id-') }}".replace('-id-',agentRate.id),fetchFormData(new FormData(document.getElementById('form-edit'))),'#modal-edit',function(){
                 table.ajax.reload()
             })
         })

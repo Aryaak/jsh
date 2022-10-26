@@ -753,3 +753,10 @@ $(document).ready(function (e) {
         }
     })
 })
+function fetchFormData(formData){
+    formData.set('minValue',formData.get('minValue').replaceAll('.',''))
+    formData.set('rateValue',formData.get('rateValue').replaceAll('.','').replace(',','.'))
+    formData.set('polishCost',formData.get('polishCost').replaceAll('.',''))
+    formData.set('stampCost',formData.get('stampCost').replaceAll('.',''))
+    return formData;
+}

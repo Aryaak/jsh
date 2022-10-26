@@ -7,6 +7,7 @@ use Exception;
 use App\Models\Principal;
 use App\Models\Scoring;
 use Illuminate\Http\Request;
+use App\Http\Requests\PrincipalRequest;
 
 class PrincipalController extends Controller
 {
@@ -27,7 +28,7 @@ class PrincipalController extends Controller
     {
     }
 
-    public function store(Request $request)
+    public function store(PrincipalRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -47,6 +48,7 @@ class PrincipalController extends Controller
     public function show(Principal $principal)
     {
         $principal->city->province;
+        $principal->scorings;
         return response()->json($this->showResponse($principal->toArray()));
     }
 
@@ -54,7 +56,7 @@ class PrincipalController extends Controller
     {
     }
 
-    public function update(Request $request, Principal $principal)
+    public function update(PrincipalRequest $request, Principal $principal)
     {
         try {
             DB::beginTransaction();

@@ -71,7 +71,7 @@
                             <x-submenu route="master.insurance-types.index">Jenis Jaminan</x-submenu>
                             <x-submenu route="master.insurances.index">Asuransi</x-submenu>
                             <x-submenu route="master.insurance-rates.index">Rate Asuransi</x-submenu>
-                            <x-submenu route="dashboard">Bank</x-submenu>
+                            <x-submenu route="master.banks.index">Bank</x-submenu>
                             <x-submenu route="master.bank-rates.index">Rate Bank</x-submenu>
                             <x-submenu route="master.agents.index">Agen</x-submenu>
                             <x-submenu route="master.agent-rates.index">Rate Agen</x-submenu>

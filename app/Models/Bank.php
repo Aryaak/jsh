@@ -26,6 +26,9 @@ class Bank extends Model
     public function bank_rates(){
         return $this->hasMany(BankRate::class);
     }
+    public function templates(){
+        return $this->hasMany(Template::class);
+    }
     public static function buat(array $params): self{
         return self::create(self::fetch((object)$params));
     }
@@ -33,6 +36,9 @@ class Bank extends Model
         return $this->update(self::fetch((object)$params));
     }
     public function hapus(): bool{
+        $this->templates->each(function($template) {
+            $template->delete();
+        });
         return $this->delete();
     }
 }

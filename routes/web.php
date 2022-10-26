@@ -5,6 +5,7 @@ use App\Http\Controllers\AgentRateController;
 use App\Http\Controllers\BankRateController;
 use App\Http\Controllers\PrincipalController;
 use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\InsuranceController;
@@ -37,6 +38,7 @@ Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::apiResource('jenis-jaminan',InsuranceTypeController::class)->names('insurance-types');
     Route::apiResource('rate-asuransi',InsuranceRateController::class)->names('insurance-rates');
     Route::apiResource('rate-bank',BankRateController::class)->names('bank-rates');
+    Route::apiResource('bank',BankController::class)->names('banks');
 });
 
 Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {

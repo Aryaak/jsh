@@ -65,20 +65,33 @@
                     <x-form-textarea label="Alamat" id="create-info-address" name="info[address]" class="mb-3" required />
                 </div>
             </div>
-            <div class="row mb-2">
-                <div class="col-12 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
-                </div>
-            </div>
-            <div class="col-md-3" style="margin: 0 auto">
-                <div class="col-12 border p-0">
-                    <div class="p-3">
-                        <x-form-check id="create-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
-                        <x-form-check id="create-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="w-100 text-center">
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
+                    </div>
+                    <div class="col-md-3" style="margin: 0 auto">
+                        <div class="border rounded p-0">
+                            <div class="p-3">
+                                <x-form-check id="create-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
+                                <x-form-check id="create-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            Total Nilai: <b>69</b>
+                        </div>
                     </div>
                 </div>
-                <div class="col-12 my-3">
-                    Total Nilai: <b>69</b>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="w-100 text-center">
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
+                    </div>
+                    <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Sertifikat</x-button>
+                    <div id="create-certificate-container" class="row">
+                        {{-- Tempat Tambah Sertifikat --}}
+                    </div>
                 </div>
             </div>
         </x-form>
@@ -163,24 +176,47 @@
             </div>
         </div>
 
-        <div class="row mb-2">
-            <div class="col-12 text-center">
-                <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
-            </div>
-        </div>
-        <div class="col-md-3" style="margin: 0 auto">
-            <div class="col-12 border p-0">
-                <div class="p-3">
-                    <x-form-check id="show-scoring-score-1" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                    <x-form-check id="show-scoring-score-2" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="w-100 text-center">
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
+                </div>
+                <div class="col-md-3" style="margin: 0 auto">
+                    <div class="border rounded p-0">
+                        <div class="p-3">
+                            <x-form-check id="show-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
+                            <x-form-check id="show-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>Total Nilai: <b>69</b></div>
+                        <div>
+                            <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-12 mt-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>Total Nilai: <b>69</b></div>
-                    <div>
-                        <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="w-100 text-center">
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
+                </div>
+                <div id="show-certificate-container" class="row">
+                    {{-- START Copy ini saat looping sertifikat --}}
+                    <div id="show-certificate-1" class="mt-4 col-md-6">
+                        <div class="border rounded p-3">
+                            <div class="border-bottom pb-2 mb-2">
+                                <b>Nomor</b>: <br>
+                                <span id="show-certificate-number-1">-</span>
+                            </div>
+                            <div>
+                                <b>Berlaku Hingga</b>: <br>
+                                <span id="show-certificate-expired-at-1">-</span>
+                            </div>
+                        </div>
                     </div>
+                    {{-- END Copy ini saat looping sertifikat --}}
                 </div>
             </div>
         </div>
@@ -216,20 +252,33 @@
                     <x-form-textarea label="Alamat" id="edit-info-address" name="info[address]" class="mb-3" required />
                 </div>
             </div>
-            <div class="row mb-2">
-                <div class="col-12 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
-                </div>
-            </div>
-            <div class="col-md-3" style="margin: 0 auto">
-                <div class="col-12 border p-0">
-                    <div class="p-3">
-                        <x-form-check id="edit-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
-                        <x-form-check id="edit-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="w-100 text-center">
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
+                    </div>
+                    <div class="col-md-3" style="margin: 0 auto">
+                        <div class="border rounded p-0">
+                            <div class="p-3">
+                                <x-form-check id="edit-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
+                                <x-form-check id="edit-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            Total Nilai: <b>69</b>
+                        </div>
                     </div>
                 </div>
-                <div class="col-12 my-3">
-                    Total Nilai: <b>69</b>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="w-100 text-center">
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
+                    </div>
+                    <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Sertifikat</x-button>
+                    <div id="edit-certificate-container" class="row">
+                        {{-- Tempat Tambah Sertifikat --}}
+                    </div>
                 </div>
             </div>
         </x-form>
@@ -247,6 +296,9 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        var createTemplateCounter = 0
+        var editTemplateCounter = 0
+
         $(document).ready(function () {
             const table = $("#table").DataTable()
             $("#create-info-province-id, #create-info-city-id").select2({dropdownParent: $('#modal-create')})
@@ -262,5 +314,51 @@
                 }
             })
         })
+
+
+
+        $("#create-new-certificate").click(function () {
+            addNewTemplate('create')
+        })
+
+        $("#edit-new-certificate").click(function () {
+            addNewTemplate('edit')
+        })
+
+        $(document).on('click', '.btn-delete-certificate', function () {
+            NegativeConfirm.fire({
+                title: "Ingin menghapus sertifikat ini?"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(this).parent().parent().remove()
+                }
+            })
+        })
+
+        function addNewTemplate(createOrEdit) {
+            var counter = 0;
+            var inputId = '';
+
+            if (createOrEdit == 'create') {
+                createTemplateCounter++
+                counter = createTemplateCounter
+            }
+            else {
+                editTemplateCounter++
+                counter = editTemplateCounter
+                inputId = `<input type="hidden" id="edit-certificate-id" name="certificate[id[]]" />`
+            }
+
+            $("#" + createOrEdit + "-certificate-container").append(`
+                <div id="` + createOrEdit + `-certificate-` + counter + `" class="mt-4 col-md-6">
+                    <div class="border rounded p-3">
+                        ` + inputId + `
+                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Sertifikat</x-button>
+                        <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number[]]" class="mb-3" required />
+                        <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt[]]" class="mb-3" type="date" required />
+                    </div>
+                </div>
+            `)
+        }
     </script>
 @endpush

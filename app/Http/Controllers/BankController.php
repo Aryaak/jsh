@@ -64,9 +64,10 @@ class BankController extends Controller
             for($i = 0; $i < count($templates); $i++){
                 $templates[$i]->ubah($request->all(),$i,$bank->id);
             }
-            DB::commit();
+            Template::buat($request->all(),$bank->id);
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());

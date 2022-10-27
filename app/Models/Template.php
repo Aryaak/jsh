@@ -31,18 +31,21 @@ class Template extends Model
         return $this->hasMany(BankRate::class);
     }
     public static function buat(array $params, $id): self{
-        $data = null;
+        $data = Template::first();
         for($i = 0; $i < count($params['title']); $i++){
-            $template = array(
-                'title' => $params['title'][$i],
-                'type' => $params['type'][$i],
-                'text' => $params['text'][$i],
-                'bank_id' => $id
-            );
-            $data = self::create(self::fetch((object)$template));
+            if(isset($params['id'][$i]) == false){
+                $template = array(
+                    'title' => $params['title'][$i],
+                    'type' => $params['type'][$i],
+                    'text' => $params['text'][$i],
+                    'bank_id' => $id
+                );
+                $data = self::create(self::fetch((object)$template));
+            }
         }
         return $data;
     }
+
     public function ubah(array $params, $id_bank, $id): bool{
         $template = array(
             'title' => $params['title'][$id_bank],
@@ -52,6 +55,7 @@ class Template extends Model
         );
         return $this->update(self::fetch((object)$template));
     }
+
     public function hapus(): bool{
         return $this->delete();
     }

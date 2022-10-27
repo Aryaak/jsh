@@ -115,6 +115,7 @@
 
         $("#edit-save").click(function () {
             loading()
+            tinymce.triggerSave();
             let formData = new FormData(document.getElementById('form-edit'))
             ajaxPost("{{ route('master.banks.update','-id-') }}".replace('-id-',bank.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
@@ -131,7 +132,9 @@
                     $('#show-name').html(bank.name)
                     $('#show-template').html('')
                     for (let i = 0; i < bank.templates.length; i++) {
-                        $('#show-template').append(`<x-button face="secondary" icon='bx bxs-cloud-download'>`+ bank.templates[i].title +`</x-button>`)
+                        $('#show-template').append(`
+                            <x-button class="template-pdf" data-id="`+ bank.templates[i].id +`" face="secondary" icon='bx bxs-cloud-download'>`+ bank.templates[i].title +`</x-button>
+                        `)
                     }
                 }
             })
@@ -144,8 +147,7 @@
             let formData = new FormData(document.getElementById('form-edit'))
             $('#edit-name').val(bank.name)
             for (let i = 1; i <= bank.templates.length; i++) {
-                addNewTemplate('edit', bank.templates[i-1].text)
-                $('#edit-template-id-'+i).val(bank.templates[i-1].id)
+                addNewTemplate('edit', bank.templates[i-1].text, bank.templates[i-1].id)
                 $('#edit-template-title-'+i).val(bank.templates[i-1].title)
                 $('#edit-template-type-'+i).val(bank.templates[i-1].type)
             }
@@ -165,6 +167,18 @@
             })
         })
 
+        $(document).on('click', '.template-pdf', function () {
+            NegativeConfirm.fire({
+                title: "Yakin ingin mengunduh Template?",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let formData = new FormData()
+                    formData.append('id', $(this).data('id'))
+                    ajaxPost("{{ route('pdf.download') }}",formData,'',function(){})
+                }
+            })
+        })
+
         $(document).on('click', '.btn-delete-template', function () {
             NegativeConfirm.fire({
                 title: "Ingin menghapus template ini?"
@@ -175,7 +189,7 @@
             })
         })
 
-        function addNewTemplate(createOrEdit, valueTemplate = '') {
+        function addNewTemplate(createOrEdit, valueTemplate = '',id = '') {
             var counter = 0;
             var inputId = '';
 
@@ -186,7 +200,7 @@
             else {
                 editTemplateCounter++
                 counter = editTemplateCounter
-                inputId = `<input type="hidden" id="edit-template-id" name="id[]" />`
+                inputId = `<input type="hidden" id="edit-template-id" value="`+ id +`" name="id[]" />`
             }
 
             $("#" + createOrEdit + "-template-container").append(`

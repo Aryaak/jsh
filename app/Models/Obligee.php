@@ -14,6 +14,8 @@ class Obligee extends Model
         'name',
         'address',
         'type',
+        'city_id',
+        'status',
         'jamsyar_id',
         'jamsyar_code'
     ];
@@ -27,6 +29,8 @@ class Obligee extends Model
             'name' => $args->name,
             'address' => $args->address,
             'type' => $args->type,
+            'city_id' => $args->city_id,
+            'status' => 'Sinkron',
             'jamsyar_id' => $args->jamsyar_id,
             'jamsyar_code' => $args->jamsyar_code
         ];

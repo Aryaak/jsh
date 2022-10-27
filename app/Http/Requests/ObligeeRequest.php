@@ -12,11 +12,12 @@ class ObligeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'name' => 'required',
-            // 'address' => 'required',
-            // 'pro' => 'required',
-            // 'jamsyar_id' => 'required',
-            // 'jamsyar_code' => 'required'
+            'name' => 'required',
+            'address' => 'required',
+            'type' => 'required',
+            'city_id' => 'required',
+            'jamsyar_id' => 'required',
+            'jamsyar_code' => 'required'
         ];
 
     }
@@ -24,11 +25,12 @@ class ObligeeRequest extends FormRequest
     public function attributes()
     {
         return [
-            // 'name' => 'Nama',
-            // 'address' => 'Alamat',
-            // 'type' => 'required',
-            // 'jamsyar_id' => 'ID Jamsyar',
-            // 'jamsyar_code' => 'required'
+            'name' => 'Nama',
+            'address' => 'Alamat',
+            'type' => 'Jenis',
+            'city_id' => 'Kota',
+            'jamsyar_id' => 'ID Jamsyar',
+            'jamsyar_code' => 'Kode Jamsyar'
         ];
     }
 }

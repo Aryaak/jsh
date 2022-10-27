@@ -12,6 +12,7 @@ use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\InsuranceTypeController;
 use App\Http\Controllers\InsuranceRateController;
 use App\Http\Controllers\ObligeeController;
+use App\Http\Controllers\PDFDownloadController;
 use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\UploaderController;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('welcome'))->name('dashboard');
 Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
+Route::post('/pdf/download/', [PDFDownloadController::class, 'pdf'])->name('pdf.download');
 
 Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::get('/', fn() => redirect(route('dashboard')));

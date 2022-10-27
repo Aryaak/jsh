@@ -21,17 +21,6 @@
                     <th width="80px">Tindakan</th>
                 </tr>
             @endslot
-            <tr>
-                <td>1</td>
-                <td>Tes</td>
-                <td>Tes</td>
-                <td><x-badge face="label-success">Sinkron</x-badge></td>
-                <td>
-                    <x-button type="icon" class="btn-sync" size="sm"  icon="bx bx-refresh" face="warning">Sinkronkan</x-button>
-                    <x-button type="icon" class="btn-show" data-bs-toggle="modal" data-bs-target="#modal-show" size="sm" icon="bx bx-search" face="info">Detail</x-button>
-                    <x-button type="icon" class="btn-delete" size="sm" icon="bx bxs-trash" face="danger">Hapus</x-button>
-                </td>
-            </tr>
         </x-table>
     </x-card>
 @endsection
@@ -40,8 +29,11 @@
     <x-modal id="modal-create" title="Tambah Obligee">
         <x-form id="form-create" method="post">
             <x-form-input label="Nama" id="create-name" name="name" class="mb-3" required />
-            <x-form-select label="Provinsi" id="create-province-id" :options="[]" name="provinceId" class="mb-3" required/>
-            <x-form-select label="Kota" id="create-city-id" :options="[]" name="cityId" class="mb-3" />
+            <x-form-select label="Provinsi" id="create-province-id" name="province_id" class="mb-3" required/>
+            <x-form-select label="Kota" id="create-city-id" name="city_id" class="mb-3" />
+            <x-form-input label="Jenis" id="create-type" name="type" class="mb-3" required />
+            <x-form-input label="JamsyarID" id="create-jamsyar-id" name="jamsyar_id" class="mb-3" required />
+            <x-form-input label="JamsyarCode" id="create-jamsyar-code" name="jamsyar_code" class="mb-3" required />
             <x-form-textarea label="Alamat" id="create-address" name="address" />
         </x-form>
 
@@ -67,6 +59,10 @@
             <span id="show-address">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
+            <b>Jenis</b>: <br>
+            <span id="show-type">-</span>
+        </div>
+        <div class="border-bottom pb-2 mb-2">
             <b>Status Sinkronisasi</b>: <br>
             <span id="show-status"><x-badge face="label-success">Sinkron</x-badge></span>
         </div>
@@ -87,8 +83,11 @@
     <x-modal id="modal-edit" title="Ubah Obligee">
         <x-form id="form-edit" method="put">
             <x-form-input label="Nama" id="edit-name" name="name" class="mb-3" required />
-            <x-form-select label="Provinsi" id="edit-province-id" :options="[]" name="provinceId" class="mb-3" required/>
-            <x-form-select label="Kota" id="edit-city-id" :options="[]" name="cityId" class="mb-3" />
+            <x-form-select label="Provinsi" id="edit-province-id" name="province_id" class="mb-3" required/>
+            <x-form-select label="Kota" id="edit-city-id" name="city_id" class="mb-3" />
+            <x-form-input label="Jenis" id="edit-type" name="type" class="mb-3" required />
+            <x-form-input label="JamsyarID" id="edit-jamsyar-id" name="jamsyar_id" class="mb-3" required />
+            <x-form-input label="JamsyarCode" id="edit-jamsyar-code" name="jamsyar_code" class="mb-3" required />
             <x-form-textarea label="Alamat" id="edit-address" name="address" />
         </x-form>
 
@@ -105,10 +104,68 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        let table = null
+        let obligee = null
         $(document).ready(function () {
-            const table = $("#table").DataTable()
-            $("#create-province-id, #create-city-id").select2({dropdownParent: $('#modal-create')})
-            $("#edit-province-id, #edit-city-id").select2({dropdownParent: $('#modal-edit')})
+            table = dataTableInit('table','Obligee',{url : '{{ route('master.obligees.index') }}'},[
+                {data: 'name', name: 'name'},
+                {data: 'address', name: 'address'},
+                {data: 'status', name: 'status'},
+            ])
+
+            select2Init("#create-province-id, #edit-province-id",'{{ route('select2.province') }}',0,$('#modal-create'))
+            select2Init("#create-city-id",'{{ route('select2.city') }}',0,$('#modal-create'),'--  Pilih --',false,function(params){
+                return {
+                    search: params.term ?? '',
+                    province_id: $('#create-province-id').val()
+                }
+            })
+            select2Init("#edit-province-id",'{{ route('select2.province') }}',0,$('#modal-edit'))
+            select2Init("#edit-city-id",'{{ route('select2.city') }}',0,$('#modal-edit'),'--  Pilih --',false,function(params){
+                return {
+                    search: params.term ?? '',
+                    province_id: $('#edit-province-id').val()
+                }
+            })
+        })
+
+        $(document).on('click', '#create-save', function () {
+            ajaxPost("{{ route('master.obligees.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
+                table.ajax.reload()
+                clearForm('#form-create')
+            })
+        })
+
+        $(document).on('click', '#edit-save', function () {
+            loading()
+            ajaxPost("{{ route('master.obligees.update','-id-') }}".replace('-id-',obligee.id),new FormData(document.getElementById('form-edit')),'#modal-edit',function(){
+                table.ajax.reload()
+            })
+        })
+
+        $(document).on('click', '.btn-show', function () {
+            ajaxGet("{{ route('master.obligees.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+                if(response.success){
+                    obligee = response.data
+                    $('#show-name').html(obligee.name)
+                    $('#show-address').html(obligee.address)
+                    $('#show-type').html(obligee.type)
+                    $('#show-province').html(obligee.city.province.name)
+                    $('#show-city').html(obligee.city.name)
+                    $('#show-jamsyar-id').html(obligee.jamsyar_id)
+                    $('#show-jamsyar-code').html(obligee.jamsyar_code)
+                }
+            })
+        })
+
+        $(document).on('click', '.btn-edit', function () {
+            $('#edit-name').val(obligee.name)
+            $('#edit-address').val(obligee.name)
+            $('#edit-type').val(obligee.name)
+            select2SetVal('edit-province-id',obligee.city.province.id,obligee.city.province.name)
+            select2SetVal('edit-city-id',obligee.city.id,obligee.city.name)
+            $('#edit-jamsyar-id').val(obligee.address)
+            $('#edit-jamsyar-code').val(obligee.address)
         })
 
         $(document).on('click', '.btn-delete', function () {
@@ -117,6 +174,9 @@
                 title: "Yakin ingin menghapus Obligee?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    ajaxPost("{{ route('master.obligees.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},'',function(){
+                        table.ajax.reload()
+                    })
                 }
             })
         })

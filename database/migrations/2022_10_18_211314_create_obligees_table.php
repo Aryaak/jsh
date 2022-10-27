@@ -15,6 +15,9 @@ return new class extends Migration
             $table->string('type');
             $table->string('jamsyar_id');
             $table->string('jamsyar_code');
+            $table->string('status');
+
+            $table->foreignId('city_id')->constrained();
             $table->timestamps();
         });
     }

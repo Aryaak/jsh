@@ -79,8 +79,6 @@ class AgentController extends Controller
     {
         try {
             DB::beginTransaction();
-            $bankaccount = $agen->bank_accounts;
-            $bankaccount->hapus();
             $agen->hapus();
             DB::commit();
             $http_code = 200;

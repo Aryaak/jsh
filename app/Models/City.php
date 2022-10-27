@@ -15,6 +15,9 @@ class City extends Model
     public function principals(){
         return $this->hasMany(Principal::class);
     }
+    public function obligees(){
+        return $this->hasMany(Obligee::class);
+    }
     public function province(){
         return $this->belongsTo(Province::class);
     }

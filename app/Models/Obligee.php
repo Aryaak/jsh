@@ -10,8 +10,41 @@ class Obligee extends Model
 {
     use HasFactory;
 
-    public $fillable = ['name','address','type','jamsyar_id','jamsyar_code'];
-    public static function types(){
-        return [];
+    public $fillable = [
+        'name',
+        'address',
+        'type',
+        'city_id',
+        'status',
+        'jamsyar_id',
+        'jamsyar_code'
+    ];
+
+    public function city(){
+        return $this->belongsTo(City::class);
+    }
+
+    private static function fetch(object $args): array{
+        return [
+            'name' => $args->name,
+            'address' => $args->address,
+            'type' => $args->type,
+            'city_id' => $args->city_id,
+            'status' => 'Sinkron',
+            'jamsyar_id' => $args->jamsyar_id,
+            'jamsyar_code' => $args->jamsyar_code
+        ];
+    }
+
+    public static function buat(array $params): self{
+        return self::create(self::fetch((object)$params));
+    }
+
+    public function ubah(array $params): bool{
+        return $this->update(self::fetch((object)$params));
+    }
+
+    public function hapus(){
+        $this->delete();
     }
 }

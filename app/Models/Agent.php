@@ -81,6 +81,9 @@ class Agent extends Model
         return $this->update(self::fetch((object)$agent));
     }
     public function hapus(): bool{
+        $this->bank_accounts->each(function($account) {
+            $account->delete();
+        });
         return $this->delete();
     }
 }

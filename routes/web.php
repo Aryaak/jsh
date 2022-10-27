@@ -5,11 +5,14 @@ use App\Http\Controllers\AgentRateController;
 use App\Http\Controllers\BankRateController;
 use App\Http\Controllers\PrincipalController;
 use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\InsuranceTypeController;
 use App\Http\Controllers\InsuranceRateController;
+use App\Http\Controllers\ObligeeController;
+use App\Http\Controllers\PDFDownloadController;
 use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\UploaderController;
@@ -23,7 +26,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', fn () => view('welcome'))->name('dashboard');
-Route::get('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
+Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
+Route::post('/pdf/download/', [PDFDownloadController::class, 'pdf'])->name('pdf.download');
 
 Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::get('/', fn() => redirect(route('dashboard')));
@@ -37,6 +41,8 @@ Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::apiResource('jenis-jaminan',InsuranceTypeController::class)->names('insurance-types');
     Route::apiResource('rate-asuransi',InsuranceRateController::class)->names('insurance-rates');
     Route::apiResource('rate-bank',BankRateController::class)->names('bank-rates');
+    Route::apiResource('bank',BankController::class)->names('banks');
+    Route::apiResource('obligee',ObligeeController::class)->names('obligees');
 });
 
 Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {

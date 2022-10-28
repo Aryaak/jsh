@@ -63,8 +63,9 @@
                     <div class="col-md-3" style="margin: 0 auto">
                         <div class="border rounded p-0">
                             <div class="p-3">
-                                <x-form-check id="create-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
-                                <x-form-check id="create-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                                @foreach ($scorings as $scoring)
+                                    <x-form-check id="create-scoring-score-{{ $scoring->id }}" name="scoring[{{ $scoring->id }}]" value="1">{{ $scoring->title }}</x-form-check>
+                                @endforeach
                             </div>
                         </div>
                         <div class="my-3">
@@ -174,12 +175,13 @@
                 <div class="col-md-3" style="margin: 0 auto">
                     <div class="border rounded p-0">
                         <div class="p-3">
-                            <x-form-check id="show-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
-                            <x-form-check id="show-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                            @foreach ($scorings as $scoring)
+                                <x-form-check id="show-scoring-score-{{ $scoring->id }}" name="scoring[{{ $scoring->id }}]" value="1" disabled>{{ $scoring->title }}</x-form-check>
+                            @endforeach
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div>Total Nilai: <b>69</b></div>
+                        <div>Total Nilai: <b><span id="show-score"></span></b></div>
                         <div>
                             <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
                         </div>
@@ -252,12 +254,13 @@
                     <div class="col-md-3" style="margin: 0 auto">
                         <div class="border rounded p-0">
                             <div class="p-3">
-                                <x-form-check id="edit-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
-                                <x-form-check id="edit-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                                @foreach ($scorings as $scoring)
+                                    <x-form-check id="edit-scoring-score-{{ $scoring->id }}" name="scoring[{{ $scoring->id }}]" value="1">{{ $scoring->title }}</x-form-check>
+                                @endforeach
                             </div>
                         </div>
                         <div class="my-3">
-                            Total Nilai: <b>69</b>
+                            <div>Total Nilai: <b><span id="edit-score">69</span></b></div>
                         </div>
                     </div>
                 </div>
@@ -338,7 +341,7 @@
                     $('#show-name').html(principal.name)
                     $('#show-email').html(principal.email)
                     $('#show-phone').html(principal.phone)
-                    $('#show-domisile').html(principal.domisile)
+                    $('#show-domisile').html(principal.domicile)
                     $('#show-province').html(principal.city.province.name)
                     $('#show-city').html(principal.city.name)
                     $('#show-address').html(principal.address)
@@ -351,6 +354,9 @@
                     $('#show-nib-expired-at').html(principal.nib_expired_at)
                     $('#show-status').html(principal.status)
                     $('#show-jamsyar-code').html(principal.jamsyar_code)
+                    $('#show-score').html(principal.score)
+                    $('input[type="checkbox"]:checked').prop('checked',false)
+                    principal.scorings.forEach(e => { $('#show-scoring-score-'+e.id).prop('checked',true) });
                 }
             })
         })
@@ -369,6 +375,11 @@
             $('#edit-info-nib-number').val(principal.nib_number)
             $('#edit-info-nib-expired-at').val(principal.nib_expired_at)
             $('#edit-info-address').val(principal.address)
+            $('#edit-info-jamsyar-id').val(principal.jamsyar_id)
+            $('#edit-info-jamsyar-code').val(principal.jamsyar_code)
+            $('input[type="checkbox"]:checked').prop('checked',false)
+            principal.scorings.forEach(e => { $('#edit-scoring-score-'+e.id).prop('checked',true) });
+
         })
 
         $(document).on('click', '.btn-delete', function () {

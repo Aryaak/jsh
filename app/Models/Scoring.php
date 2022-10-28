@@ -14,8 +14,10 @@ class Scoring extends Model
     public static function categories(){
         return ['character','capacity','capital','condition','collateral'];
     }
-    public function scoring_details()
-    {
+    public function scoring_details(){
         return $this->hasMany(ScoringDetail::class);
+    }
+    public function principals(){
+        return $this->belongsToMany(Principal::class)->withTimestamps();
     }
 }

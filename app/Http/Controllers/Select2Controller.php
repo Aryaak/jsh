@@ -38,4 +38,12 @@ class Select2Controller extends Controller
     public function insuranceType(Request $request){
         return response()->json(Select2::insuranceType($request->search));
     }
+
+    public function obligee(Request $request){
+        return response()->json(Select2::obligee($request->search));
+    }
+
+    public function principal(Request $request){
+        return response()->json(Select2::principal($request->search));
+    }
 }

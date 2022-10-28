@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Scoring;
 
 class Principal extends Model
 {
@@ -30,6 +31,9 @@ class Principal extends Model
     public function city(){
         return $this->belongsTo(City::class);
     }
+    public function scorings(){
+        return $this->belongsToMany(Scoring::class)->withTimestamps();
+    }
     private static function fetch(object $args){
         return (object)[
             'principal' => [
@@ -49,17 +53,27 @@ class Principal extends Model
                 'jamsyar_id' => $args->info['jamsyarId'],
                 'jamsyar_code' => $args->info['jamsyarCode'],
                 'score' => 0
-            ]
+            ],
+            'scoring' => array_values(collect($args->scoring)->map(function($item,$key){return $key;})->all())
         ];
     }
     public static function buat(array $params): self{
         $request = self::fetch((object)$params);
         $principal = self::create($request->principal);
+        $principal->scorings()->sync($request->scoring);
+        $principal->updateScore();
         return $principal;
-        // dd($request);
     }
     public function ubah(array $params): bool{
-        return $this->update(self::fetch((object)$params)->principal);
+        $request = self::fetch((object)$params);
+        $this->update($request->principal);
+        $this->scorings()->sync($request->scoring);
+        return $this->updateScore();
+    }
+    private function updateScore(): bool{
+        return $this->update([
+            'score' => $this->scorings->count() / Scoring::whereNull('category')->count() * 10
+        ]);
     }
     public function hapus(){
         $this->delete();

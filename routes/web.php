@@ -17,6 +17,7 @@ use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\UploaderController;
 use App\Http\Controllers\SuretyBondController;
+use App\Http\Controllers\GuaranteeBankController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,7 @@ Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
 
 Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
     Route::apiResource('surety-bond',SuretyBondController::class)->names('surety-bonds');
+    Route::apiResource('bank-garansi',GuaranteeBankController::class)->names('guarantee-banks');
     // Route::get('/', fn() => redirect(route('dashboard')));
 
     // Route untuk produk ....

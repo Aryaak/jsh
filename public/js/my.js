@@ -779,3 +779,24 @@ function inspectFormData(formData) {
         console.log(pair[0]+ ', ' + pair[1]);
     }
 }
+function calculateDayFromDates(calender,action){
+    let dayCount = 0
+    if(calender == 'start'){
+        const startDate = $('#'+action+'-start-date').val()
+        const endDate = $('#'+action+'-end-date').val()
+        if(startDate && endDate) dayCount = dateDiffDays(startDate,endDate)
+    }else if(calender == 'end'){
+        const startDate = $('#'+action+'-start-date').val()
+        const endDate = $('#'+action+'-end-date').val()
+        if(startDate && endDate) dayCount = dateDiffDays(startDate,endDate)
+    }
+    return dayCount + parseInt($('.'+action+'-due-day-tolerance:checked').val())
+}
+function scoringGroupBy(scorings) {
+    return scorings.reduce((group, scoring) => {
+        const { category } = scoring;
+        group[category] = group[category] ?? [];
+        group[category].push(scoring);
+        return group;
+    }, {});
+}

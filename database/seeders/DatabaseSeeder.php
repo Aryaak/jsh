@@ -25,6 +25,15 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProvinceSeeder::class,
             CitySeeder::class,
+            BranchSeeder::class,
+            AgentSeeder::class,
+            InsuranceSeeder::class,
+            InsuranceTypeSeeder::class,
+            ObligeeSeeder::class,
+            PrincipalSeeder::class,
+            InsuranceRateSeeder::class,
+            AgentRateSeeder::class,
+            StatusSeeder::class,
         ]);
     }
 }

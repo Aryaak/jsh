@@ -8,16 +8,14 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PDFDownloadController extends Controller
 {
-    public function pdf(Request $request)
+    public function pdf($id)
     {
-        $template = Template::find($request->id);
+        $template = Template::find($id);
         $data = ['content' => $template->text,];
         $pdf = Pdf::loadView('master.pdf', $data);
-
-        $path = public_path('pdf/');
+        $pdf->getDomPDF()->setBasePath(public_path('images/content/'));
         $fileName =  time() . '.' . 'pdf';
-        $pdf->save($path . '/' . $fileName);
-        $pdf = public_path('pdf/'.$fileName);
-        // return view('pdf');
+
+        return $pdf->download($fileName);
     }
 }

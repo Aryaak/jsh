@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('welcome'))->name('dashboard');
 Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
-Route::post('/pdf/download/', [PDFDownloadController::class, 'pdf'])->name('pdf.download');
+Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
 
 Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::get('/', fn() => redirect(route('dashboard')));

@@ -3,19 +3,18 @@
 namespace Database\Seeders;
 
 use DB;
-use App\Models\Agent;
-use App\Models\AgentRate;
+use App\Models\Bank;
+use App\Models\BankRate;
 use App\Models\Insurance;
 use App\Models\InsuranceType;
 use Illuminate\Database\Seeder;
 
-class AgentRateSeeder extends Seeder
+class BankRateSeeder extends Seeder
 {
     public function run()
     {
         $params = [];
-
-        foreach (Agent::all() as $agent) {
+        foreach (Bank::all() as $bank) {
             foreach (Insurance::all() as $insurance) {
                 foreach (InsuranceType::all() as $insuranceType) {
                     $params[] = [
@@ -24,14 +23,14 @@ class AgentRateSeeder extends Seeder
                         'polish_cost' => mt_rand(5000,15000),
                         'stamp_cost' => mt_rand(5000,15000),
                         'desc' => "dummy",
+                        'bank_id' => $bank->id,
                         'insurance_id' => $insurance->id,
-                        'insurance_type_id' => $insuranceType->id,
-                        'agent_id' => $agent->id
+                        'insurance_type_id' => $insuranceType->id
                     ];
                 }
             }
         }
-        AgentRate::insert($params);
-        DB::table('banks')->update(['created_at' => now(),'updated_at' => now()]);
+        BankRate::insert($params);
+        DB::table('bank_rates')->update(['created_at' => now(),'updated_at' => now()]);
     }
 }

@@ -20,7 +20,6 @@ class SuretyBondController extends Controller
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
-        // dd($scorings);
         return view('product.surety-bonds',compact('scorings'));
     }
 

@@ -132,8 +132,10 @@
                     $('#show-name').html(bank.name)
                     $('#show-template').html('')
                     for (let i = 0; i < bank.templates.length; i++) {
+                        var url = '{{ url("/pdf/download/:id") }}';
+                        url = url.replace(':id', bank.templates[i].id);
                         $('#show-template').append(`
-                            <x-button class="template-pdf" data-id="`+ bank.templates[i].id +`" face="secondary" icon='bx bxs-cloud-download'>`+ bank.templates[i].title +`</x-button>
+                            <x-button class="template-pdf" target="_blank" link=`+url+` face="secondary" icon='bx bxs-cloud-download'>`+ bank.templates[i].title +`</x-button>
                         `)
                     }
                 }
@@ -163,18 +165,6 @@
                     ajaxPost("{{ route('master.banks.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
                         table.ajax.reload()
                     })
-                }
-            })
-        })
-
-        $(document).on('click', '.template-pdf', function () {
-            NegativeConfirm.fire({
-                title: "Yakin ingin mengunduh Template?",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    let formData = new FormData()
-                    formData.append('id', $(this).data('id'))
-                    ajaxPost("{{ route('pdf.download') }}",formData,'',function(){})
                 }
             })
         })

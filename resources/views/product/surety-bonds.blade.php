@@ -125,131 +125,31 @@
             <div class="row mx-1">
                 <x-card>
                     <div class="row">
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">30</div>
-                            <div class="border-bottom p-1 text-center">Character</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                        @foreach ($scorings->groupBy('category') as $grouped)
+                            <div class="col border p-0" style="position: relative">
+                                {{-- <div class="border-bottom p-1 text-center">30</div> --}}
+                                <div class="border-bottom p-1 text-center">{{ $grouped->first()->category }}</div>
+                                <div class="px-3 pt-3 pb-5">
+                                    @foreach ($grouped as $score)
+                                    <div class="mb-3">
+                                        <div class="fw-bold">{{ $score->title }}</div>
+                                        @foreach ($score->details as $detail)
+                                            <x-form-check type="radio" id="create-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}">{{ $detail->text }}</x-form-check>
+                                        @endforeach
+                                    </div>
+                                    @endforeach
                                 </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-3" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-4" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-5" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-6" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
+                                {{-- <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>Sub Total Nilai {{ $grouped->first()->category }}:</div>
+                                        <div><b>20</b></div>
+                                    </div>
+                                </div> --}}
                             </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Character:</div>
-                                    <div><b>20</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">20</div>
-                            <div class="border-bottom p-1 text-center">Capacity</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-7" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-8" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-9" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-10" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-11" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Capacity:</div>
-                                    <div><b>17</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">20</div>
-                            <div class="border-bottom p-1 text-center">Capital</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-12" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-13" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-14" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-15" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-16" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Capital:</div>
-                                    <div><b>16</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">17</div>
-                            <div class="border-bottom p-1 text-center">Condition</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-17" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-18" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-19" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-23" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-24" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-25" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-26" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-27" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-28" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Condition:</div>
-                                    <div><b>16</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">13</div>
-                            <div class="border-bottom p-1 text-center">Collateral</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-29" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-30" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-31" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-32" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="create-scoring-score-20" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-21" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="create-scoring-score-22" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Prospect:</div>
-                                    <div><b>1</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 mt-3">
+                        @endforeach
+                        {{-- <div class="col-12 mt-3">
                             Total Nilai: <b>69</b>
-                        </div>
+                        </div> --}}
                     </div>
                 </x-card>
             </div>
@@ -433,136 +333,31 @@
         <div class="row mx-1">
             <x-card>
                 <div class="row">
-                    <div class="col border p-0" style="position: relative">
-                        <div class="border-bottom p-1 text-center">30</div>
-                        <div class="border-bottom p-1 text-center">Character</div>
-                        <div class="px-3 pt-3 pb-5">
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-1" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-2" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
+                    @foreach ($scorings->groupBy('category') as $grouped)
+                        <div class="col border p-0" style="position: relative">
+                            {{-- <div class="border-bottom p-1 text-center">30</div> --}}
+                            <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
+                            <div class="px-3 pt-3 pb-5">
+                                @foreach ($grouped as $score)
+                                <div class="mb-3">
+                                    <div class="fw-bold">{{ $score->title }}</div>
+                                    @foreach ($score->details as $detail)
+                                        <x-form-check type="radio" id="show-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}" disabled>{{ $detail->text }}</x-form-check>
+                                    @endforeach
+                                </div>
+                                @endforeach
                             </div>
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-3" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-4" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-5" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-6" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                        </div>
-                        <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>Sub Total Nilai Character:</div>
-                                <div><b>20</b></div>
+                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>Sub Total Nilai {{ $grouped->first()->category }}:</div>
+                                    <div><b id="show-sub-total-{{ $grouped->first()->category }}">-</b></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col border p-0" style="position: relative">
-                        <div class="border-bottom p-1 text-center">20</div>
-                        <div class="border-bottom p-1 text-center">Capacity</div>
-                        <div class="px-3 pt-3 pb-5">
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-7" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-8" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-9" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-10" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-11" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                        </div>
-                        <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>Sub Total Nilai Capacity:</div>
-                                <div><b>17</b></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col border p-0" style="position: relative">
-                        <div class="border-bottom p-1 text-center">20</div>
-                        <div class="border-bottom p-1 text-center">Capital</div>
-                        <div class="px-3 pt-3 pb-5">
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-12" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-13" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-14" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-15" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-16" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                        </div>
-                        <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>Sub Total Nilai Capital:</div>
-                                <div><b>16</b></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col border p-0" style="position: relative">
-                        <div class="border-bottom p-1 text-center">17</div>
-                        <div class="border-bottom p-1 text-center">Condition</div>
-                        <div class="px-3 pt-3 pb-5">
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-17" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-18" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-19" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-23" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-24" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-25" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-26" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-27" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-28" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                        </div>
-                        <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>Sub Total Nilai Condition:</div>
-                                <div><b>16</b></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col border p-0" style="position: relative">
-                        <div class="border-bottom p-1 text-center">13</div>
-                        <div class="border-bottom p-1 text-center">Collateral</div>
-                        <div class="px-3 pt-3 pb-5">
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-29" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-30" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-31" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-32" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                            <div class="mb-3">
-                                <div class="fw-bold">Kategori</div>
-                                <x-form-check id="show-scoring-score-20" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-21" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                                <x-form-check id="show-scoring-score-22" name="scoring[score[]]" value="10" disabled>Name</x-form-check>
-                            </div>
-                        </div>
-                        <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>Sub Total Nilai Prospect:</div>
-                                <div><b>1</b></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>Total Nilai: <b>69</b></div>
-                            <div>
-                                <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
+                    {{-- <div class="col-12 mt-3">
+                        Total Nilai: <b>69</b>
+                    </div> --}}
                 </div>
             </x-card>
         </div>
@@ -582,7 +377,6 @@
                     <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Surety Bond</div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-4">
                     <div class="w-100 mb-4">
@@ -693,7 +487,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="row mb-2">
                 <div class="col-12 text-center">
                     <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Surety Bond</div>
@@ -702,131 +495,31 @@
             <div class="row mx-1">
                 <x-card>
                     <div class="row">
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">30</div>
-                            <div class="border-bottom p-1 text-center">Character</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                        @foreach ($scorings->groupBy('category') as $grouped)
+                            <div class="col border p-0" style="position: relative">
+                                {{-- <div class="border-bottom p-1 text-center">30</div> --}}
+                                <div class="border-bottom p-1 text-center">{{ $grouped->first()->category }}</div>
+                                <div class="px-3 pt-3 pb-5">
+                                    @foreach ($grouped as $score)
+                                    <div class="mb-3">
+                                        <div class="fw-bold">{{ $score->title }}</div>
+                                        @foreach ($score->details as $detail)
+                                            <x-form-check type="radio" id="edit-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}">{{ $detail->text }}</x-form-check>
+                                        @endforeach
+                                    </div>
+                                    @endforeach
                                 </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-3" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-4" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-5" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-6" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
+                                {{-- <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>Sub Total Nilai {{ $grouped->first()->category }}:</div>
+                                        <div><b>20</b></div>
+                                    </div>
+                                </div> --}}
                             </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Character:</div>
-                                    <div><b>20</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">20</div>
-                            <div class="border-bottom p-1 text-center">Capacity</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-7" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-8" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-9" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-10" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-11" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Capacity:</div>
-                                    <div><b>17</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">20</div>
-                            <div class="border-bottom p-1 text-center">Capital</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-12" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-13" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-14" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-15" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-16" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Capital:</div>
-                                    <div><b>16</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">17</div>
-                            <div class="border-bottom p-1 text-center">Condition</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-17" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-18" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-19" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-23" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-24" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-25" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-26" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-27" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-28" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Condition:</div>
-                                    <div><b>16</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col border p-0" style="position: relative">
-                            <div class="border-bottom p-1 text-center">13</div>
-                            <div class="border-bottom p-1 text-center">Collateral</div>
-                            <div class="px-3 pt-3 pb-5">
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-29" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-30" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-31" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-32" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="fw-bold">Kategori</div>
-                                    <x-form-check id="edit-scoring-score-20" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-21" name="scoring[score[]]" value="10">Name</x-form-check>
-                                    <x-form-check id="edit-scoring-score-22" name="scoring[score[]]" value="10">Name</x-form-check>
-                                </div>
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai Prospect:</div>
-                                    <div><b>1</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 mt-3">
+                        @endforeach
+                        {{-- <div class="col-12 mt-3">
                             Total Nilai: <b>69</b>
-                        </div>
+                        </div> --}}
                     </div>
                 </x-card>
             </div>
@@ -924,6 +617,7 @@
             ajaxGet("{{ route('products.surety-bonds.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     suretyBond = response.data
+                    console.log(suretyBond);
                     $('#show-receipt-number').html(suretyBond.receipt_number)
                     $('#show-bond-number').html(suretyBond.bond_number)
                     $('#show-polish-number').html(suretyBond.polish_number)
@@ -954,10 +648,22 @@
                     // $('#show-status').html()
                     // $('#show-cancel-status').html()
                     // $('#show-sync-status').html()
+                    $('input[type="radio"]:checked').prop('checked',false)
+                    const groupByCategory = suretyBondGroupBy(suretyBond.scorings)
+                    Object.keys(groupByCategory).forEach(key => {
+                        $('#show-scoring-category').html(key)
+                        let subtotal = 0
+                        groupByCategory[key].forEach(e => {
+                            $('#show-scoring-score-'+e.scoring_id+'-'+e.scoring_detail_id).prop('checked',true)
+                            subtotal += e.value
+                        });
+                        $('#show-sub-total-'+key).html(subtotal)
+                    });
                 }
             })
         })
         $(document).on('click', '.btn-edit', function () {
+            $('input[type="radio"]:checked').prop('checked',false)
             select2SetVal("edit-agent-id",suretyBond.agent.id,suretyBond.agent.name)
             select2SetVal("edit-insurance-id",suretyBond.insurance.id,suretyBond.insurance.name)
             select2SetVal("edit-insurance-type-id",suretyBond.insurance_type.id,suretyBond.insurance_type.name)
@@ -974,6 +680,8 @@
             $('#edit-start-date').val(suretyBond.start_date)
             $('#edit-end-date').val(suretyBond.end_date)
             $('#edit-due-day-tolerance-'+suretyBond.due_day_tolerance).prop('checked',true).trigger('input')
+            console.log('#edit-due-day-tolerance-'+suretyBond.due_day_tolerance);
+            $('#edit-day-count-input').val(suretyBond.day_count)
             $('#edit-project-name').val(suretyBond.project_name)
             $('#edit-document-title').val(suretyBond.document_title)
             $('#edit-document-number').val(suretyBond.document_number)
@@ -983,6 +691,12 @@
             // $('#edit-status').val()
             // $('#edit-cancel-status').val()
             // $('#edit-sync-status').val()
+            const groupByCategory = suretyBondGroupBy(suretyBond.scorings)
+            Object.keys(groupByCategory).forEach(key => {
+                groupByCategory[key].forEach(e => {
+                    $('#edit-scoring-score-'+e.scoring_id+'-'+e.scoring_detail_id).prop('checked',true)
+                });
+            });
         })
         $(document).on('click', '#edit-save', function () {
             loading()
@@ -996,6 +710,9 @@
                 title: "Yakin ingin menghapus Surety Bond?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    ajaxPost("{{ route('products.surety-bonds.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method : 'delete'},'',function(response){
+                        table.ajax.reload()
+                    })
                 }
             })
         })
@@ -1011,6 +728,14 @@
                 if(startDate && endDate) dayCount = dateDiffDays(startDate,endDate)
             }
             return dayCount + parseInt($('.'+action+'-due-day-tolerance:checked').val())
+        }
+        function suretyBondGroupBy(scorings) {
+            return scorings.reduce((group, scoring) => {
+                const { category } = scoring;
+                group[category] = group[category] ?? [];
+                group[category].push(scoring);
+                return group;
+            }, {});
         }
     </script>
 @endpush

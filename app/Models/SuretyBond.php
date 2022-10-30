@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\InsuranceRate;
 use App\Models\AgentRate;
 use App\Models\Status;
+use App\Models\Scoring;
+use App\Models\ScoringDetail;
 
 class SuretyBond extends Model
 {
@@ -40,6 +42,7 @@ class SuretyBond extends Model
         'insurance_id',
         'insurance_type_id',
         'revision_from_id',
+        'score'
     ];
     public function principal(){
         return $this->belongsTo(Principal::class);
@@ -62,6 +65,9 @@ class SuretyBond extends Model
     public function statuses(){
         return $this->hasMany(SuretyBondStatus::class);
     }
+    public function scorings(){
+        return $this->hasMany(SuretyBondScore::class);
+    }
     public function last_status(){
         return $this->hasOne(SuretyBondStatus::class)->ofMany('id', 'max');
     }
@@ -77,6 +83,15 @@ class SuretyBond extends Model
     private static function fetch(object $args): object{
         $insuranceRate = InsuranceRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId]])->firstOrFail();
         $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId]])->firstOrFail();
+        $scoring = array_map(function($key,$value){
+            return [
+                'scoring_id' => $key,
+                'scoring_detail_id' => $value,
+                'category' => Scoring::findOrFail($key)->category,
+                'value' => ScoringDetail::findOrFail($value)->value
+            ];
+        },array_keys($args->scoring),array_values($args->scoring));
+        $totalScore = array_sum(array_column($scoring, 'value'));
         return (object)[
             'suretyBond' => [
                 'receipt_number' => $args->receiptNumber,
@@ -105,7 +120,9 @@ class SuretyBond extends Model
                 'obligee_id' => $args->obligeeId,
                 'insurance_id' => $args->insuranceId,
                 'insurance_type_id' => $args->insuranceTypeId,
-            ]
+                'score' => $totalScore
+            ],
+            'scoring' => $scoring
         ];
     }
     private static function fetchStatus(object $args): array{
@@ -116,12 +133,12 @@ class SuretyBond extends Model
             if($status == 'input'){
                 $params = [
                     ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => $type,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id]
+                    ['type' => 'finance','status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id]
                 ];
             }else if($status == 'terbit'){
                 $params = [
                     ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => $type,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
+                    ['type' => 'insurance','status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
                 ];
             }else{
                 $params = [
@@ -139,13 +156,22 @@ class SuretyBond extends Model
         $request = self::fetch((object)$params);
         $suretyBond = self::create($request->suretyBond);
         $suretyBond->ubahStatus(['type' => 'process','status' => 'input']);
+        $suretyBond->scorings()->createMany($request->scoring);
         return $suretyBond;
     }
     public function ubah(array $params): bool{
         $request = self::fetch((object)$params);
+        foreach ($request->scoring as $score) {
+            $this->scorings()->where('scoring_id',$score['scoring_id'])->update($score);
+        }
         return $this->update($request->suretyBond);
     }
     public function ubahStatus(array $params){
         return $this->statuses()->createMany(self::fetchStatus((object)$params));
+    }
+    public function hapus(){
+        $this->statuses()->delete();
+        $this->scorings()->delete();
+        return $this->delete();
     }
 }

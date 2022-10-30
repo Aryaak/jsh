@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Exception;
 use App\Models\SuretyBond;
+use App\Models\Scoring;
 use Illuminate\Http\Request;
 
 class SuretyBondController extends Controller
@@ -18,7 +19,9 @@ class SuretyBondController extends Controller
             ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }
-        return view('product.surety-bonds');
+        $scorings = Scoring::whereNotNull('category')->with('details')->get();
+        // dd($scorings);
+        return view('product.surety-bonds',compact('scorings'));
     }
 
     public function create()
@@ -49,6 +52,8 @@ class SuretyBondController extends Controller
         $suretyBond->agent;
         $suretyBond->insurance;
         $suretyBond->insurance_type;
+        $suretyBond->statuses;
+        $suretyBond->scorings;
         return response()->json($this->showResponse($suretyBond->toArray()));
     }
 
@@ -75,5 +80,18 @@ class SuretyBondController extends Controller
 
     public function destroy(SuretyBond $suretyBond)
     {
+        try {
+            DB::beginTransaction();
+            $suretyBond->hapus();
+            $http_code = 200;
+            $response = $this->destroyResponse();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
     }
 }

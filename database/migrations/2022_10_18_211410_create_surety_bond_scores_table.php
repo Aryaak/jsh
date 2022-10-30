@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('surety_bond_scores', function (Blueprint $table) {
             $table->id();
             $table->float('value');
+            $table->string('category');
             $table->foreignId('surety_bond_id')->constrained();
             $table->foreignId('scoring_id')->constrained();
             $table->foreignId('scoring_detail_id')->constrained();

@@ -16,6 +16,7 @@ use App\Http\Controllers\PDFDownloadController;
 use App\Http\Controllers\RegionalController;
 use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\UploaderController;
+use App\Http\Controllers\SuretyBondController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,7 +47,8 @@ Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
 });
 
 Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
-    Route::get('/', fn() => redirect(route('dashboard')));
+    Route::apiResource('surety-bond',SuretyBondController::class)->names('surety-bonds');
+    // Route::get('/', fn() => redirect(route('dashboard')));
 
     // Route untuk produk ....
 });
@@ -77,6 +79,8 @@ Route::group(['prefix' => '/select2', 'as' => 'select2.'], function () {
     Route::get('city',[Select2Controller::class,'city'])->name('city');
     Route::get('agent',[Select2Controller::class,'agent'])->name('agent');
     Route::get('insurance',[Select2Controller::class,'insurance'])->name('insurance');
+    Route::get('obligee',[Select2Controller::class,'obligee'])->name('obligee');
+    Route::get('principal',[Select2Controller::class,'principal'])->name('principal');
     Route::get('insurance-type',[Select2Controller::class,'insuranceType'])->name('insuranceType');
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Sirius;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,9 +14,17 @@ class InsuranceRateController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = InsuranceRate::with('insurance','insurance_type');
+            // $data = InsuranceRate::with('insurance','insurance_type');
+            $data = DB::table('insurance_rates as ir')
+            ->join('insurances as i','i.id','ir.insurance_id')
+            ->join('insurance_types as it','it.id','ir.insurance_type_id')
+            ->select('ir.*','i.name','it.name as insurance_type_name');
             return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('min_value', fn($rate) => Sirius::toRupiah($rate->min_value))
+            ->editColumn('polish_cost', fn($rate) => Sirius::toRupiah($rate->polish_cost))
+            ->editColumn('stamp_cost', fn($rate) => Sirius::toRupiah($rate->stamp_cost))
+            ->editColumn('rate_value', fn($rate) => str_replace('.', '.', $rate->rate_value))
             ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }

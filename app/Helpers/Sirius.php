@@ -436,6 +436,7 @@ class Sirius
     public static function getAllProvince(): array
     {
         return [
+            'Aceh',
             'Bali',
             'Banten',
             'Bengkulu',
@@ -456,14 +457,13 @@ class Sirius
             'Lampung',
             'Maluku',
             'Maluku Utara',
-            'Nanggroe Aceh Darussalam',
             'Nusa Tenggara Barat',
             'Nusa Tenggara Timur',
             'Papua',
             'Papua Barat',
+            'Papua Pegunungan',
             'Papua Selatan',
             'Papua Tengah',
-            'Papua Pegunungan',
             'Riau',
             'Sulawesi Barat',
             'Sulawesi Selatan',

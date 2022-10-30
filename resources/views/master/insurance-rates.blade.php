@@ -104,8 +104,8 @@
         let insuranceRate = null
         $(document).ready(function () {
             table = dataTableInit('table','Insurance Rate',{url : '{{ route('master.insurance-rates.index') }}'},[
-                {data: 'insurance.name', name: 'insurance.name'},
-                {data: 'insurance_type.name', name: 'insurance_type.name'},
+                {data: 'name', name: 'name'},
+                {data: 'insurance_type_name', name: 'insurance_type_name'},
                 {data: 'min_value', name: 'min_value'},
                 {data: 'rate_value', name: 'rate_value'},
                 {data: 'polish_cost', name: 'polish_cost'},
@@ -136,10 +136,10 @@
                     insuranceRate = response.data
                     $('#show-insurance').html(insuranceRate.insurance.name)
                     $('#show-insurance-type').html(insuranceRate.insurance_type.name)
-                    $('#show-min-value').html(insuranceRate.min_value)
-                    $('#show-rate-value').html(insuranceRate.rate_value)
-                    $('#show-polish-cost').html(insuranceRate.polish_cost)
-                    $('#show-stamp-cost').html(insuranceRate.stamp_cost)
+                    $('#show-min-value').html((ToRupiah.format(insuranceRate.min_value)).replace('\u00A0', '') + ",-")
+                    $('#show-rate-value').html(ToUnit.format(insuranceRate.rate_value))
+                    $('#show-polish-cost').html((ToRupiah.format(insuranceRate.polish_cost)).replace('\u00A0', '') + ",-")
+                    $('#show-stamp-cost').html((ToRupiah.format(insuranceRate.stamp_cost)).replace('\u00A0', '') + ",-")
                     $('#show-desc').html(insuranceRate.desc)
                 }
             })
@@ -147,10 +147,10 @@
         $(document).on('click', '.btn-edit', function () {
             select2SetVal('edit-insurance-id',insuranceRate.insurance.id,insuranceRate.insurance.name)
             select2SetVal('edit-insurance-type-id',insuranceRate.insurance_type.id,insuranceRate.insurance_type.name)
-            $('#edit-min-value').val(insuranceRate.min_value)
-            $('#edit-rate-value').val(insuranceRate.rate_value)
-            $('#edit-polish-cost').val(insuranceRate.polish_cost)
-            $('#edit-stamp-cost').val(insuranceRate.stamp_cost)
+            $('#edit-min-value').val((ToRupiah.format(insuranceRate.min_value)).replace('Rp\u00A0', ''))
+            $('#edit-rate-value').val(ToUnit.format(insuranceRate.rate_value))
+            $('#edit-polish-cost').val((ToRupiah.format(insuranceRate.polish_cost)).replace('Rp\u00A0', ''))
+            $('#edit-stamp-cost').val((ToRupiah.format(insuranceRate.stamp_cost)).replace('Rp\u00A0', ''))
             $('#edit-desc').val(insuranceRate.desc)
         })
         $(document).on('click', '.btn-delete', function () {

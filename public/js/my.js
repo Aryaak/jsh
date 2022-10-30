@@ -373,7 +373,7 @@ function dataTableInit(id,title,ajax,column,properties = {},translate = null,but
       pageLength : 10,
       order: [[0,'asc']],
       lengthMenu: [[10, 25, 50,100, -1], [10, 25, 50,100, "Semua"]],
-      pagingType: 'full_numbers',
+    //   pagingType: 'full_numbers',
       ajax: ajax,
       columns: columns,
       language: translate ?? datatablesTranslate(title),
@@ -754,9 +754,28 @@ $(document).ready(function (e) {
     })
 })
 function fetchFormData(formData){
-    formData.set('minValue',formData.get('minValue').replaceAll('.',''))
-    formData.set('rateValue',formData.get('rateValue').replaceAll('.','').replace(',','.'))
-    formData.set('polishCost',formData.get('polishCost').replaceAll('.',''))
-    formData.set('stampCost',formData.get('stampCost').replaceAll('.',''))
+    //for rates
+    if(formData.has('minValue')) formData.set('minValue',formData.get('minValue').replaceAll('.',''))
+    if(formData.has('rateValue')) formData.set('rateValue',formData.get('rateValue').replaceAll('.','').replace(',','.'))
+    if(formData.has('polishCost')) formData.set('polishCost',formData.get('polishCost').replaceAll('.',''))
+    if(formData.has('stampCost')) formData.set('stampCost',formData.get('stampCost').replaceAll('.',''))
+    //for surety bond
+    if(formData.has('contractValue')) formData.set('contractValue',formData.get('contractValue').replaceAll('.',''))
+    if(formData.has('insuranceValue')) formData.set('insuranceValue',formData.get('insuranceValue').replaceAll('.',''))
+    if(formData.has('serviceCharge')) formData.set('serviceCharge',formData.get('serviceCharge').replaceAll('.',''))
+    if(formData.has('adminCharge')) formData.set('adminCharge',formData.get('adminCharge').replaceAll('.',''))
+    if(formData.has('premiCharge')) formData.set('premiCharge',formData.get('premiCharge').replaceAll('.',''))
     return formData;
+}
+function dateDiffDays(startDate,endDate) {
+    const date1 = new Date(startDate);
+    const date2 = new Date(endDate);
+    const diffTime = Math.abs(date2 - date1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays
+}
+function inspectFormData(formData) {
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]);
+    }
 }

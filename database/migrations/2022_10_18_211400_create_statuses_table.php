@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
-            $table->string('for_process')->nullable()->comment('only for surety bond and');
+            $table->string('for_process')->nullable()->comment('only for surety bond and guarantee bank');
             $table->timestamps();
         });
     }

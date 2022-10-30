@@ -9,7 +9,7 @@
     }
 @endphp
 <div {{ $attributes->merge(['class' => $class]) }}>
-    <input class="form-check-input" type="{{ $type }}" value="{{ $value ?? '' }}" id="{{ $id }}" name="{{ $name ?? '' }}" @if($checked) checked @endif @if($disabled) disabled @endif @if($required) required @endif />
+    <input class="form-check-input {{ $inputClass }}" type="{{ $type }}" value="{{ $value ?? '' }}" id="{{ $id }}" name="{{ $name ?? '' }}" @if($checked) checked @endif @if($disabled) disabled @endif @if($required) required @endif />
     <label class="form-check-label" for="{{ $id }}">
         {!! $slot !!}
     </label>

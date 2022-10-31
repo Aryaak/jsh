@@ -1,4 +1,4 @@
-@extends('layouts.main', ['title' => 'Surety Bond'])
+@extends('layouts.main', ['title' => 'Bank Garansi'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
@@ -6,9 +6,9 @@
 @endpush
 
 @section('contents')
-    <x-card header="Daftar Surety Bond">
+    <x-card header="Daftar Bank Garansi">
         @slot('headerAction')
-            <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Surety Bond</x-button>
+            <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Bank Garansi</x-button>
         @endslot
 
         <x-table id="table">
@@ -18,7 +18,7 @@
                     <th>No. Kwitansi</th>
                     <th>No. Bond</th>
                     <th>No. Polis</th>
-                    <th>Status SB</th>
+                    <th>Status BG</th>
                     <th>Status Sinkron</th>
                     <th>Tanggal</th>
                     <th width="80px">Tindakan</th>
@@ -29,11 +29,11 @@
 @endsection
 
 @section('modals')
-    <x-modal id="modal-create" title="Tambah Surety Bond" size="fullscreen" darkBody>
+    <x-modal id="modal-create" title="Tambah Bank Garansi" size="fullscreen" darkBody>
         <x-form id="form-create" method="post">
             <div class="row mb-4">
                 <div class="col-12 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Surety Bond</div>
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Bank Garansi</div>
                 </div>
             </div>
             <div class="row">
@@ -44,7 +44,7 @@
                             <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
                             <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
                             <x-form-select label="Nama Agen" id="create-agent-id" name="agentId" class="mb-3" required/>
-                            <x-form-select label="Nama Asuransi" id="create-insurance-id" name="insuranceId" class="mb-3" required/>
+                            <x-form-select label="Nama Bank" id="create-bank-id" name="bankId" class="mb-3" required/>
                             <x-form-select label="Jenis Jaminan" id="create-insurance-type-id" name="insuranceTypeId" required/>
                         </x-card>
                     </div>
@@ -79,8 +79,8 @@
                     <div class="w-100 mb-3">
                         <x-card header="5. Tambahan" smallHeader>
                             <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                            <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" classInput="to-rupiah" required />
                             <x-form-input label="Premi Bayar" id="create-premi-charge" name="premiCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+                            <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" classInput="to-rupiah" required />
                         </x-card>
                     </div>
                 </div>
@@ -99,9 +99,9 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
-                                <x-form-check id="create-due-day-tolerance-0" input-class="create-due-day-tolerance" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                <x-form-check id="create-due-day-tolerance-1" input-class="create-due-day-tolerance" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                <x-form-check id="create-due-day-tolerance-2" input-class="create-due-day-tolerance" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                <x-form-check id="create-due-day-tolerance-0" input-class='create-due-day-tolerance' name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                <x-form-check id="create-due-day-tolerance-1" input-class='create-due-day-tolerance' name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                <x-form-check id="create-due-day-tolerance-2" input-class='create-due-day-tolerance' name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
                             </div>
                             <div class="mb-3">
                                 <x-form-label required>Jumlah Hari</x-form-label>
@@ -119,7 +119,7 @@
 
             <div class="row mb-2">
                 <div class="col-12 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Surety Bond</div>
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Bank Garansi</div>
                 </div>
             </div>
             <div class="row mx-1">
@@ -160,10 +160,10 @@
         @endslot
     </x-modal>
 
-    <x-modal id="modal-show" title="Detail Surety Bond" size="fullscreen" darkBody>
+    <x-modal id="modal-show" title="Detail Bank Garansi" size="fullscreen" darkBody>
         <div class="row mb-4">
             <div class="col-12 text-center">
-                <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Surety Bond</div>
+                <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Bank Garansi</div>
             </div>
         </div>
         <div class="row">
@@ -187,8 +187,8 @@
                             <div id="show-agent">-</div>
                         </div>
                         <div class="mb-3">
-                            <x-form-label>Nama Asuransi</x-form-label>
-                            <div id="show-insurance">-</div>
+                            <x-form-label>Nama Bank</x-form-label>
+                            <div id="show-bank">-</div>
                         </div>
                         <div>
                             <x-form-label>Jenis Jaminan</x-form-label>
@@ -230,7 +230,7 @@
                         </div>
                     </x-card>
                 </div>
-                <div class="w-100 mb-4">
+                <div class="w-100 mb-3">
                     <x-card header="5. Tambahan" smallHeader>
                         <div class="mb-3">
                             <x-form-label>Service Charge</x-form-label>
@@ -246,7 +246,7 @@
                         </div>
                     </x-card>
                 </div>
-                <div class="w-100 mb-4">
+                <div class="w-100 mb-3">
                     <x-card header="6. Lainnya" smallHeader>
                         <div class="mb-3">
                             <x-form-label>Keterangan</x-form-label>
@@ -327,7 +327,7 @@
 
         <div class="row mb-2">
             <div class="col-12 text-center">
-                <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Surety Bond</div>
+                <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Bank Garansi</div>
             </div>
         </div>
         <div class="row mx-1">
@@ -370,11 +370,11 @@
         @endslot
     </x-modal>
 
-    <x-modal id="modal-edit" title="Ubah Surety Bond" size="fullscreen" darkBody>
+    <x-modal id="modal-edit" title="Ubah Bank Garansi" size="fullscreen" darkBody>
         <x-form id="form-edit" method="put">
             <div class="row mb-4">
                 <div class="col-12 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Surety Bond</div>
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Bank Garansi</div>
                 </div>
             </div>
             <div class="row">
@@ -385,7 +385,7 @@
                             <x-form-input label="No. Bond" id="edit-bond-number" name="bondNumber" class="mb-3" />
                             <x-form-input label="No. Polis" id="edit-polish-number" name="polishNumber" class="mb-3" />
                             <x-form-select label="Nama Agen" id="edit-agent-id" name="agentId" class="mb-3" required/>
-                            <x-form-select label="Nama Asuransi" id="edit-insurance-id" name="insuranceId" class="mb-3" required/>
+                            <x-form-select label="Nama Bank" id="edit-bank-id" name="bankId" class="mb-3" required/>
                             <x-form-select label="Jenis Jaminan" id="edit-insurance-type-id" name="insuranceTypeId" required/>
                         </x-card>
                     </div>
@@ -417,14 +417,14 @@
                             </div>
                         </x-card>
                     </div>
-                    <div class="w-100 mb-4">
+                    <div class="w-100 mb-3">
                         <x-card header="5. Tambahan" smallHeader>
                             <x-form-input label="Service Charge" id="edit-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                             <x-form-input label="Premi Bayar" id="edit-premi-charge" name="premiCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                             <x-form-input label="Biaya Admin" id="edit-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" classInput="to-rupiah" required />
                         </x-card>
                     </div>
-                    <div class="w-100 mb-4">
+                    <div class="w-100 mb-3">
                         <x-card header="6. Lainnya" smallHeader>
                             <x-form-textarea label="Keterangan" id="edit-desc" name="desc" class="mb-3" />
                             <x-form-input label="Tanggal Bayar" id="edit-paid-date" name="paidDate" class="mb-3" type="date" required />
@@ -470,9 +470,9 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
-                                <x-form-check id="edit-due-day-tolerance-0" input-class="edit-due-day-tolerance" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                <x-form-check id="edit-due-day-tolerance-1" input-class="edit-due-day-tolerance" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                <x-form-check id="edit-due-day-tolerance-2" input-class="edit-due-day-tolerance" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                <x-form-check id="edit-due-day-tolerance-0" input-class='edit-due-day-tolerance' name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                <x-form-check id="edit-due-day-tolerance-1" input-class='edit-due-day-tolerance' name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                <x-form-check id="edit-due-day-tolerance-2" input-class='edit-due-day-tolerance' name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
                             </div>
                             <div class="mb-3">
                                 <x-form-label required>Jumlah Hari</x-form-label>
@@ -487,9 +487,10 @@
                     </div>
                 </div>
             </div>
+
             <div class="row mb-2">
                 <div class="col-12 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Surety Bond</div>
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Bank Garansi</div>
                 </div>
             </div>
             <div class="row mx-1">
@@ -536,7 +537,7 @@
     <x-modal id="modal-status-histories" title="Riwayat Status">
         <div class="pb-2 mb-2 text-center">
             <b>No. Bond</b> <br>
-            <span id="status-histories-no-bond">-</span>
+            <span id="status-histories-no-guarantee">-</span>
         </div>
         <div class="list-group" id="status-histories">
             {{-- History Items --}}
@@ -562,9 +563,9 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         let table = null
-        let suretyBond = null
+        let guaranteeBank = null
         $(document).ready(function () {
-            table = dataTableInit('table','Surety Bond',{url : '{{ route('products.surety-bonds.index') }}'},[
+            table = dataTableInit('table','Bank Garansi',{url : '{{ route('products.guarantee-banks.index') }}'},[
                 {data: 'receipt_number', name: 'receipt_number'},
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
@@ -572,22 +573,23 @@
                 {data: 'insurance_value', name: 'insurance_value'},
                 {data: 'start_date', name: 'start_date'},
             ])
-
             select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,$('#modal-create'))
             select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-create'))
             select2Init("#create-principal-id",'{{ route('select2.principal') }}',0,$('#modal-create'))
             select2Init("#create-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-create'))
             select2Init("#create-insurance-type-id",'{{ route('select2.insuranceType') }}',0,$('#modal-create'))
+            select2Init("#create-bank-id",'{{ route('select2.bank') }}',0,$('#modal-create'))
 
             select2Init("#edit-agent-id",'{{ route('select2.agent') }}',0,$('#modal-edit'))
             select2Init("#edit-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-edit'))
             select2Init("#edit-principal-id",'{{ route('select2.principal') }}',0,$('#modal-edit'))
             select2Init("#edit-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-edit'))
             select2Init("#edit-insurance-type-id",'{{ route('select2.insuranceType') }}',0,$('#modal-edit'))
+            select2Init("#edit-bank-id",'{{ route('select2.bank') }}',0,$('#modal-edit'))
         })
         $(document).on('click', '#create-save', function () {
             loading()
-            ajaxPost("{{ route('products.surety-bonds.store') }}",fetchFormData(new FormData(document.getElementById('form-create'))),'#modal-create',function(){
+            ajaxPost("{{ route('products.guarantee-banks.store') }}",fetchFormData(new FormData(document.getElementById('form-create'))),'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
             })
@@ -614,42 +616,41 @@
             $('#'+split[0]+'-day-count').html(dayCount)
         })
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('products.surety-bonds.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('products.guarantee-banks.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
-                    suretyBond = response.data
-                    console.log(suretyBond);
-                    $('#show-receipt-number').html(suretyBond.receipt_number)
-                    $('#show-bond-number').html(suretyBond.bond_number)
-                    $('#show-polish-number').html(suretyBond.polish_number)
-                    $('#show-agent').html(suretyBond.agent.name)
-                    $('#show-insurance').html(suretyBond.insurance.name)
-                    $('#show-insurance-type').html(suretyBond.insurance_type.name)
-                    $('#show-obligee-name').html(suretyBond.obligee.name)
-                    $('#show-obligee-address').html(suretyBond.obligee.name)
-                    $('#show-principal-name').html(suretyBond.principal.name)
-                    $('#show-principal-address').html(suretyBond.principal.address)
-                    $('#show-pic-name').html(suretyBond.principal.pic_name)
-                    $('#show-pic-position').html(suretyBond.principal.pic_position)
-                    $('#show-service-charge').html(numberFormat(suretyBond.service_charge))
-                    $('#show-premi-charge').html(numberFormat(suretyBond.insurance_total_net))
-                    $('#show-admin-charge').html(numberFormat(suretyBond.admin_charge))
-                    $('#show-contract-value').html(numberFormat(suretyBond.contract_value))
-                    $('#show-insurance-value').html(numberFormat(suretyBond.insurance_value))
-                    $('#show-start-date').html(suretyBond.start_date)
-                    $('#show-end-date').html(suretyBond.end_date)
-                    $('#show-due-day-tolerance').html(suretyBond.due_day_tolerance)
-                    $('#show-day-count').html(suretyBond.day_count)
-                    $('#show-project-name').html(suretyBond.project_name)
-                    $('#show-document-title').html(suretyBond.document_title)
-                    $('#show-document-number').html(suretyBond.document_number)
-                    $('#show-document-expired-at').html(suretyBond.document_expired_at)
+                    guaranteeBank = response.data
+                    $('#show-receipt-number').html(guaranteeBank.receipt_number)
+                    $('#show-bond-number').html(guaranteeBank.bond_number)
+                    $('#show-polish-number').html(guaranteeBank.polish_number)
+                    $('#show-agent').html(guaranteeBank.agent.name)
+                    $('#show-bank').html(guaranteeBank.bank.name)
+                    $('#show-insurance-type').html(guaranteeBank.insurance_type.name)
+                    $('#show-obligee-name').html(guaranteeBank.obligee.name)
+                    $('#show-obligee-address').html(guaranteeBank.obligee.name)
+                    $('#show-principal-name').html(guaranteeBank.principal.name)
+                    $('#show-principal-address').html(guaranteeBank.principal.address)
+                    $('#show-pic-name').html(guaranteeBank.principal.pic_name)
+                    $('#show-pic-position').html(guaranteeBank.principal.pic_position)
+                    $('#show-service-charge').html(numberFormat(guaranteeBank.service_charge))
+                    $('#show-premi-charge').html(numberFormat(guaranteeBank.insurance_total_net))
+                    $('#show-admin-charge').html(numberFormat(guaranteeBank.admin_charge))
+                    $('#show-contract-value').html(numberFormat(guaranteeBank.contract_value))
+                    $('#show-insurance-value').html(numberFormat(guaranteeBank.insurance_value))
+                    $('#show-start-date').html(guaranteeBank.start_date)
+                    $('#show-end-date').html(guaranteeBank.end_date)
+                    $('#show-due-day-tolerance').html(guaranteeBank.due_day_tolerance)
+                    $('#show-day-count').html(guaranteeBank.day_count)
+                    $('#show-project-name').html(guaranteeBank.project_name)
+                    $('#show-document-title').html(guaranteeBank.document_title)
+                    $('#show-document-number').html(guaranteeBank.document_number)
+                    $('#show-document-expired-at').html(guaranteeBank.document_expired_at)
                     // $('#show-desc').html()
                     // $('#show-paid-date').html()
                     // $('#show-status').html()
                     // $('#show-cancel-status').html()
                     // $('#show-sync-status').html()
-                    $('input[type="radio"]:checked').prop('checked',false)
-                    const groupByCategory = scoringGroupBy(suretyBond.scorings)
+                    // $('input[type="radio"]:checked').prop('checked',false)
+                    const groupByCategory = scoringGroupBy(guaranteeBank.scorings)
                     Object.keys(groupByCategory).forEach(key => {
                         $('#show-scoring-category').html(key)
                         let subtotal = 0
@@ -663,54 +664,54 @@
             })
         })
         $(document).on('click', '.btn-edit', function () {
+            console.log(guaranteeBank);
             $('input[type="radio"]:checked').prop('checked',false)
-            select2SetVal("edit-agent-id",suretyBond.agent.id,suretyBond.agent.name)
-            select2SetVal("edit-insurance-id",suretyBond.insurance.id,suretyBond.insurance.name)
-            select2SetVal("edit-insurance-type-id",suretyBond.insurance_type.id,suretyBond.insurance_type.name)
-            select2SetVal("edit-obligee-id",suretyBond.obligee.id,suretyBond.obligee.name)
-            select2SetVal("edit-principal-id",suretyBond.principal.id,suretyBond.principal.name)
-            $('#edit-receipt-number').val(suretyBond.receipt_number)
-            $('#edit-bond-number').val(suretyBond.bond_number)
-            $('#edit-polish-number').val(suretyBond.polish_number)
-            $('#edit-service-charge').val(numberFormat(suretyBond.service_charge))
-            $('#edit-premi-charge').val(numberFormat(suretyBond.insurance_total_net))
-            $('#edit-admin-charge').val(numberFormat(suretyBond.admin_charge))
-            $('#edit-contract-value').val(numberFormat(suretyBond.contract_value))
-            $('#edit-insurance-value').val(numberFormat(suretyBond.insurance_value))
-            $('#edit-start-date').val(suretyBond.start_date)
-            $('#edit-end-date').val(suretyBond.end_date)
-            $('#edit-due-day-tolerance-'+suretyBond.due_day_tolerance).prop('checked',true).trigger('input')
-            console.log('#edit-due-day-tolerance-'+suretyBond.due_day_tolerance);
-            $('#edit-day-count-input').val(suretyBond.day_count)
-            $('#edit-project-name').val(suretyBond.project_name)
-            $('#edit-document-title').val(suretyBond.document_title)
-            $('#edit-document-number').val(suretyBond.document_number)
-            $('#edit-document-expired-at').val(suretyBond.document_expired_at)
+            select2SetVal("edit-agent-id",guaranteeBank.agent.id,guaranteeBank.agent.name)
+            select2SetVal("edit-bank-id",guaranteeBank.bank.id,guaranteeBank.bank.name)
+            select2SetVal("edit-insurance-type-id",guaranteeBank.insurance_type.id,guaranteeBank.insurance_type.name)
+            select2SetVal("edit-obligee-id",guaranteeBank.obligee.id,guaranteeBank.obligee.name)
+            select2SetVal("edit-principal-id",guaranteeBank.principal.id,guaranteeBank.principal.name)
+            $('#edit-receipt-number').val(guaranteeBank.receipt_number)
+            $('#edit-bond-number').val(guaranteeBank.bond_number)
+            $('#edit-polish-number').val(guaranteeBank.polish_number)
+            $('#edit-service-charge').val(numberFormat(guaranteeBank.service_charge))
+            $('#edit-premi-charge').val(numberFormat(guaranteeBank.insurance_total_net))
+            $('#edit-admin-charge').val(numberFormat(guaranteeBank.admin_charge))
+            $('#edit-contract-value').val(numberFormat(guaranteeBank.contract_value))
+            $('#edit-insurance-value').val(numberFormat(guaranteeBank.insurance_value))
+            $('#edit-start-date').val(guaranteeBank.start_date)
+            $('#edit-end-date').val(guaranteeBank.end_date)
+            $('#edit-due-day-tolerance-'+guaranteeBank.due_day_tolerance).prop('checked',true).trigger('input')
+            $('#edit-day-count-input').val(guaranteeBank.day_count)
+            $('#edit-project-name').val(guaranteeBank.project_name)
+            $('#edit-document-title').val(guaranteeBank.document_title)
+            $('#edit-document-number').val(guaranteeBank.document_number)
+            $('#edit-document-expired-at').val(guaranteeBank.document_expired_at)
             // $('#edit-desc').val()
             // $('#edit-paid-date').val()
             // $('#edit-status').val()
             // $('#edit-cancel-status').val()
             // $('#edit-sync-status').val()
-            const groupByCategory = scoringGroupBy(suretyBond.scorings)
+            const groupByCategory = scoringGroupBy(guaranteeBank.scorings)
             Object.keys(groupByCategory).forEach(key => {
                 groupByCategory[key].forEach(e => {
                     $('#edit-scoring-score-'+e.scoring_id+'-'+e.scoring_detail_id).prop('checked',true)
                 });
             });
         })
-        $(document).on('click', '#edit-save', function () {
+         $(document).on('click', '#edit-save', function () {
             loading()
-            ajaxPost("{{ route('products.surety-bonds.update','-id-') }}".replace('-id-',suretyBond.id),fetchFormData(new FormData(document.getElementById('form-edit'))),'#modal-edit',function(){
+            ajaxPost("{{ route('products.guarantee-banks.update','-id-') }}".replace('-id-',guaranteeBank.id),fetchFormData(new FormData(document.getElementById('form-edit'))),'#modal-edit',function(){
                 table.ajax.reload()
             })
         })
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Surety Bond?",
+                title: "Yakin ingin menghapus Bank Garansi?",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    ajaxPost("{{ route('products.surety-bonds.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method : 'delete'},'',function(response){
+                    ajaxPost("{{ route('products.guarantee-banks.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method : 'delete'},'',function(response){
                         table.ajax.reload()
                     })
                 }

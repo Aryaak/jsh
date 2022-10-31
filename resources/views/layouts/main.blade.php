@@ -86,7 +86,7 @@
                         Produk
                         @slot('submenus')
                             <x-submenu route="products.surety-bonds.index">Surety Bond</x-submenu>
-                            <x-submenu route="dashboard">Bank Garansi</x-submenu>
+                            <x-submenu route="products.guarantee-banks.index">Bank Garansi</x-submenu>
                         @endslot
                     </x-menu>
 

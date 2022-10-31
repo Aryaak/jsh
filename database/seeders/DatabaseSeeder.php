@@ -34,7 +34,9 @@ class DatabaseSeeder extends Seeder
             InsuranceRateSeeder::class,
             AgentRateSeeder::class,
             StatusSeeder::class,
-            ScoringSeeder::class
+            ScoringSeeder::class,
+            BankSeeder::class,
+            BankRateSeeder::class,
         ]);
     }
 }

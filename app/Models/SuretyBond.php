@@ -60,7 +60,7 @@ class SuretyBond extends Model
         return $this->belongsTo(InsuranceType::class);
     }
     public function revision_from(){
-        return $this->belongsTo(SuretyBond::class.'revision_from_id');
+        return $this->belongsTo(SuretyBond::class,'revision_from_id');
     }
     public function statuses(){
         return $this->hasMany(SuretyBondStatus::class);

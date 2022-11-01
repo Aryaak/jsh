@@ -11,4 +11,7 @@ class Certificate extends Model
     use HasFactory;
 
     public $fillable = ['number','expired_at','principal_id'];
+    public function principal(){
+        return $this->belongsTo(Principal::class);
+    }
 }

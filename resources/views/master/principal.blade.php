@@ -77,12 +77,12 @@
                         <div class="border rounded p-0">
                             <div class="p-3">
                                 @foreach ($scorings as $scoring)
-                                    <x-form-check id="create-scoring-score-{{ $scoring->id }}" name="scoring[{{ $scoring->id }}]" value="1">{{ $scoring->title }}</x-form-check>
+                                    <x-form-check id="create-scoring-score-{{ $scoring->id }}" input-class="create-scoring" name="scoring[{{ $scoring->id }}]" value="1">{{ $scoring->title }}</x-form-check>
                                 @endforeach
                             </div>
                         </div>
                         <div class="my-3">
-                            Total Nilai: <b>69</b>
+                            Total Nilai: <b id="create-total-score">0</b>
                         </div>
                     </div>
                 </div>
@@ -266,12 +266,12 @@
                         <div class="border rounded p-0">
                             <div class="p-3">
                                 @foreach ($scorings as $scoring)
-                                    <x-form-check id="edit-scoring-score-{{ $scoring->id }}" name="scoring[{{ $scoring->id }}]" value="1">{{ $scoring->title }}</x-form-check>
+                                    <x-form-check id="edit-scoring-score-{{ $scoring->id }}" input-class="edit-scoring" name="scoring[{{ $scoring->id }}]" value="1">{{ $scoring->title }}</x-form-check>
                                 @endforeach
                             </div>
                         </div>
                         <div class="my-3">
-                            <div>Total Nilai: <b><span id="edit-score">69</span></b></div>
+                            <div>Total Nilai: <b><span id="edit-total-score">0</span></b></div>
                         </div>
                     </div>
                 </div>
@@ -320,6 +320,11 @@
             })
         })
 
+        $(document).on('click', '.create-scoring, .edit-scoring', function () {
+            const creadit = $(this).attr('id').split('-')[0]
+            let totalScore = $('.'+creadit+'-scoring:checkbox:checked').length / $('.'+creadit+'-scoring:checkbox').length * 10
+            $('#'+creadit+'-total-score').html(totalScore)
+        })
         $(document).on('click', '#create-save', function () {
             ajaxPost("{{ route('master.principals.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
                 table.ajax.reload()
@@ -357,6 +362,16 @@
                     $('#show-score').html(principal.score)
                     $('input[type="checkbox"]:checked').prop('checked',false)
                     principal.scorings.forEach(e => { $('#show-scoring-score-'+e.id).prop('checked',true) });
+                    let html = ''
+                    principal.certificates.forEach(e => {
+                       html += "<div id='show-certificate-1' class='mt-4 col-md-6'>"+
+                            "<div class='border rounded p-3'>"+
+                                "<div class='border-bottom pb-2 mb-2'><b>Nomor</b>: <br><span id='show-certificate-number-"+e.id+"'>"+e.number+"</span></div>"+
+                                "<div><b>Berlaku Hingga</b>: <br><span id='show-certificate-expired-at-"+e.id+"'>"+e.expired_at+"</span></div>"+
+                            "</div>"+
+                        "</div>"
+                    });
+                    $('#show-certificate-container').html(html)
                 }
             })
         })
@@ -377,9 +392,23 @@
             $('#edit-info-address').val(principal.address)
             $('#edit-info-jamsyar-id').val(principal.jamsyar_id)
             $('#edit-info-jamsyar-code').val(principal.jamsyar_code)
+            $('#edit-total-score').html(principal.score)
             $('input[type="checkbox"]:checked').prop('checked',false)
             principal.scorings.forEach(e => { $('#edit-scoring-score-'+e.id).prop('checked',true) });
-
+            counter = 0
+            principal.certificates.forEach(e => {
+                $("#edit-certificate-container").append(`
+                <div id="edit-certificate-` + counter + `" class="mt-4 col-md-6">
+                    <div class="border rounded p-3">
+                        <input type="hidden" id="edit-certificate-id" name="certificate[id][]" />
+                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Sertifikat</x-button>
+                        <x-form-input label="Nomor" id="edit-certificate-number-` + counter + `" name="certificate[number][]" value="`+e.number+`" class="mb-3" required />
+                        <x-form-input label="Berlaku Hingga" id="edit-certificate-expired-at-` + counter + `" name="certificate[expiredAt][]" value="`+e.expired_at+`" class="mb-3" type="date" required />
+                    </div>
+                </div>
+            `)
+            counter++
+            });
         })
 
         $(document).on('click', '.btn-delete', function () {
@@ -424,7 +453,7 @@
             else {
                 editCertificateCounter++
                 counter = editCertificateCounter
-                inputId = `<input type="hidden" id="edit-certificate-id" name="certificate[id[]]" />`
+                inputId = `<input type="hidden" id="edit-certificate-id" name="certificate[id][]" />`
             }
 
             $("#" + createOrEdit + "-certificate-container").append(`
@@ -432,8 +461,8 @@
                     <div class="border rounded p-3">
                         ` + inputId + `
                         <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Akta Pembangunan</x-button>
-                        <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number[]]" class="mb-3" required />
-                        <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt[]]" class="mb-3" type="date" required />
+                        <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number][]" class="mb-3" required />
+                        <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt][]" class="mb-3" type="date" required />
                     </div>
                 </div>
             `)

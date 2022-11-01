@@ -30,6 +30,11 @@
     text-align: right !important;
 }
 
+.form-control:disabled, .form-control[readonly] {
+    background-color: unset !important;
+    cursor: not-allowed !important;
+}
+
 /* Datatable */
 
 .dataTable.no-footer {
@@ -137,7 +142,7 @@
     color: var(--bs-danger);
 }
 
-/* Select 2 */
+/* Select2 */
 .select2-container {
     width: 100% !important;
 }

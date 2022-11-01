@@ -49,6 +49,7 @@ class PrincipalController extends Controller
     {
         $principal->city->province;
         $principal->scorings;
+        $principal->certificates;
         return response()->json($this->showResponse($principal->toArray()));
     }
 

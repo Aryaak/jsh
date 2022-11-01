@@ -31,10 +31,20 @@ class Principal extends Model
     public function city(){
         return $this->belongsTo(City::class);
     }
+    public function certificates(){
+        return $this->hasMany(Certificate::class);
+    }
     public function scorings(){
         return $this->belongsToMany(Scoring::class)->withTimestamps();
     }
     private static function fetch(object $args){
+        $certificates = [];
+        for ($i=0; $i < count($args->certificate['number']); $i++) {
+            $certificates[] = [
+                'number' => $args->certificate['number'][$i],
+                'expired_at' => $args->certificate['expiredAt'][$i],
+            ];
+        }
         return (object)[
             'principal' => [
                 'name' => $args->info['name'],
@@ -54,13 +64,15 @@ class Principal extends Model
                 'jamsyar_code' => $args->info['jamsyarCode'],
                 'score' => 0
             ],
-            'scoring' => array_values(collect($args->scoring)->map(function($item,$key){return $key;})->all())
+            'scoring' => array_values(collect($args->scoring)->map(function($item,$key){return $key;})->all()),
+            'certificate' => $certificates,
         ];
     }
     public static function buat(array $params): self{
         $request = self::fetch((object)$params);
         $principal = self::create($request->principal);
         $principal->scorings()->sync($request->scoring);
+        $principal->certificates()->createMany($request->certificate);
         $principal->updateScore();
         return $principal;
     }
@@ -68,6 +80,8 @@ class Principal extends Model
         $request = self::fetch((object)$params);
         $this->update($request->principal);
         $this->scorings()->sync($request->scoring);
+        $this->certificates()->delete();
+        $this->certificates()->createMany($request->certificate);
         return $this->updateScore();
     }
     private function updateScore(): bool{

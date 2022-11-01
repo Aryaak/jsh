@@ -61,8 +61,8 @@
                     <div class="w-100 text-center">
                         <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
                     </div>
-                    <x-button id="create-new-deed" icon="bx bx-plus">Tambah Akta Pembangunan</x-button>
-                    <div id="create-deed-container" class="row">
+                    <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Akta Pembangunan</x-button>
+                    <div id="create-certificate-container" class="row">
                         {{-- Tempat Tambah Akta Pembangunan --}}
                     </div>
                 </div>
@@ -174,17 +174,17 @@
                 <div class="w-100 text-center">
                     <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
                 </div>
-                <div id="show-deed-container" class="row">
+                <div id="show-certificate-container" class="row">
                     {{-- START Copy ini saat looping akta --}}
-                    <div id="show-deed-1" class="mt-4 col-md-6">
+                    <div id="show-certificate-1" class="mt-4 col-md-6">
                         <div class="border rounded p-3">
                             <div class="border-bottom pb-2 mb-2">
                                 <b>Nomor</b>: <br>
-                                <span id="show-deed-number-1">-</span>
+                                <span id="show-certificate-number-1">-</span>
                             </div>
                             <div>
                                 <b>Berlaku Hingga</b>: <br>
-                                <span id="show-deed-expired-at-1">-</span>
+                                <span id="show-certificate-expired-at-1">-</span>
                             </div>
                         </div>
                     </div>
@@ -250,8 +250,8 @@
                     <div class="w-100 text-center">
                         <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
                     </div>
-                    <x-button id="edit-new-deed" icon="bx bx-plus">Tambah Akta Pembangunan</x-button>
-                    <div id="edit-deed-container" class="row">
+                    <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Akta Pembangunan</x-button>
+                    <div id="edit-certificate-container" class="row">
                         {{-- Tempat Tambah Akta Pembangunan --}}
                     </div>
                 </div>
@@ -293,8 +293,8 @@
     <script>
         let table = null
         let principal = null
-        var createDeedCounter = 0
-        var editDeedCounter = 0
+        var createCertificateCounter = 0
+        var editCertificateCounter = 0
 
         $(document).ready(function () {
             table = dataTableInit('table','Principal',{url : '{{ route('master.principals.index') }}'},[
@@ -395,15 +395,15 @@
             })
         })
 
-        $("#create-new-deed").click(function () {
-            addNewDeed('create')
+        $("#create-new-certificate").click(function () {
+            addNewCertificate('create')
         })
 
-        $("#edit-new-deed").click(function () {
-            addNewDeed('edit')
+        $("#edit-new-certificate").click(function () {
+            addNewCertificate('edit')
         })
 
-        $(document).on('click', '.btn-delete-deed', function () {
+        $(document).on('click', '.btn-delete-certificate', function () {
             NegativeConfirm.fire({
                 title: "Ingin menghapus akta ini?"
             }).then((result) => {
@@ -413,27 +413,27 @@
             })
         })
 
-        function addNewDeed(createOrEdit) {
+        function addNewCertificate(createOrEdit) {
             var counter = 0;
             var inputId = '';
 
             if (createOrEdit == 'create') {
-                createDeedCounter++
-                counter = createDeedCounter
+                createCertificateCounter++
+                counter = createCertificateCounter
             }
             else {
-                editDeedCounter++
-                counter = editDeedCounter
-                inputId = `<input type="hidden" id="edit-deed-id" name="deed[id[]]" />`
+                editCertificateCounter++
+                counter = editCertificateCounter
+                inputId = `<input type="hidden" id="edit-certificate-id" name="certificate[id[]]" />`
             }
 
-            $("#" + createOrEdit + "-deed-container").append(`
-                <div id="` + createOrEdit + `-deed-` + counter + `" class="mt-4 col-md-6">
+            $("#" + createOrEdit + "-certificate-container").append(`
+                <div id="` + createOrEdit + `-certificate-` + counter + `" class="mt-4 col-md-6">
                     <div class="border rounded p-3">
                         ` + inputId + `
-                        <x-button class="btn-delete-deed w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Akta Pembangunan</x-button>
-                        <x-form-input label="Nomor" id="` + createOrEdit + `-deed-number-` + counter + `" name="deed[number[]]" class="mb-3" required />
-                        <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-deed-expired-at-` + counter + `" name="deed[expiredAt[]]" class="mb-3" type="date" required />
+                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Akta Pembangunan</x-button>
+                        <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number[]]" class="mb-3" required />
+                        <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt[]]" class="mb-3" type="date" required />
                     </div>
                 </div>
             `)

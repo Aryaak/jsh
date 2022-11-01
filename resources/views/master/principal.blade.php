@@ -19,7 +19,7 @@
                     <th>Alamat</th>
                     <th>No. HP/Telp</th>
                     {{-- <th>Status Sinkronisasi</th> --}}
-                    <th width="80px">Tindakan</th>
+                    <th width="105px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -55,7 +55,20 @@
                     <x-form-textarea label="Alamat" id="create-info-address" name="info[address]" class="mb-3" required />
                 </div>
             </div>
+
             <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="w-100 text-center">
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                    </div>
+                    <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Akta Pembangunan</x-button>
+                    <div id="create-certificate-container" class="row">
+                        {{-- Tempat Tambah Akta Pembangunan --}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-12">
                     <div class="w-100 text-center">
                         <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
@@ -71,17 +84,6 @@
                         <div class="my-3">
                             Total Nilai: <b id="create-total-score">0</b>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="w-100 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
-                    </div>
-                    <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Sertifikat</x-button>
-                    <div id="create-certificate-container" class="row">
-                        {{-- Tempat Tambah Sertifikat --}}
                     </div>
                 </div>
             </div>
@@ -170,32 +172,10 @@
         <div class="row mb-3">
             <div class="col-md-12">
                 <div class="w-100 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
-                </div>
-                <div class="col-md-3" style="margin: 0 auto">
-                    <div class="border rounded p-0">
-                        <div class="p-3">
-                            @foreach ($scorings as $scoring)
-                                <x-form-check id="show-scoring-score-{{ $scoring->id }}" name="scoring[{{ $scoring->id }}]" value="1" disabled>{{ $scoring->title }}</x-form-check>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div>Total Nilai: <b><span id="show-score"></span></b></div>
-                        <div>
-                            <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="w-100 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
                 </div>
                 <div id="show-certificate-container" class="row">
-                    {{-- START Copy ini saat looping sertifikat --}}
+                    {{-- START Copy ini saat looping akta --}}
                     <div id="show-certificate-1" class="mt-4 col-md-6">
                         <div class="border rounded p-3">
                             <div class="border-bottom pb-2 mb-2">
@@ -208,7 +188,25 @@
                             </div>
                         </div>
                     </div>
-                    {{-- END Copy ini saat looping sertifikat --}}
+                    {{-- END Copy ini saat looping akta --}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="w-100 text-center">
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
+                </div>
+                <div class="col-md-3" style="margin: 0 auto">
+                    <div class="border rounded p-0">
+                        <div class="p-3">
+                            @foreach ($scorings as $scoring)
+                                <x-form-check id="show-scoring-score-{{ $scoring->id }}" name="scoring[{{ $scoring->id }}]" value="1" disabled>{{ $scoring->title }}</x-form-check>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="my-3">Total Nilai: <b><span id="show-score"></span></b></div>
                 </div>
             </div>
         </div>
@@ -246,7 +244,20 @@
                     <x-form-textarea label="Alamat" id="edit-info-address" name="info[address]" class="mb-3" required />
                 </div>
             </div>
+
             <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="w-100 text-center">
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                    </div>
+                    <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Akta Pembangunan</x-button>
+                    <div id="edit-certificate-container" class="row">
+                        {{-- Tempat Tambah Akta Pembangunan --}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-12">
                     <div class="w-100 text-center">
                         <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
@@ -262,17 +273,6 @@
                         <div class="my-3">
                             <div>Total Nilai: <b><span id="edit-total-score">0</span></b></div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="w-100 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
-                    </div>
-                    <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Sertifikat</x-button>
-                    <div id="edit-certificate-container" class="row">
-                        {{-- Tempat Tambah Sertifikat --}}
                     </div>
                 </div>
             </div>
@@ -293,8 +293,8 @@
     <script>
         let table = null
         let principal = null
-        var createTemplateCounter = 0
-        var editTemplateCounter = 0
+        var createCertificateCounter = 0
+        var editCertificateCounter = 0
 
         $(document).ready(function () {
             table = dataTableInit('table','Principal',{url : '{{ route('master.principals.index') }}'},[
@@ -425,16 +425,16 @@
         })
 
         $("#create-new-certificate").click(function () {
-            addNewTemplate('create')
+            addNewCertificate('create')
         })
 
         $("#edit-new-certificate").click(function () {
-            addNewTemplate('edit')
+            addNewCertificate('edit')
         })
 
         $(document).on('click', '.btn-delete-certificate', function () {
             NegativeConfirm.fire({
-                title: "Ingin menghapus sertifikat ini?"
+                title: "Ingin menghapus akta ini?"
             }).then((result) => {
                 if (result.isConfirmed) {
                     $(this).parent().parent().remove()
@@ -442,17 +442,17 @@
             })
         })
 
-        function addNewTemplate(createOrEdit) {
+        function addNewCertificate(createOrEdit) {
             var counter = 0;
             var inputId = '';
 
             if (createOrEdit == 'create') {
-                createTemplateCounter++
-                counter = createTemplateCounter
+                createCertificateCounter++
+                counter = createCertificateCounter
             }
             else {
-                editTemplateCounter++
-                counter = editTemplateCounter
+                editCertificateCounter++
+                counter = editCertificateCounter
                 inputId = `<input type="hidden" id="edit-certificate-id" name="certificate[id][]" />`
             }
 
@@ -460,7 +460,7 @@
                 <div id="` + createOrEdit + `-certificate-` + counter + `" class="mt-4 col-md-6">
                     <div class="border rounded p-3">
                         ` + inputId + `
-                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Sertifikat</x-button>
+                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Akta Pembangunan</x-button>
                         <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number][]" class="mb-3" required />
                         <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt][]" class="mb-3" type="date" required />
                     </div>

@@ -69,6 +69,7 @@
                             <x-submenu route="master.regionals.index">Regional</x-submenu>
                             <x-submenu route="master.branches.index">Cabang</x-submenu>
                             <x-submenu route="master.insurance-types.index">Jenis Jaminan</x-submenu>
+                            <x-submenu route="dashboard">Template</x-submenu>
                             <x-submenu route="master.insurances.index">Asuransi</x-submenu>
                             <x-submenu route="master.insurance-rates.index">Rate Asuransi</x-submenu>
                             <x-submenu route="master.banks.index">Bank</x-submenu>
@@ -95,10 +96,10 @@
                     <x-menu route="payments.*" icon="bx bxs-wallet">
                         Pembayaran
                         @slot('submenus')
-                            <x-submenu route="dashboard" icon="bx bxs-wallet">Principal ke Cabang</x-submenu>
-                            <x-submenu route="dashboard" icon="bx bxs-wallet">Cabang ke Regional</x-submenu>
-                            <x-submenu route="dashboard" icon="bx bxs-wallet">Regional ke Asuransi</x-submenu>
-                            <x-submenu route="dashboard" icon="bx bxs-wallet">Cabang ke Agen</x-submenu>
+                            <x-submenu route="dashboard">Principal ke Cabang</x-submenu>
+                            <x-submenu route="dashboard">Cabang ke Regional</x-submenu>
+                            <x-submenu route="dashboard">Regional ke Asuransi</x-submenu>
+                            <x-submenu route="dashboard">Cabang ke Agen</x-submenu>
                         @endslot
                     </x-menu>
 

@@ -167,7 +167,6 @@
                     ` + inputId + `
                     <x-button class="btn-delete-template w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Template</x-button>
                     <x-form-input label="Judul" id="` + createOrEdit + `-template-title-` + counter + `" name="template[title[]]" class="mb-3" required />
-                    <x-form-input label="Jenis" id="` + createOrEdit + `-template-type-` + counter + `" name="template[type[]]" class="mb-3" required />
                     <x-form-textarea label="Template" id="` + createOrEdit + `-template-text-` + counter + `" name="template[text[]]" class="mb-3" required />
                 </div>
             `)

@@ -21,7 +21,7 @@
                     <th>Status SB</th>
                     <th>Status Sinkron</th>
                     <th>Tanggal</th>
-                    <th width="80px">Tindakan</th>
+                    <th width="105px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -79,8 +79,11 @@
                     <div class="w-100 mb-3">
                         <x-card header="5. Tambahan" smallHeader>
                             <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                            <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" classInput="to-rupiah" required />
-                            <x-form-input label="Premi Bayar" id="create-premi-charge" name="premiCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+                            <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+                            <div>
+                                <x-form-label>Premi Bayar</x-form-label>
+                                <div id="create-premi-charge">Rp0,-</div>
+                            </div>
                         </x-card>
                     </div>
                 </div>
@@ -111,7 +114,7 @@
                             <x-form-input label="Nama Proyek" id="create-project-name" name="projectName" class="mb-3" required />
                             <x-form-input label="Dokumen Pendukung" id="create-document-title" name="documentTitle" class="mb-3" />
                             <x-form-input label="No. Dokumen Pendukung" id="create-document-number" name="documentNumber" class="mb-3" />
-                            <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" />
+                            <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
                         </x-card>
                     </div>
                 </div>
@@ -237,36 +240,12 @@
                             <div id="show-service-charge">Rp0,-</div>
                         </div>
                         <div class="mb-3">
-                            <x-form-label>Premi Bayar</x-form-label>
-                            <div id="show-premi-charge">Rp0,-</div>
-                        </div>
-                        <div>
                             <x-form-label>Biaya Admin</x-form-label>
                             <div id="show-admin-charge">Rp0,-</div>
                         </div>
-                    </x-card>
-                </div>
-                <div class="w-100 mb-4">
-                    <x-card header="6. Lainnya" smallHeader>
-                        <div class="mb-3">
-                            <x-form-label>Keterangan</x-form-label>
-                            <div id="show-desc">-</div>
-                        </div>
-                        <div class="mb-3">
-                            <x-form-label>Tanggal Bayar</x-form-label>
-                            <div id="show-paid-date">-</div>
-                        </div>
-                        <div class="mb-3">
-                            <x-form-label>Status</x-form-label>
-                            <div id="show-status"><x-badge face="label-success">Lunas</x-badge></div>
-                        </div>
-                        <div class="mb-3">
-                            <x-form-label>Status Batal</x-form-label>
-                            <div id="show-cancel-status"><x-badge face="label-warning">Piutang</x-badge></div>
-                        </div>
                         <div>
-                            <x-form-label>Status Sinkronisasi</x-form-label>
-                            <div id="show-sync-status"><x-badge face="label-success">Sinkron</x-badge></div>
+                            <x-form-label>Premi Bayar</x-form-label>
+                            <div id="show-premi-charge">Rp0,-</div>
                         </div>
                     </x-card>
                 </div>
@@ -420,38 +399,11 @@
                     <div class="w-100 mb-4">
                         <x-card header="5. Tambahan" smallHeader>
                             <x-form-input label="Service Charge" id="edit-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                            <x-form-input label="Premi Bayar" id="edit-premi-charge" name="premiCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                            <x-form-input label="Biaya Admin" id="edit-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" classInput="to-rupiah" required />
-                        </x-card>
-                    </div>
-                    <div class="w-100 mb-4">
-                        <x-card header="6. Lainnya" smallHeader>
-                            <x-form-textarea label="Keterangan" id="edit-desc" name="desc" class="mb-3" />
-                            <x-form-input label="Tanggal Bayar" id="edit-paid-date" name="paidDate" class="mb-3" type="date" required />
-                            @php
-                                $options = [
-                                    'piutang' => "Piutang",
-                                    'batal' => "Batal",
-                                    'lunas' => "Lunas",
-                                    'salah-cetak' => "Salah Cetak",
-                                ]
-                            @endphp
-                            <x-form-select label="Status" id="edit-status" :$options name="status" class="mb-3" required/>
-                            @php
-                                $options = [
-                                    'piutang' => "Piutang",
-                                    'lunas' => "Lunas",
-                                ]
-                            @endphp
-                            <x-form-select label="Status Batal" id="edit-cancel-status" :$options name="cancelStatus" class="mb-3" required/>
-                            @php
-                                $options = [
-                                    'not-jamsyar' => "Bukan Jamsyar",
-                                    'not-synced' => "Belum Sinkron",
-                                    'synced' => "Sinkron",
-                                ]
-                            @endphp
-                            <x-form-select label="Status Sinkronisasi" id="edit-sync-status" :$options name="syncStatus" class="mb-3" required/>
+                            <x-form-input label="Biaya Admin" id="edit-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+                            <div>
+                                <x-form-label>Premi Bayar</x-form-label>
+                                <div id="edit-premi-charge">Rp0,-</div>
+                            </div>
                         </x-card>
                     </div>
                 </div>
@@ -482,7 +434,7 @@
                             <x-form-input label="Nama Proyek" id="edit-project-name" name="projectName" class="mb-3" required />
                             <x-form-input label="Dokumen Pendukung" id="edit-document-title" name="documentTitle" class="mb-3" />
                             <x-form-input label="No. Dokumen Pendukung" id="edit-document-number" name="documentNumber" class="mb-3" />
-                            <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="edit-document-expired-at" name="documentExpiredAt" />
+                            <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="edit-document-expired-at" name="documentExpiredAt" type="date" />
                         </x-card>
                     </div>
                 </div>
@@ -533,19 +485,35 @@
         @endslot
     </x-modal>
 
-    <x-modal id="modal-status-histories" title="Riwayat Status">
+    <x-modal id="modal-status-histories" title="Riwayat Status" size="xl">
         <div class="pb-2 mb-2 text-center">
             <b>No. Bond</b> <br>
             <span id="status-histories-no-bond">-</span>
         </div>
-        <div class="list-group" id="status-histories">
-            {{-- History Items --}}
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <i class="bx bxs-circle me-2 align-middle text-success" style="font-size:.3em!important"></i>
-                    <span class="badge rounded-pill bg-label-success"><i class="bx bx-check me-1 align-middle"></i>Lunas</span>
+        <div class="row">
+            <div class="col-md-4 border rounded p-3">
+                <div class="fw-bold text-center mb-3">Status Jaminan</div>
+                <div class="list-group" id="insurance-status-histories">
+                    {{-- Start History Items --}}
+                    <x-history-item icon="bx bx-check" face="success" time="01/11/2022 22:00">Lunas</x-history-item>
+                    {{-- End History Items --}}
                 </div>
-                <div><small>17/10/2022 12:00</small></div>
+            </div>
+            <div class="col-md-4 border rounded p-3">
+                <div class="fw-bold text-center mb-3">Status Proses</div>
+                <div class="list-group" id="progress-status-histories">
+                    {{-- Start History Items --}}
+                    <x-history-item icon="bx bx-check" face="success" time="01/11/2022 22:00">Lunas</x-history-item>
+                    {{-- End History Items --}}
+                </div>
+            </div>
+            <div class="col-md-4 border rounded p-3">
+                <div class="fw-bold text-center mb-3">Status Keuangan</div>
+                <div class="list-group" id="finance-status-histories">
+                    {{-- Start History Items --}}
+                    <x-history-item icon="bx bx-check" face="success" time="01/11/2022 22:00">Lunas</x-history-item>
+                    {{-- End History Items --}}
+                </div>
             </div>
         </div>
 
@@ -673,7 +641,7 @@
             $('#edit-bond-number').val(suretyBond.bond_number)
             $('#edit-polish-number').val(suretyBond.polish_number)
             $('#edit-service-charge').val(numberFormat(suretyBond.service_charge))
-            $('#edit-premi-charge').val(numberFormat(suretyBond.insurance_total_net))
+            $('#edit-premi-charge').html(numberFormat(suretyBond.insurance_total_net))
             $('#edit-admin-charge').val(numberFormat(suretyBond.admin_charge))
             $('#edit-contract-value').val(numberFormat(suretyBond.contract_value))
             $('#edit-insurance-value').val(numberFormat(suretyBond.insurance_value))

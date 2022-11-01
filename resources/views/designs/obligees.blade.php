@@ -18,7 +18,7 @@
                     <th>Nama</th>
                     <th>Alamat</th>
                     <th>Status Sinkronisasi</th>
-                    <th width="80px">Tindakan</th>
+                    <th width="105px">Tindakan</th>
                 </tr>
             @endslot
             <tr>

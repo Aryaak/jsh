@@ -1,11 +1,15 @@
 @if ($type == 'icon')
     @isset ($link)
-        <a href="{{ $link }}" {{ $attributes->merge(['class' => "text-$face"]) }}>
-            <i class="{{ $icon }} align-middle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{!! $slot !!}"></i>
-        </a>
+        <span {!! $attributes !!}>
+            <a href="{{ $link }}" class="btn btn-{{ $face }} btn-{{ $size }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{!! $slot !!}">
+                <i class="{{ $icon }} align-middle"></i>
+            </a>
+        </span>
     @else
-        <span data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="{!! $slot !!}" class="cursor-pointer">
-            <i {{ $attributes->merge(['class' => "$icon text-$face align-middle"]) }} {{ $attributes->merge(['onclick' => '']) }}></i>
+        <span {!! $attributes !!}>
+            <button type="button" class="btn btn-{{ $face }} btn-{{ $size }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{!! $slot !!}">
+                <i class="{{ $icon }} align-middle"></i>
+            </button>
         </span>
     @endisset
 @else

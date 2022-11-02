@@ -53,6 +53,9 @@ class SuretyBondController extends Controller
         $suretyBond->insurance_type;
         $suretyBond->statuses;
         $suretyBond->scorings;
+        foreach ($suretyBond->statuses as $statuses) {
+            $statuses->status;
+        }
         return response()->json($this->showResponse($suretyBond->toArray()));
     }
 

@@ -50,9 +50,16 @@ class GuaranteeBankController extends Controller
         $bankGaransi->obligee;
         $bankGaransi->agent;
         $bankGaransi->bank;
+        $bankGaransi->insurance;
         $bankGaransi->insurance_type;
         $bankGaransi->statuses;
         $bankGaransi->scorings;
+        $bankGaransi->statuses;
+        foreach ($bankGaransi->statuses as $statuses) {
+            $statuses->status;
+        }
+        // dd($bankGaransi->statuses);
+        // $bankGaransi->statuses->status;
         return response()->json($this->showResponse($bankGaransi->toArray()));
     }
 

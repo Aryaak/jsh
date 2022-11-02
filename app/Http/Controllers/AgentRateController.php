@@ -14,14 +14,19 @@ class AgentRateController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = AgentRate::with('agent','insurance','insurance_type');
+            $data = AgentRate::with('agent','insurance','insurance_type','bank')
+            ->when($request->is_bg == 1, function ($query){
+                return $query->has('bank');
+            })->when($request->is_bg == 0, function ($query){
+                return $query->has('bank',0);
+            });
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('min_value', fn($rate) => Sirius::toRupiah($rate->min_value))
             ->editColumn('polish_cost', fn($rate) => Sirius::toRupiah($rate->polish_cost))
             ->editColumn('stamp_cost', fn($rate) => Sirius::toRupiah($rate->stamp_cost))
             ->editColumn('rate_value', fn($rate) => str_replace('.', '.', $rate->rate_value))
-            ->editColumn('action', 'datatables.actions-show-delete-sb')
+            ->editColumn('action', 'datatables.actions-show-delete-sb-bg')
             ->toJson();
         }
         return view('master.agent-rates');
@@ -53,6 +58,7 @@ class AgentRateController extends Controller
         $rateAgen->agent;
         $rateAgen->insurance;
         $rateAgen->insurance_type;
+        $rateAgen->bank;
         return response()->json($this->showResponse($rateAgen->toArray()));
     }
 

@@ -35,7 +35,7 @@ return new class extends Migration
             $table->foreignId('principal_id')->constrained();
             $table->foreignId('agent_id')->constrained();
             $table->foreignId('obligee_id')->constrained();
-            // $table->foreignId('insurance_id')->constrained();
+            $table->foreignId('insurance_id')->constrained();
             $table->foreignId('insurance_type_id')->constrained();
             $table->unsignedBigInteger('revision_from_id')->nullable();
             $table->float('score');

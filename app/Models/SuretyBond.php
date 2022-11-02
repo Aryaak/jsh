@@ -82,7 +82,7 @@ class SuretyBond extends Model
     }
     private static function fetch(object $args): object{
         $insuranceRate = InsuranceRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId]])->firstOrFail();
-        $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId]])->firstOrFail();
+        $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',null]])->firstOrFail();
         $scoring = array_map(function($key,$value){
             return [
                 'scoring_id' => $key,

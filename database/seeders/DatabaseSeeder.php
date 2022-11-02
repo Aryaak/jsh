@@ -37,6 +37,8 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
             ScoringSeeder::class,
             BankRateSeeder::class,
+            SuretyBondSeeder::class,
+            GuaranteeBankSeeder::class
         ]);
     }
 }

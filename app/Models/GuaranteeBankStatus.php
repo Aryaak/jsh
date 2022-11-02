@@ -11,6 +11,9 @@ class GuaranteeBankStatus extends Model
     use HasFactory;
 
     public $fillable = ['type','guarantee_bank_id','status_id'];
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:00',
+    ];
     public function guarantee_bank(){
         return $this->belongsTo(GuaranteeBank::class);
     }

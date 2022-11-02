@@ -508,7 +508,7 @@
             </div>
             <div class="col-md-4 border rounded p-3">
                 <div class="fw-bold text-center mb-3">Status Proses</div>
-                <div class="list-group" id="progress-status-histories">
+                <div class="list-group" id="process-status-histories">
                     {{-- Start History Items --}}
                     <x-history-item icon="bx bx-check" face="success" time="01/11/2022 22:00">Lunas</x-history-item>
                     {{-- End History Items --}}
@@ -593,11 +593,13 @@
             ajaxGet("{{ route('products.guarantee-banks.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     guaranteeBank = response.data
+                    console.log(guaranteeBank);
                     $('#show-receipt-number').html(guaranteeBank.receipt_number)
                     $('#show-bond-number').html(guaranteeBank.bond_number)
                     $('#show-polish-number').html(guaranteeBank.polish_number)
                     $('#show-agent').html(guaranteeBank.agent.name)
                     $('#show-bank').html(guaranteeBank.bank.name)
+                    $('#show-insurance').html(guaranteeBank.insurance.name)
                     $('#show-insurance-type').html(guaranteeBank.insurance_type.name)
                     $('#show-obligee-name').html(guaranteeBank.obligee.name)
                     $('#show-obligee-address').html(guaranteeBank.obligee.name)
@@ -634,6 +636,13 @@
                         });
                         $('#show-sub-total-'+key).html(subtotal)
                     });
+                    $('#process-status-histories').html('')
+                    $('#finance-status-histories').html('')
+                    $('#insurance-status-histories').html('')
+                    guaranteeBank.statuses.forEach(e => {
+                        const html = `<x-history-item icon="bx bx-check" face="success" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
+                        $('#'+e.type+'-status-histories').append(html)
+                    });
                 }
             })
         })
@@ -645,6 +654,7 @@
             select2SetVal("edit-insurance-type-id",guaranteeBank.insurance_type.id,guaranteeBank.insurance_type.name)
             select2SetVal("edit-obligee-id",guaranteeBank.obligee.id,guaranteeBank.obligee.name)
             select2SetVal("edit-principal-id",guaranteeBank.principal.id,guaranteeBank.principal.name)
+            select2SetVal("edit-insurance-id",guaranteeBank.insurance.id,guaranteeBank.insurance.name)
             $('#edit-receipt-number').val(guaranteeBank.receipt_number)
             $('#edit-bond-number').val(guaranteeBank.bond_number)
             $('#edit-polish-number').val(guaranteeBank.polish_number)

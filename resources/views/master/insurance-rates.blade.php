@@ -34,7 +34,7 @@
             <x-form-select label="Nama Asuransi" id="create-insurance-id" name="insuranceId" class="mb-3" required/>
             <x-form-select label="Jenis Jaminan" id="create-insurance-type-id" name="insuranceTypeId" class="mb-3" required/>
             <x-form-input label="Nilai Minimal" id="create-min-value" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Nilai Rate" id="create-rate-value" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="3" required />
+            <x-form-input label="Nilai Rate" id="create-rate-value" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
             <x-form-input label="Biaya Polis" id="create-polish-cost" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Material" id="create-stamp-cost" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="create-desc" name="desc" />
@@ -81,7 +81,7 @@
             <x-form-select label="Nama Asuransi" id="edit-insurance-id" name="insuranceId" class="mb-3" required/>
             <x-form-select label="Jenis Jaminan" id="edit-insurance-type-id" name="insuranceTypeId" class="mb-3" required/>
             <x-form-input label="Nilai Minimal" id="edit-min-value" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Nilai Rate" id="edit-rate-value" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="3" required />
+            <x-form-input label="Nilai Rate" id="edit-rate-value" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
             <x-form-input label="Biaya Polis" id="edit-polish-cost" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Material" id="edit-stamp-cost" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="edit-desc" name="desc" />

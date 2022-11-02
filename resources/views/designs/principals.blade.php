@@ -19,7 +19,7 @@
                     <th>Alamat</th>
                     <th>No. HP/Telp</th>
                     <th>Status Sinkronisasi</th>
-                    <th width="80px">Tindakan</th>
+                    <th width="105px">Tindakan</th>
                 </tr>
             @endslot
             <tr>
@@ -65,7 +65,20 @@
                     <x-form-textarea label="Alamat" id="create-info-address" name="info[address]" class="mb-3" required />
                 </div>
             </div>
+
             <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="w-100 text-center">
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                    </div>
+                    <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Sertifikat Pembangunan</x-button>
+                    <div id="create-certificate-container" class="row">
+                        {{-- Tempat Tambah Sertifikat Pembangunan --}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-12">
                     <div class="w-100 text-center">
                         <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
@@ -80,17 +93,6 @@
                         <div class="my-3">
                             Total Nilai: <b>69</b>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="w-100 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
-                    </div>
-                    <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Sertifikat</x-button>
-                    <div id="create-certificate-container" class="row">
-                        {{-- Tempat Tambah Sertifikat --}}
                     </div>
                 </div>
             </div>
@@ -179,28 +181,7 @@
         <div class="row mb-3">
             <div class="col-md-12">
                 <div class="w-100 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
-                </div>
-                <div class="col-md-3" style="margin: 0 auto">
-                    <div class="border rounded p-0">
-                        <div class="p-3">
-                            <x-form-check id="show-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
-                            <x-form-check id="show-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div>Total Nilai: <b>69</b></div>
-                        <div>
-                            <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="w-100 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
                 </div>
                 <div id="show-certificate-container" class="row">
                     {{-- START Copy ini saat looping sertifikat --}}
@@ -217,6 +198,23 @@
                         </div>
                     </div>
                     {{-- END Copy ini saat looping sertifikat --}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="w-100 text-center">
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
+                </div>
+                <div class="col-md-3" style="margin: 0 auto">
+                    <div class="border rounded p-0">
+                        <div class="p-3">
+                            <x-form-check id="show-scoring-score-1" name="scoring[score[]]" value="10">Name</x-form-check>
+                            <x-form-check id="show-scoring-score-2" name="scoring[score[]]" value="10">Name</x-form-check>
+                        </div>
+                    </div>
+                    <div class="my-3">Total Nilai: <b>69</b></div>
                 </div>
             </div>
         </div>
@@ -252,7 +250,20 @@
                     <x-form-textarea label="Alamat" id="edit-info-address" name="info[address]" class="mb-3" required />
                 </div>
             </div>
+
             <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="w-100 text-center">
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                    </div>
+                    <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Sertifikat Pembangunan</x-button>
+                    <div id="edit-certificate-container" class="row">
+                        {{-- Tempat Tambah Sertifikat Pembangunan --}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-12">
                     <div class="w-100 text-center">
                         <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Principal</div>
@@ -267,17 +278,6 @@
                         <div class="my-3">
                             Total Nilai: <b>69</b>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="w-100 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Serifikat Principal</div>
-                    </div>
-                    <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Sertifikat</x-button>
-                    <div id="edit-certificate-container" class="row">
-                        {{-- Tempat Tambah Sertifikat --}}
                     </div>
                 </div>
             </div>
@@ -296,8 +296,8 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        var createTemplateCounter = 0
-        var editTemplateCounter = 0
+        var createCertificateCounter = 0
+        var editCertificateCounter = 0
 
         $(document).ready(function () {
             const table = $("#table").DataTable()
@@ -318,11 +318,11 @@
 
 
         $("#create-new-certificate").click(function () {
-            addNewTemplate('create')
+            addNewCertificate('create')
         })
 
         $("#edit-new-certificate").click(function () {
-            addNewTemplate('edit')
+            addNewCertificate('edit')
         })
 
         $(document).on('click', '.btn-delete-certificate', function () {
@@ -335,17 +335,17 @@
             })
         })
 
-        function addNewTemplate(createOrEdit) {
+        function addNewCertificate(createOrEdit) {
             var counter = 0;
             var inputId = '';
 
             if (createOrEdit == 'create') {
-                createTemplateCounter++
-                counter = createTemplateCounter
+                createCertificateCounter++
+                counter = createCertificateCounter
             }
             else {
-                editTemplateCounter++
-                counter = editTemplateCounter
+                editCertificateCounter++
+                counter = editCertificateCounter
                 inputId = `<input type="hidden" id="edit-certificate-id" name="certificate[id[]]" />`
             }
 
@@ -353,7 +353,7 @@
                 <div id="` + createOrEdit + `-certificate-` + counter + `" class="mt-4 col-md-6">
                     <div class="border rounded p-3">
                         ` + inputId + `
-                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Sertifikat</x-button>
+                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Sertifikat Pembangunan</x-button>
                         <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number[]]" class="mb-3" required />
                         <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt[]]" class="mb-3" type="date" required />
                     </div>

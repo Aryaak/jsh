@@ -19,12 +19,16 @@ class AgentRate extends Model
         'agent_id',
         'insurance_id',
         'insurance_type_id',
+        'bank_id'
     ];
     public function agent(){
         return $this->belongsTo(Agent::class);
     }
     public function insurance(){
         return $this->belongsTo(Insurance::class);
+    }
+    public function bank(){
+        return $this->belongsTo(Bank::class);
     }
     public function insurance_type(){
         return $this->belongsTo(InsuranceType::class);
@@ -39,6 +43,7 @@ class AgentRate extends Model
             'agent_id' => $args->agentId,
             'insurance_id' => $args->insuranceId,
             'insurance_type_id' => $args->insuranceTypeId,
+            'bank_id' => $args->bankId ?? null,
         ];
     }
     public static function buat(array $params): self{

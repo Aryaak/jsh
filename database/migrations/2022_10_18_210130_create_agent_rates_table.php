@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('agent_id')->constrained();
             $table->foreignId('insurance_id')->constrained();
             $table->foreignId('insurance_type_id')->constrained();
+            $table->foreignId('bank_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

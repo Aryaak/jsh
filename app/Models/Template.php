@@ -10,7 +10,7 @@ class Template extends Model
 {
     use HasFactory;
 
-    public $fillable = ['title','type','text','bank_id'];
+    public $fillable = ['title','text','bank_id'];
     public static function types(){
         return ['kuitansi','surat_permohonan','syarat_bank'];
     }
@@ -18,7 +18,6 @@ class Template extends Model
     private static function fetch(object $args): array{
         return [
             'title' => $args->title,
-            'type' => $args->type,
             'text' => $args->text,
             'bank_id' => $args->bank_id,
         ];
@@ -36,7 +35,6 @@ class Template extends Model
             if(isset($params['id'][$i]) == false){
                 $template = array(
                     'title' => $params['title'][$i],
-                    'type' => $params['type'][$i],
                     'text' => $params['text'][$i],
                     'bank_id' => $id
                 );
@@ -49,7 +47,6 @@ class Template extends Model
     public function ubah(array $params, $id_bank, $id): bool{
         $template = array(
             'title' => $params['title'][$id_bank],
-            'type' => $params['type'][$id_bank],
             'text' => $params['text'][$id_bank],
             'bank_id' => $id
         );

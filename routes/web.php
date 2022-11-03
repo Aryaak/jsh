@@ -18,6 +18,7 @@ use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\UploaderController;
 use App\Http\Controllers\SuretyBondController;
 use App\Http\Controllers\GuaranteeBankController;
+use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +46,7 @@ Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::apiResource('rate-bank',BankRateController::class)->names('bank-rates');
     Route::apiResource('bank',BankController::class)->names('banks');
     Route::apiResource('obligee',ObligeeController::class)->names('obligees');
+    Route::apiResource('template',TemplateController::class)->names('templates');
 });
 
 Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {

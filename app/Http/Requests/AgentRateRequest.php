@@ -19,7 +19,8 @@ class AgentRateRequest extends FormRequest
             'desc' => 'nullable',
             'agentId' => 'required',
             'insuranceId' => 'required',
-            'insuranceTypeId' => 'required'
+            'insuranceTypeId' => 'required',
+            'bankId' => 'nullable'
         ];
     }
     public function attributes()

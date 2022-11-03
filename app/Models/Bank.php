@@ -19,7 +19,9 @@ class Bank extends Model
             'name' => $args->name,
         ];
     }
-
+    public function agent_rates(){
+        return $this->hasMany(AgentRate::class);
+    }
     public function bank_accounts(){
         return $this->hasMany(BankAccount::class);
     }

@@ -501,7 +501,7 @@
             </div>
             <div class="col-md-4 border rounded p-3">
                 <div class="fw-bold text-center mb-3">Status Proses</div>
-                <div class="list-group" id="progress-status-histories">
+                <div class="list-group" id="process-status-histories">
                     {{-- Start History Items --}}
                     <x-history-item icon="bx bx-check" face="success" time="01/11/2022 22:00">Lunas</x-history-item>
                     {{-- End History Items --}}
@@ -585,7 +585,6 @@
             ajaxGet("{{ route('products.surety-bonds.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     suretyBond = response.data
-                    console.log(suretyBond);
                     $('#show-receipt-number').html(suretyBond.receipt_number)
                     $('#show-bond-number').html(suretyBond.bond_number)
                     $('#show-polish-number').html(suretyBond.polish_number)
@@ -626,6 +625,14 @@
                             subtotal += e.value
                         });
                         $('#show-sub-total-'+key).html(subtotal)
+                    });
+
+                    $('#insurance-status-histories').html('')
+                    $('#process-status-histories').html('')
+                    $('#finance-status-histories').html('')
+                    suretyBond.statuses.forEach(e => {
+                        const html = `<x-history-item icon="bx bx-check" face="success" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
+                        $('#'+e.type+'-status-histories').append(html)
                     });
                 }
             })

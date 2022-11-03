@@ -40,7 +40,7 @@ class GuaranteeBank extends Model
         'principal_id',
         'agent_id',
         'obligee_id',
-        // 'insurance_id',
+        'insurance_id',
         'insurance_type_id',
         'revision_from_id',
         'score',
@@ -87,7 +87,7 @@ class GuaranteeBank extends Model
     }
     private static function fetch(object $args): object{
         $bankRate = BankRate::where([['bank_id',$args->bankId],['insurance_type_id',$args->insuranceTypeId]])->firstOrFail();
-        $agentRate = AgentRate::where([['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId]])->firstOrFail();
+        $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',$args->bankId]])->firstOrFail();
         $scoring = array_map(function($key,$value){
             return [
                 'scoring_id' => $key,
@@ -124,7 +124,7 @@ class GuaranteeBank extends Model
                 'bank_id' => $args->bankId,
                 'agent_id' => $args->agentId,
                 'obligee_id' => $args->obligeeId,
-                // 'insurance_id' => $args->insuranceId,
+                'insurance_id' => $args->insuranceId,
                 'insurance_type_id' => $args->insuranceTypeId,
                 'score' => $totalScore
             ],

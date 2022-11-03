@@ -39,7 +39,7 @@
                     plugins: 'image table lists fullscreen code',
                     menubar: 'file edit insert view table format table tools help',
                     toolbar: 'undo redo | styles | bold italic underline | numlist bullist | image | alignleft aligncenter alignright alignjustify | code fullscreen',
-                    images_upload_handler: tinyMCEImageUploadHandler("{{ route('uploader.tinymce') }}", "{{ csrf_token() }}")
+                    images_upload_handler: tinyMCEImageUploadHandler("{{ route('uploader.tinymce') }}", "{{ csrf_token() }}"),
                 });
             })
         </script>

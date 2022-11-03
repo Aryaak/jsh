@@ -65,7 +65,7 @@ class BankController extends Controller
             if(isset($request->title)){
                 $templates = $bank->templates;
                 for($i = 0; $i < count($templates); $i++){
-                    $templates[$i]->ubah($request->all(),$i,$bank->id);
+                    $templates[$i]->ubah_bank($request->all(),$i,$bank->id);
                 }
                 Template::buat($request->all(),$bank->id);
             }

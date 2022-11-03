@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('text');
-            $table->foreignId('bank_id')->constrained();
+            $table->foreignId('bank_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

@@ -8,6 +8,7 @@ use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\InsuranceTypeController;
 use App\Http\Controllers\InsuranceRateController;
@@ -33,7 +34,7 @@ Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('
 Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
 
 Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
-    Route::get('/', fn() => redirect(route('dashboard')));
+    // Route::get('/', fn() => redirect(route('dashboard')));
 
     Route::apiResource('cabang',BranchController::class)->names('branches');
     Route::apiResource('regional',RegionalController::class)->names('regionals');
@@ -47,6 +48,7 @@ Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
     Route::apiResource('bank',BankController::class)->names('banks');
     Route::apiResource('obligee',ObligeeController::class)->names('obligees');
     Route::apiResource('template',TemplateController::class)->names('templates');
+    Route::apiResource('/',DashboardController::class)->names('dashboard');
 });
 
 Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {

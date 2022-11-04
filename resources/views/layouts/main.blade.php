@@ -60,7 +60,7 @@
 
                 <ul class="menu-inner py-1 pb-5">
 
-                    <x-menu route="dashboard" icon="bx bx-home-circle">Dasbor</x-menu>
+                    <x-menu route="master.dashboard.index" icon="bx bx-home-circle">Dasbor</x-menu>
 
                     {{-- Master Data --}}
                     <x-menu route="master.*" icon="bx bxs-data">

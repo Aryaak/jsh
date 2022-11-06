@@ -17,7 +17,7 @@ class PrincipalSeeder extends Seeder
                 'email' => 'email@gmail.com',
                 'address' => 'Jl. Samratulangi No. 10 Bulukumba',
                 'domicile' => 'Surabaya',
-                'score' => 75,
+                'score' => 7.5,
                 'npwp_number' => '123',
                 'npwp_expired_at' => now(),
                 'nib_number' => '123',

@@ -139,7 +139,8 @@ class SuretyBond extends Model
             if($status == 'input'){
                 $params = [
                     ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'finance','status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id]
+                    ['type' => 'finance','status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id],
+                    ['type' => 'insurance','status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id]
                 ];
             }else if($status == 'terbit'){
                 $params = [

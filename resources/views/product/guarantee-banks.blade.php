@@ -18,7 +18,7 @@
                     <th>No. Kwitansi</th>
                     <th>No. Bond</th>
                     <th>No. Polis</th>
-                    <th>Status BG</th>
+                    <th>Status Jaminan</th>
                     <th>Status Sinkron</th>
                     <th>Tanggal</th>
                     <th width="105px">Tindakan</th>
@@ -543,7 +543,7 @@
                 {data: 'receipt_number', name: 'receipt_number'},
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
-                {data: 'last_status.status.name', name: 'last_status.status.name',orderable:false},
+                {data: 'insurance_status.status.name', name: 'insurance_status.status.name',orderable:false},
                 {data: 'insurance_value', name: 'insurance_value'},
                 {data: 'start_date', name: 'start_date'},
             ])

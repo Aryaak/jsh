@@ -13,7 +13,7 @@ class GuaranteeBankController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = GuaranteeBank::with('last_status','last_status.status');
+            $data = GuaranteeBank::with('insurance_status','insurance_status.status');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')
@@ -58,8 +58,6 @@ class GuaranteeBankController extends Controller
         foreach ($bankGaransi->statuses as $statuses) {
             $statuses->status;
         }
-        // dd($bankGaransi->statuses);
-        // $bankGaransi->statuses->status;
         return response()->json($this->showResponse($bankGaransi->toArray()));
     }
 

@@ -13,7 +13,7 @@ class SuretyBondController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = SuretyBond::with('last_status','last_status.status');
+            $data = SuretyBond::with('insurance_status','insurance_status.status');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')

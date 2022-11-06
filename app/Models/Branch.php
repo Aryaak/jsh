@@ -22,8 +22,8 @@ class Branch extends Model
             'name' => $args->name,
             'is_regional' => $args->is_regional,
             'slug' => Str::slug($args->name),
-            'jamsyar_username' => $args->is_regional ? $args->jamsyar_username : null,
-            'jamsyar_password' => $args->is_regional ? $args->jamsyar_password : null,
+            'jamsyar_username' => $args->jamsyar_username,
+            'jamsyar_password' => $args->jamsyar_password,
         ];
         if($params['is_regional'] == 0){
             $params['regional_id'] = $args->regionalId;

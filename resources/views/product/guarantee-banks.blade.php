@@ -568,6 +568,14 @@
                 clearForm('#form-create')
             })
         })
+        $(document).on('input', '#create-service-charge, #create-admin-charge, #edit-service-charge, #edit-admin-charge', function () {
+            const creadit = $(this).attr('id').split('-')[0] //create or edit
+            const serviceCharge = parseInt($('#'+creadit+'-service-charge').val() ? $('#'+creadit+'-service-charge').val().replaceAll('.','') : 0)
+            const adminCharge = parseInt($('#'+creadit+'-admin-charge').val() ? $('#'+creadit+'-admin-charge').val().replaceAll('.','') : 0)
+            const totalCharge =  serviceCharge + adminCharge
+            // console.log(serviceCharge,' + ',adminCharge,' = ',totalCharge);
+            $('#'+creadit+'-premi-charge').html(numberFormat(totalCharge))
+        })
         $(document).on('change', '#create-obligee-id, #edit-obligee-id', function () {
             const action = $(this).attr('id').split('-')[0] //create or edit
             ajaxGet('{{ route('master.obligees.show','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
@@ -593,7 +601,6 @@
             ajaxGet("{{ route('products.guarantee-banks.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     guaranteeBank = response.data
-                    console.log(guaranteeBank);
                     $('#show-receipt-number').html(guaranteeBank.receipt_number)
                     $('#show-bond-number').html(guaranteeBank.bond_number)
                     $('#show-polish-number').html(guaranteeBank.polish_number)
@@ -608,7 +615,7 @@
                     $('#show-pic-name').html(guaranteeBank.principal.pic_name)
                     $('#show-pic-position').html(guaranteeBank.principal.pic_position)
                     $('#show-service-charge').html(numberFormat(guaranteeBank.service_charge))
-                    $('#show-premi-charge').html(numberFormat(guaranteeBank.insurance_total_net))
+                    $('#show-premi-charge').html(numberFormat(guaranteeBank.total_charge))
                     $('#show-admin-charge').html(numberFormat(guaranteeBank.admin_charge))
                     $('#show-contract-value').html(numberFormat(guaranteeBank.contract_value))
                     $('#show-insurance-value').html(numberFormat(guaranteeBank.insurance_value))
@@ -647,7 +654,6 @@
             })
         })
         $(document).on('click', '.btn-edit', function () {
-            console.log(guaranteeBank);
             $('input[type="radio"]:checked').prop('checked',false)
             select2SetVal("edit-agent-id",guaranteeBank.agent.id,guaranteeBank.agent.name)
             select2SetVal("edit-bank-id",guaranteeBank.bank.id,guaranteeBank.bank.name)
@@ -659,7 +665,7 @@
             $('#edit-bond-number').val(guaranteeBank.bond_number)
             $('#edit-polish-number').val(guaranteeBank.polish_number)
             $('#edit-service-charge').val(numberFormat(guaranteeBank.service_charge))
-            $('#edit-premi-charge').html(numberFormat(guaranteeBank.insurance_total_net))
+            $('#edit-premi-charge').html(numberFormat(guaranteeBank.total_charge))
             $('#edit-admin-charge').val(numberFormat(guaranteeBank.admin_charge))
             $('#edit-contract-value').val(numberFormat(guaranteeBank.contract_value))
             $('#edit-insurance-value').val(numberFormat(guaranteeBank.insurance_value))

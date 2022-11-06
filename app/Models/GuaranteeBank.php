@@ -30,6 +30,8 @@ class GuaranteeBank extends Model
         'insurance_value',
         'service_charge',
         'admin_charge',
+        'total_charge',
+        'profit',
         'insurance_polish_cost',
         'insurance_stamp_cost',
         'insurance_total_net',
@@ -86,7 +88,7 @@ class GuaranteeBank extends Model
         return $this->hasOne(GuaranteeBankStatus::class)->ofMany(['id' => 'max'], function($query){$query->where('type','insurance'); });
     }
     private static function fetch(object $args): object{
-        $bankRate = BankRate::where([['bank_id',$args->bankId],['insurance_type_id',$args->insuranceTypeId]])->firstOrFail();
+        $bankRate = BankRate::where([['bank_id',$args->bankId],['insurance_type_id',$args->insuranceTypeId],['insurance_id',$args->insuranceId]])->firstOrFail();
         $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',$args->bankId]])->firstOrFail();
         $scoring = array_map(function($key,$value){
             return [
@@ -97,6 +99,8 @@ class GuaranteeBank extends Model
             ];
         },array_keys($args->scoring),array_values($args->scoring));
         $totalScore = array_sum(array_column($scoring, 'value'));
+        $insuranceTotalNet = ((int)$args->insuranceValue * $bankRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $bankRate->polish_cost + $bankRate->stamp_cost;
+        $officeTotalNet = ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $agentRate->polish_cost + $agentRate->stamp_cost;
         return (object)[
             'guaranteeBank' => [
                 'receipt_number' => $args->receiptNumber,
@@ -114,12 +118,14 @@ class GuaranteeBank extends Model
                 'insurance_value' => $args->insuranceValue,
                 'service_charge' => $args->serviceCharge,
                 'admin_charge' => $args->adminCharge,
+                'total_charge' => $args->serviceCharge + $args->adminCharge,
+                'profit' => $officeTotalNet - $insuranceTotalNet,
                 'insurance_polish_cost' => $bankRate->polish_cost,
                 'insurance_stamp_cost' => $bankRate->stamp_cost,
-                'insurance_total_net' => ((int)$args->insuranceValue * $bankRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $bankRate->polish_cost + $bankRate->stamp_cost,
+                'insurance_total_net' => $insuranceTotalNet,
                 'office_polish_cost' => $agentRate->polish_cost,
                 'office_stamp_cost' => $agentRate->stamp_cost,
-                'office_total_net' => ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $agentRate->polish_cost + $agentRate->stamp_cost,
+                'office_total_net' => $officeTotalNet,
                 'principal_id' => $args->principalId,
                 'bank_id' => $args->bankId,
                 'agent_id' => $args->agentId,

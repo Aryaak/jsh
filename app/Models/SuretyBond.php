@@ -30,6 +30,8 @@ class SuretyBond extends Model
         'insurance_value',
         'service_charge',
         'admin_charge',
+        'total_charge',
+        'profit',
         'insurance_polish_cost',
         'insurance_stamp_cost',
         'insurance_total_net',
@@ -92,6 +94,8 @@ class SuretyBond extends Model
             ];
         },array_keys($args->scoring),array_values($args->scoring));
         $totalScore = array_sum(array_column($scoring, 'value'));
+        $insuranceTotalNet = ((int)$args->insuranceValue * $insuranceRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $insuranceRate->polish_cost + $insuranceRate->stamp_cost;
+        $officeTotalNet = ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $agentRate->polish_cost + $agentRate->stamp_cost;
         return (object)[
             'suretyBond' => [
                 'receipt_number' => $args->receiptNumber,
@@ -109,12 +113,14 @@ class SuretyBond extends Model
                 'insurance_value' => $args->insuranceValue,
                 'service_charge' => $args->serviceCharge,
                 'admin_charge' => $args->adminCharge,
+                'total_charge' => $args->serviceCharge + $args->adminCharge,
+                'profit' => $officeTotalNet - $insuranceTotalNet,
                 'insurance_polish_cost' => $insuranceRate->polish_cost,
                 'insurance_stamp_cost' => $insuranceRate->stamp_cost,
-                'insurance_total_net' => ((int)$args->insuranceValue * $insuranceRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $insuranceRate->polish_cost + $insuranceRate->stamp_cost,
+                'insurance_total_net' => $insuranceTotalNet,
                 'office_polish_cost' => $agentRate->polish_cost,
                 'office_stamp_cost' => $agentRate->stamp_cost,
-                'office_total_net' => ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $agentRate->polish_cost + $agentRate->stamp_cost,
+                'office_total_net' => $officeTotalNet,
                 'principal_id' => $args->principalId,
                 'agent_id' => $args->agentId,
                 'obligee_id' => $args->obligeeId,

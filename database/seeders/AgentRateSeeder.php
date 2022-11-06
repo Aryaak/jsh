@@ -20,8 +20,8 @@ class AgentRateSeeder extends Seeder
             foreach (Insurance::all() as $insurance) {
                 foreach (InsuranceType::all() as $insuranceType) {
                     $params[] = [
-                        'min_value' => mt_rand(15000,5000000),
-                        'rate_value' => (float)rand()/(float)getrandmax(),
+                        'min_value' => mt_rand(15000,500000),
+                        'rate_value' => 0.9,
                         'polish_cost' => mt_rand(5000,15000),
                         'stamp_cost' => mt_rand(5000,15000),
                         'desc' => "dummy",
@@ -38,8 +38,8 @@ class AgentRateSeeder extends Seeder
                 foreach (Insurance::all() as $insurance) {
                     foreach (InsuranceType::all() as $insuranceType) {
                         $params[] = [
-                            'min_value' => mt_rand(15000,5000000),
-                            'rate_value' => (float)rand()/(float)getrandmax(),
+                            'min_value' => mt_rand(15000,500000),
+                            'rate_value' => 0.9,
                             'polish_cost' => mt_rand(5000,15000),
                             'stamp_cost' => mt_rand(5000,15000),
                             'desc' => "dummy",

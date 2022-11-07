@@ -107,10 +107,9 @@
             ajaxPost("{{ route('master.banks.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
+                createTemplateCounter = 0
+                $("#create-template-container").html('')
             })
-
-            createTemplateCounter = 0
-            $("#create-template-container").html('')
         })
 
         $("#edit-save").click(function () {
@@ -119,10 +118,9 @@
             let formData = new FormData(document.getElementById('form-edit'))
             ajaxPost("{{ route('master.banks.update','-id-') }}".replace('-id-',bank.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
+                editTemplateCounter = 0
+                $("#edit-template-container").html('')
             })
-
-            editTemplateCounter = 0
-            $("#edit-template-container").html('')
         })
 
         $(document).on('click', '.btn-show', function () {
@@ -151,7 +149,6 @@
             for (let i = 1; i <= bank.templates.length; i++) {
                 addNewTemplate('edit', bank.templates[i-1].text, bank.templates[i-1].id)
                 $('#edit-template-title-'+i).val(bank.templates[i-1].title)
-                $('#edit-template-type-'+i).val(bank.templates[i-1].type)
             }
         })
 

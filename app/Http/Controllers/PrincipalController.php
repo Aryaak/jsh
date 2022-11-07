@@ -17,17 +17,9 @@ class PrincipalController extends Controller
             $data = Principal::with('city');
             return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('score', 'datatables.score-principal')
             ->editColumn('action', 'datatables.actions-show-delete')
-            ->editColumn('score', function($row){
-                $color = 'text-danger';
-                if($row->score >= 6.6){
-                    $color = 'text-success';
-                }else if($row->score >= 3.3){
-                    $color = 'text-warning';
-                }
-                return "<span class='".$color."'>$row->score</span>";
-            })
-            ->rawColumns(['action','score'])
+            ->rawColumns(['score', 'action'])
             ->toJson();
         }
         $scorings = Scoring::whereNull('category')->get();

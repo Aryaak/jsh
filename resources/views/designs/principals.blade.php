@@ -69,7 +69,7 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="w-100 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pendirian</div>
                     </div>
                     <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Sertifikat Pembangunan</x-button>
                     <div id="create-certificate-container" class="row">
@@ -181,7 +181,7 @@
         <div class="row mb-3">
             <div class="col-md-12">
                 <div class="w-100 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pendirian</div>
                 </div>
                 <div id="show-certificate-container" class="row">
                     {{-- START Copy ini saat looping sertifikat --}}
@@ -254,7 +254,7 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="w-100 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pendirian</div>
                     </div>
                     <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Sertifikat Pembangunan</x-button>
                     <div id="edit-certificate-container" class="row">

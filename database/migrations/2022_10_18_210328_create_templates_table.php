@@ -11,9 +11,8 @@ return new class extends Migration
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('type');
             $table->longText('text');
-            $table->foreignId('bank_id')->constrained();
+            $table->foreignId('bank_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

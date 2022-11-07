@@ -13,9 +13,8 @@ class BankRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'title' => 'required',
-            'type' => 'required',
-            'text' => 'required'
+            'title.*' => 'required',
+            'text.*' => 'required'
         ];
     }
 
@@ -23,9 +22,8 @@ class BankRequest extends FormRequest
     {
         return [
             'name' => 'Nama',
-            'title' => 'Judul',
-            'type' => 'Jenis',
-            'text' => 'Template'
+            'title.*' => 'Judul',
+            'text.*' => 'Template'
         ];
     }
 }

@@ -32,10 +32,12 @@ class BankController extends Controller
         try {
             DB::beginTransaction();
             $bank = Bank::buat($request->validated());
-            Template::buat($request->validated(), $bank->id);
-            DB::commit();
+            if(isset($request->title)){
+                Template::buat($request->validated(), $bank->id);
+            }
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -60,11 +62,13 @@ class BankController extends Controller
         try {
             DB::beginTransaction();
             $bank->ubah($request->all());
-            $templates = $bank->templates;
-            for($i = 0; $i < count($templates); $i++){
-                $templates[$i]->ubah($request->all(),$i,$bank->id);
+            if(isset($request->title)){
+                $templates = $bank->templates;
+                for($i = 0; $i < count($templates); $i++){
+                    $templates[$i]->ubah_bank($request->all(),$i,$bank->id);
+                }
+                Template::buat($request->all(),$bank->id);
             }
-            Template::buat($request->all(),$bank->id);
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();

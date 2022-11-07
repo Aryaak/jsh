@@ -18,7 +18,7 @@
                     <th>No. Kwitansi</th>
                     <th>No. Bond</th>
                     <th>No. Polis</th>
-                    <th>Status SB</th>
+                    <th>Status Jaminan</th>
                     <th>Status Sinkron</th>
                     <th>Tanggal</th>
                     <th width="105px">Tindakan</th>
@@ -536,7 +536,7 @@
                 {data: 'receipt_number', name: 'receipt_number'},
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
-                {data: 'last_status.status.name', name: 'last_status.status.name',orderable:false},
+                {data: 'insurance_status.status.name', name: 'insurance_status.status.name',orderable:false},
                 {data: 'insurance_value', name: 'insurance_value'},
                 {data: 'start_date', name: 'start_date'},
             ])
@@ -553,6 +553,15 @@
             select2Init("#edit-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-edit'))
             select2Init("#edit-insurance-type-id",'{{ route('select2.insuranceType') }}',0,$('#modal-edit'))
         })
+
+        $(document).on('input', '#create-service-charge, #create-admin-charge, #edit-service-charge, #edit-admin-charge', function () {
+            const creadit = $(this).attr('id').split('-')[0] //create or edit
+            const serviceCharge = parseInt($('#'+creadit+'-service-charge').val() ? $('#'+creadit+'-service-charge').val().replaceAll('.','') : 0)
+            const adminCharge = parseInt($('#'+creadit+'-admin-charge').val() ? $('#'+creadit+'-admin-charge').val().replaceAll('.','') : 0)
+            const totalCharge =  serviceCharge + adminCharge
+            // console.log(serviceCharge,' + ',adminCharge,' = ',totalCharge);
+            $('#'+creadit+'-premi-charge').html(numberFormat(totalCharge))
+        })
         $(document).on('click', '#create-save', function () {
             loading()
             ajaxPost("{{ route('products.surety-bonds.store') }}",fetchFormData(new FormData(document.getElementById('form-create'))),'#modal-create',function(){
@@ -560,19 +569,20 @@
                 clearForm('#form-create')
             })
         })
+
         $(document).on('change', '#create-obligee-id, #edit-obligee-id', function () {
-            const action = $(this).attr('id').split('-')[0] //create or edit
+            const creadit = $(this).attr('id').split('-')[0] //create or edit
             ajaxGet('{{ route('master.obligees.show','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
-               $('#'+action+'-obligee-address').html(response.data.address)
+               $('#'+creadit+'-obligee-address').html(response.data.address)
             })
         })
         $(document).on('change', '#create-principal-id, #edit-principal-id', function () {
-            const action = $(this).attr('id').split('-')[0] //create or edit
+            const creadit = $(this).attr('id').split('-')[0] //create or edit
             ajaxGet('{{ route('master.principals.show','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
                 const data = response.data
-                $('#'+action+'-principal-address').html(data.address)
-                $('#'+action+'-pic-name').html(data.pic_name)
-                $('#'+action+'-pic-position').html(data.pic_position)
+                $('#'+creadit+'-principal-address').html(data.address)
+                $('#'+creadit+'-pic-name').html(data.pic_name)
+                $('#'+creadit+'-pic-position').html(data.pic_position)
             })
         })
         $(document).on('input', '#create-start-date, #create-end-date, #edit-start-date, #edit-end-date, .create-due-day-tolerance, .edit-due-day-tolerance', function () {
@@ -598,8 +608,8 @@
                     $('#show-pic-name').html(suretyBond.principal.pic_name)
                     $('#show-pic-position').html(suretyBond.principal.pic_position)
                     $('#show-service-charge').html(numberFormat(suretyBond.service_charge))
-                    $('#show-premi-charge').html(numberFormat(suretyBond.insurance_total_net))
                     $('#show-admin-charge').html(numberFormat(suretyBond.admin_charge))
+                    $('#show-premi-charge').html(numberFormat(suretyBond.total_charge))
                     $('#show-contract-value').html(numberFormat(suretyBond.contract_value))
                     $('#show-insurance-value').html(numberFormat(suretyBond.insurance_value))
                     $('#show-start-date').html(suretyBond.start_date)
@@ -610,6 +620,7 @@
                     $('#show-document-title').html(suretyBond.document_title)
                     $('#show-document-number').html(suretyBond.document_number)
                     $('#show-document-expired-at').html(suretyBond.document_expired_at)
+
                     // $('#show-desc').html()
                     // $('#show-paid-date').html()
                     // $('#show-status').html()
@@ -648,14 +659,13 @@
             $('#edit-bond-number').val(suretyBond.bond_number)
             $('#edit-polish-number').val(suretyBond.polish_number)
             $('#edit-service-charge').val(numberFormat(suretyBond.service_charge))
-            $('#edit-premi-charge').html(numberFormat(suretyBond.insurance_total_net))
+            $('#edit-premi-charge').html(numberFormat(suretyBond.total_charge))
             $('#edit-admin-charge').val(numberFormat(suretyBond.admin_charge))
             $('#edit-contract-value').val(numberFormat(suretyBond.contract_value))
             $('#edit-insurance-value').val(numberFormat(suretyBond.insurance_value))
             $('#edit-start-date').val(suretyBond.start_date)
             $('#edit-end-date').val(suretyBond.end_date)
             $('#edit-due-day-tolerance-'+suretyBond.due_day_tolerance).prop('checked',true).trigger('input')
-            console.log('#edit-due-day-tolerance-'+suretyBond.due_day_tolerance);
             $('#edit-day-count-input').val(suretyBond.day_count)
             $('#edit-project-name').val(suretyBond.project_name)
             $('#edit-document-title').val(suretyBond.document_title)

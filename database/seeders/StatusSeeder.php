@@ -18,6 +18,7 @@ class StatusSeeder extends Seeder
             ['name' => 'analisa asuransi','type' => 'process','for_process' => 'guarantee_bank'],
             ['name' => 'analisa bank','type' => 'process','for_process' => 'guarantee_bank'],
             ['name' => 'terbit','type' => 'process','for_process' => 'guarantee_bank'],
+            ['name' => 'belum terbit','type' => 'insurance','for_process' => null],
             ['name' => 'terbit','type' => 'insurance','for_process' => null],
             ['name' => 'batal','type' => 'insurance','for_process' => null],
             ['name' => 'revisi','type' => 'insurance','for_process' => null],

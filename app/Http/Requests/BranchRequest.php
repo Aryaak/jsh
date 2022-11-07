@@ -14,8 +14,8 @@ class BranchRequest extends FormRequest
         return [
             'name' => 'required',
             'is_regional' => 'required',
-            'jamsyar_username' => 'required_if:is_regional,1',
-            'jamsyar_password' => 'required_if:is_regional,1',
+            'jamsyar_username' => 'required',
+            'jamsyar_password' => 'required',
             'regionalId' => 'required_if:is_regional,0'
         ];
     }
@@ -33,6 +33,7 @@ class BranchRequest extends FormRequest
         return [
             'jamsyar_username.required_if' => ':attribute harus diisi',
             'jamsyar_password.required_if' => ':attribute harus diisi',
+            'regionalId.required_if' => ':attribute harus diisi',
         ];
     }
 }

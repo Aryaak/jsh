@@ -25,12 +25,14 @@ return new class extends Migration
             $table->unsignedBigInteger('insurance_value');
             $table->unsignedInteger('service_charge');
             $table->unsignedInteger('admin_charge');
+            $table->unsignedBigInteger('total_charge');
+            $table->unsignedDecimal('profit',20,5);
             $table->unsignedInteger('insurance_polish_cost');
             $table->unsignedInteger('insurance_stamp_cost');
-            $table->unsignedBigInteger('insurance_total_net');
+            $table->unsignedDecimal('insurance_total_net',10,2);
             $table->unsignedInteger('office_polish_cost');
             $table->unsignedInteger('office_stamp_cost');
-            $table->unsignedBigInteger('office_total_net');
+            $table->unsignedDecimal('office_total_net',10,2);
             $table->foreignId('principal_id')->constrained();
             $table->foreignId('agent_id')->constrained();
             $table->foreignId('obligee_id')->constrained();
@@ -41,5 +43,9 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('revision_from_id')->references('id')->on('surety_bonds');
         });
+    }
+    public function down()
+    {
+        Schema::dropIfExists('surety_bonds');
     }
 };

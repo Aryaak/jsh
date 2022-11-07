@@ -17,6 +17,7 @@
                     <th width="10px">No.</th>
                     <th>Regional</th>
                     <th>Nama</th>
+                    <th>Jamsyar Username</th>
                     <th width="80px">Tindakan</th>
                 </tr>
             @endslot
@@ -29,6 +30,8 @@
         <x-form id="form-create" method="post">
             <x-form-select label="Regional" id="create-regional-id" name="regionalId" class="mb-3" required/>
             <x-form-input id="create-name" name="name" label="Nama" />
+            <x-form-input id="create-jamsyar-username" name="jamsyar_username" label="Jamsyar Username" class="mb-3" required />
+            <x-form-input id="create-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" class="mb-3" type="password" required />
         </x-form>
 
         @slot('footer')
@@ -45,6 +48,14 @@
             <b>Nama</b>: <br>
             <span id="show-name">-</span>
         </div>
+        <div class="border-bottom mb-2 pb-2">
+            <b>Jamsyar Username</b>: <br>
+            <span id="show-jamsyar-username">-</span>
+        </div>
+        <div>
+            <b>Jamsyar Password</b>: <br>
+            <span id="show-jamsyar-password">-</span>
+        </div>
 
         @slot('footer')
             <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
@@ -55,6 +66,8 @@
         <x-form id="form-edit" method="put">
             <x-form-select label="Regional" id="edit-regional-id" name="regionalId" class="mb-3" required/>
             <x-form-input id="edit-name" name="name" label="Nama" required />
+            <x-form-input id="edit-jamsyar-username" name="jamsyar_username" label="Jamsyar Username" class="mb-3" required />
+            <x-form-input id="edit-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" class="mb-3" type="password" required />
         </x-form>
 
         @slot('footer')
@@ -76,6 +89,7 @@
             table = dataTableInit('table','Cabang',{url : '{{ route('master.branches.index') }}'},[
                 {data: 'regional.name', name: 'regional.name'},
                 {data: 'name', name: 'name'},
+                {data: 'jamsyar_username', name: 'jamsyar_username'},
             ])
             select2Init("#create-regional-id",'{{ route('select2.regional') }}',0,$('#modal-create'))
             select2Init("#edit-regional-id",'{{ route('select2.regional') }}',0,$('#modal-edit'))
@@ -103,12 +117,16 @@
                     branch = response.data
                     $('#show-regional').html(branch.regional.name)
                     $('#show-name').html(branch.name)
+                    $('#show-jamsyar-username').html(branch.jamsyar_username)
+                    $('#show-jamsyar-password').html(branch.jamsyar_password)
                 }
             })
         })
         $(document).on('click', '.btn-edit', function () {
             $('#edit-name').val(branch.name)
             $('#edit-regional-id').append(new Option(branch.regional.name,branch.regional.id,true,true)).trigger('change');
+            $('#edit-jamsyar-username').val(branch.jamsyar_username)
+            $('#edit-jamsyar-password').val(branch.jamsyar_password)
         })
         $(document).on('click', '.btn-delete', function () {
             // Delete

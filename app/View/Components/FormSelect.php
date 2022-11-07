@@ -23,6 +23,7 @@ class FormSelect extends Component
         private ?string $readonly = null,
         private ?string $multiple = null,
         private ?string $autofocus = null,
+        private ?string $classInput = null,
     ) {
         //
     }
@@ -45,6 +46,7 @@ class FormSelect extends Component
             'disabled' => $this->disabled,
             'readonly' => $this->readonly,
             'multiple' => $this->multiple,
+            'classInput' => $this->classInput,
         ]);
     }
 }

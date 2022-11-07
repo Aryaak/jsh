@@ -8,17 +8,17 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('payable_payment', function (Blueprint $table) {
-            $table->foreignId('payable_id')->constrained();
+        Schema::create('payment_details', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedDecimal('total',20,5);
             $table->foreignId('payment_id')->constrained();
-            $table->primary(['payable_id', 'payment_id']);
-            $table->index(['payable_id', 'payment_id']);
-            $table->unsignedBigInteger('nominal');
+            $table->foreignId('surety_bond_id')->nullable()->constrained();
+            $table->foreignId('guarantee_bank_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
     public function down()
     {
-        Schema::dropIfExists('payable_payment');
+        Schema::dropIfExists('payment_details');
     }
 };

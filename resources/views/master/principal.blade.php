@@ -18,7 +18,7 @@
                     <th>Nama</th>
                     <th>Alamat</th>
                     <th>No. HP/Telp</th>
-                    <th>Score</th>
+                    <th>Skor</th>
                     {{-- <th>Status Sinkronisasi</th> --}}
                     <th width="105px">Tindakan</th>
                 </tr>
@@ -324,8 +324,8 @@
 
         $(document).on('click', '.create-scoring, .edit-scoring', function () {
             const creadit = $(this).attr('id').split('-')[0]
-            let totalScore = $('.'+creadit+'-scoring:checkbox:checked').length / $('.'+creadit+'-scoring:checkbox').length * 10
-            $('#'+creadit+'-total-score').html(totalScore)
+            const totalScore = $('.'+creadit+'-scoring:checkbox:checked').length / $('.'+creadit+'-scoring:checkbox').length * 10
+            $('#'+creadit+'-total-score').removeClass().html(totalScore).addClass(setScoreColor(totalScore))
         })
         $(document).on('click', '#create-save', function () {
             ajaxPost("{{ route('master.principals.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
@@ -361,7 +361,7 @@
                     $('#show-nib-expired-at').html(principal.nib_expired_at)
                     $('#show-status').html(principal.status)
                     $('#show-jamsyar-code').html(principal.jamsyar_code)
-                    $('#show-score').html(principal.score)
+                    $('#show-score').removeClass().html(principal.score).addClass(setScoreColor(principal.score))
                     $('input[type="checkbox"]:checked').prop('checked',false)
                     principal.scorings.forEach(e => { $('#show-scoring-score-'+e.id).prop('checked',true) });
                     let html = ''
@@ -394,7 +394,7 @@
             $('#edit-info-address').val(principal.address)
             $('#edit-info-jamsyar-id').val(principal.jamsyar_id)
             $('#edit-info-jamsyar-code').val(principal.jamsyar_code)
-            $('#edit-total-score').html(principal.score)
+            $('#edit-total-score').removeClass().html(principal.score).addClass(setScoreColor(principal.score))
             $('input[type="checkbox"]:checked').prop('checked',false)
             principal.scorings.forEach(e => { $('#edit-scoring-score-'+e.id).prop('checked',true) });
             counter = 0
@@ -468,6 +468,15 @@
                     </div>
                 </div>
             `)
+        }
+        function setScoreColor(value){
+            let color = 'text-danger'
+            if(value >= 6.6){
+                color = 'text-success'
+            }else if(value >= 3.3){
+                color = 'text-warning'
+            }
+            return color
         }
     </script>
 @endpush

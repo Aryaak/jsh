@@ -18,6 +18,7 @@ use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\UploaderController;
 use App\Http\Controllers\SuretyBondController;
 use App\Http\Controllers\GuaranteeBankController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,8 +57,12 @@ Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
 });
 
 Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
-    Route::get('/', fn() => redirect(route('dashboard')));
-
+    Route::get('/',[PaymentController::class,'tables'])->name('tables');
+    Route::match(['get', 'post'],'principal-ke-cabang',[PaymentController::class,'indexPrincipalToBranch'])->name('principal-to-branch.index');
+    Route::apiResource('/principal-ke-cabang',PaymentController::class,['only' => ['store','show','destroy']])->names('principal-to-branch');
+    // Route::group(['prefix' => '/hitung','as' => 'calculate.'], function () {
+    //     Route::get('principal-ke-cabang',[PaymentController::class,'calculatePrincipalToBranch'])->name('principal-to-branch');
+    // });
     // Route untuk pembayaran ....
 });
 

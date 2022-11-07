@@ -12,7 +12,7 @@
     @endif
 
     <select
-        class="form-select select2"
+        class="form-select select2 {{ $classInput }}"
         id="{{ $id }}" name="{{ $name }}"
         data-placeholder="{{ $placeholder }}"
         @isset($required) required @endisset

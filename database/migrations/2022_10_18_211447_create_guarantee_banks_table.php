@@ -26,7 +26,7 @@ return new class extends Migration
             $table->unsignedInteger('service_charge');
             $table->unsignedInteger('admin_charge');
             $table->unsignedBigInteger('total_charge');
-            $table->unsignedDecimal('profit',10,2);
+            $table->unsignedDecimal('profit',20,5);
             $table->unsignedInteger('insurance_polish_cost');
             $table->unsignedInteger('insurance_stamp_cost');
             $table->unsignedDecimal('insurance_total_net',10,2);
@@ -44,5 +44,9 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('revision_from_id')->references('id')->on('guarantee_banks');
         });
+    }
+    public function down()
+    {
+        Schema::dropIfExists('guarantee_banks');
     }
 };

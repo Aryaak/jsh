@@ -10,12 +10,25 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('total_bill');
-            $table->unsignedBigInteger('paid_bill');
-            $table->unsignedBigInteger('unpaid_bill');
-            $table->foreignId('payment_period_id')->constrained();
+            $table->unsignedDecimal('total_bill',20,5);
+            $table->unsignedDecimal('paid_bill',20,5);
+            $table->unsignedDecimal('unpaid_bill',20,5);
+            $table->timestamp('paid_at');
+            $table->integer('month')->comment('ex. 01..09..12');
+            $table->year('year');
             $table->string('type');
+            $table->text('desc')->nullable();
+            $table->foreignId('agent_id')->nullable()->constrained();
+            $table->foreignId('insurance_id')->nullable()->constrained();
+            $table->foreignId('principal_id')->nullable()->constrained();
+            $table->foreignId('branch_id')->nullable()->constrained();
+            $table->unsignedBigInteger('regional_id')->nullable();
+            $table->foreign('regional_id')->references('id')->on('branches');
             $table->timestamps();
         });
+    }
+    public function down()
+    {
+        Schema::dropIfExists('payments');
     }
 };

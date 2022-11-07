@@ -20,7 +20,7 @@
                     <th>Nilai Minimal</th>
                     <th>Nilai Rate</th>
                     <th>Biaya Polis</th>
-                    <th>Material</th>
+                    <th>Materai</th>
                     <th width="80px">Tindakan</th>
                 </tr>
             @endslot
@@ -54,7 +54,7 @@
                     <th>Nilai Minimal</th>
                     <th>Nilai Rate</th>
                     <th>Biaya Polis</th>
-                    <th>Material</th>
+                    <th>Materai</th>
                     <th width="80px">Tindakan</th>
                 </tr>
             @endslot
@@ -86,7 +86,7 @@
             <x-form-input label="Nilai Minimal" id="create-min-value-sb" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Nilai Rate" id="create-rate-value-sb" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
             <x-form-input label="Biaya Polis" id="create-polish-cost-sb" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Material" id="create-stamp-cost-sb" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+            <x-form-input label="Materai" id="create-stamp-cost-sb" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="create-desc-sb" name="desc" />
         </x-form>
 
@@ -117,7 +117,7 @@
             <span id="show-polish-cost-sb">Rp10.000,-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Material</b>: <br>
+            <b>Materai</b>: <br>
             <span id="show-stamp-cost-sb">Rp6.000,-</span>
         </div>
         <div>
@@ -138,7 +138,7 @@
             <x-form-input label="Nilai Minimal" id="edit-min-value-sb" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Nilai Rate" id="edit-rate-value-sb" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
             <x-form-input label="Biaya Polis" id="edit-polish-cost-sb" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Material" id="edit-stamp-cost-sb" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+            <x-form-input label="Materai" id="edit-stamp-cost-sb" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="edit-desc-sb" name="desc" />
         </x-form>
 
@@ -160,7 +160,7 @@
             <x-form-input label="Nilai Minimal" id="create-min-value-bg" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Nilai Rate" id="create-rate-value-bg" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
             <x-form-input label="Biaya Polis" id="create-polish-cost-bg" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Material" id="create-stamp-cost-bg" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+            <x-form-input label="Materai" id="create-stamp-cost-bg" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="create-desc-bg" name="desc" />
         </x-form>
 
@@ -191,7 +191,7 @@
             <span id="show-polish-cost-bg">Rp10.000,-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Material</b>: <br>
+            <b>Materai</b>: <br>
             <span id="show-stamp-cost-bg">Rp6.000,-</span>
         </div>
         <div>
@@ -212,7 +212,7 @@
             <x-form-input label="Nilai Minimal" id="edit-min-value-bg" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Nilai Rate" id="edit-rate-value-bg" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
             <x-form-input label="Biaya Polis" id="edit-polish-cost-bg" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Material" id="edit-stamp-cost-bg" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+            <x-form-input label="Materai" id="edit-stamp-cost-bg" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="edit-desc-bg" name="desc" />
         </x-form>
 

@@ -18,6 +18,7 @@
                     <th>Nama</th>
                     <th>Alamat</th>
                     <th>No. HP/Telp</th>
+                    <th>Score</th>
                     {{-- <th>Status Sinkronisasi</th> --}}
                     <th width="105px">Tindakan</th>
                 </tr>
@@ -59,11 +60,11 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="w-100 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pendirian</div>
                     </div>
-                    <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Akta Pembangunan</x-button>
+                    <x-button id="create-new-certificate" icon="bx bx-plus">Tambah Akta Pendirian</x-button>
                     <div id="create-certificate-container" class="row">
-                        {{-- Tempat Tambah Akta Pembangunan --}}
+                        {{-- Tempat Tambah Akta Pendirian --}}
                     </div>
                 </div>
             </div>
@@ -172,7 +173,7 @@
         <div class="row mb-3">
             <div class="col-md-12">
                 <div class="w-100 text-center">
-                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pendirian</div>
                 </div>
                 <div id="show-certificate-container" class="row">
                     {{-- START Copy ini saat looping akta --}}
@@ -248,11 +249,11 @@
             <div class="row mb-3">
                 <div class="col-md-12">
                     <div class="w-100 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pembangunan</div>
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Daftar Akta Pendirian</div>
                     </div>
-                    <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Akta Pembangunan</x-button>
+                    <x-button id="edit-new-certificate" icon="bx bx-plus">Tambah Akta Pendirian</x-button>
                     <div id="edit-certificate-container" class="row">
-                        {{-- Tempat Tambah Akta Pembangunan --}}
+                        {{-- Tempat Tambah Akta Pendirian --}}
                     </div>
                 </div>
             </div>
@@ -301,6 +302,7 @@
                 {data: 'name', name: 'name'},
                 {data: 'address', name: 'address'},
                 {data: 'phone', name: 'phone'},
+                {data: 'score', name: 'score'},
                 // {data: 'phone', name: 'phone'},
             ])
 
@@ -460,7 +462,7 @@
                 <div id="` + createOrEdit + `-certificate-` + counter + `" class="mt-4 col-md-6">
                     <div class="border rounded p-3">
                         ` + inputId + `
-                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Akta Pembangunan</x-button>
+                        <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Akta Pendirian</x-button>
                         <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number][]" class="mb-3" required />
                         <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt][]" class="mb-3" type="date" required />
                     </div>

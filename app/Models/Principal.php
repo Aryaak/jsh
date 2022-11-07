@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Scoring;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Principal extends Model
 {
@@ -28,6 +29,19 @@ class Principal extends Model
         'jamsyar_code',
         'city_id',
     ];
+
+    // Accessor
+    public function scoreColor(): Attribute
+    {
+        return Attribute::make(get: function () {
+            return match (true) {
+                $this->score / 3 >= 2.33 => 'success',
+                $this->score / 3 >= 1.33 => 'warning',
+                default => 'danger',
+            };
+        });
+    }
+
     public function city(){
         return $this->belongsTo(City::class);
     }

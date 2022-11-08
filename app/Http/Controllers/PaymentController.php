@@ -9,13 +9,14 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function indexPrincipalToBranch(Request $request)
-    {
+    public function indexPrincipalToBranch(Request $request){
         return view('payment.principal-to-branch');
     }
-    public function indexRegionalToInsurance(Request $request)
-    {
+    public function indexRegionalToInsurance(Request $request){
         return view('payment.regional-to-insurance');
+    }
+    public function indexBranchToAgent(Request $request){
+        return view('payment.branch-to-agent');
     }
 
     public function calculate(Request $request){
@@ -38,7 +39,7 @@ class PaymentController extends Controller
         }else if($type == 'regional_to_insurance'){
             $data = Payment::with('insurance','regional')->whereType($type);
         }else if($type == 'branch_to_agent'){
-            // $data = Payment::with('principal','branch')->whereType($type);
+            $data = Payment::with('branch','agent')->whereType($type);
         }
         return datatables()->of($data)
         ->addIndexColumn()
@@ -80,7 +81,8 @@ class PaymentController extends Controller
             $payment->regional;
             $payment->insurance;
         }else if($type == 'branch_to_agent'){
-
+            $payment->branch;
+            $payment->agent;
         }
 
         return response()->json($this->showResponse($payment->toArray()));

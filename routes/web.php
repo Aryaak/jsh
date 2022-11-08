@@ -62,14 +62,11 @@ Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
 
 Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
     Route::get('/',[PaymentController::class,'tables'])->name('tables');
-    Route::post('calculate',[PaymentController::class,'calculate'])->name('calculate');
+    Route::post('hitung',[PaymentController::class,'calculate'])->name('calculate');
     Route::get('principal-ke-cabang',[PaymentController::class,'indexPrincipalToBranch'])->name('principal-to-branch.index');
     Route::get('regional-ke-asuransi',[PaymentController::class,'indexRegionalToInsurance'])->name('regional-to-insurance.index');
+    Route::get('cabang-ke-agent',[PaymentController::class,'indexBranchToAgent'])->name('branch-to-agent.index');
     Route::apiResource('/payment',PaymentController::class,['only' => ['store','show','destroy']])->names('payment');
-    // Route::group(['prefix' => '/hitung','as' => 'calculate.'], function () {
-    //     Route::get('principal-ke-cabang',[PaymentController::class,'calculatePrincipalToBranch'])->name('principal-to-branch');
-    // });
-    // Route untuk pembayaran ....
 });
 
 Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {

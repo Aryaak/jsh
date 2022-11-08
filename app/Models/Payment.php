@@ -65,7 +65,7 @@ class Payment extends Model
             $totalBill = array_sum(array_column($details,'total'));
             $paidBill = $totalBill;
         }else if($type == 'branch_to_agent'){
-            $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->get()->map(function ($item){
+            $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('agent_id',$args->agentId)->get()->map(function ($item){
                 return [
                     'surety_bond_id' => $item->id,
                     'guarantee_bank_id' => null,

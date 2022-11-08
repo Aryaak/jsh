@@ -98,7 +98,7 @@
                         @slot('submenus')
                             <x-submenu route="payments.principal-to-branch.index">Principal ke Cabang</x-submenu>
                             <x-submenu route="dashboard">Cabang ke Regional</x-submenu>
-                            <x-submenu route="dashboard">Regional ke Asuransi</x-submenu>
+                            <x-submenu route="payments.regional-to-insurance.index">Regional ke Asuransi</x-submenu>
                             <x-submenu route="dashboard">Cabang ke Agen</x-submenu>
                         @endslot
                     </x-menu>

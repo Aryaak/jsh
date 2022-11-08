@@ -16,8 +16,8 @@
                 <tr>
                     <th width="10px">No.</th>
                     <th>Waktu Bayar</th>
-                    <th>Dari Principal</th>
-                    <th>Ke Cabang</th>
+                    <th>Dari Regional</th>
+                    <th>Ke Asuransi</th>
                     <th>Nominal Bayar</th>
                     <th width="80px">Tindakan</th>
                 </tr>
@@ -29,11 +29,11 @@
 @section('modals')
     <x-modal id="modal-create" title="Tambah Pembayaran">
         <x-form id="form-create" method="post">
-            <x-form-input label="Waktu Bayar" id="create-paid-at" name="paidAt" type="datetime-local" class="mb-3" required />
+            <x-form-input label="Waktu Bayar" id="create-paid-at" class-input="calculate-params" name="paidAt" type="datetime-local" class="mb-3" required />
             <x-form-input label="Bulan" id="create-month" class-input="calculate-params" name="month" type="number" class="mb-3" required />
             <x-form-input label="Tahun" id="create-year" class-input="calculate-params" name="year" type="number" class="mb-3" required />
-            <x-form-select label="Dari Principal" id="create-principal-id" class-input="calculate-params" name="principalId" class="mb-3" required />
-            <x-form-select label="Ke Cabang" id="create-branch-id" class-input="calculate-params" name="branchId" class="mb-3" required />
+            <x-form-select label="Dari Regional" id="create-regional-id" class-input="calculate-params" name="regionalId" class="mb-3" required />
+            <x-form-select label="Ke Asuransi" id="create-insurance-id" class-input="calculate-params" name="insuranceId" class="mb-3" required />
             <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="create-desc" name="desc" />
         </x-form>
@@ -49,12 +49,12 @@
             <span id="show-paid-at">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Dari Principal</b>: <br>
-            <span id="show-principal">-</span>
+            <b>Dari Regional</b>: <br>
+            <span id="show-regional">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Ke Cabang</b>: <br>
-            <span id="show-branch">-</span>
+            <b>Ke Asuransi</b>: <br>
+            <span id="show-insurance">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nominal Bayar</b>: <br>
@@ -72,10 +72,10 @@
 
     <x-modal id="modal-edit" title="Ubah Pembayaran">
         <x-form id="form-edit" method="put">
-            <x-form-input label="Waktu Bayar" id="edit-datetime" class-input="calculate-params" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Dari Principal" id="edit-principal-id" class-input="calculate-params" name="principalId" :options="[]" class="mb-3" required />
-            <x-form-select label="Ke Cabang" id="edit-branch-id" class-input="calculate-params" name="branchId" :options="[]" class="mb-3" required />
-            <x-form-input label="Nominal Bayar" id="edit-nominal" class-input="calculate-params" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+            <x-form-input label="Waktu Bayar" id="edit-datetime" name="datetime" type="datetime-local" class="mb-3" required />
+            <x-form-select label="Dari Regional" id="edit-regional-id" name="regionalId" :options="[]" class="mb-3" required />
+            <x-form-select label="Ke Asuransi" id="edit-insurance-id" name="insuranceId" :options="[]" class="mb-3" required />
+            <x-form-input label="Nominal Bayar" id="edit-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="edit-desc" name="desc" />
         </x-form>
 
@@ -94,30 +94,26 @@
     <script>
         let table = null
         let payment = null
-        const type = 'principal_to_branch'
+        const type = 'regional_to_insurance'
         $(document).ready(function () {
             table = dataTableInit('table','Pembayaran',{
                     url : '{{ route('payments.tables') }}',
                     data : { type : type }
                 },[
                 {data: 'paid_at'},
-                {data: 'principal.name'},
-                {data: 'branch.name'},
+                {data: 'regional.name'},
+                {data: 'insurance.name'},
                 {data: 'total_bill'}
             ])
-            select2Init("#create-principal-id",'{{ route('select2.principal') }}',0,$('#modal-create'))
-            select2Init("#create-branch-id",'{{ route('select2.branch') }}',0,$('#modal-create'))
-
-            // $("#create-principal-id, #create-branch-id").select2({dropdownParent: $('#modal-create')})
-            // $("#edit-principal-id, #edit-branch-id").select2({dropdownParent: $('#modal-edit')})
+            select2Init("#create-regional-id",'{{ route('select2.regional') }}',0,$('#modal-create'))
+            select2Init("#create-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-create'))
         })
-
         $(document).on('input', '.calculate-params', function () {
-            const principalId = $('#create-principal-id').val()
-            const branchId = $('#create-branch-id').val()
+            const regionalId = $('#create-regional-id').val()
+            const insuranceId = $('#create-insurance-id').val()
             const month = $('#create-month').val()
             const year = $('#create-year').val()
-            if(principalId && branchId && month && year){
+            if(regionalId && insuranceId && month && year){
                 let formData = new FormData(document.getElementById('form-create'))
                 formData.append('type',type)
                 ajaxPost("{{ route('payments.calculate') }}",formData,'',function(response){
@@ -141,8 +137,8 @@
                 if(response.success){
                     payment = response.data
                     $('#show-paid-at').html(payment.paid_at)
-                    $('#show-principal').html(payment.principal.name)
-                    $('#show-branch').html(payment.branch.name)
+                    $('#show-regional').html(payment.regional.name)
+                    $('#show-insurance').html(payment.insurance.name)
                     $('#show-nominal').html(numberFormat(payment.total_bill))
                     $('#show-desc').html(payment.desc)
                 }

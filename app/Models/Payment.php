@@ -55,14 +55,14 @@ class Payment extends Model
         }else if($type == 'branch_to_regional'){
 
         }else if($type == 'regional_to_insurance'){
-            $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->get()->map(function ($item){
+            $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
                 return [
                     'surety_bond_id' => $item->id,
                     'guarantee_bank_id' => null,
                     'total' => $item->insurance_total_net
                 ];
             })->all());
-            $totalBill = array_sum($details['total']);
+            $totalBill = array_sum(array_column($details,'total'));
             $paidBill = $totalBill;
         }else if($type == 'branch_to_agent'){
             $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->get()->map(function ($item){
@@ -72,14 +72,13 @@ class Payment extends Model
                     'total' => $item->total_charge - $item->office_total_net
                 ];
             })->all());
-            $totalBill = array_sum($details['total']);
+            $totalBill = array_sum(array_column($details,'total'));
             $paidBill = $totalBill;
         }
 
-
         return (object)[
             'payment' => [
-                'paid_at' => $args->paid_at,
+                'paid_at' => $args->paidAt ?? null,
                 'year' => $args->year,
                 'month' => $args->month,
                 'total_bill' => $totalBill,

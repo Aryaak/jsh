@@ -8,7 +8,7 @@
 @section('contents')
     {{-- Filter --}}
     <x-card class="mb-4">
-        <div class="row">
+        <div class="row mb-2">
             @php
                 $options = [
                     0 => 'Sesuaikan Sendiri',
@@ -19,84 +19,58 @@
                     186 => '6 Bulan',
                     365 => 'Setahun',
                 ];
+
+                $columns = [
+                    'receipt_number' => "No. Kwitansi",
+                    'bond_number' => "No. Bond",
+                    'polish_number' => "No. Polis",
+                    'insurance_value' => "Nilai Jaminan",
+                ];
+
+                $operators = [
+                    'like' => "Mirip Seperti",
+                    '=' => "Sama Dengan (=)",
+                    '>' => "Lebih Dari (>)",
+                    '>=' => "Lebih Dari atau Sama Dengan (≥)",
+                    '<' => "Kurang Dari (<)",
+                    '<=' => "Kurang Dari atau Sama Dengan (≤)",
+                ];
             @endphp
 
-            <div class="col-md-4 mb-2"><x-form-select label="Periode" id="period" :options="$options" name="" empty /></div>
-            <div class="col-md-4 mb-2"><x-form-input id="startDate" name="startDate" type="date" label="Tanggal Awal" value="{{ today()->toDateString() }}"/></div>
-            <div class="col-md-4 mb-2"><x-form-input id="endDate" name="endDate" type="date" label="Tanggal Akhir" value="{{ today()->toDateString() }}"/></div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 mb-2"><x-form-select label="Partner" id="partnerId" :options="[]" name="partnerId" selectedNone="Semua Partner" /></div>
-            <div class="col-md-6 mb-3"><x-form-select label="Customer" id="customerId" :options="[]" name="customerId" selectedNone="Semua Customer" /></div>
+            <div class="col-md-4 mb-2"><x-form-select label="Periode" id="period" :options="$options" name="" /></div>
+            <div class="col-md-4 mb-2"><x-form-input label="Tanggal Awal" id="startDate" name="startDate" type="date" value="{{ today()->toDateString() }}"/></div>
+            <div class="col-md-4 mb-2"><x-form-input label="Tanggal Akhir" id="endDate" name="endDate" type="date" value="{{ today()->toDateString() }}"/></div>
         </div>
 
-        <x-button type="button" onclick="filter()" class="w-100"><i class='bx bxs-filter-alt align-middle me-2'></i>Filter</x-button>
+        <x-button type="button" id="add-new-filter" class="mb-3" icon="bx bx-plus" face="secondary">Tambah Filter</x-button>
+
+        <div id="filter-container">
+        </div>
+
+        <x-button type="submit" onclick="filter()" class="w-100" icon='bx bxs-filter-alt'>Filter</x-button>
     </x-card>
 
-    {{-- Summary --}}
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0">
-                        <i class="bx bx-recycle"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        Rp<span id="total_transaction"></span>,-<br>
-                        <small class="h6">Seluruh Transaksi</small>
-                    </div>
-                </div>
-            </x-card>
+    {{-- Chart --}}
+    <x-card class="mb-4">
+        <div class="chart-container-11">
+            <canvas id="chart"></canvas>
         </div>
-        <div class="col-md-4 mb-3">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        Rp<span id="total_withdrawal"></span>,-<br>
-                        <small class="h6">Seluruh Penarikan</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-        <div class="col-md-4 mb-4">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0">
-                        <i class="bx bxs-report"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        Rp<span id="total_amount"></span>,-<br>
-                        <small class="h6">Total Keseluruhan</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-    </div>
+    </x-card>
 
     {{-- Table --}}
-    <x-card class="mb-4">
+    <x-card>
         <x-table id="table">
             @slot('thead')
                 <tr>
                     <th>No.</th>
-                    <th>Kode</th>
-                    <th>Partner</th>
-                    <th>Customer</th>
-                    <th>Nominal</th>
-                    <th>Waktu</th>
+                    <th>Tanggal Transaksi</th>
+                    <th>No. Kwitansi</th>
+                    <th>No. Bond</th>
+                    <th>No. Polis</th>
+                    <th>Nilai Jaminan</th>
                 </tr>
             @endslot
         </x-table>
-    </x-card>
-
-    {{-- Cart --}}
-    <x-card>
-        <div class="chart-container-11">
-            <canvas id="chart"></canvas>
-        </div>
     </x-card>
 @endsection
 
@@ -108,9 +82,8 @@
     <script>
         let chart = null
         let table = null
-        let total_amount = 0
-        let total_transaksi = 0
-        let total_penarikan = 0
+        let filterCount = 0
+
         const select = $("#period")
         const start = $("#startDate")
         const end = $("#endDate")
@@ -137,5 +110,27 @@
             select.val("0")
             select.trigger("change")
         })
+
+        $(document).ready(function() {
+            select.select2()
+        })
+
+        $("#add-new-filter").click(function () {
+            addNewFilter()
+        })
+
+        function addNewFilter() {
+            filterCount++
+
+            $("#filter-container").append(`
+                <div class="row">
+                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" /></div>
+                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]" /></div>
+                    <div class="col-md-4 mb-2"><x-form-input label="Isi Filter" id="value-` + filterCount + `" name="columns[` + filterCount + `][value]" type="search"/></div>
+                </div>
+            `)
+
+            $("#column-" + filterCount + ", #operator-" + filterCount + "").select2()
+        }
     </script>
 @endpush

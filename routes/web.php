@@ -70,10 +70,16 @@ Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
     // Route untuk pembayaran ....
 });
 
-Route::group(['prefix' => '/laporan', 'as' => 'reports.'], function () {
+Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
     Route::get('/', fn() => redirect(route('dashboard')));
 
-    // Route untuk laporan ....
+    // Route untuk laporan surety bond ....
+});
+
+Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
+    Route::get('/', fn() => redirect(route('dashboard')));
+
+    // Route untuk laporan bank garansi ....
 });
 
 /**

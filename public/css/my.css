@@ -1,5 +1,9 @@
 /* Theme */
 
+.menu-vertical, .menu-vertical .menu-block, .menu-vertical .menu-inner > .menu-item, .menu-vertical .menu-inner > .menu-header {
+    width: 16.8rem !important;
+}
+
 .badge .bx {
     font-size: 12px !important;
 }

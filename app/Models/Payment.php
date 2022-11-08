@@ -102,4 +102,8 @@ class Payment extends Model
         $payment->details()->createMany($request->details);
         return $payment;
     }
+    public function hapus(): bool{
+        $this->details()->delete();
+        return $this->delete();
+    }
 }

@@ -139,10 +139,10 @@
             ajaxGet("{{ route('payments.principal-to-branch.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     payment = response.data
-                    $('#show-paid_at').html(payment.pain_at)
+                    $('#show-paid_at').html(payment.paid_at)
                     $('#show-principal').html(payment.principal.name)
                     $('#show-branch').html(payment.branch.name)
-                    $('#show-nominal').html(payment.total_pill)
+                    $('#show-nominal').html(numberFormat(payment.total_bill))
                     $('#show-desc').html(payment.desc)
                 }
             })
@@ -153,6 +153,9 @@
                 title: "Yakin ingin menghapus Pembayaran?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    ajaxPost("{{ route('payments.principal-to-branch.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method:'delete'},'',function(){
+                        table.ajax.reload()
+                    })
                 }
             })
         })

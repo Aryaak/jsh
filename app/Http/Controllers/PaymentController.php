@@ -28,7 +28,7 @@ class PaymentController extends Controller
         $data = Payment::with('principal','branch');
         return datatables()->of($data)
         ->addIndexColumn()
-        ->editColumn('action', 'datatables.actions-show-delete')
+        ->editColumn('action', 'datatables.actions-delete')
         ->toJson();
     }
 
@@ -54,11 +54,11 @@ class PaymentController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Payment $principalKeCabang)
+    public function show(Payment $payment)
     {
-        $principalKeCabang->principal;
-        $principalKeCabang->branch;
-        return response()->json($this->showResponse($principalKeCabang->toArray()));
+        $payment->principal;
+        $payment->branch;
+        return response()->json($this->showResponse($payment->toArray()));
     }
 
     public function edit(Payment $payment)
@@ -71,5 +71,18 @@ class PaymentController extends Controller
 
     public function destroy(Payment $payment)
     {
+        try {
+            DB::beginTransaction();
+            $payment->hapus();
+            $http_code = 200;
+            $response = $this->destroyResponse();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
     }
 }

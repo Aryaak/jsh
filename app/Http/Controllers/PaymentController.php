@@ -9,23 +9,38 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function indexPrincipalToBranch(Request $request)
-    {
-        if($request->ajax()){
-            try {
-                $response = $this->response('OK',true,['total' => Payment::fetch((object)$request->all())->payment['total_bill']]);
-                $http_code = 200;
-            } catch (Exception $e) {
-                $http_code = $this->httpErrorCode($e->getCode());
-                $response = $this->errorResponse($e->getMessage());
-            }
-            return response()->json($response,$http_code);
-        }
+    public function indexPrincipalToBranch(Request $request){
         return view('payment.principal-to-branch');
     }
+    public function indexRegionalToInsurance(Request $request){
+        return view('payment.regional-to-insurance');
+    }
+    public function indexBranchToAgent(Request $request){
+        return view('payment.branch-to-agent');
+    }
 
-    public function tables(){
-        $data = Payment::with('principal','branch');
+    public function calculate(Request $request){
+        try {
+            $response = $this->response('OK',true,['total' => Payment::fetch((object)$request->all())->payment['total_bill']]);
+            $http_code = 200;
+        } catch (Exception $e) {
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+        return response()->json($response,$http_code);
+    }
+    public function tables(Request $request){
+        $type = $request->type;
+        $data = null;
+        if($type == 'principal_to_branch'){
+            $data = Payment::with('principal','branch')->whereType($type);
+        }else if($type == 'branch_to_regional'){
+            // $data = Payment::with('principal','branch')->whereType($type);
+        }else if($type == 'regional_to_insurance'){
+            $data = Payment::with('insurance','regional')->whereType($type);
+        }else if($type == 'branch_to_agent'){
+            $data = Payment::with('branch','agent')->whereType($type);
+        }
         return datatables()->of($data)
         ->addIndexColumn()
         ->editColumn('action', 'datatables.actions-show-delete')
@@ -54,11 +69,23 @@ class PaymentController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Payment $principalKeCabang)
+    public function show(Payment $payment)
     {
-        $principalKeCabang->principal;
-        $principalKeCabang->branch;
-        return response()->json($this->showResponse($principalKeCabang->toArray()));
+        $type = $payment->type;
+        if($type == 'principal_to_branch'){
+            $payment->principal;
+            $payment->branch;
+        }else if($type == 'branch_to_regional'){
+
+        }else if($type == 'regional_to_insurance'){
+            $payment->regional;
+            $payment->insurance;
+        }else if($type == 'branch_to_agent'){
+            $payment->branch;
+            $payment->agent;
+        }
+
+        return response()->json($this->showResponse($payment->toArray()));
     }
 
     public function edit(Payment $payment)
@@ -71,5 +98,18 @@ class PaymentController extends Controller
 
     public function destroy(Payment $payment)
     {
+        try {
+            DB::beginTransaction();
+            $payment->hapus();
+            $http_code = 200;
+            $response = $this->destroyResponse();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
     }
 }

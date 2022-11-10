@@ -30,7 +30,7 @@ class Select2
     }
 
     public static function branch(?string $keyword = null){
-        return self::fetch(Branch::when($keyword != '', function ($query) use ($keyword){
+        return self::fetch(Branch::where('is_regional',false)->when($keyword != '', function ($query) use ($keyword){
             return $query->where('name', 'like', "%$keyword%");
         })->get());
     }

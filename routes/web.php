@@ -21,6 +21,7 @@ use App\Http\Controllers\SuretyBondController;
 use App\Http\Controllers\GuaranteeBankController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TemplateController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,7 +71,9 @@ Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
 });
 
 Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
-    Route::get('/', fn() => redirect(route('dashboard')));
+    // Route::get('/', fn() => redirect(route('dashboard')));
+    Route::get('/pemasukan',[ReportController::class,'incomeSB'])->name('income');
+
 
     // Route untuk laporan surety bond ....
 });

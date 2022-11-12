@@ -72,7 +72,7 @@ Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
 
 Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
     // Route::get('/', fn() => redirect(route('dashboard')));
-    Route::get('/pemasukan',[ReportController::class,'incomeSB'])->name('income');
+    Route::match(['get', 'post'],'/pemasukan',[ReportController::class,'incomeSB'])->name('income');
 
 
     // Route untuk laporan surety bond ....

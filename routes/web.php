@@ -30,58 +30,59 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 */
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', fn () => view('welcome'))->name('dashboard');
+    Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
+    Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
 
-Route::get('/', fn () => view('welcome'))->name('dashboard');
-Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
-Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
+    Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
+        // Route::get('/', fn() => redirect(route('dashboard')));
 
-Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
-    // Route::get('/', fn() => redirect(route('dashboard')));
+        Route::apiResource('cabang',BranchController::class)->names('branches');
+        Route::apiResource('regional',RegionalController::class)->names('regionals');
+        Route::apiResource('asuransi',InsuranceController::class)->names('insurances');
+        Route::apiResource('agen',AgentController::class)->names('agents');
+        Route::apiResource('principal',PrincipalController::class)->names('principals');
+        Route::apiResource('rate-agen',AgentRateController::class)->names('agent-rates');
+        Route::apiResource('jenis-jaminan',InsuranceTypeController::class)->names('insurance-types');
+        Route::apiResource('rate-asuransi',InsuranceRateController::class)->names('insurance-rates');
+        Route::apiResource('rate-bank',BankRateController::class)->names('bank-rates');
+        Route::apiResource('bank',BankController::class)->names('banks');
+        Route::apiResource('obligee',ObligeeController::class)->names('obligees');
+        Route::apiResource('template',TemplateController::class)->names('templates');
+        Route::apiResource('/',DashboardController::class)->names('dashboard');
+    });
 
-    Route::apiResource('cabang',BranchController::class)->names('branches');
-    Route::apiResource('regional',RegionalController::class)->names('regionals');
-    Route::apiResource('asuransi',InsuranceController::class)->names('insurances');
-    Route::apiResource('agen',AgentController::class)->names('agents');
-    Route::apiResource('principal',PrincipalController::class)->names('principals');
-    Route::apiResource('rate-agen',AgentRateController::class)->names('agent-rates');
-    Route::apiResource('jenis-jaminan',InsuranceTypeController::class)->names('insurance-types');
-    Route::apiResource('rate-asuransi',InsuranceRateController::class)->names('insurance-rates');
-    Route::apiResource('rate-bank',BankRateController::class)->names('bank-rates');
-    Route::apiResource('bank',BankController::class)->names('banks');
-    Route::apiResource('obligee',ObligeeController::class)->names('obligees');
-    Route::apiResource('template',TemplateController::class)->names('templates');
-    Route::apiResource('/',DashboardController::class)->names('dashboard');
-});
+    Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
+        Route::apiResource('surety-bond',SuretyBondController::class)->names('surety-bonds');
+        Route::apiResource('bank-garansi',GuaranteeBankController::class)->names('guarantee-banks');
+        // Route::get('/', fn() => redirect(route('dashboard')));
 
-Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
-    Route::apiResource('surety-bond',SuretyBondController::class)->names('surety-bonds');
-    Route::apiResource('bank-garansi',GuaranteeBankController::class)->names('guarantee-banks');
-    // Route::get('/', fn() => redirect(route('dashboard')));
+        // Route untuk produk ....
+    });
 
-    // Route untuk produk ....
-});
+    Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
+        Route::get('/',[PaymentController::class,'tables'])->name('tables');
+        Route::post('hitung',[PaymentController::class,'calculate'])->name('calculate');
+        Route::get('principal-ke-cabang',[PaymentController::class,'indexPrincipalToBranch'])->name('principal-to-branch.index');
+        Route::get('regional-ke-asuransi',[PaymentController::class,'indexRegionalToInsurance'])->name('regional-to-insurance.index');
+        Route::get('cabang-ke-agent',[PaymentController::class,'indexBranchToAgent'])->name('branch-to-agent.index');
+        Route::apiResource('/payment',PaymentController::class,['only' => ['store','show','destroy']])->names('payment');
+    });
 
-Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
-    Route::get('/',[PaymentController::class,'tables'])->name('tables');
-    Route::post('hitung',[PaymentController::class,'calculate'])->name('calculate');
-    Route::get('principal-ke-cabang',[PaymentController::class,'indexPrincipalToBranch'])->name('principal-to-branch.index');
-    Route::get('regional-ke-asuransi',[PaymentController::class,'indexRegionalToInsurance'])->name('regional-to-insurance.index');
-    Route::get('cabang-ke-agent',[PaymentController::class,'indexBranchToAgent'])->name('branch-to-agent.index');
-    Route::apiResource('/payment',PaymentController::class,['only' => ['store','show','destroy']])->names('payment');
-});
-
-Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
-    // Route::get('/', fn() => redirect(route('dashboard')));
-    Route::match(['get', 'post'],'/pemasukan',[ReportController::class,'incomeSB'])->name('income');
+    Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
+        // Route::get('/', fn() => redirect(route('dashboard')));
+        Route::match(['get', 'post'],'/pemasukan',[ReportController::class,'incomeSB'])->name('income');
 
 
-    // Route untuk laporan surety bond ....
-});
+        // Route untuk laporan surety bond ....
+    });
 
-Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
-    Route::get('/', fn() => redirect(route('dashboard')));
+    Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
+        Route::get('/', fn() => redirect(route('dashboard')));
 
-    // Route untuk laporan bank garansi ....
+        // Route untuk laporan bank garansi ....
+    });
 });
 
 /**

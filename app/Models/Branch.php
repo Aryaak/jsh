@@ -14,6 +14,9 @@ class Branch extends Model
     public function branches(){
         return $this->hasMany(Branch::class,'regional_id');
     }
+    public function user(){
+        return $this->hasOne(User::class);
+    }
     public function regional(){
         return $this->belongsTo(Branch::class,'regional_id');
     }

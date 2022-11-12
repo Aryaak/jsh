@@ -110,7 +110,7 @@
                             <x-submenu route="dashboard">Produksi</x-submenu>
                             <x-submenu route="dashboard">Keuangan</x-submenu>
                             <x-submenu route="dashboard">Sisa Agen</x-submenu>
-                            <x-submenu route="dashboard">Pemasukan</x-submenu>
+                            <x-submenu route="sb-reports.income">Pemasukan</x-submenu>
                             <x-submenu route="dashboard">Pengeluaran</x-submenu>
                             <x-submenu route="dashboard">Laba</x-submenu>
                         @endslot

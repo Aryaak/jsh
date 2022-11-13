@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\PasswordUpdateResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -21,7 +22,11 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->instance(PasswordUpdateResponse::class, new class implements PasswordUpdateResponse {
+            public function toResponse($request){
+              return response()->json(['success' => true,'message' => 'Ubah password berhasil.']);
+            }
+        });
     }
 
     /**

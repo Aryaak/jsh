@@ -32,13 +32,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', fn () => view('welcome'))->name('dashboard');
+    Route::get('/', DashboardController::class)->name('dashboard');
     Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
     Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
 
     Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
-        // Route::get('/', fn() => redirect(route('dashboard')));
-
+        Route::get('/', fn() => redirect(route('dashboard')));
         Route::apiResource('cabang',BranchController::class)->names('branches');
         Route::apiResource('regional',RegionalController::class)->names('regionals');
         Route::apiResource('asuransi',InsuranceController::class)->names('insurances');
@@ -51,13 +50,12 @@ Route::middleware(['auth'])->group(function () {
         Route::apiResource('bank',BankController::class)->names('banks');
         Route::apiResource('obligee',ObligeeController::class)->names('obligees');
         Route::apiResource('template',TemplateController::class)->names('templates');
-        Route::apiResource('/',DashboardController::class)->names('dashboard');
     });
 
     Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
+        Route::get('/', fn() => redirect(route('dashboard')));
         Route::apiResource('surety-bond',SuretyBondController::class)->names('surety-bonds');
         Route::apiResource('bank-garansi',GuaranteeBankController::class)->names('guarantee-banks');
-        // Route::get('/', fn() => redirect(route('dashboard')));
 
         // Route untuk produk ....
     });
@@ -72,10 +70,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
+        Route::get('/', fn() => redirect(route('dashboard')));
         Route::match(['get', 'post'],'/produksi',[SuretyBondReportController::class,'product'])->name('product');
         Route::match(['get', 'post'],'/keuangan',[SuretyBondReportController::class,'finance'])->name('finance');
         Route::match(['get', 'post'],'/pemasukan',[SuretyBondReportController::class,'income'])->name('income');
         Route::match(['get', 'post'],'/pengeluaran',[SuretyBondReportController::class,'expense'])->name('expense');
+
         // Route untuk laporan surety bond ....
     });
 
@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
         Route::match(['get', 'post'],'/keuangan',[GuaranteeBankReportController::class,'finance'])->name('finance');
         Route::match(['get', 'post'],'/pemasukan',[GuaranteeBankReportController::class,'income'])->name('income');
         Route::match(['get', 'post'],'/pengeluaran',[GuaranteeBankReportController::class,'expense'])->name('expense');
+
         // Route untuk laporan bank garansi ....
     });
 });

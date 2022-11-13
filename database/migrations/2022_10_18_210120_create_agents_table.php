@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('identity_number');
             $table->boolean('is_active');
             $table->boolean('is_verified');
-            $table->string('jamsyar_username');
-            $table->string('jamsyar_password');
 
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->foreign('branch_id')->references('id')->on('branches');

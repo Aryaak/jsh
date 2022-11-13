@@ -19,8 +19,6 @@ class AgentRequest extends FormRequest
             'identity_number' => 'required',
             'is_active' => 'required',
             'is_verified' => 'required',
-            'jamsyar_username' => 'required',
-            'jamsyar_password' => 'required',
             'branch_id' => 'required',
             'number' => 'required',
             'name_bank' => 'required',

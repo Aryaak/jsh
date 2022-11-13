@@ -19,8 +19,6 @@ class Agent extends Model
         'identity_number',
         'is_active',
         'is_verified',
-        'jamsyar_username',
-        'jamsyar_password',
         'branch_id'
     ];
 
@@ -33,8 +31,6 @@ class Agent extends Model
             'identity_number' => $args->identity_number,
             'is_active' => $args->is_active,
             'is_verified' => $args->is_verified,
-            'jamsyar_username' => $args->jamsyar_username,
-            'jamsyar_password' => $args->jamsyar_password,
             'branch_id' => $args->branch_id,
         ];
     }
@@ -59,8 +55,6 @@ class Agent extends Model
             'identity_number' => $params['identity_number'],
             'is_active' => $params['is_active'],
             'is_verified' => $params['is_verified'],
-            'jamsyar_username' => $params['jamsyar_username'],
-            'jamsyar_password' => $params['jamsyar_password'],
             'branch_id' => $params['branch_id'],
         );
         return self::create(self::fetch((object)$agent));
@@ -74,8 +68,6 @@ class Agent extends Model
             'identity_number' => $params['identity_number'],
             'is_active' => $params['is_active'],
             'is_verified' => $params['is_verified'],
-            'jamsyar_username' => $params['jamsyar_username'],
-            'jamsyar_password' => $params['jamsyar_password'],
             'branch_id' => $params['branch_id'],
         );
         return $this->update(self::fetch((object)$agent));

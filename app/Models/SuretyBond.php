@@ -9,6 +9,7 @@ use App\Models\AgentRate;
 use App\Models\Status;
 use App\Models\Scoring;
 use App\Models\ScoringDetail;
+use App\Helpers\Sirius;
 use DB;
 
 class SuretyBond extends Model
@@ -183,7 +184,7 @@ class SuretyBond extends Model
         return $this->delete();
     }
 
-    private static function fetchReport(object $args): object{
+    private static function fetchQuery(object $args): object{
         $columns = [
             'startDate' => 'sb.created_at',
             'endDate' => 'sb.created_at',
@@ -193,144 +194,61 @@ class SuretyBond extends Model
             4 => 'sb.insurance_value',
         ];
         $params = [];
-        if(isset($args->params)){
-            foreach ($args->params as $key => $param) {
-                if(!in_array($key,['startDate','endDate'])){
-                    if(isset($columns[$param['name']])){
-                        $params[] = (object)[
-                            'column' => $columns[$param['name']],
-                            'operator' => $param['operator'],
-                            'value' => $param['value']
-                        ];
-                    }
-                }else{
-                    $operator = '';
-                    if($key == 'startDate'){
-                        $operator = '>=';
-                    }else if($key == 'endDate'){
-                        $operator = '<=';
-                    }
+        if(isset($args->request_for)) unset($args->request_for);
+        foreach ($args as $key => $param) {
+            if(!in_array($key,['startDate','endDate'])){
+                if(isset($columns[$param['name']])){
                     $params[] = (object)[
-                        'column' => $columns[$key],
-                        'operator' => $operator,
-                        'value' => $param
+                        'column' => $columns[$param['name']],
+                        'operator' => $param['operator'],
+                        'value' => $param['value']
                     ];
                 }
+            }else{
+                $operator = '';
+                if($key == 'startDate'){
+                    $operator = '>=';
+                }else if($key == 'endDate'){
+                    $operator = '<=';
+                }
+                $params[] = (object)[
+                    'column' => $columns[$key],
+                    'operator' => $operator,
+                    'value' => $param
+                ];
             }
         }
         return (object)$params;
     }
 
-    public static function report(array $params){
-        $params = self::fetchReport((object)$params);
-        $query = DB::table('surety_bonds as sb')->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal')
+    private static function kueri(array $params){
+        $params = self::fetchQuery((object)$params);
+        $query = DB::table('surety_bonds as sb')
         ->join('principals as p','p.id','sb.principal_id')
         ->join('agents as a','a.id','sb.agent_id')
         ->join('obligees as o','o.id','sb.obligee_id')
         ->join('insurances as i','i.id','sb.insurance_id')
         ->join('insurance_types as it','it.id','sb.insurance_type_id');
-        // dd($params);
         foreach ($params as $param) {
             if(in_array($param->column,['sb.created_at'])){
-                // dd($param);
-                // $query->when(isset($params->column),function($sub) use ($param){
-                    $query->whereDate($param->column,$param->operator,$param->value);
-                // });
+                $query->whereDate($param->column,$param->operator,$param->value);
             }else{
                 $query->where($param->column,$param->operator,$param->value);
-
             }
         }
-        // ->when(isset($params->receipt_number),function($query) use ($params){
-        //     $query->where('sb.receipt_number',$params->receipt_number->operator,$params->receipt_number->value);
-        // })
-        // ->when(isset($params->bond_number),function($query) use ($params){
-        //     $query->where('sb.bond_number',$params->bond_number->operator,$params->bond_number->value);
-        // })
-        // ->when(isset($params->polish_number),function($query) use ($params){
-        //     $query->where('sb.polish_number',$params->polish_number->operator,$params->polish_number->value);
-        // })
-        // ->when(isset($params->project_name),function($query) use ($params){
-        //     $query->where('sb.project_name',$params->project_name->operator,$params->project_name->value);
-        // })
-        // ->when(isset($params->start_date),function($query) use ($params){
-        //     $query->whereDate('sb.start_date',$params->start_date->operator,$params->start_date->value);
-        // })
-        // ->when(isset($params->end_date),function($query) use ($params){
-        //     $query->whereDate('sb.end_date',$params->end_date->operator,$params->end_date->value);
-        // })
-        // ->when(isset($params->day_count),function($query) use ($params){
-        //     $query->where('sb.day_count',$params->day_count->operator,$params->day_count->value);
-        // })
-        // ->when(isset($params->due_day_tolerance),function($query) use ($params){
-        //     $query->where('sb.due_day_tolerance',$params->due_day_tolerance->operator,$params->due_day_tolerance->value);
-        // })
-        // ->when(isset($params->document_number),function($query) use ($params){
-        //     $query->where('sb.document_number',$params->document_number->operator,$params->document_number->value);
-        // })
-        // ->when(isset($params->document_title),function($query) use ($params){
-        //     $query->where('sb.document_title',$params->document_title->operator,$params->document_title->value);
-        // })
-        // ->when(isset($params->document_expired_at),function($query) use ($params){
-        //     $query->whereDate('sb.document_expired_at',$params->document_expired_at->operator,$params->document_expired_at->value);
-        // })
-        // ->when(isset($params->contract_value),function($query) use ($params){
-        //     $query->where('sb.contract_value',$params->contract_value->operator,$params->contract_value->value);
-        // })
-        // ->when(isset($params->insurance_value),function($query) use ($params){
-        //     $query->where('sb.insurance_value',$params->insurance_value->operator,$params->insurance_value->value);
-        // })
-        // ->when(isset($params->service_charge),function($query) use ($params){
-        //     $query->where('sb.service_charge',$params->service_charge->operator,$params->service_charge->value);
-        // })
-        // ->when(isset($params->admin_charge),function($query) use ($params){
-        //     $query->where('sb.admin_charge',$params->admin_charge->operator,$params->admin_charge->value);
-        // })
-        // ->when(isset($params->total_charge),function($query) use ($params){
-        //     $query->where('sb.total_charge',$params->total_charge->operator,$params->total_charge->value);
-        // })
-        // ->when(isset($params->profit),function($query) use ($params){
-        //     $query->where('sb.profit',$params->profit->operator,$params->profit->value);
-        // })
-        // ->when(isset($params->insurance_polish_cost),function($query) use ($params){
-        //     $query->where('sb.insurance_polish_cost',$params->insurance_polish_cost->operator,$params->insurance_polish_cost->value);
-        // })
-        // ->when(isset($params->insurance_stamp_cost),function($query) use ($params){
-        //     $query->where('sb.insurance_stamp_cost',$params->insurance_stamp_cost->operator,$params->insurance_stamp_cost->value);
-        // })
-        // ->when(isset($params->insurance_total_net),function($query) use ($params){
-        //     $query->where('sb.insurance_total_net',$params->insurance_total_net->operator,$params->insurance_total_net->value);
-        // })
-        // ->when(isset($params->office_polish_cost),function($query) use ($params){
-        //     $query->where('sb.office_polish_cost',$params->office_polish_cost->operator,$params->office_polish_cost->value);
-        // })
-        // ->when(isset($params->office_total_net),function($query) use ($params){
-        //     $query->where('sb.office_total_net',$params->office_total_net->operator,$params->office_total_net->value);
-        // })
-        // ->when(isset($params->score),function($query) use ($params){
-        //     $query->where('sb.score',$params->score->operator,$params->score->value);
-        // })
-        // ->when(isset($params->agent),function($query) use ($params){
-        //     $query->where('a.name',$params->agent->operator,$params->agent->value);
-        // })
-        // ->when(isset($params->agent),function($query) use ($params){
-        //     $query->where('a.name',$params->agent->operator,$params->agent->value);
-        // })
-        // ->when(isset($params->obligee),function($query) use ($params){
-        //     $query->where('a.name',$params->obligee->operator,$params->obligee->value);
-        // })
-        // ->when(isset($params->insurance),function($query) use ($params){
-        //     $query->where('a.name',$params->insurance->operator,$params->insurance->value);
-        // })
-        // ->when(isset($params->insurance_type),function($query) use ($params){
-        //     $query->where('a.name',$params->insurance_type->operator,$params->insurance_type->value);
-        // });
-        // ->when(isset($params->period) && isset($params->period->start),function($query) use ($params){
-        //     $query->whereDate('created_at',$params->period->operator,$params->period->start);
-        // })
-        // ->when(isset($params->period) && isset($params->period->end),function($query) use ($params){
-        //     $query->whereDate('created_at',$params->period->operator,$params->period->end);
-        // });
         return $query;
+    }
+    public static function table(array $params){
+        return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
+    }
+    public static function chart(array $params){
+        $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.total_charge) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+        $labels = array_map(function($val){
+            return Sirius::toShortDate($val);
+        },array_keys($data));
+        return [
+            'labels' => $labels,
+            'datasets' => array_values($data),
+        ];
     }
 }

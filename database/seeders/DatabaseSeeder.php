@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BankSeeder::class,
             ProvinceSeeder::class,
-            CitySeeder::class,
             BranchSeeder::class,
+            CitySeeder::class,
             AgentSeeder::class,
             InsuranceSeeder::class,
             InsuranceTypeSeeder::class,
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             ScoringSeeder::class,
             BankRateSeeder::class,
             SuretyBondSeeder::class,
-            GuaranteeBankSeeder::class
+            GuaranteeBankSeeder::class,
         ]);
     }
 }

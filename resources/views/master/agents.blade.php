@@ -38,8 +38,6 @@
             <x-form-select label="Nama Bank" id="create-bank-id" :options="[]" name="bank_id" class="mb-3"/>
             <x-form-input label="No. Rekening" id="create-bank-number" name="number" class="mb-3" />
             <x-form-input label="Atas Nama Rekening" id="create-bank-owner-name" name="name_bank" class="mb-3" />
-            <x-form-input label="Username Jamsyar" id="create-jamsyar-username" name="jamsyar_username" class="mb-3" />
-            <x-form-input label="Kata Sandi Jamsyar" id="create-jamsyar-password" name="jamsyar_password" type="password" class="mb-3" />
             <div class="row">
                 <div class="col-sm-6 mb-3">
                     <x-form-label for="create-is-verified">Sudah Diverifikasi?</x-form-label>
@@ -91,14 +89,6 @@
             <b>Atas Nama Rekening</b>: <br>
             <span id="show-bank-owner">-</span>
         </div>
-        <div class="border-bottom pb-2 mb-2">
-            <b>Username Jamsyar</b>: <br>
-            <span id="show-jamsyar-username">-</span>
-        </div>
-        <div class="border-bottom pb-2 mb-2">
-            <b>Kata Sandi Jamsyar</b>: <br>
-            <span id="show-jamsyar-password">-</span>
-        </div>
         <div class="row">
             <div class="col-sm-6">
                 <b>Sudah Diverifikasi</b>: <br>
@@ -126,8 +116,6 @@
             <x-form-select label="Nama Bank" id="edit-bank-id" name="bank_id" class="mb-3"/>
             <x-form-input label="No. Rekening" id="edit-bank-number" name="number" class="mb-3" />
             <x-form-input label="Atas Nama Rekening" id="edit-bank-owner-name" name="name_bank" class="mb-3" />
-            <x-form-input label="Username Jamsyar" id="edit-jamsyar-username" name="jamsyar_username" class="mb-3" />
-            <x-form-input label="Kata Sandi Jamsyar" id="edit-jamsyar-password" name="jamsyar_password" class="mb-3" type="password" />
             <div class="row">
                 <div class="col-sm-6 mb-3">
                     <x-form-label for="edit-is-verified">Sudah Diverifikasi?</x-form-label>
@@ -194,8 +182,6 @@
                     $('#show-phone').html(agent.phone)
                     $('#show-email').html(agent.email)
                     $('#show-address').html(agent.address)
-                    $('#show-jamsyar-username').html(agent.jamsyar_username)
-                    $('#show-jamsyar-password').html(agent.jamsyar_password)
                     $('#show-bank').html(agent.bank_accounts.bank.name)
                     $('#show-bank-number').html(agent.bank_accounts.number)
                     $('#show-bank-owner').html(agent.bank_accounts.name)
@@ -232,8 +218,6 @@
             $('#edit-email').val(agent.email)
             $('#edit-address').val(agent.address)
             $('#edit-identity-number').val(agent.identity_number)
-            $('#edit-jamsyar-username').val(agent.jamsyar_username)
-            $('#edit-jamsyar-password').val(agent.jamsyar_password)
             $('#edit-bank-id').append(new Option(agent.bank_accounts.bank.name,agent.bank_accounts.bank.id,true,true)).trigger('change');
             $('#edit-bank-number').val(agent.bank_accounts.number)
             $('#edit-bank-owner-name').val(agent.bank_accounts.name)

@@ -23,8 +23,6 @@ class AgentFactory extends Factory
             'identity_number' => fake()->nik(),
             'is_active' => 1,
             'is_verified' => 1,
-            'jamsyar_username' => fake()->username(),
-            'jamsyar_password' => 'password',
             'branch_id' => fake()->randomElement([2,3,4,5,6]),
         ];
     }

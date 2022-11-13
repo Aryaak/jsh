@@ -100,6 +100,7 @@
                     });
                     data.params.startDate = start.val()
                     data.params.endDate = end.val()
+                    data.request_for = 'datatable'
                 }
             },[
                 {data: 'date',name: 'created_at'},
@@ -108,7 +109,49 @@
                 {data: 'polish_number',name: 'polish_number'},
                 {data: 'nominal', name: 'total_charge'}
             ],{},null,false,false)
+            drawChart()
         })
+        function filter(){
+            table.ajax.reload()
+            drawChart()
+        }
+        function drawChart(){
+            let formData = new FormData(document.getElementById('filter-form'))
+            formData.append('startDate',start.val())
+            formData.append('endDate',end.val())
+            formData.append('request_for','chart')
+
+            ajaxPost('{{ route('sb-reports.income') }}',formData, null, function (result) {
+                const income = result.data
+                if(chart) chart.destroy()
+                chart = new Chart(document.getElementById('chart').getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: income.labels,
+                        datasets: [{
+                            label: "Total",
+                            data: income.datasets,
+                            backgroundColor: '#8CC152FF',
+                            backgroundColor: '#8CC152AA',
+                            borderWidth: 1,
+                            pointRadius: 4,
+                            pointRotation: 3,
+                            tension: .3,
+                            fill: true
+                        }]
+                    },
+                    options: ChartOptionToRupiah
+                });
+
+                Swal.close()
+            }, function (errorResponse) {
+                Swal.fire({
+                    title: "Gagal menghitung nominal!",
+                    text: errorResponse.message,
+                    icon: 'error',
+                })
+            }, false)
+        }
         select.change(function() {
             const val = $(this).val()
             if (val == 1 || val == 7 || val == 31 || val == 93 || val == 186 || val == 365 ) end.val("{{ date('Y-m-d', strtotime('now')) }}")

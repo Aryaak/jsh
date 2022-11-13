@@ -200,7 +200,7 @@
                                         <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit()">
                                             <i class="bx bx-power-off align-middle me-2"></i>
                                             <span class="align-top">Keluar</span>
-                                            <form action="" method="post" id="logout-form">
+                                            <form action="{{ route('logout') }}" method="post" id="logout-form">
                                                 @csrf
                                             </form>
                                         </a>

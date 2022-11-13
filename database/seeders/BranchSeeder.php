@@ -19,7 +19,13 @@ class BranchSeeder extends Seeder
             ['name' => 'Madiun','slug' => Str::slug('Madiun'),'is_regional' => 0,'jamsyar_username' => null,'jamsyar_password' => null,'regional_id' => 1],
             ['name' => 'Kediri','slug' => Str::slug('Kediri'),'is_regional' => 0,'jamsyar_username' => null,'jamsyar_password' => null,'regional_id' => 1],
         ];
-        Branch::insert($params);
-        DB::table('branches')->update(['created_at' => now(),'updated_at' => now()]);
+        foreach ($params as $param) {
+            $data = Branch::create($param);
+            $data->user()->create([
+                'name' => $param['name'],
+                'username' => $param['slug'],
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', //password
+            ]);
+        }
     }
 }

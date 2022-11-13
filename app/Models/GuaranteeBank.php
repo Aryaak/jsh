@@ -9,6 +9,8 @@ use App\Models\ScoringDetail;
 use App\Models\AgentRate;
 use App\Models\Scoring;
 use App\Models\Status;
+use App\Helpers\Sirius;
+use DB;
 
 class GuaranteeBank extends Model
 {
@@ -186,5 +188,85 @@ class GuaranteeBank extends Model
         $this->statuses()->delete();
         $this->scorings()->delete();
         return $this->delete();
+    }
+    private static function fetchQuery(object $args): object{
+        $columns = [
+            'startDate' => 'gb.created_at',
+            'endDate' => 'gb.created_at',
+            1 => 'gb.receipt_number',
+            2 => 'gb.bond_number',
+            3 => 'gb.polish_number',
+            4 => 'gb.insurance_value',
+        ];
+        $params = [];
+        if(isset($args->request_for)) unset($args->request_for);
+        foreach ($args as $key => $param) {
+            if(!in_array($key,['startDate','endDate'])){
+                if(isset($columns[$param['name']])){
+                    $params[] = (object)[
+                        'column' => $columns[$param['name']],
+                        'operator' => $param['operator'],
+                        'value' => $param['value']
+                    ];
+                }
+            }else{
+                $operator = '';
+                if($key == 'startDate'){
+                    $operator = '>=';
+                }else if($key == 'endDate'){
+                    $operator = '<=';
+                }
+                $params[] = (object)[
+                    'column' => $columns[$key],
+                    'operator' => $operator,
+                    'value' => $param
+                ];
+            }
+        }
+        return (object)$params;
+    }
+    private static function kueri(array $params){
+        $params = self::fetchQuery((object)$params);
+        $query = DB::table('guarantee_banks as gb')
+        ->join('principals as p','p.id','gb.principal_id')
+        ->join('agents as a','a.id','gb.agent_id')
+        ->join('obligees as o','o.id','gb.obligee_id')
+        ->join('insurances as i','i.id','gb.insurance_id')
+        ->join('insurance_types as it','it.id','gb.insurance_type_id');
+        foreach ($params as $param) {
+            if(in_array($param->column,['gb.created_at'])){
+                $query->whereDate($param->column,$param->operator,$param->value);
+            }else{
+                $query->where($param->column,$param->operator,$param->value);
+            }
+        }
+        return $query;
+    }
+    public static function table(string $type,array $params){
+        if($type == 'income'){
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.total_charge as nominal');
+        }else if($type == 'expense'){
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.insurance_total_net as nominal');
+        }else if($type == 'product'){
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_total_net as nominal');
+        }else if($type == 'finance'){
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_total_net as nominal');
+        }
+    }
+    public static function chart(string $type,array $params){
+        $data = [];
+        if($type == 'income'){
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.total_charge) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+        }else if($type == 'expense'){
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.insurance_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+        }else if($type == 'product'){
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+        }else if($type == 'finance'){
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+        }
+        return [
+            'labels' => array_map(function($val){ return Sirius::toShortDate($val); },array_keys($data)),
+            'datasets' => array_values($data),
+        ];
     }
 }

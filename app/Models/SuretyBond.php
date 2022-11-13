@@ -238,16 +238,30 @@ class SuretyBond extends Model
         }
         return $query;
     }
-    public static function table(array $params){
-        return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
+    public static function table(string $type,array $params){
+        if($type == 'income'){
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
+        }else if($type == 'expense'){
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.insurance_total_net as nominal');
+        }else if($type == 'product'){
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_total_net as nominal');
+        }else if($type == 'finance'){
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_total_net as nominal');
+        }
     }
-    public static function chart(array $params){
-        $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.total_charge) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
-        $labels = array_map(function($val){
-            return Sirius::toShortDate($val);
-        },array_keys($data));
+    public static function chart(string $type,array $params){
+        $data = [];
+        if($type == 'income'){
+            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.total_charge) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+        }else if($type == 'expense'){
+            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.insurance_total_net) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+        }else if($type == 'product'){
+            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_total_net) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+        }else if($type == 'finance'){
+            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_total_net) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+        }
         return [
-            'labels' => $labels,
+            'labels' => array_map(function($val){ return Sirius::toShortDate($val); },array_keys($data)),
             'datasets' => array_values($data),
         ];
     }

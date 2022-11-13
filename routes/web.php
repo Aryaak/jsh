@@ -21,7 +21,8 @@ use App\Http\Controllers\SuretyBondController;
 use App\Http\Controllers\GuaranteeBankController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TemplateController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SuretyBondReportController;
+use App\Http\Controllers\GuaranteeBankReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,16 +72,19 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
-        // Route::get('/', fn() => redirect(route('dashboard')));
-        Route::match(['get', 'post'],'/pemasukan',[ReportController::class,'incomeSB'])->name('income');
-
-
+        Route::match(['get', 'post'],'/produksi',[SuretyBondReportController::class,'product'])->name('product');
+        Route::match(['get', 'post'],'/keuangan',[SuretyBondReportController::class,'finance'])->name('finance');
+        Route::match(['get', 'post'],'/pemasukan',[SuretyBondReportController::class,'income'])->name('income');
+        Route::match(['get', 'post'],'/pengeluaran',[SuretyBondReportController::class,'expense'])->name('expense');
         // Route untuk laporan surety bond ....
     });
 
     Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
         Route::get('/', fn() => redirect(route('dashboard')));
-
+        Route::match(['get', 'post'],'/produksi',[GuaranteeBankReportController::class,'product'])->name('product');
+        Route::match(['get', 'post'],'/keuangan',[GuaranteeBankReportController::class,'finance'])->name('finance');
+        Route::match(['get', 'post'],'/pemasukan',[GuaranteeBankReportController::class,'income'])->name('income');
+        Route::match(['get', 'post'],'/pengeluaran',[GuaranteeBankReportController::class,'expense'])->name('expense');
         // Route untuk laporan bank garansi ....
     });
 });

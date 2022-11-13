@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware(['auth'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
-    Route::get('/profile', [ProfileController::class,'index'])->name('profile');
+    Route::get('/profil', [ProfileController::class,'index'])->name('profile');
     Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
     Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
 

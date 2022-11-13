@@ -29,9 +29,9 @@
     <x-modal id="modal-create" title="Tambah Cabang">
         <x-form id="form-create" method="post">
             <x-form-select label="Regional" id="create-regional-id" name="regionalId" class="mb-3" required/>
-            <x-form-input id="create-name" name="name" label="Nama" />
+            <x-form-input id="create-name" name="name" label="Nama" class="mb-3" required/>
             <x-form-input id="create-jamsyar-username" name="jamsyar_username" label="Jamsyar Username" class="mb-3" required />
-            <x-form-input id="create-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" class="mb-3" type="password" required />
+            <x-form-input id="create-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" type="password" required />
         </x-form>
 
         @slot('footer')
@@ -44,7 +44,7 @@
             <b>Regional</b>: <br>
             <span id="show-regional">-</span>
         </div>
-        <div>
+        <div class="border-bottom pb-2 mb-2">
             <b>Nama</b>: <br>
             <span id="show-name">-</span>
         </div>
@@ -65,9 +65,9 @@
     <x-modal id="modal-edit" title="Ubah Cabang">
         <x-form id="form-edit" method="put">
             <x-form-select label="Regional" id="edit-regional-id" name="regionalId" class="mb-3" required/>
-            <x-form-input id="edit-name" name="name" label="Nama" required />
+            <x-form-input id="edit-name" name="name" label="Nama" class="mb-3" required />
             <x-form-input id="edit-jamsyar-username" name="jamsyar_username" label="Jamsyar Username" class="mb-3" required />
-            <x-form-input id="edit-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" class="mb-3" type="password" required />
+            <x-form-input id="edit-jamsyar-password" name="jamsyar_password" label="Jamsyar Password" type="password" required />
         </x-form>
 
         @slot('footer')
@@ -118,7 +118,7 @@
                     $('#show-regional').html(branch.regional.name)
                     $('#show-name').html(branch.name)
                     $('#show-jamsyar-username').html(branch.jamsyar_username)
-                    $('#show-jamsyar-password').html(branch.jamsyar_password)
+                    $('#show-jamsyar-password').html(branch.jamsyar_password_masked)
                 }
             })
         })

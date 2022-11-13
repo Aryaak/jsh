@@ -1,1 +1,1 @@
-<x-badge :face='$model->scoreColor' rounded>{{ $model->score }}</x-badge>
+<x-badge :face='$model->scoreColor' rounded>{{ Str::replace('.', ',', $model->score) }}</x-badge>

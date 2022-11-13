@@ -17,7 +17,9 @@
                     <x-form-input label="Kata Sandi Sebelumnya" id="current_password" name="current_password" type="password" class="mb-3" required />
                     <x-form-input label="Kata Sandi Baru" id="password" name="password" type="password" class="mb-3" required />
                     <x-form-input label="Konfirmasi Kata Sandi Baru" id="password_confirmation" name="password_confirmation" type="password" required />
-                    <x-button class="mt-3" icon="fa-solid fa-save" id="btn-update-password">Perbarui</x-button>
+                    <div class="text-end">
+                        <x-button class="mt-3" icon="fa-solid fa-save" id="btn-update-password">Perbarui</x-button>
+                    </div>
                 </x-form>
             </x-card>
         </div>

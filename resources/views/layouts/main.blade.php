@@ -107,11 +107,11 @@
                     <x-menu route="payments.sb.*" icon="bx bxs-file">
                         Laporan Surety Bond
                         @slot('submenus')
-                            <x-submenu route="dashboard">Produksi</x-submenu>
-                            <x-submenu route="dashboard">Keuangan</x-submenu>
+                            <x-submenu route="sb-reports.product">Produksi</x-submenu>
+                            <x-submenu route="sb-reports.finance">Keuangan</x-submenu>
                             <x-submenu route="dashboard">Sisa Agen</x-submenu>
                             <x-submenu route="sb-reports.income">Pemasukan</x-submenu>
-                            <x-submenu route="dashboard">Pengeluaran</x-submenu>
+                            <x-submenu route="sb-reports.expense">Pengeluaran</x-submenu>
                             <x-submenu route="dashboard">Laba</x-submenu>
                         @endslot
                     </x-menu>
@@ -120,11 +120,11 @@
                     <x-menu route="payments.bg.*" icon="bx bxs-file">
                         Laporan Bank Garansi
                         @slot('submenus')
-                            <x-submenu route="dashboard">Produksi</x-submenu>
-                            <x-submenu route="dashboard">Keuangan</x-submenu>
+                            <x-submenu route="bg-reports.product">Produksi</x-submenu>
+                            <x-submenu route="bg-reports.finance">Keuangan</x-submenu>
                             <x-submenu route="dashboard">Sisa Agen</x-submenu>
-                            <x-submenu route="dashboard">Pemasukan</x-submenu>
-                            <x-submenu route="dashboard">Pengeluaran</x-submenu>
+                            <x-submenu route="bg-reports.income">Pemasukan</x-submenu>
+                            <x-submenu route="bg-reports.expense">Pengeluaran</x-submenu>
                             <x-submenu route="dashboard">Laba</x-submenu>
                         @endslot
                     </x-menu>

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function __invoke()
     {
         $sb_lunas = 0;
         $sb_non_lunas = 0;
@@ -26,29 +26,5 @@ class DashboardController extends Controller
             'lunas' => $sb_lunas,
             'non_lunas' => $sb_non_lunas,
         ]);
-    }
-
-    public function create()
-    {
-    }
-
-    public function store(Request $request)
-    {
-    }
-
-    public function show(int $id)
-    {
-    }
-
-    public function edit(int $id)
-    {
-    }
-
-    public function update(Request $request, int $id)
-    {
-    }
-
-    public function destroy(int $id)
-    {
     }
 }

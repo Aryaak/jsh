@@ -27,11 +27,23 @@
 @endsection
 
 @section('modals')
+    @php
+        $months = [];
+        foreach (range(1, 12) as $month) {
+            $months[$month] = Sirius::longMonth($month);
+        }
+
+        $years = [];
+        foreach (range(date('Y'), 2000) as $year) {
+            $years[$year] = $year;
+        }
+    @endphp
+
     <x-modal id="modal-create" title="Tambah Pembayaran">
         <x-form id="form-create" method="post">
             <x-form-input label="Waktu Bayar" id="create-paid-at" class-input="calculate-params" name="paidAt" type="datetime-local" class="mb-3" required />
-            <x-form-input label="Bulan" id="create-month" class-input="calculate-params" name="month" type="number" class="mb-3" required />
-            <x-form-input label="Tahun" id="create-year" class-input="calculate-params" name="year" type="number" class="mb-3" required />
+            <x-form-select label="Bulan" id="create-month" class-input="calculate-params" name="month" class="mb-3" :options="$months" value="{{ date('m') }}" required />
+            <x-form-select label="Tahun" id="create-year" class-input="calculate-params" name="year" class="mb-3" :options="$years" value="{{ date('Y') }}" required />
             <x-form-select label="Dari Regional" id="create-regional-id" class-input="calculate-params" name="regionalId" class="mb-3" required />
             <x-form-select label="Ke Asuransi" id="create-insurance-id" class-input="calculate-params" name="insuranceId" class="mb-3" required />
             <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
@@ -105,6 +117,7 @@
                 {data: 'insurance.name'},
                 {data: 'total_bill'}
             ])
+            $("#create-month, #create-year").select2({dropdownParent: $('#modal-create')})
             select2Init("#create-regional-id",'{{ route('select2.regional') }}',0,$('#modal-create'))
             select2Init("#create-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-create'))
         })

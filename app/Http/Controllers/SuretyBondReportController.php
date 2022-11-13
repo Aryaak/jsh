@@ -3,60 +3,60 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\GuaranteeBank;
+use App\Models\SuretyBond;
 
-class GuaranteeBankReport extends Controller
+class SuretyBondReportController extends Controller
 {
     public function income(Request $request){
         if($request->ajax()){
             if($request->request_for == 'datatable'){
-                $data = GuaranteeBank::table('income',$request->params);
+                $data = SuretyBond::table('income',$request->params);
                 return datatables()->of($data)
                 ->addIndexColumn()
                 ->toJson();
             }else if($request->request_for == 'chart'){
-                return response()->json($this->showResponse(GuaranteeBank::chart('income',$request->all())));
+                return response()->json($this->showResponse(SuretyBond::chart('income',$request->all())));
             }
         }
-        return view('report.guarantee-bank.income');
+        return view('report.surety-bond.income');
     }
     public function expense(Request $request){
         if($request->ajax()){
             if($request->request_for == 'datatable'){
-                $data = GuaranteeBank::table('expense',$request->params);
+                $data = SuretyBond::table('expense',$request->params);
                 return datatables()->of($data)
                 ->addIndexColumn()
                 ->toJson();
             }else if($request->request_for == 'chart'){
-                return response()->json($this->showResponse(GuaranteeBank::chart('expense',$request->all())));
+                return response()->json($this->showResponse(SuretyBond::chart('expense',$request->all())));
             }
         }
-        return view('report.guarantee-bank.expense');
+        return view('report.surety-bond.expense');
     }
     public function finance(Request $request){
         if($request->ajax()){
             if($request->request_for == 'datatable'){
-                $data = GuaranteeBank::table('finance',$request->params);
+                $data = SuretyBond::table('finance',$request->params);
                 return datatables()->of($data)
                 ->addIndexColumn()
                 ->toJson();
             }else if($request->request_for == 'chart'){
-                return response()->json($this->showResponse(GuaranteeBank::chart('finance',$request->all())));
+                return response()->json($this->showResponse(SuretyBond::chart('finance',$request->all())));
             }
         }
-        return view('report.guarantee-bank.finance');
+        return view('report.surety-bond.finance');
     }
     public function product(Request $request){
         if($request->ajax()){
             if($request->request_for == 'datatable'){
-                $data = GuaranteeBank::table('product',$request->params);
+                $data = SuretyBond::table('product',$request->params);
                 return datatables()->of($data)
                 ->addIndexColumn()
                 ->toJson();
             }else if($request->request_for == 'chart'){
-                return response()->json($this->showResponse(GuaranteeBank::chart('product',$request->all())));
+                return response()->json($this->showResponse(SuretyBond::chart('product',$request->all())));
             }
         }
-        return view('report.guarantee-bank.product');
+        return view('report.surety-bond.product');
     }
 }

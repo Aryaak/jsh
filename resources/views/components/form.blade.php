@@ -13,6 +13,8 @@
     {!! $slot !!}
 
     @isset($submit)
-        <x-button type="submit" face="{{ $submitFace ?? 'primary' }}" icon="{{ $submitIcon ?? 'bx bxs-paper-plane' }}" class="mt-3 {{ $submitWide ? 'w-100' : '' }}" >{{ $submit }}</x-button>
+        <div class="text-end">
+            <x-button type="submit" face="{{ $submitFace ?? 'primary' }}" icon="{{ $submitIcon ?? 'bx bxs-paper-plane' }}" class="mt-3 {{ $submitWide ? 'w-100' : '' }}" >{{ $submit }}</x-button>
+        </div>
     @endisset
 </form>

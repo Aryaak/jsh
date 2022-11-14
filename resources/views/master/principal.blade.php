@@ -328,6 +328,7 @@
             $('#'+creadit+'-total-score').removeClass().html(totalScore).addClass(setScoreColor(totalScore))
         })
         $(document).on('click', '#create-save', function () {
+            loading()
             ajaxPost("{{ route('master.principals.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')

@@ -649,7 +649,7 @@
             })
         })
         $(document).on('click', '.btn-edit', function () {
-            $('input[type="radio"]:checked').prop('checked',false)
+            // $('input[type="radio"]:checked').prop('checked',false)
             select2SetVal("edit-agent-id",suretyBond.agent.id,suretyBond.agent.name)
             select2SetVal("edit-insurance-id",suretyBond.insurance.id,suretyBond.insurance.name)
             select2SetVal("edit-insurance-type-id",suretyBond.insurance_type.id,suretyBond.insurance_type.name)

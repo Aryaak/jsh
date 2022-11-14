@@ -28,7 +28,8 @@ class PrincipalRequest extends FormRequest
             'info.provinceId' => 'required',
             'info.jamsyarId' => 'required',
             'info.jamsyarCode' => 'required',
-            'scoring' => 'required|array'
+            'scoring' => 'required|array',
+            'certificate' => 'required|array',
         ];
     }
     public function attributes()
@@ -49,7 +50,8 @@ class PrincipalRequest extends FormRequest
             'info.provinceId' => 'Provinsi',
             'info.jamsyarId' => 'Jamsyar ID',
             'info.jamsyarCode' => 'Jamsyar Kode',
-            'scoring' => 'Scoring'
+            'scoring' => 'Scoring',
+            'certificate' => 'Akta Pendirian'
         ];
     }
 }

@@ -7,6 +7,7 @@ use Exception;
 use App\Models\SuretyBond;
 use App\Models\Scoring;
 use Illuminate\Http\Request;
+use App\Http\Requests\SuretyBondRequest;
 
 class SuretyBondController extends Controller
 {
@@ -27,11 +28,11 @@ class SuretyBondController extends Controller
     {
     }
 
-    public function store(Request $request)
+    public function store(SuretyBondRequest $request)
     {
         try {
             DB::beginTransaction();
-            SuretyBond::buat($request->all());
+            SuretyBond::buat($request->validated());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -63,11 +64,11 @@ class SuretyBondController extends Controller
     {
     }
 
-    public function update(Request $request, SuretyBond $suretyBond)
+    public function update(SuretyBondRequest $request, SuretyBond $suretyBond)
     {
         try {
             DB::beginTransaction();
-            $suretyBond->ubah($request->all());
+            $suretyBond->ubah($request->validated());
             $http_code = 200;
             $response = $this->updateResponse();
             DB::commit();

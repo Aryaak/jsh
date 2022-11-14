@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use DB;
 use Exception;
 use App\Models\Branch;
-use App\Http\Requests\BranchRequest;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Requests\BranchRequest;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 class BranchController extends Controller
 {

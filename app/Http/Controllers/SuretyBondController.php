@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Sirius;
 use DB;
 use Exception;
 use App\Models\SuretyBond;
@@ -16,6 +17,8 @@ class SuretyBondController extends Controller
             $data = SuretyBond::with('insurance_status','insurance_status.status');
             return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
+            ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
             ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }

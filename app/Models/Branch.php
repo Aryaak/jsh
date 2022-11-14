@@ -2,15 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Str;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Branch extends Model
 {
     use HasFactory;
     protected $fillable = ['name','slug','is_regional','jamsyar_username','jamsyar_password','regional_id'];
     protected $casts = ['is_regional' => 'boolean'];
+    protected $appends = ['jamsyar_password_masked'];
+
+    // Accessor
+
+    public function jamsyarPasswordMasked(): Attribute
+    {
+        return Attribute::make(get: fn() => Str::mask($this->jamsyar_password, "*", 0));
+    }
+
+    // Relations
+
     public function branches(){
         return $this->hasMany(Branch::class,'regional_id');
     }

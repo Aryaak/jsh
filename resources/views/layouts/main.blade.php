@@ -146,7 +146,8 @@
                         {{-- Breadcrumb --}}
                         @php
                             $url = Str::replaceFirst(config('app.url'), '', Request::url());
-                            $titles = explode('/', $url);
+                            if ($url == Request::url()) $url = '';
+                            $titles = collect(explode('/', $url))->filter()->toArray();
                             $real_titles = [];
                             $main_title = 'Dasbor';
                             foreach ($titles as $key => $title) {
@@ -174,21 +175,21 @@
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar">
-                                        <img src="{{ 'https://ui-avatars.com/api/?name=Admin' }}" alt="Foto {{ auth()->user()->name ?? 'Admin' }}" class="w-px-40 rounded-circle" />
+                                        <img src="{{ auth()->user()->avatar }}" alt="Foto {{ auth()->user()->name }}" class="w-px-40 rounded-circle" />
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <a class="dropdown-item" href="">
+                                        <a class="dropdown-item" href="{{ route('profile') }}">
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar">
-                                                        <img src="{{ 'https://ui-avatars.com/api/?name=Admin' }}" alt="Foto {{ auth()->user()->name ?? 'Admin' }}" class="w-px-40 rounded-circle" />
+                                                        <img src="{{ auth()->user()->avatar }}" alt="Foto {{ auth()->user()->name }}" class="w-px-40 rounded-circle" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block">{{ auth()->user()->name ?? 'Admin' }}</span>
-                                                    <small class="text-muted">{{ Str::title(auth()->user()->role ?? 'Admin') }}</small>
+                                                    <span class="fw-semibold d-block">{{ auth()->user()->name }}</span>
+                                                    <small class="text-muted">{{ Str::title(auth()->user()->role_converted) }}</small>
                                                 </div>
                                             </div>
                                         </a>

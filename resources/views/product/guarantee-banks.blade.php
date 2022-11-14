@@ -19,7 +19,7 @@
                     <th>No. Bond</th>
                     <th>No. Polis</th>
                     <th>Status Jaminan</th>
-                    <th>Status Sinkron</th>
+                    <th>Nilai Jaminan</th>
                     <th>Tanggal</th>
                     <th width="105px">Tindakan</th>
                 </tr>
@@ -574,7 +574,8 @@
             const adminCharge = parseInt($('#'+creadit+'-admin-charge').val() ? $('#'+creadit+'-admin-charge').val().replaceAll('.','') : 0)
             const totalCharge =  serviceCharge + adminCharge
             // console.log(serviceCharge,' + ',adminCharge,' = ',totalCharge);
-            $('#'+creadit+'-premi-charge').html(numberFormat(totalCharge))
+            if (isNaN(totalCharge)) totalCharge = 0
+            $('#'+creadit+'-premi-charge').html(ToRupiah.format(totalCharge).replaceAll('\u00A0', '')+",-")
         })
         $(document).on('change', '#create-obligee-id, #edit-obligee-id', function () {
             const action = $(this).attr('id').split('-')[0] //create or edit

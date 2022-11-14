@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Sirius;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
@@ -30,17 +31,32 @@ class Principal extends Model
         'city_id',
     ];
 
-    // Accessor
+    protected $appends = ['npwp_expired_at_converted', 'nib_expired_at_converted'];
+
+    // Accessors
+
     public function scoreColor(): Attribute
     {
         return Attribute::make(get: function () {
             return match (true) {
-                $this->score / 3 >= 2.33 => 'success',
-                $this->score / 3 >= 1.33 => 'warning',
+                $this->score >= 6.6 => 'success',
+                $this->score >= 3.3 => 'warning',
                 default => 'danger',
             };
         });
     }
+
+    public function npwpExpiredAtConverted(): Attribute
+    {
+        return Attribute::make(get: fn() => Sirius::toLongDate($this->npwp_expired_at));
+    }
+
+    public function nibExpiredAtConverted(): Attribute
+    {
+        return Attribute::make(get: fn() => Sirius::toLongDate($this->nib_expired_at));
+    }
+
+    // Relations
 
     public function city(){
         return $this->belongsTo(City::class);

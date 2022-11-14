@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Exception;
 use App\Models\Template;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
 
 class TemplateController extends Controller
@@ -15,7 +16,7 @@ class TemplateController extends Controller
             $data = Template::all();
             return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('action', 'datatables.actions-show-delete')
+            ->editColumn('action', 'datatables.actions-show')
             ->toJson();
         }
         return view('master.templates');

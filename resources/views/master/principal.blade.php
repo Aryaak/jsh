@@ -324,7 +324,8 @@
 
         $(document).on('click', '.create-scoring, .edit-scoring', function () {
             const creadit = $(this).attr('id').split('-')[0]
-            const totalScore = $('.'+creadit+'-scoring:checkbox:checked').length / $('.'+creadit+'-scoring:checkbox').length * 10
+            var totalScore = $('.'+creadit+'-scoring:checkbox:checked').length / $('.'+creadit+'-scoring:checkbox').length * 10
+            totalScore = String(totalScore).replace('.', ',')
             $('#'+creadit+'-total-score').removeClass().html(totalScore).addClass(setScoreColor(totalScore))
         })
         $(document).on('click', '#create-save', function () {
@@ -356,9 +357,9 @@
                     $('#show-pic-name').html(principal.pic_name)
                     $('#show-pic-position').html(principal.pic_position)
                     $('#show-npwp-number').html(principal.npwp_number)
-                    $('#show-npwp-expired-at').html(principal.npwp_expired_at)
+                    $('#show-npwp-expired-at').html(principal.npwp_expired_at_converted)
                     $('#show-nib-number').html(principal.nib_number)
-                    $('#show-nib-expired-at').html(principal.nib_expired_at)
+                    $('#show-nib-expired-at').html(principal.nib_expired_at_converted)
                     $('#show-status').html(principal.status)
                     $('#show-jamsyar-code').html(principal.jamsyar_code)
                     $('#show-score').removeClass().html(principal.score).addClass(setScoreColor(principal.score))
@@ -470,6 +471,7 @@
             `)
         }
         function setScoreColor(value){
+            value = parseFloat(value.replace(',', '.'))
             let color = 'text-danger'
             if(value >= 6.6){
                 color = 'text-success'

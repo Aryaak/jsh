@@ -25,7 +25,7 @@ class AgentRateController extends Controller
             ->editColumn('min_value', fn($rate) => Sirius::toRupiah($rate->min_value))
             ->editColumn('polish_cost', fn($rate) => Sirius::toRupiah($rate->polish_cost))
             ->editColumn('stamp_cost', fn($rate) => Sirius::toRupiah($rate->stamp_cost))
-            ->editColumn('rate_value', fn($rate) => str_replace('.', '.', $rate->rate_value))
+            ->editColumn('rate_value', fn($rate) => str_replace('.', ',', $rate->rate_value))
             ->editColumn('action', 'datatables.actions-show-delete-sb-bg')
             ->toJson();
         }

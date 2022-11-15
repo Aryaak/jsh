@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Branch;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,30 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer(['layout.*', 'master.*', 'payment.*', 'product.*', 'report.*', 'dashboard', 'regionals', 'branches', 'profile'], function ($view) {
+            $currently_on = 'main';
+            if (request()->routeIs('regional.*')) $currently_on = 'regional';
+            elseif (request()->routeIs('branch.*')) $currently_on = 'branch';
+            $global['currently_on'] = $currently_on;
+
+            if ($currently_on == 'regional' || $currently_on == 'branch') {
+                $slug = explode('/', url()->current())[3];
+                if (! session()->has('regional') || session('regional')?->slug != $slug) {
+                    session()->put('regional', Branch::where('slug', $slug)->first());
+                }
+                $global['regional'] = session()->get('regional');
+            }
+            if ($currently_on == 'branch') {
+                $slug = explode('/', url()->current())[4];
+                if (! session()->has('branch') || session('branch')?->slug != $slug) {
+                    session()->put('branch', Branch::where('slug', $slug)->first());
+                }
+                $global['branch'] = session()->get('branch');
+            }
+
+            $view->with('global', (object)$global);
+        });
+
+        Schema::defaultStringLength(191);
     }
 }

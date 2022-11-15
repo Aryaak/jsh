@@ -12,23 +12,19 @@ use Barryvdh\Debugbar\Facades\Debugbar;
 
 class BranchController extends Controller
 {
-    public function index(Request $request)
+    public function index(Branch $regional, Request $request)
     {
         if($request->ajax()){
-            $data = Branch::with('regional')->where('is_regional',false);
+            $data = Branch::with('regional')->where('is_regional', false)->where('regional_id', $regional->id);
             return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('action', 'datatables.actions-show-delete')
+            ->editColumn('action', 'datatables.actions-branch')
             ->toJson();
         }
-        return view('master.branches');
+        return view('branches');
     }
 
-    public function create()
-    {
-    }
-
-    public function store(BranchRequest $request)
+    public function store(Branch $regional, BranchRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -45,17 +41,13 @@ class BranchController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Branch $cabang)
+    public function show(Branch $regional, Branch $cabang)
     {
         $cabang->regional;
         return response()->json($this->showResponse($cabang->toArray()));
     }
 
-    public function edit(Branch $branch)
-    {
-    }
-
-    public function update(Request $request, Branch $cabang)
+    public function update(Branch $regional, Branch $cabang, Request $request)
     {
         try {
             DB::beginTransaction();
@@ -72,7 +64,7 @@ class BranchController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(Branch $cabang)
+    public function destroy(Branch $regional, Branch $cabang)
     {
         try {
             DB::beginTransaction();

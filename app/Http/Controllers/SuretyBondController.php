@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Sirius;
+use App\Models\Branch;
 use DB;
 use Exception;
 use App\Models\SuretyBond;
@@ -14,12 +15,15 @@ class SuretyBondController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
+            if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
+            elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
+
             $data = SuretyBond::with('insurance_status','insurance_status.status');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
             ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
-            ->editColumn('action', 'datatables.actions-show-delete')
+            ->editColumn('action', $action)
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
@@ -30,7 +34,7 @@ class SuretyBondController extends Controller
     {
     }
 
-    public function store(Request $request)
+    public function store(Branch $regional, Branch $branch, Request $request)
     {
         try {
             DB::beginTransaction();
@@ -47,7 +51,12 @@ class SuretyBondController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(SuretyBond $suretyBond)
+    public function showRegional(Branch $regional, SuretyBond $suretyBond)
+    {
+        return $this->show($regional, null, $suretyBond);
+    }
+
+    public function show(Branch $regional, ?Branch $branch, SuretyBond $suretyBond)
     {
         $suretyBond->principal;
         $suretyBond->obligee;
@@ -66,7 +75,7 @@ class SuretyBondController extends Controller
     {
     }
 
-    public function update(Request $request, SuretyBond $suretyBond)
+    public function update(Branch $regional, Branch $branch, SuretyBond $suretyBond, Request $request)
     {
         try {
             DB::beginTransaction();
@@ -83,7 +92,7 @@ class SuretyBondController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(SuretyBond $suretyBond)
+    public function destroy(Branch $regional, Branch $branch, SuretyBond $suretyBond)
     {
         try {
             DB::beginTransaction();

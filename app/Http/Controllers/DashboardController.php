@@ -21,7 +21,7 @@ class DashboardController extends Controller
                 $sb_lunas++;
             }
         }
-        return view('master.dashboard', [
+        return view('dashboard', [
             'agen' => $agen_count,
             'lunas' => $sb_lunas,
             'non_lunas' => $sb_non_lunas,

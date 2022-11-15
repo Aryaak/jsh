@@ -42,7 +42,7 @@
             <div class="authentication-inner">
                 <x-card>
                     <div class="app-brand justify-content-center mb-0">
-                        <a href="{{ route('dashboard') }}" class="app-brand-link p-3">
+                        <a href="{{ route('main.dashboard') }}" class="app-brand-link p-3">
                             <span class="app-brand-logo w-100">
                                 <img src="{{ asset('assets/logos/logo.png') }}" alt="Logo JSH" class="w-100">
                             </span>

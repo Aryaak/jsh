@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Sirius;
+use App\Models\Branch;
 use DB;
 use Exception;
 use App\Models\Payment;
@@ -21,7 +23,8 @@ class PaymentController extends Controller
 
     public function calculate(Request $request){
         try {
-            $response = $this->response('OK',true,['total' => Payment::fetch((object)$request->all())->payment['total_bill']]);
+            $total = Payment::fetch((object)$request->all())->payment['total_bill'];
+            $response = $this->response('OK',true,['total' => $total, 'total_converted' => Sirius::toRupiah($total, 2)]);
             $http_code = 200;
         } catch (Exception $e) {
             $http_code = $this->httpErrorCode($e->getCode());
@@ -33,16 +36,18 @@ class PaymentController extends Controller
         $type = $request->type;
         $data = null;
         if($type == 'principal_to_branch'){
-            $data = Payment::with('principal','branch')->whereType($type);
+            $data = Payment::with('principal','branch')->where('branch_id', session()->get('branch')?->id)->whereType($type);
         }else if($type == 'branch_to_regional'){
-            // $data = Payment::with('principal','branch')->whereType($type);
+            // $data = Payment::with('principal','branch')->where('branch_id', session()->get('branch')?->id)->whereType($type);
         }else if($type == 'regional_to_insurance'){
-            $data = Payment::with('insurance','regional')->whereType($type);
+            $data = Payment::with('insurance','regional')->where('regional_id', session()->get('regional')?->id)->whereType($type);
         }else if($type == 'branch_to_agent'){
-            $data = Payment::with('branch','agent')->whereType($type);
+            $data = Payment::with('branch','agent')->where('branch_id', session()->get('branch')?->id)->whereType($type);
         }
         return datatables()->of($data)
         ->addIndexColumn()
+        ->editColumn('paid_at', fn($payment) => Sirius::toLongDate($payment->paid_at))
+        ->editColumn('total_bill', fn($payment) => Sirius::toRupiah($payment->total_bill, 2))
         ->editColumn('action', 'datatables.actions-show-delete')
         ->toJson();
     }

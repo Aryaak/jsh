@@ -107,7 +107,7 @@
         let table = null
         let obligee = null
         $(document).ready(function () {
-            table = dataTableInit('table','Obligee',{url : '{{ route('master.obligees.index') }}'},[
+            table = dataTableInit('table','Obligee',{url : '{{ route($global->currently_on.'.master.obligees.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'name', name: 'name'},
                 {data: 'address', name: 'address'},
                 {data: 'status', name: 'status'},
@@ -174,6 +174,7 @@
                 title: "Yakin ingin menghapus Obligee?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     ajaxPost("{{ route('master.obligees.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},'',function(){
                         table.ajax.reload()
                     })

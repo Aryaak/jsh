@@ -109,7 +109,7 @@
         let table = null
         let bankRate = null
         $(document).ready(function () {
-            table = dataTableInit('table','Rate Bank',{url : '{{ route('master.bank-rates.index') }}'},[
+            table = dataTableInit('table','Rate Bank',{url : '{{ route($global->currently_on.'.master.bank-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'bank.name', name: 'bank.name'},
                 {data: 'insurance_type.name', name: 'insurance_type.name'},
                 {data: 'min_value', name: 'min_value'},
@@ -170,6 +170,7 @@
                 title: "Yakin ingin menghapus Rate Agen?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     ajaxPost("{{ route('master.bank-rates.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},null,function(){
                         table.ajax.reload()
                     })

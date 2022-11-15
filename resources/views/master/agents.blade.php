@@ -58,7 +58,7 @@
     <x-modal id="modal-show" title="Detail Agen">
         <div class="mb-5 text-center">
             <small>Cabang:</small>
-            <div id="show-branch" class="h4 mb-2 fw-bold">Nama Cabangnya</div>
+            <div id="show-branch" class="h4 mb-2 fw-bold">-</div>
         </div>
 
         <div class="border-bottom pb-2 mb-2">
@@ -144,7 +144,7 @@
         let table = null
         let agent = null
         $(document).ready(function () {
-            table = dataTableInit('table','Agen',{url : '{{ route('master.agents.index') }}'},[
+            table = dataTableInit('table','Agen',{url : '{{ route($global->currently_on.'.master.agents.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'branch.name', name: 'branch.name'},
                 {data: 'name', name: 'name'},
                 {data: 'phone', name: 'phone'},
@@ -256,6 +256,7 @@
                 title: "Yakin ingin menghapus Agent?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     let formData = new FormData()
                     formData.append('_method','delete')
                     ajaxPost("{{ route('master.agents.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){

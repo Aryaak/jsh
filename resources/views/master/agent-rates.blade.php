@@ -72,28 +72,28 @@
 
     <x-modal id="modal-show-sb" title="Detail Rate Agen Surety Bond">
         <div class="mb-5 text-center">
-            <div id="show-agent-sb" class="h4 mb-2 fw-bold">Nama Agen Di Sini</div>
-            <div id="show-insurance-type-sb">Ini Jenis Jaminannya</div>
+            <div id="show-agent-sb" class="h4 mb-2 fw-bold">-</div>
+            <div id="show-insurance-type-sb">-</div>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nama Asuransi</b>: <br>
-            <span id="show-insurance-sb">Tes</span>
+            <span id="show-insurance-sb">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nilai Minimal</b>: <br>
-            <span id="show-min-value-sb">Rp10.000,-</span>
+            <span id="show-min-value-sb">Rp0,-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nilai Rate</b>: <br>
-            <span id="show-rate-value-sb">0,240</span>
+            <span id="show-rate-value-sb">0</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Biaya Polis</b>: <br>
-            <span id="show-polish-cost-sb">Rp10.000,-</span>
+            <span id="show-polish-cost-sb">Rp0,-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Materai</b>: <br>
-            <span id="show-stamp-cost-sb">Rp6.000,-</span>
+            <span id="show-stamp-cost-sb">Rp0,-</span>
         </div>
         <div>
             <b>Keterangan</b>: <br>
@@ -147,32 +147,32 @@
 
     <x-modal id="modal-show-bg" title="Detail Rate Agen Bank Garansi">
         <div class="mb-5 text-center">
-            <div id="show-agent-bg" class="h4 mb-2 fw-bold">Nama Agen Di Sini</div>
-            <div id="show-insurance-type-bg">Ini Jenis Jaminannya</div>
+            <div id="show-agent-bg" class="h4 mb-2 fw-bold">-</div>
+            <div id="show-insurance-type-bg">-</div>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nama Asuransi</b>: <br>
-            <span id="show-insurance-bg">Tes</span>
+            <span id="show-insurance-bg">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nama Bank</b>: <br>
-            <span id="show-bank-bg">Tes</span>
+            <span id="show-bank-bg">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nilai Minimal</b>: <br>
-            <span id="show-min-value-bg">Rp10.000,-</span>
+            <span id="show-min-value-bg">Rp0,-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nilai Rate</b>: <br>
-            <span id="show-rate-value-bg">0,240</span>
+            <span id="show-rate-value-bg">0</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Biaya Polis</b>: <br>
-            <span id="show-polish-cost-bg">Rp10.000,-</span>
+            <span id="show-polish-cost-bg">Rp0,-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Materai</b>: <br>
-            <span id="show-stamp-cost-bg">Rp6.000,-</span>
+            <span id="show-stamp-cost-bg">Rp0,-</span>
         </div>
         <div>
             <b>Keterangan</b>: <br>
@@ -216,7 +216,7 @@
         let tableBG = null
         $(document).ready(function () {
             tableSB = dataTableInit('table-sb','Rate Agen',{
-                    url : '{{ route('master.agent-rates.index') }}',
+                    url : '{{ route($global->currently_on.'.master.agent-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',
                     data : { is_bg : 0 }
                 },[
                 {data: 'agent.name', name: 'agent.name'},
@@ -227,7 +227,7 @@
                 {data: 'stamp_cost', name: 'stamp_cost'},
             ])
             tableBG = dataTableInit('table-bg','Rate Agen',{
-                    url : '{{ route('master.agent-rates.index') }}',
+                    url : '{{ route($global->currently_on.'.master.agent-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',
                     data : { is_bg : 1 }
                 },[
                 {data: 'agent.name', name: 'agent.name'},
@@ -300,6 +300,7 @@
                 title: "Yakin ingin menghapus Rate Agen?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     ajaxPost("{{ route('master.agent-rates.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},null,function(){
                         tableSB.ajax.reload()
                     })
@@ -353,6 +354,7 @@
                 title: "Yakin ingin menghapus Rate Agen?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     ajaxPost("{{ route('master.agent-rates.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},null,function(){
                         tableBG.ajax.reload()
                     })

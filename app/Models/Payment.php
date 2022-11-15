@@ -2,17 +2,33 @@
 
 namespace App\Models;
 
+use App\Helpers\Sirius;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SuretyBond;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Payment extends Model
 {
     use HasFactory;
 
     public $fillable = ['total_bill','paid_bill','unpaid_bill','paid_at','month','year','type','agent_id','insurance_id','principal_id','branch_id','regional_id'];
+
+    protected $appends = ['paid_at_converted', 'total_bill_converted'];
+
+    // Accessors
+
+    public function paidAtConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toLongDate($this->paid_at));
+    }
+    public function totalBillConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->total_bill, 2));
+    }
+
+    // Relations
     public function details(){
         return $this->hasMany(PaymentDetail::class);
     }

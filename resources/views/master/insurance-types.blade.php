@@ -71,7 +71,7 @@
         let table = null
         let insuranceType = {}
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance',{url : '{{ route('master.insurance-types.index') }}'},[
+            table = dataTableInit('table','Insurance',{url : '{{ route($global->currently_on.'.master.insurance-types.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'code', name: 'code'},
                 {data: 'name', name: 'name'},
             ])
@@ -114,6 +114,7 @@
                 title: "Yakin ingin menghapus Tipe Asuransi?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     let formData = new FormData()
                     formData.append('_method','delete')
                     ajaxPost("{{ route('master.insurance-types.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){

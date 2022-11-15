@@ -17,7 +17,6 @@
                     <th width="10px">No.</th>
                     <th>Waktu Bayar</th>
                     <th>Dari Principal</th>
-                    <th>Ke Cabang</th>
                     <th>Nominal Bayar</th>
                     <th width="80px">Tindakan</th>
                 </tr>
@@ -27,14 +26,29 @@
 @endsection
 
 @section('modals')
-    <x-modal id="modal-create" title="Tambah Pembayaran">
+    @php
+        $months = [];
+        foreach (range(1, 12) as $month) {
+            $months[$month] = Sirius::longMonth($month);
+        }
+
+        $years = [];
+        foreach (range(date('Y'), 2000) as $year) {
+            $years[$year] = $year;
+        }
+    @endphp
+
+    <x-modal id="modal-create" title="Tambah Pembayaran" size="fullscreen">
         <x-form id="form-create" method="post">
+            <input type="hidden" id="create-branch-id" class="calculate-params" name="branchId" value="{{ $global->branch->id }}">
             <x-form-input label="Waktu Bayar" id="create-paid-at" name="paidAt" type="datetime-local" class="mb-3" required />
-            <x-form-input label="Bulan" id="create-month" class-input="calculate-params" name="month" type="number" class="mb-3" required />
-            <x-form-input label="Tahun" id="create-year" class-input="calculate-params" name="year" type="number" class="mb-3" required />
+            <x-form-select label="Bulan" id="create-month" class-input="calculate-params" name="month" class="mb-3" :options="$months" value="{{ date('m') }}" required />
+            <x-form-select label="Tahun" id="create-year" class-input="calculate-params" name="year" class="mb-3" :options="$years" value="{{ date('Y') }}" required />
             <x-form-select label="Dari Principal" id="create-principal-id" class-input="calculate-params" name="principalId" class="mb-3" required />
-            <x-form-select label="Ke Cabang" id="create-branch-id" class-input="calculate-params" name="branchId" class="mb-3" required />
-            <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+            <div class="mb-3">
+                <x-form-label required>Nominal Bayar</x-form-label>
+                <div id="create-nominal">-</div>
+            </div>
             <x-form-textarea label="Keterangan" id="create-desc" name="desc" />
         </x-form>
 
@@ -53,10 +67,6 @@
             <span id="show-principal">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Ke Cabang</b>: <br>
-            <span id="show-branch">-</span>
-        </div>
-        <div class="border-bottom pb-2 mb-2">
             <b>Nominal Bayar</b>: <br>
             <span id="show-nominal">Rp0,-</span>
         </div>
@@ -64,27 +74,6 @@
             <b>Keterangan</b>: <br>
             <span id="show-desc">-</span>
         </div>
-
-        @slot('footer')
-            <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
-        @endslot
-    </x-modal>
-
-    <x-modal id="modal-edit" title="Ubah Pembayaran">
-        <x-form id="form-edit" method="put">
-            <x-form-input label="Waktu Bayar" id="edit-datetime" class-input="calculate-params" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Dari Principal" id="edit-principal-id" class-input="calculate-params" name="principalId" :options="[]" class="mb-3" required />
-            <x-form-select label="Ke Cabang" id="edit-branch-id" class-input="calculate-params" name="branchId" :options="[]" class="mb-3" required />
-            <x-form-input label="Nominal Bayar" id="edit-nominal" class-input="calculate-params" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-textarea label="Keterangan" id="edit-desc" name="desc" />
-        </x-form>
-
-        @slot('footer')
-            <div class="d-flex justify-content-between w-100">
-                <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
-                <x-button id="edit-save" face="success" icon="bx bxs-save">Simpan</x-button>
-            </div>
-        @endslot
     </x-modal>
 @endsection
 
@@ -102,11 +91,10 @@
                 },[
                 {data: 'paid_at'},
                 {data: 'principal.name'},
-                {data: 'branch.name'},
                 {data: 'total_bill'}
             ])
+            $("#create-month, #create-year").select2({dropdownParent: $('#modal-create')})
             select2Init("#create-principal-id",'{{ route('select2.principal') }}',0,$('#modal-create'))
-            select2Init("#create-branch-id",'{{ route('select2.branch') }}',0,$('#modal-create'))
 
             // $("#create-principal-id, #create-branch-id").select2({dropdownParent: $('#modal-create')})
             // $("#edit-principal-id, #edit-branch-id").select2({dropdownParent: $('#modal-edit')})
@@ -118,13 +106,16 @@
             const month = $('#create-month').val()
             const year = $('#create-year').val()
             if(principalId && branchId && month && year){
+                $('#create-nominal').html(`<i class='fa-solid fa-spinner fa-spin me-2'></i>Menghitung ...`)
                 let formData = new FormData(document.getElementById('form-create'))
                 formData.append('type',type)
                 ajaxPost("{{ route('payments.calculate') }}",formData,'',function(response){
                     if(response.success){
-                        $('#create-nominal').val(numberFormat(response.data.total))
+                        $('#create-nominal').html(response.data.total_converted)
                     }
-                },null,false)
+                },function (response) {
+                    $('#create-nominal').html(`<span class='color-danger'><i class='fa-solid fa-x me-2'></i>Terjadi masalah pada sistem</span>`)
+                },false)
             }
         })
         $(document).on('click', '#create-save', function () {
@@ -134,17 +125,19 @@
             ajaxPost("{{ route('payments.payment.store') }}",formData,'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
+                $("#create-nominal").html('-')
+                $('#create-year').val('{{ date('Y') }}').trigger('change')
+                $('#create-month').val('{{ date('m') }}').trigger('change')
             })
         })
         $(document).on('click', '.btn-show', function () {
             ajaxGet("{{ route('payments.payment.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     payment = response.data
-                    $('#show-paid-at').html(payment.paid_at)
+                    $('#show-paid-at').html(payment.paid_at_converted)
                     $('#show-principal').html(payment.principal.name)
-                    $('#show-branch').html(payment.branch.name)
-                    $('#show-nominal').html(numberFormat(payment.total_bill))
-                    $('#show-desc').html(payment.desc)
+                    $('#show-nominal').html(payment.total_bill_converted)
+                    $('#show-desc').html(payment.desc ?? '-')
                 }
             })
         })
@@ -154,6 +147,7 @@
                 title: "Yakin ingin menghapus Pembayaran?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     ajaxPost("{{ route('payments.payment.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method:'delete'},'',function(){
                         table.ajax.reload()
                     })

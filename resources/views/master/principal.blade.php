@@ -298,7 +298,7 @@
         var editCertificateCounter = 0
 
         $(document).ready(function () {
-            table = dataTableInit('table','Principal',{url : '{{ route('master.principals.index') }}'},[
+            table = dataTableInit('table','Principal',{url : '{{ route($global->currently_on.'.master.principals.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'name', name: 'name'},
                 {data: 'address', name: 'address'},
                 {data: 'phone', name: 'phone'},
@@ -329,6 +329,7 @@
             $('#'+creadit+'-total-score').removeClass().html(totalScore).addClass(setScoreColor(totalScore))
         })
         $(document).on('click', '#create-save', function () {
+            loading()
             ajaxPost("{{ route('master.principals.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
@@ -420,6 +421,7 @@
                 title: "Yakin ingin menghapus Principal?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     ajaxPost("{{ route('master.principals.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},'',function(){
                         table.ajax.reload()
                     })

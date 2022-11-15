@@ -288,8 +288,7 @@ function ajaxGet(url, modal = null, successCallback = null, errorCallback = null
 
 function clearForm(formselector) {
     $(formselector).find('input').each(function () {
-        if ($(this).attr('name') !== '_method' && $(this).attr('name') !== '_token' &&
-            $(this).attr('type') !== 'checkbox' && $(this).attr('type') !== 'radio') {
+        if ($(this).attr('type') !== 'hidden' && $(this).attr('type') !== 'checkbox' && $(this).attr('type') !== 'radio') {
             $(this).val('')
         }
     })

@@ -81,7 +81,7 @@
         let bank = null
 
         $(document).ready(function () {
-            table = dataTableInit('table','Bank',{url : '{{ route('master.banks.index') }}'},[
+            table = dataTableInit('table','Bank',{url : '{{ route($global->currently_on.'.master.banks.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'name', name: 'name'},
             ])
         })
@@ -157,6 +157,7 @@
                 title: "Yakin ingin menghapus Bank?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     let formData = new FormData()
                     formData.append('_method','delete')
                     ajaxPost("{{ route('master.banks.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){

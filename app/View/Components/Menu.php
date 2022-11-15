@@ -11,6 +11,7 @@ class Menu extends Component
         private string $route,
         private string $icon,
         private ?string $submenus = null,
+        private array $routeParams = []
     )
     {
         //
@@ -29,6 +30,7 @@ class Menu extends Component
             'route' => $this->route,
             'icon' => $this->icon,
             'submenus' => $this->submenus,
+            'routeParams' => $this->routeParams,
         ]);
     }
 }

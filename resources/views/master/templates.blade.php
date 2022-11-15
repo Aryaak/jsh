@@ -54,7 +54,7 @@
         let template = null
 
         $(document).ready(function () {
-            table = dataTableInit('table','Template',{url : '{{ route('master.templates.index') }}'},[
+            table = dataTableInit('table','Template',{url : '{{ route($global->currently_on.'.master.templates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'title', name: 'title'},
             ])
         })

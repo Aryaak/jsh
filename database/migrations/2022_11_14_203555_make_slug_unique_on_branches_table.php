@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('branches', function (Blueprint $table) {
             $table->string('slug')->unique()->change();
         });
     }

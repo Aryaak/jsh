@@ -13,7 +13,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    public $fillable = ['total_bill','paid_bill','unpaid_bill','paid_at','month','year','type','agent_id','insurance_id','principal_id','branch_id','regional_id'];
+    public $fillable = ['total_bill','paid_bill','unpaid_bill','paid_at','month','year','desc','type','agent_id','insurance_id','principal_id','branch_id','regional_id'];
 
     protected $appends = ['paid_at_converted', 'total_bill_converted'];
 

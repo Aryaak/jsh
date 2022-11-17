@@ -9,6 +9,7 @@ use Exception;
 use App\Models\Scoring;
 use App\Models\GuaranteeBank;
 use Illuminate\Http\Request;
+use App\Http\Requests\GuaranteeBankRequest;
 
 class GuaranteeBankController extends Controller
 {
@@ -38,7 +39,7 @@ class GuaranteeBankController extends Controller
     {
         try {
             DB::beginTransaction();
-            GuaranteeBank::buat($request->all());
+            GuaranteeBank::buat($request->validated());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -81,7 +82,7 @@ class GuaranteeBankController extends Controller
     {
         try {
             DB::beginTransaction();
-            $bankGaransi->ubah($request->all());
+            $bankGaransi->ubah($request->validated());
             $http_code = 200;
             $response = $this->updateResponse();
             DB::commit();

@@ -120,6 +120,7 @@ class Principal extends Model
         ]);
     }
     public function hapus(){
+        $this->certificates()->delete();
         $this->delete();
     }
 }

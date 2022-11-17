@@ -12,9 +12,9 @@ class PDFDownloadController extends Controller
     {
         $template = Template::find($id);
         $data = ['content' => $template->text,];
-        $pdf = Pdf::loadView('master.pdf', $data);
+        $pdf = Pdf::loadView('pdf', $data);
         $pdf->getDomPDF()->setBasePath(public_path('images/'));
-        $fileName =  time() . '.' . 'pdf';
+        $fileName =  $template->title . '.' . 'pdf';
 
         return $pdf->download($fileName);
     }

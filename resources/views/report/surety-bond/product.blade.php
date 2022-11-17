@@ -91,7 +91,7 @@
         $(document).ready(function() {
             select.select2()
             table = dataTableInit('table','Pemasukan',{
-                url : '{{ route('sb-reports.product') }}',
+                url : '{{ route($global->currently_on.'.sb-reports.product', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',
                 data: function(data){
                     const formData = $("#filter-form").serializeArray();
                     data.params = {}
@@ -121,7 +121,7 @@
             formData.append('endDate',end.val())
             formData.append('request_for','chart')
 
-            ajaxPost('{{ route('sb-reports.product') }}',formData, null, function (result) {
+            ajaxPost('{{ route($global->currently_on.'.sb-reports.product', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',formData, null, function (result) {
                 const income = result.data
                 if(chart) chart.destroy()
                 chart = new Chart(document.getElementById('chart').getContext('2d'), {

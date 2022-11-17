@@ -32,12 +32,8 @@
 
     <x-modal id="modal-edit" title="Ubah Template" size="fullscreen">
         <x-form id="form-edit" method="put">
-            <div class="mb-3">
-                <x-form-input id="edit-name" name="title" label="Nama" class="mb-3" required />
-            </div>
-            <div id="edit-template-container">
-                {{-- Tempat Tambah Template --}}
-            </div>
+            <x-form-input id="edit-name" name="title" label="Nama" class="mb-3" required />
+            <x-form-textarea id="edit-text" name="text" label="Template" tinymce required />
         </x-form>
 
         @slot('footer')
@@ -58,7 +54,7 @@
         let template = null
 
         $(document).ready(function () {
-            table = dataTableInit('table','Template',{url : '{{ route('master.templates.index') }}'},[
+            table = dataTableInit('table','Template',{url : '{{ route($global->currently_on.'.master.templates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'title', name: 'title'},
             ])
         })
@@ -83,38 +79,13 @@
             let formData = new FormData(document.getElementById('form-edit'))
             ajaxPost("{{ route('master.templates.update','-id-') }}".replace('-id-',template.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
-                $("#edit-template-container").html('')
             })
         })
 
         $(document).on('click', '.btn-edit', function () {
             let formData = new FormData(document.getElementById('form-edit'))
             $('#edit-name').val(template.title);
-            $('#edit-template-container').html('');
-            addNewTemplate("edit",template.text,template.id);
+            tinymce.get("edit-text").setContent(template.text);
         })
-
-        function addNewTemplate(createOrEdit, valueTemplate = '',id = '') {
-            inputId = `<input type="hidden" id="edit-template-id" value="`+ id +`" name="id[]" />`
-            $("#edit-template-container").append(`
-                <div id="` + createOrEdit + `-template" class="border rounded p-3 mt-3">
-                    ` + inputId + `
-                    <x-form-textarea label="Template" id="text" name="text" class="mb-3" required />
-                </div>
-            `);
-
-            $("#text").tinymce({
-                language: 'id',
-                plugins: 'image table lists fullscreen code',
-                menubar: 'file edit insert view table format table tools help',
-                toolbar: 'undo redo | styles | bold italic underline | numlist bullist | image | alignleft aligncenter alignright alignjustify | code fullscreen',
-                images_upload_handler: tinyMCEImageUploadHandler("{{ route('uploader.tinymce') }}", "{{ csrf_token() }}"),
-                setup: function (editor) {
-                    editor.on('init', function (e) {
-                        editor.setContent(valueTemplate);
-                    });
-                }
-            });
-        }
     </script>
 @endpush

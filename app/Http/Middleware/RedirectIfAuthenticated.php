@@ -23,6 +23,14 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                if (auth()->user()->role == 'main') {
+                    return redirect(RouteServiceProvider::HOME);
+                } elseif (auth()->user()->role == 'regional') {
+                    return redirect('/'.auth()->user()->branch->slug);
+                } elseif (auth()->user()->role == 'branch') {
+                    return redirect('/'.auth()->user()->branch->regional->slug.'/'.auth()->user()->branch->slug);
+                }
+
                 return redirect(RouteServiceProvider::HOME);
             }
         }

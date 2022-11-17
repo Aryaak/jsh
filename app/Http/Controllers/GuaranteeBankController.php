@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Sirius;
+use App\Models\Branch;
 use DB;
 use Exception;
 use App\Models\Scoring;
@@ -14,10 +16,15 @@ class GuaranteeBankController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
+            if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
+            elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
+
             $data = GuaranteeBank::with('insurance_status','insurance_status.status');
             return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('action', 'datatables.actions-show-delete')
+            ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
+            ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
+            ->editColumn('action', $action)
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
@@ -28,7 +35,7 @@ class GuaranteeBankController extends Controller
     {
     }
 
-    public function store(GuaranteeBankRequest $request)
+    public function store(Branch $regional, Branch $branch, Request $request)
     {
         try {
             DB::beginTransaction();
@@ -45,7 +52,12 @@ class GuaranteeBankController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(GuaranteeBank $bankGaransi)
+    public function showRegional(Branch $regional, GuaranteeBank $bankGaransi)
+    {
+        return $this->show($regional, null, $bankGaransi);
+    }
+
+    public function show(Branch $regional, ?Branch $branch, GuaranteeBank $bankGaransi)
     {
         $bankGaransi->principal;
         $bankGaransi->obligee;
@@ -66,7 +78,7 @@ class GuaranteeBankController extends Controller
     {
     }
 
-    public function update(GuaranteeBankRequest $request, GuaranteeBank $bankGaransi)
+    public function update(Branch $regional, Branch $branch, GuaranteeBank $bankGaransi, Request $request)
     {
         try {
             DB::beginTransaction();
@@ -83,7 +95,7 @@ class GuaranteeBankController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(GuaranteeBank $bankGaransi)
+    public function destroy(Branch $regional, Branch $branch, GuaranteeBank $bankGaransi)
     {
         try {
             DB::beginTransaction();

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use DB;
 use Exception;
-use App\Models\Principal;
 use App\Models\Scoring;
+use App\Models\Principal;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\PrincipalRequest;
 
@@ -52,6 +53,7 @@ class PrincipalController extends Controller
         $principal->city->province;
         $principal->scorings;
         $principal->certificates;
+        $principal->score = Str::replace('.', ',', $principal->score);
         return response()->json($this->showResponse($principal->toArray()));
     }
 

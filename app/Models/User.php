@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,6 +43,28 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Accessor
+
+    public function avatar(): Attribute
+    {
+        return Attribute::make(get: fn () => 'https://ui-avatars.com/api/?name=' . $this->name);
+    }
+
+    public function roleConverted(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return match($this->role) {
+                    'main' => "Admin Pusat",
+                    'regional' => "Admin Regional",
+                    'branch' => "Admin Cabang",
+                };
+            }
+        );
+    }
+
+    // Relations
 
     public function branch(){
         return $this->belongsTo(Branch::class);

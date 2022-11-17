@@ -92,7 +92,7 @@
         let table = null
         let insurance = {}
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance Type',{url : '{{ route('master.insurances.index') }}'},[
+            table = dataTableInit('table','Insurance Type',{url : '{{ route($global->currently_on.'.master.insurances.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'name', name: 'name'},
                 {data: 'alias', name: 'alias'},
                 {data: 'address', name: 'address'},
@@ -144,6 +144,7 @@
                 title: "Yakin ingin menghapus Asuransi?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     let formData = new FormData()
                     formData.append('_method','delete')
                     ajaxPost("{{ route('master.insurances.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){

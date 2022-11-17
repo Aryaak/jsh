@@ -11,6 +11,7 @@ use App\Models\Scoring;
 use App\Models\ScoringDetail;
 use App\Helpers\Sirius;
 use DB;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class SuretyBond extends Model
 {
@@ -48,6 +49,54 @@ class SuretyBond extends Model
         'revision_from_id',
         'score'
     ];
+
+    protected $appends = [
+        'service_charge_converted',
+        'admin_charge_converted',
+        'total_charge_converted',
+        'contract_value_converted',
+        'insurance_value_converted',
+        'start_date_converted',
+        'end_date_converted',
+        'document_expired_at_converted',
+    ];
+
+    // Accessors
+
+    public function serviceChargeConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->service_charge));
+    }
+    public function adminChargeConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->admin_charge));
+    }
+    public function totalChargeConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->total_charge));
+    }
+    public function contractValueConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->contract_value));
+    }
+    public function insuranceValueConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->insurance_value));
+    }
+    public function startDateConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toLongDate($this->start_date));
+    }
+    public function endDateConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toLongDate($this->end_date));
+    }
+    public function documentExpiredAtConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toLongDate($this->document_expired_at));
+    }
+
+    // Relations
     public function principal(){
         return $this->belongsTo(Principal::class);
     }

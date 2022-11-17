@@ -2,15 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Str;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Branch extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSlug;
     protected $fillable = ['name','slug','is_regional','jamsyar_username','jamsyar_password','regional_id'];
     protected $casts = ['is_regional' => 'boolean'];
+    protected $appends = ['jamsyar_password_masked'];
+
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()->generateSlugsFrom('name')->saveSlugsTo('slug');
+    }
+
+    // Accessor
+
+    public function jamsyarPasswordMasked(): Attribute
+    {
+        return Attribute::make(get: fn() => Str::mask($this->jamsyar_password, "*", 0));
+    }
+
+    // Relations
+
     public function branches(){
         return $this->hasMany(Branch::class,'regional_id');
     }
@@ -24,7 +43,6 @@ class Branch extends Model
         $params = [
             'name' => $args->name,
             'is_regional' => $args->is_regional,
-            'slug' => Str::slug($args->name),
             'jamsyar_username' => $args->jamsyar_username,
             'jamsyar_password' => $args->jamsyar_password,
         ];

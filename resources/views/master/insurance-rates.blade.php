@@ -103,7 +103,7 @@
         let table = null
         let insuranceRate = null
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance Rate',{url : '{{ route('master.insurance-rates.index') }}'},[
+            table = dataTableInit('table','Insurance Rate',{url : '{{ route($global->currently_on.'.master.insurance-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'name', name: 'name'},
                 {data: 'insurance_type_name', name: 'insurance_type_name'},
                 {data: 'min_value', name: 'min_value'},
@@ -159,6 +159,7 @@
                 title: "Yakin ingin menghapus Rate Asuransi?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     ajaxPost("{{ route('master.insurance-rates.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},null,function(){
                         table.ajax.reload()
                     })

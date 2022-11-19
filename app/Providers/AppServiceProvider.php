@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer(['layout.*', 'master.*', 'payment.*', 'product.*', 'report.*', 'dashboard', 'regionals', 'branches', 'profile'], function ($view) {
+        view()->composer(['designs.*', 'layout.*', 'master.*', 'payment.*', 'product.*', 'report.*', 'dashboard', 'regionals', 'branches', 'profile'], function ($view) {
             $currently_on = 'main';
             if (request()->routeIs('regional.*')) $currently_on = 'regional';
             elseif (request()->routeIs('branch.*')) $currently_on = 'branch';

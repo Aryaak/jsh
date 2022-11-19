@@ -6,6 +6,15 @@
 @endpush
 
 @section('contents')
+    <x-card header="Total Hutang" class="mb-3">
+        @slot('headerAction')
+            <x-button data-bs-toggle="modal" data-bs-target="#modal-payable" size="sm" icon="bx bx-search" face="info">Detail Hutang</x-button>
+        @endslot
+        <div class="h1 text-end text-danger fw-bold mb-0">
+            Rp10.000.000,-
+        </div>
+    </x-card>
+
     <x-card header="Daftar Pembayaran">
         @slot('headerAction')
             <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Pembayaran</x-button>
@@ -16,16 +25,12 @@
                 <tr>
                     <th width="10px">No.</th>
                     <th>Waktu Bayar</th>
-                    <th>Dari Cabang</th>
-                    <th>Ke Regional</th>
                     <th>Nominal Bayar</th>
                     <th width="80px">Tindakan</th>
                 </tr>
             @endslot
             <tr>
                 <td>1</td>
-                <td>Tes</td>
-                <td>Tes</td>
                 <td>Tes</td>
                 <td>Rp100.000.000,-</td>
                 <td>
@@ -38,12 +43,32 @@
 @endsection
 
 @section('modals')
-    <x-modal id="modal-create" title="Tambah Pembayaran">
+    @php
+        $months = [];
+        foreach (range(1, 12) as $month) {
+            $months[$month] = Sirius::longMonth($month);
+        }
+
+        $years = [];
+        foreach (range(date('Y'), 2000) as $year) {
+            $years[$year] = $year;
+        }
+    @endphp
+
+    <x-modal id="modal-create" title="Tambah Pembayaran" size="fullscreen">
         <x-form id="form-create" method="post">
             <x-form-input label="Waktu Bayar" id="create-datetime" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Dari Cabang" id="create-branch-id" name="branchId" :options="[]" class="mb-3" required />
-            <x-form-select label="Ke Regional" id="create-regional-id" name="regionalId" :options="[]" class="mb-3" required />
-            <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+            <x-form-select label="Bulan" id="create-month" name="month" class="mb-3" :options="$months" value="{{ date('m') }}" required />
+            <x-form-select label="Tahun" id="create-year" name="year" class="mb-3" :options="$years" value="{{ date('Y') }}" required />
+            <div class="mb-3">
+                <x-form-label>Total Hutang</x-form-label>
+                <div id="create-payable" class="text-danger">Rp0,-</div>
+            </div>
+            <div class="mb-3">
+                <x-form-label>Total Tagihan</x-form-label>
+                <div id="create-bill">Rp0,-</div>
+            </div>
+            <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class-input="to-rupiah" class="mb-3" required />
             <x-form-textarea label="Keterangan" id="create-desc" name="desc" />
         </x-form>
 
@@ -58,12 +83,12 @@
             <span id="show-datetime">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Dari Cabang</b>: <br>
-            <span id="show-branch">-</span>
+            <b>Bulan</b>: <br>
+            <span id="show-month">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Ke Regional</b>: <br>
-            <span id="show-regional">-</span>
+            <b>Tahun</b>: <br>
+            <span id="show-year">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Nominal Bayar</b>: <br>
@@ -73,27 +98,25 @@
             <b>Keterangan</b>: <br>
             <span id="show-desc">-</span>
         </div>
-
-        @slot('footer')
-            <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
-        @endslot
     </x-modal>
 
-    <x-modal id="modal-edit" title="Ubah Pembayaran">
-        <x-form id="form-edit" method="put">
-            <x-form-input label="Waktu Bayar" id="edit-datetime" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Dari Cabang" id="edit-branch-id" name="branchId" :options="[]" class="mb-3" required />
-            <x-form-select label="Ke Regional" id="edit-regional-id" name="regionalId" :options="[]" class="mb-3" required />
-            <x-form-input label="Nominal Bayar" id="edit-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-textarea label="Keterangan" id="edit-desc" name="desc" />
-        </x-form>
-
-        @slot('footer')
-            <div class="d-flex justify-content-between w-100">
-                <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
-                <x-button id="edit-save" face="success" icon="bx bxs-save">Simpan</x-button>
-            </div>
-        @endslot
+    <x-modal id="modal-payable" title="Detail Hutang" size="fullscreen">
+        <x-table id="payable-table">
+            @slot('thead')
+                <tr>
+                    <th width="10px">No.</th>
+                    <th>Tahun</th>
+                    <th>Bulan</th>
+                    <th>Total Hutang</th>
+                </tr>
+            @endslot
+            <tr>
+                <td>1</td>
+                <td>2022</td>
+                <td>November</td>
+                <td>Rp10.000.000,-</td>
+            </tr>
+        </x-table>
     </x-modal>
 @endsection
 
@@ -103,6 +126,7 @@
     <script>
         $(document).ready(function () {
             const table = $("#table").DataTable()
+            $("#create-month, #create-year").select2({dropdownParent: $('#modal-create')})
             $("#create-branch-id, #create-regional-id").select2({dropdownParent: $('#modal-create')})
             $("#edit-branch-id, #edit-regional-id").select2({dropdownParent: $('#modal-edit')})
         })

@@ -11,6 +11,7 @@ use App\Models\Scoring;
 use App\Models\Status;
 use App\Helpers\Sirius;
 use DB;
+use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class GuaranteeBank extends Model
@@ -234,9 +235,13 @@ class GuaranteeBank extends Model
         return $this->statuses()->createMany(self::fetchStatus((object)$params));
     }
     public function hapus(){
-        $this->statuses()->delete();
-        $this->scorings()->delete();
-        return $this->delete();
+        try{
+            $this->statuses()->delete();
+            $this->scorings()->delete();
+            return $this->delete();
+        } catch (Exception $ex) {
+            throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
+        }
     }
     private static function fetchQuery(object $args): object{
         $columns = [

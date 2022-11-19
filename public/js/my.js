@@ -195,9 +195,14 @@ function ajaxErrorResponse(request, status, error) {
     if (request.status==422) {
         title = "Data kurang lengkap!"
         let validation_error_msg="";
-        Object.keys(request.responseJSON.errors).forEach(key => {
-            validation_error_msg += "- "+request.responseJSON.errors[key]+"<br>"
-        });
+        if(request.responseJSON.errors){
+            Object.keys(request.responseJSON.errors).forEach(key => {
+                validation_error_msg += "- "+request.responseJSON.errors[key]+"<br>"
+            });
+        }else{
+            title = "Tidak bisa menghapus data"
+            validation_error_msg = request.responseJSON.message
+        }
         msg = validation_error_msg
         icon = 'warning'
     }

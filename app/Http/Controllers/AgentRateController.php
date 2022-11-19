@@ -14,12 +14,12 @@ class AgentRateController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = AgentRate::with('agent','insurance','insurance_type','bank')
+            $data = AgentRate::with('agent','insurance','insurance_type','bank')->select('agent_rates.*')
             ->when($request->is_bg == 1, function ($query){
                 return $query->has('bank');
             })->when($request->is_bg == 0, function ($query){
                 return $query->has('bank',0);
-            });
+            })->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('min_value', fn($rate) => Sirius::toRupiah($rate->min_value))

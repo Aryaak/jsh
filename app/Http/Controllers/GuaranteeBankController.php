@@ -19,7 +19,7 @@ class GuaranteeBankController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
 
-            $data = GuaranteeBank::with('insurance_status','insurance_status.status');
+            $data = GuaranteeBank::with('insurance_status','insurance_status.status')->select('guarantee_banks.*')->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))

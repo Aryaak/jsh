@@ -11,6 +11,7 @@ use App\Models\Scoring;
 use App\Models\ScoringDetail;
 use App\Helpers\Sirius;
 use DB;
+use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class SuretyBond extends Model
@@ -228,9 +229,13 @@ class SuretyBond extends Model
         return $this->statuses()->createMany(self::fetchStatus((object)$params));
     }
     public function hapus(){
-        $this->statuses()->delete();
-        $this->scorings()->delete();
-        return $this->delete();
+        try{
+            $this->statuses()->delete();
+            $this->scorings()->delete();
+            return $this->delete();
+        } catch (Exception $ex) {
+            throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
+        }
     }
 
     private static function fetchQuery(object $args): object{

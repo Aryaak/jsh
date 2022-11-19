@@ -422,8 +422,10 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()
-                    ajaxPost("{{ route('master.principals.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},'',function(){
-                        table.ajax.reload()
+                    ajaxPost("{{ route('master.principals.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},'',function(response){
+                        if(response.success){
+                            table.ajax.reload()
+                        }
                     })
                 }
             })

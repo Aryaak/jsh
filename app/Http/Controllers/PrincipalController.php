@@ -15,7 +15,7 @@ class PrincipalController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Principal::with('city');
+            $data = Principal::with('city')->select('principals.*')->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('score', 'datatables.score-principal')

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Helpers\Sirius;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use App\Models\Scoring;
+use App\Helpers\Sirius;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Principal extends Model
 {
     use HasFactory;
@@ -120,8 +120,12 @@ class Principal extends Model
         ]);
     }
     public function hapus(){
-        $this->scorings()->delete();
-        $this->certificates()->delete();
-        $this->delete();
+        try {
+            $this->scorings()->detach();
+            $this->certificates()->delete();
+            return $this->delete();
+        } catch (Exception $ex) {
+            throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
+        }
     }
 }

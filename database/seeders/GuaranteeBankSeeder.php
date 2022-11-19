@@ -7,6 +7,7 @@ use App\Models\Agent;
 use App\Models\Insurance;
 use App\Models\InsuranceType;
 use App\Models\Obligee;
+use App\Models\Branch;
 use App\Models\Principal;
 use App\Models\GuaranteeBank;
 use Illuminate\Database\Seeder;
@@ -20,8 +21,9 @@ class GuaranteeBankSeeder extends Seeder
                 "receiptNumber" => "111".$i,
                 "bondNumber" => "112".$i,
                 "polishNumber" => "113".$i,
-                "agentId" => Agent::inRandomOrder()->first()->id,
                 "bankId" => Bank::inRandomOrder()->first()->id,
+                "agentId" => Agent::inRandomOrder()->first()->id,
+                "branchId" => Branch::inRandomOrder()->first()->id,
                 "insuranceId" => Insurance::inRandomOrder()->first()->id,
                 "insuranceTypeId" => InsuranceType::inRandomOrder()->first()->id,
                 "obligeeId" => Obligee::inRandomOrder()->first()->id,

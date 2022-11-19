@@ -574,7 +574,7 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Biaya Polis Asuransi</x-form-label>
-                                <div id="show-insurance-polish-fee">-</div>
+                                <div id="show-insurance-polish-cost">-</div>
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Materai Asuransi</x-form-label>
@@ -670,11 +670,11 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Biaya Polis</x-form-label>
-                                <div id="show-polish-fee">-</div>
+                                <div id="show-office-polish-cost">-</div>
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Materai</x-form-label>
-                                <div id="show-stamp-fee">-</div>
+                                <div id="show-office-stamp-cost">-</div>
                             </div>
                             <div>
                                 <x-form-label>Total Nett Kantor</x-form-label>
@@ -871,12 +871,17 @@
                     $('#show-document-title').html(suretyBond.document_title)
                     $('#show-document-number').html(suretyBond.document_number)
                     $('#show-document-expired-at').html(suretyBond.document_expired_at_converted)
-
-                    // $('#show-desc').html()
-                    // $('#show-paid-date').html()
-                    // $('#show-status').html()
-                    // $('#show-cancel-status').html()
-                    // $('#show-sync-status').html()
+                    $('#show-insurance-rate').html(suretyBond.insurance_rate)
+                    $('#show-insurance-polish-cost').html(suretyBond.insurance_polish_cost_converted)
+                    $('#show-insurance-stamp').html(suretyBond.insurance_stamp_cost_converted)
+                    $('#show-premi-nett').html(suretyBond.insurance_net_converted)
+                    $('#show-premi-nett-total').html(suretyBond.insurance_net_total_converted)
+                    $('#show-office-rate').html(suretyBond.office_rate)
+                    $('#show-office-nett').html(suretyBond.office_net_converted)
+                    $('#show-office-nett-total').html(suretyBond.office_net_total_converted)
+                    $('#show-office-polish-cost').html(suretyBond.office_polish_cost_converted)
+                    $('#show-office-stamp-cost').html(suretyBond.office_stamp_cost_converted)
+                    $('#show-profit').html(suretyBond.profit_converted)
                     $('input[type="radio"]:checked').prop('checked',false)
                     const groupByCategory = scoringGroupBy(suretyBond.scorings)
                     Object.keys(groupByCategory).forEach(key => {
@@ -925,11 +930,6 @@
                 $('#edit-document-title').val(suretyBond.document_title)
                 $('#edit-document-number').val(suretyBond.document_number)
                 $('#edit-document-expired-at').val(suretyBond.document_expired_at)
-                // $('#edit-desc').val()
-                // $('#edit-paid-date').val()
-                // $('#edit-status').val()
-                // $('#edit-cancel-status').val()
-                // $('#edit-sync-status').val()
                 const groupByCategory = scoringGroupBy(suretyBond.scorings)
                 Object.keys(groupByCategory).forEach(key => {
                     groupByCategory[key].forEach(e => {

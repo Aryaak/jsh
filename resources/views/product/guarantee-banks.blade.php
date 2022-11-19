@@ -585,7 +585,7 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Biaya Polis Asuransi</x-form-label>
-                                <div id="show-insurance-polish-fee">-</div>
+                                <div id="show-insurance-polish-cost">-</div>
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Materai Asuransi</x-form-label>
@@ -681,11 +681,11 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Biaya Polis</x-form-label>
-                                <div id="show-polish-fee">-</div>
+                                <div id="show-office-polish-cost">-</div>
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Materai</x-form-label>
-                                <div id="show-stamp-fee">-</div>
+                                <div id="show-office-stamp-cost">-</div>
                             </div>
                             <div>
                                 <x-form-label>Total Nett Kantor</x-form-label>
@@ -859,6 +859,7 @@
             ajaxGet("{{ route($global->currently_on.'.products.guarantee-banks.show', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     guaranteeBank = response.data
+                    console.log(guaranteeBank);
                     $('#show-receipt-number').html(guaranteeBank.receipt_number)
                     $('#show-bond-number').html(guaranteeBank.bond_number)
                     $('#show-polish-number').html(guaranteeBank.polish_number)
@@ -885,12 +886,17 @@
                     $('#show-document-title').html(guaranteeBank.document_title)
                     $('#show-document-number').html(guaranteeBank.document_number)
                     $('#show-document-expired-at').html(guaranteeBank.document_expired_at_converted)
-                    // $('#show-desc').html()
-                    // $('#show-paid-date').html()
-                    // $('#show-status').html()
-                    // $('#show-cancel-status').html()
-                    // $('#show-sync-status').html()
-                    // $('input[type="radio"]:checked').prop('checked',false)
+                    $('#show-insurance-rate').html(guaranteeBank.insurance_rate)
+                    $('#show-insurance-polish-cost').html(guaranteeBank.insurance_polish_cost_converted)
+                    $('#show-insurance-stamp').html(guaranteeBank.insurance_stamp_cost_converted)
+                    $('#show-premi-nett').html(guaranteeBank.insurance_net_converted)
+                    $('#show-premi-nett-total').html(guaranteeBank.insurance_net_total_converted)
+                    $('#show-office-rate').html(guaranteeBank.office_rate)
+                    $('#show-office-nett').html(guaranteeBank.office_net_converted)
+                    $('#show-office-nett-total').html(guaranteeBank.office_net_total_converted)
+                    $('#show-office-polish-cost').html(guaranteeBank.office_polish_cost_converted)
+                    $('#show-office-stamp-cost').html(guaranteeBank.office_stamp_cost_converted)
+                    $('#show-profit').html(guaranteeBank.profit_converted)
                     const groupByCategory = scoringGroupBy(guaranteeBank.scorings)
                     Object.keys(groupByCategory).forEach(key => {
                         $('#show-scoring-category').html(key)
@@ -937,11 +943,6 @@
                 $('#edit-document-title').val(guaranteeBank.document_title)
                 $('#edit-document-number').val(guaranteeBank.document_number)
                 $('#edit-document-expired-at').val(guaranteeBank.document_expired_at)
-                // $('#edit-desc').val()
-                // $('#edit-paid-date').val()
-                // $('#edit-status').val()
-                // $('#edit-cancel-status').val()
-                // $('#edit-sync-status').val()
                 const groupByCategory = scoringGroupBy(guaranteeBank.scorings)
                 Object.keys(groupByCategory).forEach(key => {
                     groupByCategory[key].forEach(e => {

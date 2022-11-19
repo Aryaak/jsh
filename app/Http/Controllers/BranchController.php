@@ -15,7 +15,7 @@ class BranchController extends Controller
     public function index(Branch $regional, Request $request)
     {
         if($request->ajax()){
-            $data = Branch::with('regional')->where('is_regional', false)->where('regional_id', $regional->id);
+            $data = Branch::with('regional')->select('branches.*')->where('is_regional', false)->where('regional_id', $regional->id)->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-branch')

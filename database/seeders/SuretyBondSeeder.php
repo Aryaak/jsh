@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Agent;
+use App\Models\Branch;
 use App\Models\Insurance;
 use App\Models\InsuranceType;
 use App\Models\Obligee;
@@ -19,6 +20,7 @@ class SuretyBondSeeder extends Seeder
                 "receiptNumber" => "111".$i,
                 "bondNumber" => "112".$i,
                 "polishNumber" => "113".$i,
+                "branchId" => Branch::inRandomOrder()->first()->id,
                 "agentId" => Agent::inRandomOrder()->first()->id,
                 "insuranceId" => Insurance::inRandomOrder()->first()->id,
                 "insuranceTypeId" => InsuranceType::inRandomOrder()->first()->id,

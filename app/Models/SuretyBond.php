@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 class SuretyBond extends Model
 {
     use HasFactory;
-
     public $fillable = [
         'receipt_number',
         'bond_number',
@@ -38,10 +37,15 @@ class SuretyBond extends Model
         'profit',
         'insurance_polish_cost',
         'insurance_stamp_cost',
-        'insurance_total_net',
+        'insurance_rate',
+        'insurance_net',
+        'insurance_net_total',
         'office_polish_cost',
         'office_stamp_cost',
-        'office_total_net',
+        'office_rate',
+        'office_net',
+        'office_net_total',
+        'branch_id',
         'principal_id',
         'agent_id',
         'obligee_id',
@@ -56,14 +60,21 @@ class SuretyBond extends Model
         'admin_charge_converted',
         'total_charge_converted',
         'contract_value_converted',
-        'insurance_value_converted',
         'start_date_converted',
         'end_date_converted',
         'document_expired_at_converted',
+        'insurance_stamp_cost_converted',
+        'insurance_polish_cost_converted',
+        'insurance_net_converted',
+        'insurance_net_total_converted',
+        'office_stamp_cost_converted',
+        'office_polish_cost_converted',
+        'office_net_converted',
+        'office_net_total_converted',
+        'profit_converted',
     ];
 
     // Accessors
-
     public function serviceChargeConverted(): Attribute
     {
         return Attribute::make(get: fn () => Sirius::toRupiah($this->service_charge));
@@ -80,9 +91,45 @@ class SuretyBond extends Model
     {
         return Attribute::make(get: fn () => Sirius::toRupiah($this->contract_value));
     }
+    public function insurancePolishCostConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->insurance_polish_cost));
+    }
+    public function insuranceStampCostConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->insurance_stamp_cost));
+    }
     public function insuranceValueConverted(): Attribute
     {
         return Attribute::make(get: fn () => Sirius::toRupiah($this->insurance_value));
+    }
+    public function insuranceNetConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->insurance_net));
+    }
+    public function insuranceNetTotalConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->insurance_net_total));
+    }
+    public function officePolishCostConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->office_polish_cost));
+    }
+    public function officeStampCostConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->office_stamp_cost));
+    }
+    public function officeNetConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->office_net));
+    }
+    public function officeNetTotalConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->office_net_total));
+    }
+    public function profitConverted(): Attribute
+    {
+        return Attribute::make(get: fn () => Sirius::toRupiah($this->profit));
     }
     public function startDateConverted(): Attribute
     {
@@ -146,8 +193,14 @@ class SuretyBond extends Model
             ];
         },array_keys($args->scoring),array_values($args->scoring));
         $totalScore = array_sum(array_column($scoring, 'value'));
-        $insuranceTotalNet = ((int)$args->insuranceValue * $insuranceRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $insuranceRate->polish_cost + $insuranceRate->stamp_cost;
-        $officeTotalNet = ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1)) + $agentRate->polish_cost + $agentRate->stamp_cost;
+        $insuranceNet = ((int)$args->insuranceValue * $insuranceRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
+        $officeNet = ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
+
+        $insuranceNet = $insuranceNet >= $insuranceRate->min_value ? $insuranceNet : $insuranceRate->min_value;
+        $officeNet = $officeNet >= $agentRate->min_value ? $officeNet : $agentRate->min_value;
+
+        $insuranceNetTotal = $insuranceNet + $insuranceRate->polish_cost + $insuranceRate->rate_value;
+        $officeNetTotal = $officeNet + $agentRate->polish_cost + $agentRate->stamp_cost;
         return (object)[
             'suretyBond' => [
                 'receipt_number' => $args->receiptNumber,
@@ -166,13 +219,18 @@ class SuretyBond extends Model
                 'service_charge' => $args->serviceCharge,
                 'admin_charge' => $args->adminCharge,
                 'total_charge' => $args->serviceCharge + $args->adminCharge,
-                'profit' => $officeTotalNet - $insuranceTotalNet,
+                'profit' => $officeNetTotal - $insuranceNetTotal,
                 'insurance_polish_cost' => $insuranceRate->polish_cost,
-                'insurance_stamp_cost' => $insuranceRate->stamp_cost,
-                'insurance_total_net' => $insuranceTotalNet,
+                'insurance_stamp_cost' =>  $insuranceRate->stamp_cost,
+                'insurance_rate' => $insuranceRate->rate_value,
+                'insurance_net' => $insuranceNet,
+                'insurance_net_total' => $insuranceNetTotal,
                 'office_polish_cost' => $agentRate->polish_cost,
                 'office_stamp_cost' => $agentRate->stamp_cost,
-                'office_total_net' => $officeTotalNet,
+                'office_rate' => $agentRate->rate_value,
+                'office_net' => $officeNet,
+                'office_net_total' => $officeNetTotal,
+                'branch_id' => $args->branchId,
                 'principal_id' => $args->principalId,
                 'agent_id' => $args->agentId,
                 'obligee_id' => $args->obligeeId,

@@ -337,7 +337,7 @@
                 <x-card class="p-1">
                     <div class="d-flex flex-column flex-lg-row">
                         @foreach ($scorings->groupBy('category') as $grouped)
-                            <div class="col border p-0" style="position: relative; flex: 100%;">
+                            <div class="border p-0" style="position: relative; flex: 100%;">
                                 {{-- <div class="border-bottom p-1 text-center">30</div> --}}
                                 <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
                                 <div class="px-3 pt-3 pb-5">
@@ -359,6 +359,16 @@
                             </div>
                         @endforeach
                     </div>
+                    {{-- <div class="row">
+                        <div class="col-12 mt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>Total Nilai: <b>69</b></div>
+                                <div>
+                                    <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
                 </x-card>
             </div>
 
@@ -366,7 +376,10 @@
                 <div class="d-flex justify-content-between w-100">
                     <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
                     <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button>
-                    <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
+                    <div>
+                        <x-button class="btn-edit-status" data-bs-target="#modal-edit-status" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Status</x-button>
+                        <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
+                    </div>
                 </div>
             @endslot
         </x-modal>
@@ -520,6 +533,48 @@
                         <br>
                         <x-button id="edit-save" face="success" icon="bx bxs-save">Simpan</x-button>
                     </div>
+                </div>
+            @endslot
+        </x-modal>
+
+        <x-modal id="modal-edit-status" title="Ubah Status">
+            <div class="pb-2 mb-2 text-center">
+                <b>No. Bond</b> <br>
+                <span id="edit-status-no-bond">-</span>
+            </div>
+            <div>
+                <x-form id="form-edit-status" method="put">
+                    @php
+                        $insuranceStatusses = [
+                            'belum terbit' => 'Belum Terbit',
+                            'terbit' => 'Terbit',
+                            'batal' => 'Batal',
+                            'revisi' => 'Revisi',
+                            'salah cetak' => 'Salah Cetak',
+                        ];
+
+                        $processStatusses = [
+                            'input' => 'Input',
+                            'analisa asuransi' => 'Analisa Asuransi',
+                            'analisa bank' => 'Analisa Bank',
+                            'terbit' => 'Terbit',
+                        ];
+
+                        $financeStatusses = [
+                            'lunas' => 'Lunas',
+                            'belum lunas' => 'Belum Lunas',
+                        ];
+                    @endphp
+                    <x-form-select label="Status Jaminan" id="edit-status-insurance" name="insurance" class="mb-3" :options="$insuranceStatusses" required />
+                    <x-form-select label="Status Proses" id="edit-status-process" name="process" class="mb-3" :options="$processStatusses" required />
+                    <x-form-select label="Status Keuangan" id="edit-status-finance" name="finance" :options="$financeStatusses" required />
+                </x-form>
+            </div>
+
+            @slot('footer')
+                <div class="d-flex justify-content-between w-100">
+                    <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
+                    <x-button id="edit-status-save" face="success" icon="bx bxs-save">Simpan</x-button>
                 </div>
             @endslot
         </x-modal>
@@ -828,6 +883,8 @@
             ])
 
             @if ($global->currently_on == 'branch')
+                $("#edit-status-insurance, #edit-status-process, #edit-status-finance").select2({dropdownParent: $('#modal-edit-status')})
+
                 select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,$('#modal-create'))
                 select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-create'))
                 select2Init("#create-principal-id",'{{ route('select2.principal') }}',0,$('#modal-create'))

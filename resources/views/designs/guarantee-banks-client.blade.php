@@ -1,4 +1,4 @@
-@extends('layouts.client', ['title' => 'Request Surety Bond'])
+@extends('layouts.client', ['title' => 'Request Bank Garansi'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
@@ -6,12 +6,12 @@
 @endpush
 
 @section('contents')
-    <x-card header="Request Surety Bond">
+    <x-card header="Request Bank Garansi">
         <div class="border rounded p-2" style="background-color: #EEE">
             <x-form id="form-create" method="post">
                 <div class="row mb-2">
                     <div class="col-12 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Surety Bond</div>
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Bank Garansi</div>
                     </div>
                 </div>
                 <div class="d-flex flex-column flex-lg-row flex-wrap gap-2">
@@ -22,6 +22,7 @@
                                 <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
                                 <x-form-select label="Nama Agen" id="create-agent-id" :options="[]" name="agentId" class="mb-3" required/>
+                                <x-form-select label="Nama Bank" id="create-bank-id" :options="[]" name="bankId" class="mb-3" required/>
                                 <x-form-select label="Nama Asuransi" id="create-insurance-id" :options="[]" name="insuranceId" class="mb-3" required/>
                                 <x-form-select label="Jenis Jaminan" id="create-insurance-type-id" :options="[]" name="insuranceType" required/>
                             </x-card>
@@ -106,7 +107,7 @@
 
                 <div class="row mb-2">
                     <div class="col-12 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Surety Bond</div>
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Bank Garansi</div>
                     </div>
                 </div>
                 <div class="row mx-1">
@@ -253,13 +254,13 @@
     <script>
         $(document).ready(function () {
             const table = $("#table").DataTable()
-            $("#create-agent-id, #create-insurance-id, #create-insurance-type-id, #create-principal-id, #create-obligee-id").select2()
+            $("#create-agent-id, #create-bank-id, #create-insurance-id, #create-insurance-type-id, #create-principal-id, #create-obligee-id").select2()
         })
 
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Surety Bond?",
+                title: "Yakin ingin menghapus Bank Garansi?",
             }).then((result) => {
                 if (result.isConfirmed) {
                 }

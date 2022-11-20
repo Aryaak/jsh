@@ -14,4 +14,9 @@
     <div class="card-body" @if($darkBody) style="background-color: #EEE" @endif>
         {!! $slot !!}
     </div>
+    @isset($footer)
+        <div class="card-footer border-top">
+            {!! $footer !!}
+        </div>
+    @endisset
 </div>

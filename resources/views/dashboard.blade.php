@@ -47,7 +47,7 @@
 
     <x-card class="mb-4">
         <div class="income-chart-container">
-            <canvas id="chart-1"></canvas>
+            <canvas id="chart_sb"></canvas>
         </div>
     </x-card>
 
@@ -73,7 +73,7 @@
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-          const labels = [
+        const labels = [
             'Januari',
             'Februari',
             'Maret',
@@ -88,25 +88,113 @@
             'Desember',
         ];
 
-        const data = {
+        // CHART SURETY BONDS
+        // const data_sb = {
+        //     labels: labels,
+        //     datasets: [{
+        //         label: 'Profit',
+        //         backgroundColor: 'rgb(255, 99, 132)',
+        //         borderColor: 'rgb(255, 99, 132)',
+                // data: [
+                //     @json($data_sbs[0]['total_profit']),
+                //     @json($data_sbs[1]['total_profit']),
+                //     @json($data_sbs[2]['total_profit']),
+                //     @json($data_sbs[3]['total_profit']),
+                //     @json($data_sbs[4]['total_profit']),
+                //     @json($data_sbs[5]['total_profit']),
+                //     @json($data_sbs[6]['total_profit']),
+                //     @json($data_sbs[7]['total_profit']),
+                //     @json($data_sbs[8]['total_profit']),
+                //     @json($data_sbs[9]['total_profit']),
+                //     @json($data_sbs[10]['total_profit']),
+                //     @json($data_sbs[11]['total_profit']),
+                // ],
+        //     }]
+        // };
+        // var option = {
+        //     showLines: true,
+        //     onClick: function(evt) {
+        //         var element = myChart_sb.getElementAtEvent(evt);
+        //         if(element.length > 0)
+        //         {
+        //             var ind = element[0]._index;
+        //             if(confirm('Do you want to remove this point?')){
+        //                 data.datasets[0].data.splice(ind, 1);
+        //                 data.labels.splice(ind, 1);
+        //                 myLineChart.update(data);
+        //             }
+        //         }
+        //     }
+        // };
+        // const config_sb = {
+        //     type: 'line',
+        //     data: data_sb,
+        //     options: option
+        // };
+        // const myChart_sb = new Chart(
+        //     document.getElementById('chart_sb'),
+        //     config_sb
+        // );
+
+        var canvas = document.getElementById('chart_sb');
+        var data = {
             labels: labels,
-            datasets: [{
-                label: 'Data 2022',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45, 0, 10, 5, 2, 20],
-            }]
+            datasets: [
+                {
+                    label: "Profit Surety Bonds",
+                    fill: false,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(75,192,192,0.4)",
+                    borderColor: "rgba(75,192,192,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(75,192,192,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHitRadius: 10,
+                    data: [
+                        @json($data_sbs[0]['total_profit']),
+                        @json($data_sbs[1]['total_profit']),
+                        @json($data_sbs[2]['total_profit']),
+                        @json($data_sbs[3]['total_profit']),
+                        @json($data_sbs[4]['total_profit']),
+                        @json($data_sbs[5]['total_profit']),
+                        @json($data_sbs[6]['total_profit']),
+                        @json($data_sbs[7]['total_profit']),
+                        @json($data_sbs[8]['total_profit']),
+                        @json($data_sbs[9]['total_profit']),
+                        @json($data_sbs[10]['total_profit']),
+                        @json($data_sbs[11]['total_profit']),
+                    ],
+                }
+            ]
         };
 
-        const config = {
+        var option = {
+            showLines: true,
+            onClick: (e, activeEls) => {
+                let datasetIndex = activeEls[0].datasetIndex;
+                let dataIndex = activeEls[0].index;
+                let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                let label = e.chart.data.labels[dataIndex];
+
+                window.location = "{{ route('regional.products.surety-bonds.index','-regional-') }}".replace('-regional-',@json($global->regional->slug));
+            }
+        };
+
+        var myLineChart = new Chart(canvas,{
             type: 'line',
             data: data,
-            options: {}
-        };
-
-        const myChart = new Chart(
-            document.getElementById('chart-1'),
-            config
-        );
+            options: option,
+        });
+        // ==================
     </script>
 @endpush

@@ -14,11 +14,11 @@ class InsuranceRateController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            // $data = InsuranceRate::with('insurance','insurance_type');
-            $data = DB::table('insurance_rates as ir')
-            ->join('insurances as i','i.id','ir.insurance_id')
-            ->join('insurance_types as it','it.id','ir.insurance_type_id')
-            ->select('ir.*','i.name','it.name as insurance_type_name');
+            $data = InsuranceRate::with('insurance','insurance_type')->select('insurance_rates.*')->orderBy('created_at','desc');
+            // $data = DB::table('insurance_rates as ir')
+            // ->join('insurances as i','i.id','ir.insurance_id')
+            // ->join('insurance_types as it','it.id','ir.insurance_type_id')
+            // ->select('ir.*','i.name','it.name as insurance_type_name')->orderBy('ir.created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('min_value', fn($rate) => Sirius::toRupiah($rate->min_value))

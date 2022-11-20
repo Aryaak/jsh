@@ -216,7 +216,6 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
-            Route::get('dari-principal', [PaymentController::class, 'indexPrincipalToBranch'])->name('principal-to-branch.index');
             Route::get('ke-agen', [PaymentController::class, 'indexBranchToAgent'])->name('branch-to-agent.index');
         });
 

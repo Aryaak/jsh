@@ -38,12 +38,27 @@
 @endsection
 
 @section('modals')
-    <x-modal id="modal-create" title="Tambah Pembayaran">
+    @php
+        $months = [];
+        foreach (range(1, 12) as $month) {
+            $months[$month] = Sirius::longMonth($month);
+        }
+
+        $years = [];
+        foreach (range(date('Y'), 2000) as $year) {
+            $years[$year] = $year;
+        }
+    @endphp
+
+    <x-modal id="modal-create" title="Tambah Pembayaran" size="fullscreen">
         <x-form id="form-create" method="post">
             <x-form-input label="Waktu Bayar" id="create-datetime" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Dari Regional" id="create-regional-id" name="regionalId" :options="[]" class="mb-3" required />
-            <x-form-select label="Ke Asuransi" id="create-insurance-id" name="insuranceId" :options="[]" class="mb-3" required />
-            <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+            <x-form-select label="Bulan" id="create-month" name="month" class="mb-3" :options="$months" value="{{ date('m') }}" required />
+            <x-form-select label="Tahun" id="create-year" name="year" class="mb-3" :options="$years" value="{{ date('Y') }}" required />
+            <div class="mb-3">
+                <x-form-label required>Nominal Bayar</x-form-label>
+                <div id="create-nominal">-</div>
+            </div>
             <x-form-textarea label="Keterangan" id="create-desc" name="desc" />
         </x-form>
 
@@ -58,8 +73,12 @@
             <span id="show-datetime">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
-            <b>Dari Regional</b>: <br>
-            <span id="show-regional">-</span>
+            <b>Bulan</b>: <br>
+            <span id="show-month">-</span>
+        </div>
+        <div class="border-bottom pb-2 mb-2">
+            <b>Tahun</b>: <br>
+            <span id="show-year">-</span>
         </div>
         <div class="border-bottom pb-2 mb-2">
             <b>Ke Asuransi</b>: <br>
@@ -73,27 +92,6 @@
             <b>Keterangan</b>: <br>
             <span id="show-desc">-</span>
         </div>
-
-        @slot('footer')
-            <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
-        @endslot
-    </x-modal>
-
-    <x-modal id="modal-edit" title="Ubah Pembayaran">
-        <x-form id="form-edit" method="put">
-            <x-form-input label="Waktu Bayar" id="edit-datetime" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Dari Regional" id="edit-regional-id" name="regionalId" :options="[]" class="mb-3" required />
-            <x-form-select label="Ke Asuransi" id="edit-insurance-id" name="insuranceId" :options="[]" class="mb-3" required />
-            <x-form-input label="Nominal Bayar" id="edit-nominal" name="nominal" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-textarea label="Keterangan" id="edit-desc" name="desc" />
-        </x-form>
-
-        @slot('footer')
-            <div class="d-flex justify-content-between w-100">
-                <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
-                <x-button id="edit-save" face="success" icon="bx bxs-save">Simpan</x-button>
-            </div>
-        @endslot
     </x-modal>
 @endsection
 
@@ -103,6 +101,7 @@
     <script>
         $(document).ready(function () {
             const table = $("#table").DataTable()
+            $("#create-month, #create-year").select2({dropdownParent: $('#modal-create')})
             $("#create-regional-id, #create-insurance-id").select2({dropdownParent: $('#modal-create')})
             $("#edit-regional-id, #edit-insurance-id").select2({dropdownParent: $('#modal-edit')})
         })

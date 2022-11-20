@@ -127,12 +127,22 @@
                     province_id: $('#edit-province-id').val()
                 }
             })
+
+            @if (request()->has('mode') && request()->mode == 'tambah')
+                $("#modal-create").modal('show')
+            @endif
         })
 
         $(document).on('click', '#create-save', function () {
+            loading()
             ajaxPost("{{ route('master.obligees.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
+                @if (request()->has('mode') && request()->mode == 'tambah')
+                    setTimeout(() => {
+                        window.close()
+                    }, 1000);
+                @endif
             })
         })
 

@@ -19,7 +19,7 @@ class SuretyBondController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
 
-            $data = SuretyBond::with('insurance_status','insurance_status.status');
+            $data = SuretyBond::with('insurance_status','insurance_status.status')->select('surety_bonds.*')->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
@@ -35,11 +35,13 @@ class SuretyBondController extends Controller
     {
     }
 
-    public function store(Branch $regional, Branch $branch, Request $request)
+    public function store(Branch $regional, Branch $branch, SuretyBondRequest $request)
     {
         try {
             DB::beginTransaction();
-            SuretyBond::buat($request->validated());
+            $params = $request->validated();
+            $params['branchId'] = $branch->id;
+            SuretyBond::buat($params);
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -76,11 +78,13 @@ class SuretyBondController extends Controller
     {
     }
 
-    public function update(Branch $regional, Branch $branch, SuretyBond $suretyBond, Request $request)
+    public function update(Branch $regional, Branch $branch, SuretyBond $suretyBond, SuretyBondRequest $request)
     {
         try {
             DB::beginTransaction();
-            $suretyBond->ubah($request->validated());
+            $params = $request->validated();
+            $params['branchId'] = $branch->id;
+            $suretyBond->ubah($params);
             $http_code = 200;
             $response = $this->updateResponse();
             DB::commit();

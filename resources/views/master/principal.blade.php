@@ -320,6 +320,9 @@
                     province_id: $('#edit-info-province-id').val()
                 }
             })
+            @if (request()->has('mode') && request()->mode == 'tambah')
+                $("#modal-create").modal('show')
+            @endif
         })
 
         $(document).on('click', '.create-scoring, .edit-scoring', function () {
@@ -333,6 +336,11 @@
             ajaxPost("{{ route('master.principals.store') }}",new FormData(document.getElementById('form-create')),'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
+                @if (request()->has('mode') && request()->mode == 'tambah')
+                    setTimeout(() => {
+                        window.close()
+                    }, 1000);
+                @endif
             })
         })
 
@@ -422,8 +430,10 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()
-                    ajaxPost("{{ route('master.principals.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},'',function(){
-                        table.ajax.reload()
+                    ajaxPost("{{ route('master.principals.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method: 'delete'},'',function(response){
+                        if(response.success){
+                            table.ajax.reload()
+                        }
                     })
                 }
             })

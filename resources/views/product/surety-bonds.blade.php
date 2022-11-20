@@ -162,7 +162,21 @@
             </x-form>
 
             @slot('footer')
-                <x-button id="create-save" face="success" icon="bx bxs-save">Simpan</x-button>
+                <div class="d-flex justify-content-between w-100">
+                    <div>
+                    </div>
+                    <div>
+                        <div>Shortcut:</div>
+                        <div>
+                            <x-button link="{{ route('branch.master.principals.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug, 'mode' => 'tambah']) }}" target="_blank" icon="bx bxs-data">Principal</x-button>
+                            <x-button link="{{ route('branch.master.obligees.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug, 'mode' => 'tambah']) }}" target="_blank" icon="bx bxs-data">Obligee</x-button>
+                        </div>
+                    </div>
+                    <div>
+                        <br>
+                        <x-button id="create-save" face="success" icon="bx bxs-save">Simpan</x-button>
+                    </div>
+                </div>
             @endslot
         </x-modal>
 
@@ -347,6 +361,7 @@
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
                     <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
+                    <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button>
                     <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
                 </div>
             @endslot
@@ -482,8 +497,21 @@
 
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
-                    <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
-                    <x-button id="edit-save" face="success" icon="bx bxs-save">Simpan</x-button>
+                    <div>
+                        <br>
+                        <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
+                    </div>
+                    <div>
+                        <div>Shortcut:</div>
+                        <div>
+                            <x-button link="{{ route('branch.master.principals.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug, 'mode' => 'tambah']) }}" target="_blank" icon="bx bxs-data">Principal</x-button>
+                            <x-button link="{{ route('branch.master.obligees.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug, 'mode' => 'tambah']) }}" target="_blank" icon="bx bxs-data">Obligee</x-button>
+                        </div>
+                    </div>
+                    <div>
+                        <br>
+                        <x-button id="edit-save" face="success" icon="bx bxs-save">Simpan</x-button>
+                    </div>
                 </div>
             @endslot
         </x-modal>
@@ -574,7 +602,7 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Biaya Polis Asuransi</x-form-label>
-                                <div id="show-insurance-polish-fee">-</div>
+                                <div id="show-insurance-polish-cost">-</div>
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Materai Asuransi</x-form-label>
@@ -670,11 +698,11 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Biaya Polis</x-form-label>
-                                <div id="show-polish-fee">-</div>
+                                <div id="show-office-polish-cost">-</div>
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Materai</x-form-label>
-                                <div id="show-stamp-fee">-</div>
+                                <div id="show-office-stamp-cost">-</div>
                             </div>
                             <div>
                                 <x-form-label>Total Nett Kantor</x-form-label>
@@ -871,12 +899,17 @@
                     $('#show-document-title').html(suretyBond.document_title)
                     $('#show-document-number').html(suretyBond.document_number)
                     $('#show-document-expired-at').html(suretyBond.document_expired_at_converted)
-
-                    // $('#show-desc').html()
-                    // $('#show-paid-date').html()
-                    // $('#show-status').html()
-                    // $('#show-cancel-status').html()
-                    // $('#show-sync-status').html()
+                    $('#show-insurance-rate').html(suretyBond.insurance_rate)
+                    $('#show-insurance-polish-cost').html(suretyBond.insurance_polish_cost_converted)
+                    $('#show-insurance-stamp').html(suretyBond.insurance_stamp_cost_converted)
+                    $('#show-premi-nett').html(suretyBond.insurance_net_converted)
+                    $('#show-premi-nett-total').html(suretyBond.insurance_net_total_converted)
+                    $('#show-office-rate').html(suretyBond.office_rate)
+                    $('#show-office-nett').html(suretyBond.office_net_converted)
+                    $('#show-office-nett-total').html(suretyBond.office_net_total_converted)
+                    $('#show-office-polish-cost').html(suretyBond.office_polish_cost_converted)
+                    $('#show-office-stamp-cost').html(suretyBond.office_stamp_cost_converted)
+                    $('#show-profit').html(suretyBond.profit_converted)
                     $('input[type="radio"]:checked').prop('checked',false)
                     const groupByCategory = scoringGroupBy(suretyBond.scorings)
                     Object.keys(groupByCategory).forEach(key => {
@@ -896,10 +929,21 @@
                         const html = `<x-history-item icon="bx bx-check" face="success" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
                         $('#'+e.type+'-status-histories').append(html)
                     });
+
+                    $("#btn-paid-off-payment").attr('data-id', suretyBond.id)
                 }
             })
         })
 
+        $("#btn-paid-off-payment").click(function () {
+            Confirm.fire({
+                text: 'Yakin ingin melunasi pembayaran surety bond ini?'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Aksi lunasi pembayaran
+                }
+            })
+        })
 
         @if ($global->currently_on == 'branch')
             $(document).on('click', '.btn-edit', function () {
@@ -925,11 +969,6 @@
                 $('#edit-document-title').val(suretyBond.document_title)
                 $('#edit-document-number').val(suretyBond.document_number)
                 $('#edit-document-expired-at').val(suretyBond.document_expired_at)
-                // $('#edit-desc').val()
-                // $('#edit-paid-date').val()
-                // $('#edit-status').val()
-                // $('#edit-cancel-status').val()
-                // $('#edit-sync-status').val()
                 const groupByCategory = scoringGroupBy(suretyBond.scorings)
                 Object.keys(groupByCategory).forEach(key => {
                     groupByCategory[key].forEach(e => {

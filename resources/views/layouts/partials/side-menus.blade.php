@@ -148,7 +148,6 @@
         <x-menu route="branch.payments.*" icon="bx bxs-wallet">
             Pembayaran
             @slot('submenus')
-                <x-submenu route="branch.payments.principal-to-branch.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Dari Principal</x-submenu>
                 <x-submenu route="branch.dashboard" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Ke Regional</x-submenu>
                 <x-submenu route="branch.payments.branch-to-agent.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Ke Agen</x-submenu>
             @endslot
@@ -175,71 +174,5 @@
             <x-menu route="regional.branches.index" :route-params="['regional' => $global->regional->slug]" icon="bx bx-arrow-back">Kembali</x-menu>
         @endif
     @endif
-
-
-    {{-- Master Data --}}
-    {{-- <x-menu route="master.*" icon="bx bxs-data">
-        Master Data
-        @slot('submenus')
-            <x-submenu route="master.regionals.index">Regional</x-submenu>
-            <x-submenu route="master.branches.index">Cabang</x-submenu>
-            <x-submenu route="master.insurance-types.index">Jenis Jaminan</x-submenu>
-            <x-submenu route="master.templates.index">Template</x-submenu>
-            <x-submenu route="master.insurances.index">Asuransi</x-submenu>
-            <x-submenu route="master.insurance-rates.index">Rate Asuransi</x-submenu>
-            <x-submenu route="master.banks.index">Bank</x-submenu>
-            <x-submenu route="master.bank-rates.index">Rate Bank</x-submenu>
-            <x-submenu route="master.agents.index">Agen</x-submenu>
-            <x-submenu route="master.agent-rates.index">Rate Agen</x-submenu>
-            <x-submenu route="master.obligees.index">Obligee</x-submenu>
-            <x-submenu route="master.principals.index">Principal</x-submenu>
-        @endslot
-    </x-menu> --}}
-
-    {{-- Produk --}}
-    {{-- <x-menu route="products.*" icon="bx bxs-receipt">
-        Produk
-        @slot('submenus')
-            <x-submenu route="products.surety-bonds.index">Surety Bond</x-submenu>
-            <x-submenu route="products.guarantee-banks.index">Bank Garansi</x-submenu>
-        @endslot
-    </x-menu> --}}
-
-    {{-- Pembayaran --}}
-    {{-- <x-menu route="payments.*" icon="bx bxs-wallet">
-        Pembayaran
-        @slot('submenus')
-            <x-submenu route="payments.principal-to-branch.index">Principal ke Cabang</x-submenu>
-            <x-submenu route="dashboard">Cabang ke Regional</x-submenu>
-            <x-submenu route="payments.regional-to-insurance.index">Regional ke Asuransi</x-submenu>
-            <x-submenu route="payments.branch-to-agent.index">Cabang ke Agen</x-submenu>
-        @endslot
-    </x-menu> --}}
-
-    {{-- Laporan Surety Bond --}}
-    {{-- <x-menu route="payments.sb.*" icon="bx bxs-file">
-        Laporan Surety Bond
-        @slot('submenus')
-            <x-submenu route="sb-reports.product">Produksi</x-submenu>
-            <x-submenu route="sb-reports.finance">Keuangan</x-submenu>
-            <x-submenu route="dashboard">Sisa Agen</x-submenu>
-            <x-submenu route="sb-reports.income">Pemasukan</x-submenu>
-            <x-submenu route="sb-reports.expense">Pengeluaran</x-submenu>
-            <x-submenu route="dashboard">Laba</x-submenu>
-        @endslot
-    </x-menu> --}}
-
-    {{-- Laporan Bank Garansi --}}
-    {{-- <x-menu route="payments.bg.*" icon="bx bxs-file">
-        Laporan Bank Garansi
-        @slot('submenus')
-            <x-submenu route="bg-reports.product">Produksi</x-submenu>
-            <x-submenu route="bg-reports.finance">Keuangan</x-submenu>
-            <x-submenu route="dashboard">Sisa Agen</x-submenu>
-            <x-submenu route="bg-reports.income">Pemasukan</x-submenu>
-            <x-submenu route="bg-reports.expense">Pengeluaran</x-submenu>
-            <x-submenu route="dashboard">Laba</x-submenu>
-        @endslot
-    </x-menu> --}}
 
 </ul>

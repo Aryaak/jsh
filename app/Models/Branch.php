@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -58,6 +59,10 @@ class Branch extends Model
         return $this->update(self::fetch((object)$params));
     }
     public function hapus(): bool{
-        return $this->delete();
+        try{
+            return $this->delete();
+        } catch (Exception $ex) {
+            throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
+        }
     }
 }

@@ -105,9 +105,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
-                                    <x-form-check id="create-due-day-tolerance-0" input-class="create-due-day-tolerance" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                    <x-form-check id="create-due-day-tolerance-1" input-class="create-due-day-tolerance" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                    <x-form-check id="create-due-day-tolerance-2" input-class="create-due-day-tolerance" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                    <div class="d-flex flex-xl-row flex-column gap-2">
+                                        <x-form-check id="create-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                        <x-form-check id="create-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                        <x-form-check id="create-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <x-form-label required>Jumlah Hari</x-form-label>
@@ -129,10 +131,10 @@
                     </div>
                 </div>
                 <div class="row mx-1">
-                    <x-card>
-                        <div class="row">
+                    <x-card class="p-1">
+                        <div class="d-flex flex-column flex-lg-row">
                             @foreach ($scorings->groupBy('category') as $grouped)
-                                <div class="col border p-0" style="position: relative">
+                                <div class="col border p-0" style="position: relative; flex: 100%;">
                                     {{-- <div class="border-bottom p-1 text-center">30</div> --}}
                                     <div class="border-bottom p-1 text-center">{{ $grouped->first()->category }}</div>
                                     <div class="px-3 pt-3 pb-5">
@@ -327,10 +329,10 @@
                 </div>
             </div>
             <div class="row mx-1">
-                <x-card>
-                    <div class="row">
+                <x-card class="p-1">
+                    <div class="d-flex flex-column flex-lg-row">
                         @foreach ($scorings->groupBy('category') as $grouped)
-                            <div class="col border p-0" style="position: relative">
+                            <div class="col border p-0" style="position: relative; flex: 100%;">
                                 {{-- <div class="border-bottom p-1 text-center">30</div> --}}
                                 <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
                                 <div class="px-3 pt-3 pb-5">
@@ -440,9 +442,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
-                                    <x-form-check id="edit-due-day-tolerance-0" input-class="edit-due-day-tolerance" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                    <x-form-check id="edit-due-day-tolerance-1" input-class="edit-due-day-tolerance" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                    <x-form-check id="edit-due-day-tolerance-2" input-class="edit-due-day-tolerance" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                    <div class="d-flex flex-xl-row flex-column gap-2">
+                                        <x-form-check id="edit-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                        <x-form-check id="edit-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                        <x-form-check id="edit-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <x-form-label required>Jumlah Hari</x-form-label>
@@ -463,10 +467,10 @@
                     </div>
                 </div>
                 <div class="row mx-1">
-                    <x-card>
-                        <div class="row">
+                    <x-card class="p-1">
+                        <div class="d-flex flex-column flex-lg-row">
                             @foreach ($scorings->groupBy('category') as $grouped)
-                                <div class="col border p-0" style="position: relative">
+                                <div class="col border p-0" style="position: relative; flex: 100%;">
                                     {{-- <div class="border-bottom p-1 text-center">30</div> --}}
                                     <div class="border-bottom p-1 text-center">{{ $grouped->first()->category }}</div>
                                     <div class="px-3 pt-3 pb-5">

@@ -117,9 +117,11 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
-                                <x-form-check id="create-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                <x-form-check id="create-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                <x-form-check id="create-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                <div class="d-flex flex-xl-row flex-column gap-2">
+                                    <x-form-check id="create-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                    <x-form-check id="create-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                    <x-form-check id="create-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <x-form-label required>Jumlah Hari</x-form-label>
@@ -141,9 +143,9 @@
                 </div>
             </div>
             <div class="row mx-1">
-                <x-card>
-                    <div class="row">
-                        <div class="col border p-0" style="position: relative">
+                <x-card class="p-1">
+                    <div class="d-flex flex-column flex-lg-row">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">30</div>
                             <div class="border-bottom p-1 text-center">Character</div>
                             <div class="px-3 pt-3 pb-5">
@@ -167,7 +169,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col border p-0" style="position: relative">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">20</div>
                             <div class="border-bottom p-1 text-center">Capacity</div>
                             <div class="px-3 pt-3 pb-5">
@@ -190,7 +192,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col border p-0" style="position: relative">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">20</div>
                             <div class="border-bottom p-1 text-center">Capital</div>
                             <div class="px-3 pt-3 pb-5">
@@ -210,7 +212,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col border p-0" style="position: relative">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">17</div>
                             <div class="border-bottom p-1 text-center">Condition</div>
                             <div class="px-3 pt-3 pb-5">
@@ -240,7 +242,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col border p-0" style="position: relative">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">13</div>
                             <div class="border-bottom p-1 text-center">Collateral</div>
                             <div class="px-3 pt-3 pb-5">
@@ -264,9 +266,6 @@
                                     <div><b>1</b></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 mt-3">
-                            Total Nilai: <b>69</b>
                         </div>
                     </div>
                 </x-card>
@@ -429,9 +428,9 @@
             </div>
         </div>
         <div class="row mx-1">
-            <x-card>
-                <div class="row">
-                    <div class="col border p-0" style="position: relative">
+            <x-card class="p-1">
+                <div class="d-flex flex-column flex-lg-row">
+                    <div class="col border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">30</div>
                         <div class="border-bottom p-1 text-center">Character</div>
                         <div class="px-3 pt-3 pb-5">
@@ -455,7 +454,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col border p-0" style="position: relative">
+                    <div class="col border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">20</div>
                         <div class="border-bottom p-1 text-center">Capacity</div>
                         <div class="px-3 pt-3 pb-5">
@@ -478,7 +477,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col border p-0" style="position: relative">
+                    <div class="col border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">20</div>
                         <div class="border-bottom p-1 text-center">Capital</div>
                         <div class="px-3 pt-3 pb-5">
@@ -498,7 +497,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col border p-0" style="position: relative">
+                    <div class="col border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">17</div>
                         <div class="border-bottom p-1 text-center">Condition</div>
                         <div class="px-3 pt-3 pb-5">
@@ -528,7 +527,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col border p-0" style="position: relative">
+                    <div class="col border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">13</div>
                         <div class="border-bottom p-1 text-center">Collateral</div>
                         <div class="px-3 pt-3 pb-5">
@@ -647,9 +646,11 @@
                             </div>
                             <div class="mb-3">
                                 <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
-                                <x-form-check id="edit-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                <x-form-check id="edit-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                <x-form-check id="edit-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                <div class="d-flex flex-xl-row flex-column gap-2">
+                                    <x-form-check id="edit-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                    <x-form-check id="edit-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                    <x-form-check id="edit-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <x-form-label required>Jumlah Hari</x-form-label>
@@ -671,9 +672,9 @@
                 </div>
             </div>
             <div class="row mx-1">
-                <x-card>
-                    <div class="row">
-                        <div class="col border p-0" style="position: relative">
+                <x-card class="p-1">
+                    <div class="d-flex flex-column flex-lg-row">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">30</div>
                             <div class="border-bottom p-1 text-center">Character</div>
                             <div class="px-3 pt-3 pb-5">
@@ -697,7 +698,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col border p-0" style="position: relative">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">20</div>
                             <div class="border-bottom p-1 text-center">Capacity</div>
                             <div class="px-3 pt-3 pb-5">
@@ -720,7 +721,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col border p-0" style="position: relative">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">20</div>
                             <div class="border-bottom p-1 text-center">Capital</div>
                             <div class="px-3 pt-3 pb-5">
@@ -740,7 +741,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col border p-0" style="position: relative">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">17</div>
                             <div class="border-bottom p-1 text-center">Condition</div>
                             <div class="px-3 pt-3 pb-5">
@@ -770,7 +771,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col border p-0" style="position: relative">
+                        <div class="col border p-0" style="position: relative; flex: 100%;">
                             <div class="border-bottom p-1 text-center">13</div>
                             <div class="border-bottom p-1 text-center">Collateral</div>
                             <div class="px-3 pt-3 pb-5">
@@ -794,9 +795,6 @@
                                     <div><b>1</b></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 mt-3">
-                            Total Nilai: <b>69</b>
                         </div>
                     </div>
                 </x-card>

@@ -1,4 +1,4 @@
-@extends('layouts.main', ['title' => 'Pembayaran'])
+@extends('layouts.main', ['title' => 'Pembayaran Ke Asuransi'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />

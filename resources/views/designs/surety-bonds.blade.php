@@ -425,7 +425,7 @@
         <div class="row mx-1">
             <x-card class="p-1">
                 <div class="d-flex flex-column flex-lg-row">
-                    <div class="col border p-0" style="position: relative; flex: 100%;">
+                    <div class="border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">30</div>
                         <div class="border-bottom p-1 text-center">Character</div>
                         <div class="px-3 pt-3 pb-5">
@@ -449,7 +449,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col border p-0" style="position: relative; flex: 100%;">
+                    <div class="border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">20</div>
                         <div class="border-bottom p-1 text-center">Capacity</div>
                         <div class="px-3 pt-3 pb-5">
@@ -472,7 +472,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col border p-0" style="position: relative; flex: 100%;">
+                    <div class="border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">20</div>
                         <div class="border-bottom p-1 text-center">Capital</div>
                         <div class="px-3 pt-3 pb-5">
@@ -492,7 +492,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col border p-0" style="position: relative; flex: 100%;">
+                    <div class="border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">17</div>
                         <div class="border-bottom p-1 text-center">Condition</div>
                         <div class="px-3 pt-3 pb-5">
@@ -522,7 +522,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col border p-0" style="position: relative; flex: 100%;">
+                    <div class="border p-0" style="position: relative; flex: 100%;">
                         <div class="border-bottom p-1 text-center">13</div>
                         <div class="border-bottom p-1 text-center">Collateral</div>
                         <div class="px-3 pt-3 pb-5">
@@ -547,6 +547,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-12 mt-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>Total Nilai: <b>69</b></div>
@@ -562,7 +564,11 @@
         @slot('footer')
             <div class="d-flex justify-content-between w-100">
                 <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
-                <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
+                <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button>
+                <div>
+                    <x-button class="btn-edit-status" data-bs-target="#modal-edit-status" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Status</x-button>
+                    <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Data</x-button>
+                </div>
             </div>
         @endslot
     </x-modal>
@@ -804,6 +810,47 @@
         @endslot
     </x-modal>
 
+    <x-modal id="modal-edit-status" title="Ubah Status">
+        <div class="pb-2 mb-2 text-center">
+            <b>No. Bond</b> <br>
+            <span id="edit-status-no-bond">-</span>
+        </div>
+        <div>
+            <x-form id="form-edit-status" method="put">
+                @php
+                    $insuranceStatusses = [
+                        'belum terbit' => 'Belum Terbit',
+                        'terbit' => 'Terbit',
+                        'batal' => 'Batal',
+                        'revisi' => 'Revisi',
+                        'salah cetak' => 'Salah Cetak',
+                    ];
+
+                    $processStatusses = [
+                        'input' => 'Input',
+                        'analisa asuransi' => 'Analisa Asuransi',
+                        'terbit' => 'Terbit',
+                    ];
+
+                    $financeStatusses = [
+                        'lunas' => 'Lunas',
+                        'belum lunas' => 'Belum Lunas',
+                    ];
+                @endphp
+                <x-form-select label="Status Jaminan" id="edit-status-insurance" name="insurance" class="mb-3" :options="$insuranceStatusses" required />
+                <x-form-select label="Status Proses" id="edit-status-process" name="process" class="mb-3" :options="$processStatusses" required />
+                <x-form-select label="Status Keuangan" id="edit-status-finance" name="finance" :options="$financeStatusses" required />
+            </x-form>
+        </div>
+
+        @slot('footer')
+            <div class="d-flex justify-content-between w-100">
+                <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
+                <x-button id="edit-status-save" face="success" icon="bx bxs-save">Simpan</x-button>
+            </div>
+        @endslot
+    </x-modal>
+
     <x-modal id="modal-status-histories" title="Riwayat Status" size="xl">
         <div class="pb-2 mb-2 text-center">
             <b>No. Bond</b> <br>
@@ -852,6 +899,7 @@
             const table = $("#table").DataTable()
             $("#create-agent-id, #create-insurance-id, #create-insurance-type-id, #create-principal-id, #create-obligee-id").select2({dropdownParent: $('#modal-create')})
             $("#edit-agent-id, #edit-insurance-id, #edit-insurance-type-id, #edit-principal-id, #edit-obligee-id, #edit-status, #edit-cancel-status, #edit-sync-status").select2({dropdownParent: $('#modal-edit')})
+            $("#edit-status-insurance, #edit-status-process, #edit-status-finance").select2({dropdownParent: $('#modal-edit-status')})
         })
 
         $(document).on('click', '.btn-delete', function () {

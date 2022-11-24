@@ -1,0 +1,206 @@
+@extends('layouts.main', ['title' => 'Pembayaran'])
+
+@push('css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+@endpush
+
+@section('contents')
+    <x-card header="Total Hutang" class="mb-3">
+        @slot('headerAction')
+            <x-button data-bs-toggle="modal" data-bs-target="#modal-payable" size="sm" icon="bx bx-search" face="info">Detail Hutang</x-button>
+        @endslot
+        <div class="h1 text-end text-danger fw-bold mb-0">
+            {{ $payableTotal }}
+        </div>
+    </x-card>
+
+    <x-card header="Daftar Pembayaran">
+        @slot('headerAction')
+            <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Pembayaran</x-button>
+        @endslot
+
+        <x-table id="table">
+            @slot('thead')
+                <tr>
+                    <th width="10px">No.</th>
+                    <th>Waktu Bayar</th>
+                    <th>Total Tagihan</th>
+                    <th>Nominal Bayar</th>
+                    <th>Hutang</th>
+                    <th width="80px">Tindakan</th>
+                </tr>
+            @endslot
+        </x-table>
+    </x-card>
+@endsection
+
+@section('modals')
+    @php
+        $months = [];
+        foreach (range(1, 12) as $month) {
+            $months[$month] = Sirius::longMonth($month);
+        }
+
+        $years = [];
+        foreach (range(date('Y'), 2000) as $year) {
+            $years[$year] = $year;
+        }
+    @endphp
+
+    <x-modal id="modal-create" title="Tambah Pembayaran" size="fullscreen">
+        <x-form id="form-create" method="post">
+            <x-form-input label="Waktu Bayar" id="create-datetime" name="datetime" type="datetime-local" class="mb-3" required />
+            <x-form-select label="Bulan" id="create-month" name="month" class="mb-3 calculate-params" :options="$months" value="{{ date('m') }}" required />
+            <x-form-select label="Tahun" id="create-year" name="year" class="mb-3 calculate-params" :options="$years" value="{{ date('Y') }}" required />
+            <div class="row mb-3">
+                <div class="col">
+                    <x-form-label>Total Hutang</x-form-label>
+                    <div id="create-payable" class="text-danger">Rp0,-</div>
+                </div>
+                <div class="col">
+                    <x-form-label>Total Tagihan</x-form-label>
+                    <div id="create-bill">Rp0,-</div>
+                </div>
+                <div class="col">
+                    <x-form-label>Total Pembayaran</x-form-label>
+                    <div id="create-total-payment">Rp0,-</div>
+                </div>
+            </div>
+            <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class-input="to-rupiah" class="mb-3" required />
+            <x-form-textarea label="Keterangan" id="create-desc" name="desc" />
+        </x-form>
+
+        @slot('footer')
+            <x-button id="create-save" face="success" icon="bx bxs-save">Simpan</x-button>
+        @endslot
+    </x-modal>
+
+    <x-modal id="modal-show" title="Detail Pembayaran">
+        <div class="border-bottom pb-2 mb-2">
+            <b>Waktu Bayar</b>: <br>
+            <span id="show-datetime">-</span>
+        </div>
+        <div class="border-bottom pb-2 mb-2">
+            <b>Bulan</b>: <br>
+            <span id="show-month">-</span>
+        </div>
+        <div class="border-bottom pb-2 mb-2">
+            <b>Tahun</b>: <br>
+            <span id="show-year">-</span>
+        </div>
+        <div class="border-bottom pb-2 mb-2">
+            <b>Nominal Bayar</b>: <br>
+            <span id="show-nominal">Rp0,-</span>
+        </div>
+        <div>
+            <b>Keterangan</b>: <br>
+            <span id="show-desc">-</span>
+        </div>
+    </x-modal>
+
+    <x-modal id="modal-payable" title="Detail Hutang" size="fullscreen">
+        <x-table id="payable-table">
+            @slot('thead')
+                <tr>
+                    <th width="10px">No.</th>
+                    <th>Tahun</th>
+                    <th>Bulan</th>
+                    <th>Total Hutang</th>
+                    <th>Terbayar</th>
+                    <th>Sisa</th>
+                </tr>
+            @endslot
+            @foreach ($payables as $payable)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $payable->payment->year }}</td>
+                    <td>{{ $payable->payment->month }}</td>
+                    <td>{{ $payable->payable_total_converted }}</td>
+                    <td>{{ $payable->paid_total_converted }}</td>
+                    <td>{{ $payable->unpaid_total_converted }}</td>
+                </tr>
+            @endforeach
+        </x-table>
+    </x-modal>
+@endsection
+
+@push('js')
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        let table = null
+        let payment = null
+        const type = 'branch_to_regional'
+        $(document).ready(function () {
+            table = dataTableInit('table','Pembayaran',{
+                    url : '{{ route('payments.tables') }}',
+                    data : { type : type }
+                },[
+                {data: 'paid_at'},
+                {data: 'total_bill'},
+                {data: 'paid_bill'},
+                {data: 'unpaid_bill'},
+            ])
+            $("#create-month, #create-year").select2({dropdownParent: $('#modal-create')})
+            $("#create-branch-id, #create-regional-id").select2({dropdownParent: $('#modal-create')})
+            $("#edit-branch-id, #edit-regional-id").select2({dropdownParent: $('#modal-edit')})
+        })
+
+        $(document).on('click', '.btn-delete', function () {
+            // Delete
+            NegativeConfirm.fire({
+                title: "Yakin ingin menghapus Pembayaran?",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                }
+            })
+        })
+        $(document).on('input', '.calculate-params', function () {
+            const month = $('#create-month').val()
+            const year = $('#create-year').val()
+            if(month && year){
+                $('#create-nominal').html(`<i class='fa-solid fa-spinner fa-spin me-2'></i>Menghitung ...`)
+                let formData = new FormData(document.getElementById('form-create'))
+                formData.append('type',type)
+                ajaxPost("{{ route('branch.payments.branch-to-regional.calculate',['regional' => $global->regional, 'branch' => $global->branch]) }}",formData,'',function(response){
+                    if(response.success){
+                        const data = response.data
+                        console.log(data);
+                        $('#create-bill').html(data.total_bill_converted)
+                        $('#create-payable').html(data.payable_converted)
+                        $('#create-total-payment').html(total_payment_converted)
+                    }
+                },function (response) {
+                    $('#create-nominal').html(`<span class='color-danger'><i class='fa-solid fa-x me-2'></i>Terjadi masalah pada sistem</span>`)
+                },false)
+            }
+        })
+        $(document).on('click', '#create-save', function () {
+            loading()
+            let formData = new FormData(document.getElementById('form-create'))
+            formData.append('type',type)
+            formData.set('nominal',formData.get('nominal').replaceAll('.',''))
+            ajaxPost("{{ route('branch.payments.branch-to-regional.store',['regional' => $global->regional, 'branch' => $global->branch]) }}",formData,'#modal-create',function(){
+                table.ajax.reload()
+                clearForm('#form-create')
+                $("#create-nominal").html('-')
+                $('#create-year').val('{{ date('Y') }}').trigger('change')
+                $('#create-month').val('{{ date('m') }}').trigger('change')
+            })
+        })
+        $(document).on('click', '.btn-show', function () {
+            ajaxGet("{{ route('payments.payment.show','-id-') }}".replace('-id-',$(this).data('id')),'',function(response){
+                if(response.success){
+                    payment = response.data
+                    $('#show-datetime').html(payment.paid_at_converted)
+                    $('#show-month').html(payment.month)
+                    $('#show-year').html(payment.year)
+                    $('#show-nominal').html(payment.total_bill_converted)
+                    $('#show-desc').html(payment.desc ?? '-')
+
+                }
+            })
+        })
+    </script>
+@endpush

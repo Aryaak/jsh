@@ -8,7 +8,10 @@
 @section('contents')
     <x-card header="Daftar Bank Garansi">
         @slot('headerAction')
-            <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Bank Garansi</x-button>
+            <div>
+                <x-button link="" size="sm" icon="bx bx-search" face="info">Lihat Draft<x-badge face="danger" class="ms-2">2</x-badge></x-button>
+                <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Bank Garansi</x-button>
+            </div>
         @endslot
 
         <x-table id="table">

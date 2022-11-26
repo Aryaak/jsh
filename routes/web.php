@@ -24,6 +24,7 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\SuretyBondReportController;
 use App\Http\Controllers\GuaranteeBankReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\InstalmentController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -216,10 +217,13 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
-            Route::get('ke-regional', [PaymentController::class, 'indexBranchToRegional'])->name('branch-to-regional.index');
             Route::get('ke-agen', [PaymentController::class, 'indexBranchToAgent'])->name('branch-to-agent.index');
-            Route::post('payment-to-regional', [PaymentController::class, 'storeToRegional'])->name('branch-to-regional.store');
-            Route::post('calculate-to-regional', [PaymentController::class, 'calculateToRegional'])->name('branch-to-regional.calculate');
+
+            Route::get('ke-regional', [InstalmentController::class, 'index'])->name('branch-to-regional.index');
+            Route::post('ke-regional/store', [InstalmentController::class, 'store'])->name('branch-to-regional.store');
+            Route::post('ke-regional/calculate', [InstalmentController::class, 'calculate'])->name('branch-to-regional.calculate');
+            Route::post('ke-regional/payable', [InstalmentController::class, 'payable'])->name('branch-to-regional.payable');
+            Route::delete('ke-regional/{instalment}/destroy', [InstalmentController::class, 'destroy'])->name('branch-to-regional.destroy');
         });
 
         Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {

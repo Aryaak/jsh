@@ -217,7 +217,10 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::group(['prefix' => '/pembayaran', 'as' => 'payments.'], function () {
+            Route::get('ke-regional', [PaymentController::class, 'indexBranchToRegional'])->name('branch-to-regional.index');
             Route::get('ke-agen', [PaymentController::class, 'indexBranchToAgent'])->name('branch-to-agent.index');
+            Route::post('payment-to-regional', [PaymentController::class, 'storeToRegional'])->name('branch-to-regional.store');
+            Route::post('calculate-to-regional', [PaymentController::class, 'calculateToRegional'])->name('branch-to-regional.calculate');
         });
 
         Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {

@@ -47,7 +47,7 @@
 
                 <!-- Navbar -->
                 <nav class="d-flex justify-content-center p-3">
-                    <a href="{{ url('/') }}" class="app-brand-link">
+                    <a href="" class="app-brand-link">
                         <span class="app-brand-logo w-100">
                             <img src="{{ asset('assets/logos/logo.png') }}" alt="Logo JSH" class="w-100">
                         </span>

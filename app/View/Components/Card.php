@@ -11,6 +11,7 @@ class Card extends Component
         public ?string $headerAction = null,
         public bool $darkBody = false,
         public bool $smallHeader = false,
+        public ?string $footer = null,
     )
     {
         //
@@ -23,6 +24,7 @@ class Card extends Component
             'headerAction' => $this->headerAction,
             'darkBody' => $this->darkBody,
             'smallHeader' => $this->smallHeader,
+            'footer' => $this->footer,
         ]);
     }
 }

@@ -148,7 +148,7 @@
         <x-menu route="branch.payments.*" icon="bx bxs-wallet">
             Pembayaran
             @slot('submenus')
-                <x-submenu route="branch.dashboard" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Ke Regional</x-submenu>
+                <x-submenu route="branch.payments.branch-to-regional.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Ke Regional</x-submenu>
                 <x-submenu route="branch.payments.branch-to-agent.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Ke Agen</x-submenu>
             @endslot
         </x-menu>

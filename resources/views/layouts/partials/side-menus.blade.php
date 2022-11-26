@@ -84,7 +84,7 @@
             @endslot
         </x-menu>
 
-        <x-menu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]" icon="bx bx-money">Pengeluaran</x-menu>
+        <x-menu route="regional.expenses.index" :route-params="['regional' => $global->regional->slug]" icon="bx bx-money">Pengeluaran</x-menu>
 
         <x-menu route="regional.sb-reports.*" icon="bx bxs-file">
             Laporan Surety Bond

@@ -131,7 +131,7 @@
                     loading()
                     let formData = new FormData()
                     formData.append('_method','delete')
-                    ajaxPost("{{ route('regional.branches.destroy', ['regional' => $global->regional->slug, 'cabang' => '-id-']) }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                    ajaxPost("{{ route('regional.expenses.destroy', ['regional' => $global->regional->slug, 'cabang' => '-id-']) }}".replace('-id-',$(this).data('id')),formData,'',function(){
                         table.ajax.reload()
                     })
                 }

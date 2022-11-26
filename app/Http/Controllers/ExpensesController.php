@@ -4,35 +4,33 @@ namespace App\Http\Controllers;
 
 use DB;
 use Exception;
-use App\Models\Agent;
-use App\Http\Requests\AgentRequest;
-use App\Models\BankAccount;
+use App\Http\Requests\ExpensesRequest;
+use App\Models\Expenses;
 use Illuminate\Http\Request;
 
-class AgentController extends Controller
+class ExpensesController extends Controller
 {
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Agent::with('branch');
+            $data = Expenses::all();
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }
-        return view('master.agents');
+        return view('expenses');
     }
 
     public function create()
     {
     }
 
-    public function store(AgentRequest $request)
+    public function store(ExpensesRequest $request)
     {
         try {
             DB::beginTransaction();
-            $agent = Agent::buat($request->validated());
-            BankAccount::buat($request->validated(),$agent->id);
+            Expenses::buat($request->validated());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -45,24 +43,21 @@ class AgentController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Agent $agen)
+    public function show(Expenses $expenses)
     {
-        $agen->branch;
-        $agen->bank_accounts->bank;
-        return response()->json($this->showResponse($agen->toArray()));
+        dd($expenses);
+        return response()->json($this->showResponse($expenses->toArray()));
     }
 
-    public function edit(Agent $agen)
+    public function edit(Expenses $expenses)
     {
     }
 
-    public function update(Request $request, Agent $agen)
+    public function update(Request $request, Expenses $expenses)
     {
         try {
             DB::beginTransaction();
-            $agen->ubah($request->all());
-            $bankaccount = $agen->bank_accounts;
-            $bankaccount->ubah($request->all(), $agen->id);
+            $expenses->ubah($request->all());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -75,11 +70,11 @@ class AgentController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(Agent $agen)
+    public function destroy(Expenses $expenses)
     {
         try {
             DB::beginTransaction();
-            $agen->hapus();
+            $expenses->hapus();
             $http_code = 200;
             $response = $this->destroyResponse();
             DB::commit();

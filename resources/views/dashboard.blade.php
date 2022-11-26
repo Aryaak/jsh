@@ -186,7 +186,6 @@
                 let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
                 let label = e.chart.data.labels[dataIndex];
 
-                window.location = "{{ route('regional.products.surety-bonds.index','-regional-') }}".replace('-regional-',@json($global->regional->slug));
             }
         };
 

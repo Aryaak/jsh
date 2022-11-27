@@ -9,6 +9,7 @@ use App\Http\Controllers\BankController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\InsuranceTypeController;
 use App\Http\Controllers\InsuranceRateController;
@@ -137,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', DashboardController::class)->name('dashboard');
         Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
         Route::apiResource('cabang', BranchController::class)->names('branches');
-        // Route::apiResource('peengeluaran', ExpenseController::class)->names('expenses');
+        Route::apiResource('pengeluaran', ExpenseController::class)->names('expenses');
 
         Route::group(['prefix' => '/master-data', 'as' => 'master.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));

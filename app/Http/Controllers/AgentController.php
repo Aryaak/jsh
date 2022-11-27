@@ -14,7 +14,7 @@ class AgentController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Agent::with('branch');
+            $data = Agent::with('branch')->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')
@@ -33,9 +33,9 @@ class AgentController extends Controller
             DB::beginTransaction();
             $agent = Agent::buat($request->validated());
             BankAccount::buat($request->validated(),$agent->id);
-            DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -63,9 +63,9 @@ class AgentController extends Controller
             $agen->ubah($request->all());
             $bankaccount = $agen->bank_accounts;
             $bankaccount->ubah($request->all(), $agen->id);
-            DB::commit();
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -80,9 +80,9 @@ class AgentController extends Controller
         try {
             DB::beginTransaction();
             $agen->hapus();
-            DB::commit();
             $http_code = 200;
             $response = $this->destroyResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());

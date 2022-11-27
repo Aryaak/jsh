@@ -4,38 +4,37 @@ namespace App\Http\Controllers;
 
 use DB;
 use Exception;
-use App\Models\Insurance;
-use App\Http\Requests\InsuranceRequest;
-use App\Models\InsuranceType;
+use App\Models\Expense;
+use App\Models\Branch;
+use App\Http\Requests\ExpensesRequest;
 use Illuminate\Http\Request;
 
-class InsuranceController extends Controller
+class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Insurance::orderBy('created_at','desc')->get();
+            $data = Expense::all();
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }
-        return view('master.insurances');
-
+        return view('expenses');
     }
 
     public function create()
     {
     }
 
-    public function store(InsuranceRequest $request)
+    public function store(ExpensesRequest $request)
     {
         try {
             DB::beginTransaction();
-            Insurance::buat($request->validated());
-            DB::commit();
+            Expense::buat($request->validated());
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -45,23 +44,23 @@ class InsuranceController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Insurance $asuransi)
+    public function show(Branch $regional, Expense $pengeluaran)
     {
-        return response()->json($this->showResponse($asuransi->toArray()));
+        return response()->json($this->showResponse($pengeluaran->toArray()));
     }
 
-    public function edit(Insurance $asuransi)
+    public function edit(Expense $expense)
     {
     }
 
-    public function update(Request $request, Insurance $asuransi)
+    public function update(Branch $regional, Request $request, Expense $pengeluaran)
     {
         try {
             DB::beginTransaction();
-            $asuransi->ubah($request->all());
-            DB::commit();
+            $pengeluaran->ubah($request->all());
             $http_code = 200;
             $response = $this->storeResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());
@@ -71,14 +70,14 @@ class InsuranceController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(Insurance $asuransi)
+    public function destroy(Branch $regional, Expense $pengeluaran)
     {
         try {
             DB::beginTransaction();
-            $asuransi->hapus();
-            DB::commit();
+            $pengeluaran->hapus();
             $http_code = 200;
             $response = $this->destroyResponse();
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
             $http_code = $this->httpErrorCode($e->getCode());

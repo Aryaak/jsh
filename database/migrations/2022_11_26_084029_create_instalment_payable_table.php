@@ -8,17 +8,13 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('payable_payment', function (Blueprint $table) {
+        Schema::create('instalment_payable', function (Blueprint $table) {
+            $table->foreignId('instalment_id')->constrained();
             $table->foreignId('payable_id')->constrained();
-            $table->foreignId('payment_id')->constrained();
-            $table->primary(['payable_id', 'payment_id']);
-            $table->index(['payable_id', 'payment_id']);
+            $table->primary(['instalment_id', 'payable_id']);
+            $table->index(['instalment_id', 'payable_id']);
             $table->unsignedBigInteger('nominal');
             $table->timestamps();
         });
-    }
-    public function down()
-    {
-        Schema::dropIfExists('payable_payment');
     }
 };

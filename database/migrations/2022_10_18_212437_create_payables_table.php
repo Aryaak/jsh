@@ -10,11 +10,13 @@ return new class extends Migration
     {
         Schema::create('payables', function (Blueprint $table) {
             $table->id();
+            $table->integer('month');
+            $table->year('year');
             $table->unsignedBigInteger('payable_total');
             $table->unsignedBigInteger('paid_total');
             $table->unsignedBigInteger('unpaid_total');
             $table->boolean('is_paid_off')->default(false);
-            $table->foreignId('payment_id')->constrained();
+            $table->foreignId('branch_id')->constrained();
             $table->timestamps();
         });
     }

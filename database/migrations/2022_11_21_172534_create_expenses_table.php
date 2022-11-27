@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('description');
-            $table->decimal('nominal');
+            $table->decimal('nominal',20,2);
             $table->date('transaction_date');
             $table->timestamps();
         });

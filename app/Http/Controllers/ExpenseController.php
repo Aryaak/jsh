@@ -44,20 +44,20 @@ class ExpenseController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Branch $regional, Branch $cabang, Expense $expense)
+    public function show(Branch $regional, Expense $pengeluaran)
     {
-        return response()->json($this->showResponse($expense->toArray()));
+        return response()->json($this->showResponse($pengeluaran->toArray()));
     }
 
     public function edit(Expense $expense)
     {
     }
 
-    public function update(Request $request, Expense $expense)
+    public function update(Branch $regional, Request $request, Expense $pengeluaran)
     {
         try {
             DB::beginTransaction();
-            $expense->ubah($request->all());
+            $pengeluaran->ubah($request->all());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -70,11 +70,11 @@ class ExpenseController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(Expense $expense)
+    public function destroy(Branch $regional, Expense $pengeluaran)
     {
         try {
             DB::beginTransaction();
-            $expense->hapus();
+            $pengeluaran->hapus();
             $http_code = 200;
             $response = $this->destroyResponse();
             DB::commit();

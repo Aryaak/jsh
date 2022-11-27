@@ -21,13 +21,6 @@ class PaymentController extends Controller
     public function indexBranchToAgent(Request $request){
         return view('payment.branch-to-agent');
     }
-    public function indexBranchToRegional(Request $request){
-        $payables = Payable::where('is_paid_off',false)->whereHas('payment',function($query){
-            $query->where('branch_id',session()->get('branch')?->id);
-        })->with('payment')->get();
-        $payableTotal = Sirius::toRupiah($payables->sum('unpaid_total'),2);
-        return view('payment.branch-to-regional',compact('payables','payableTotal'));
-    }
 
     public function calculate(Request $request){
         try {
@@ -59,8 +52,6 @@ class PaymentController extends Controller
         $data = null;
         if($type == 'principal_to_branch'){
             $data = Payment::with('principal','branch')->select('payments.*')->where('branch_id', session()->get('branch')?->id)->whereType($type)->orderBy('created_at','desc');
-        }else if($type == 'branch_to_regional'){
-            $data = Payment::with('principal','branch')->where('branch_id', session()->get('branch')?->id)->whereType($type);
         }else if($type == 'regional_to_insurance'){
             $data = Payment::with('insurance','regional')->select('payments.*')->where('regional_id', session()->get('regional')?->id)->whereType($type)->orderBy('created_at','desc');
         }else if($type == 'branch_to_agent'){

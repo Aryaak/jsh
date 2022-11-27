@@ -10,14 +10,14 @@
         @slot('headerAction')
             <x-button data-bs-toggle="modal" data-bs-target="#modal-payable" size="sm" icon="bx bx-search" face="info">Detail Hutang</x-button>
         @endslot
-        <div class="h1 text-end text-danger fw-bold mb-0">
-            {{ $payableTotal }}
+        <div class="h1 text-end text-danger fw-bold mb-0" id="payable-total">
+
         </div>
     </x-card>
 
     <x-card header="Daftar Pembayaran">
         @slot('headerAction')
-            <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Pembayaran</x-button>
+            <x-button data-bs-toggle="modal" data-bs-target="#modal-create" id="btn-create" size="sm" icon="bx bx-plus">Tambah Pembayaran</x-button>
         @endslot
 
         <x-table id="table">
@@ -25,9 +25,7 @@
                 <tr>
                     <th width="10px">No.</th>
                     <th>Waktu Bayar</th>
-                    <th>Total Tagihan</th>
                     <th>Nominal Bayar</th>
-                    <th>Hutang</th>
                     <th width="80px">Tindakan</th>
                 </tr>
             @endslot
@@ -51,20 +49,10 @@
     <x-modal id="modal-create" title="Tambah Pembayaran" size="fullscreen">
         <x-form id="form-create" method="post">
             <x-form-input label="Waktu Bayar" id="create-datetime" name="datetime" type="datetime-local" class="mb-3" required />
-            <x-form-select label="Bulan" id="create-month" name="month" class="mb-3 calculate-params" :options="$months" value="{{ date('m') }}" required />
-            <x-form-select label="Tahun" id="create-year" name="year" class="mb-3 calculate-params" :options="$years" value="{{ date('Y') }}" required />
             <div class="row mb-3">
                 <div class="col">
-                    <x-form-label>Total Hutang</x-form-label>
-                    <div id="create-payable" class="text-danger">Rp0,-</div>
-                </div>
-                <div class="col">
                     <x-form-label>Total Tagihan</x-form-label>
-                    <div id="create-bill">Rp0,-</div>
-                </div>
-                <div class="col">
-                    <x-form-label>Total Pembayaran</x-form-label>
-                    <div id="create-total-payment">Rp0,-</div>
+                    <div id="create-payable-total">Rp0,-</div>
                 </div>
             </div>
             <x-form-input label="Nominal Bayar" id="create-nominal" name="nominal" prefix="Rp" suffix=",-" class-input="to-rupiah" class="mb-3" required />
@@ -104,23 +92,13 @@
             @slot('thead')
                 <tr>
                     <th width="10px">No.</th>
-                    <th>Tahun</th>
                     <th>Bulan</th>
+                    <th>Tahun</th>
                     <th>Total Hutang</th>
                     <th>Terbayar</th>
                     <th>Sisa</th>
                 </tr>
             @endslot
-            @foreach ($payables as $payable)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $payable->payment->year }}</td>
-                    <td>{{ $payable->payment->month }}</td>
-                    <td>{{ $payable->payable_total_converted }}</td>
-                    <td>{{ $payable->paid_total_converted }}</td>
-                    <td>{{ $payable->unpaid_total_converted }}</td>
-                </tr>
-            @endforeach
         </x-table>
     </x-modal>
 @endsection
@@ -134,18 +112,33 @@
         const type = 'branch_to_regional'
         $(document).ready(function () {
             table = dataTableInit('table','Pembayaran',{
-                    url : '{{ route('payments.tables') }}',
+                    url : '{{ route('branch.payments.branch-to-regional.index',['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',
                     data : { type : type }
                 },[
                 {data: 'paid_at'},
-                {data: 'total_bill'},
-                {data: 'paid_bill'},
-                {data: 'unpaid_bill'},
+                {data: 'nominal'},
             ])
             $("#create-month, #create-year").select2({dropdownParent: $('#modal-create')})
             $("#create-branch-id, #create-regional-id").select2({dropdownParent: $('#modal-create')})
             $("#edit-branch-id, #edit-regional-id").select2({dropdownParent: $('#modal-edit')})
+
+            payments()
         })
+        function payments(){
+            $('#payable-table tbody').html('')
+            ajaxPost("{{ route('branch.payments.branch-to-regional.payable',['regional' => $global->regional, 'branch' => $global->branch]) }}",{},'',function(response){
+                if(response.success){
+                    const data = response.data
+                    let html = ''
+                    let iteration = 1
+                    data.index.forEach(e => {
+                        html+="<tr><td>"+iteration+"</td><td>"+e.month+"</td><td>"+e.year+"</td><td>"+e.payable_total_converted+"</td><td>"+e.paid_total_converted+"</td><td>"+e.unpaid_total_converted+"</td></tr>"
+                        iteration++
+                    });
+                    $('#payable-table tbody').html(html)
+                }
+            },null,false)
+        }
 
         $(document).on('click', '.btn-delete', function () {
             // Delete
@@ -156,25 +149,17 @@
                 }
             })
         })
-        $(document).on('input', '.calculate-params', function () {
-            const month = $('#create-month').val()
-            const year = $('#create-year').val()
-            if(month && year){
-                $('#create-nominal').html(`<i class='fa-solid fa-spinner fa-spin me-2'></i>Menghitung ...`)
-                let formData = new FormData(document.getElementById('form-create'))
-                formData.append('type',type)
-                ajaxPost("{{ route('branch.payments.branch-to-regional.calculate',['regional' => $global->regional, 'branch' => $global->branch]) }}",formData,'',function(response){
-                    if(response.success){
-                        const data = response.data
-                        console.log(data);
-                        $('#create-bill').html(data.total_bill_converted)
-                        $('#create-payable').html(data.payable_converted)
-                        $('#create-total-payment').html(total_payment_converted)
-                    }
-                },function (response) {
-                    $('#create-nominal').html(`<span class='color-danger'><i class='fa-solid fa-x me-2'></i>Terjadi masalah pada sistem</span>`)
-                },false)
-            }
+        $(document).on('click', '#btn-create', function () {
+            $('#create-nominal').html(`<i class='fa-solid fa-spinner fa-spin me-2'></i>Menghitung ...`)
+            let formData = new FormData(document.getElementById('form-create'))
+            ajaxPost("{{ route('branch.payments.branch-to-regional.calculate',['regional' => $global->regional, 'branch' => $global->branch]) }}",formData,'',function(response){
+                if(response.success){
+                    const data = response.data
+                    $('#create-payable-total').html(data.payable_total_converted)
+                }
+            },function (response) {
+                $('#create-nominal').html(`<span class='color-danger'><i class='fa-solid fa-x me-2'></i>Terjadi masalah pada sistem</span>`)
+            },false)
         })
         $(document).on('click', '#create-save', function () {
             loading()
@@ -182,6 +167,7 @@
             formData.append('type',type)
             formData.set('nominal',formData.get('nominal').replaceAll('.',''))
             ajaxPost("{{ route('branch.payments.branch-to-regional.store',['regional' => $global->regional, 'branch' => $global->branch]) }}",formData,'#modal-create',function(){
+                payments()
                 table.ajax.reload()
                 clearForm('#form-create')
                 $("#create-nominal").html('-')
@@ -199,6 +185,19 @@
                     $('#show-nominal').html(payment.total_bill_converted)
                     $('#show-desc').html(payment.desc ?? '-')
 
+                }
+            })
+        })
+        $(document).on('click', '.btn-delete', function () {
+            NegativeConfirm.fire({
+                title: "Yakin ingin menghapus Pembayaran ini?",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    loading()
+                    ajaxPost("{{ route('branch.payments.branch-to-regional.destroy',['regional' => $global->regional, 'branch' => $global->branch,'instalment' => '-instalment-']) }}".replace('-instalment-',$(this).data('id')),{_method: 'delete'},'',function(){
+                        payments()
+                        table.ajax.reload()
+                    })
                 }
             })
         })

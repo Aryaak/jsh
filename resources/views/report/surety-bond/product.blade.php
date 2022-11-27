@@ -101,8 +101,8 @@
                     data.params.startDate = start.val()
                     data.params.endDate = end.val()
                     @if (request()->has('start') && request()->has('end'))
-                        data.params.startDate = request()->start
-                        data.params.endDate = request()->end
+                        data.params.startDate = "{{ request()->start }}"
+                        data.params.endDate = "{{ request()->end }}"
                     @endif
                     data.request_for = 'datatable'
                 }

@@ -13,7 +13,7 @@ class InsuranceTypeController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = InsuranceType::all();
+            $data = InsuranceType::orderBy('created_at','desc')->get();
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')

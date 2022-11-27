@@ -13,7 +13,7 @@ class TemplateController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Template::all();
+            $data = Template::orderBy('created_at','desc')->get();
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show')

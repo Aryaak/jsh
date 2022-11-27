@@ -14,7 +14,7 @@ class AgentController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Agent::with('branch');
+            $data = Agent::with('branch')->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')

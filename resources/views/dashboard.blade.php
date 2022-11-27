@@ -73,6 +73,34 @@
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        const labels_sb = [
+            @json($data_sbs[0]['bulan']),
+            @json($data_sbs[1]['bulan']),
+            @json($data_sbs[2]['bulan']),
+            @json($data_sbs[3]['bulan']),
+            @json($data_sbs[4]['bulan']),
+            @json($data_sbs[5]['bulan']),
+            @json($data_sbs[6]['bulan']),
+            @json($data_sbs[7]['bulan']),
+            @json($data_sbs[8]['bulan']),
+            @json($data_sbs[9]['bulan']),
+            @json($data_sbs[10]['bulan']),
+            @json($data_sbs[11]['bulan']),
+        ];
+        const labels_bg = [
+            @json($data_bgs[0]['bulan']),
+            @json($data_bgs[1]['bulan']),
+            @json($data_bgs[2]['bulan']),
+            @json($data_bgs[3]['bulan']),
+            @json($data_bgs[4]['bulan']),
+            @json($data_bgs[5]['bulan']),
+            @json($data_bgs[6]['bulan']),
+            @json($data_bgs[7]['bulan']),
+            @json($data_bgs[8]['bulan']),
+            @json($data_bgs[9]['bulan']),
+            @json($data_bgs[10]['bulan']),
+            @json($data_bgs[11]['bulan']),
+        ];
         const labels = [
             'Januari',
             'Februari',
@@ -90,7 +118,7 @@
         // SB
         var canvas_sb = document.getElementById('chart_sb');
         var data_sb = {
-            labels: labels,
+            labels: labels_sb,
             datasets: [
                 {
                     label: "Profit",
@@ -136,6 +164,40 @@
                 let datasetLabel = e.chart.data.datasets[datasetIndex].label;
                 let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
                 let label = e.chart.data.labels[dataIndex];
+
+                const tgl = label.split(" ")
+                let bulan = tgl[0]
+                let tahun = tgl[1]
+
+                if(bulan == 'Januari'){bulan = '01'}
+                else if(bulan == 'Februari'){bulan = '02'}
+                else if(bulan == 'Maret'){bulan = '03'}
+                else if(bulan == 'April'){bulan = '04'}
+                else if(bulan == 'Mei'){bulan = '05'}
+                else if(bulan == 'Juni'){bulan = '06'}
+                else if(bulan == 'Juli'){bulan = '07'}
+                else if(bulan == 'Agustus'){bulan = '08'}
+                else if(bulan == 'September'){bulan = '09'}
+                else if(bulan == 'Oktober'){bulan = '10'}
+                else if(bulan == 'November'){bulan = '11'}
+                else if(bulan == 'Desember'){bulan = '12'}
+
+                var start = tahun+'-'+bulan+'-01'
+                var end = tahun+'-'+bulan+'-31'
+
+                @if ($global->currently_on == 'main')
+                    var url = "{{ route('main.sb-reports.product', ['start' => '-start-', 'end' => '-end-']) }}"
+                @endif
+                @if ($global->currently_on == 'regional')
+                    var url = "{{ route('regional.sb-reports.product', ['regional' => $global->regional ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
+                @endif
+                @if ($global->currently_on == 'branch')
+                    var url = "{{ route('branch.sb-reports.product', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
+                @endif
+
+                var url2 = url.replace('-start-',start)
+                var url3 = url2.replace('-end-',end)
+                window.location.href = url3.replace('&amp;','&')
             },
             plugins: {
                 title: {
@@ -163,7 +225,7 @@
         // BG
         var canvas_bg = document.getElementById('chart_bg');
         var data_bg = {
-            labels: labels,
+            labels: labels_bg,
             datasets: [
                 {
                     label: "Profit",
@@ -209,6 +271,41 @@
                 let datasetLabel = e.chart.data.datasets[datasetIndex].label;
                 let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
                 let label = e.chart.data.labels[dataIndex];
+
+
+                const tgl = label.split(" ")
+                let bulan = tgl[0]
+                let tahun = tgl[1]
+
+                if(bulan == 'Januari'){bulan = '01'}
+                else if(bulan == 'Februari'){bulan = '02'}
+                else if(bulan == 'Maret'){bulan = '03'}
+                else if(bulan == 'April'){bulan = '04'}
+                else if(bulan == 'Mei'){bulan = '05'}
+                else if(bulan == 'Juni'){bulan = '06'}
+                else if(bulan == 'Juli'){bulan = '07'}
+                else if(bulan == 'Agustus'){bulan = '08'}
+                else if(bulan == 'September'){bulan = '09'}
+                else if(bulan == 'Oktober'){bulan = '10'}
+                else if(bulan == 'November'){bulan = '11'}
+                else if(bulan == 'Desember'){bulan = '12'}
+
+                var start = tahun+'-'+bulan+'-01'
+                var end = tahun+'-'+bulan+'-31'
+
+                @if ($global->currently_on == 'main')
+                    var url = "{{ route('main.bg-reports.product', ['start' => '-start-', 'end' => '-end-']) }}"
+                @endif
+                @if ($global->currently_on == 'regional')
+                    var url = "{{ route('regional.bg-reports.product', ['regional' => $global->regional ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
+                @endif
+                @if ($global->currently_on == 'branch')
+                    var url = "{{ route('branch.bg-reports.product', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
+                @endif
+
+                var url2 = url.replace('-start-',start)
+                var url3 = url2.replace('-end-',end)
+                window.location.href = url3.replace('&amp;','&')
             },
             plugins: {
                 title: {
@@ -233,7 +330,7 @@
         });
         // ==================
 
-        // BR
+        // Pengeluaran (Instalment)
         var canvas_BR = document.getElementById('chart_BR');
         var data_BR = {
             labels: labels,
@@ -306,7 +403,7 @@
         });
         // ==================
 
-        // RI
+        // Pemasukan (Payment)
         var canvas_RI = document.getElementById('chart_RI');
         var data_RI = {
             labels: labels,
@@ -377,6 +474,6 @@
             data: data_RI,
             options: option_RI,
         });
-        // ==================
+        //
     </script>
 @endpush

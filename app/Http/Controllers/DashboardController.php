@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agent;
+use App\Models\GuaranteeBank;
+use App\Models\Payment;
 use App\Models\SuretyBond;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -14,29 +16,75 @@ class DashboardController extends Controller
         $agen_count = Agent::all()->count();
         $sb_paid = DB::table('surety_bond_statuses')->where('status_id','=',13)->count();
         $sb_not_paid = DB::table('surety_bond_statuses')->where('status_id','=',14)->count();
-        $data_sb = DB::table('surety_bonds')
-                ->where(DB::raw('YEAR(document_expired_at)'), '=', '2023')
-                ->select(DB::raw('SUM(profit) as total_profit, MONTH(document_expired_at) as month'))
-                ->groupBy(DB::raw('MONTH(document_expired_at)'))->get();
+        // Surety Bonds
+        $data_sb = SuretyBond::
+                select(DB::raw('SUM(profit) as total_profit, MONTH(document_expired_at) as month'))
+                ->groupBy(DB::raw('MONTH(document_expired_at)'))
+                ->orderBy('document_expired_at', 'ASC')
+                ->limit(12)
+                ->get();
         $data_sb_final = [];
-        for($i = 1; $i <= 12; $i++){
-            $exist = false;
-            for($j = 0; $j < count($data_sb); $j++){
-                if($data_sb[$j]->month == $i){
-                    $exist = true;
-                    array_push($data_sb_final, ['total_profit'=>$data_sb[$j]->total_profit,'month'=>$i]);
-                }
-            }
-            if($exist == false){
-                array_push($data_sb_final, ['total_profit'=>0,'month'=>$i]);
-            }
+        for($i = 0; $i <= (11-count($data_sb)); $i++){
+            array_push($data_sb_final, ['total_profit'=>0,'month'=>$i]);
         }
-        // dd($data_sb_final);
+        for($i = 0; $i < count($data_sb); $i++){
+            array_push($data_sb_final, ['total_profit'=>$data_sb[$i]->total_profit,'month'=>$data_sb[$i]->month]);
+        }
+
+        // Bank Garansi
+        $data_bg = GuaranteeBank::
+                select(DB::raw('SUM(profit) as total_profit, MONTH(document_expired_at) as month'))
+                ->groupBy(DB::raw('MONTH(document_expired_at)'))
+                ->orderBy('document_expired_at', 'ASC')
+                ->limit(12)
+                ->get();
+        $data_bg_final = [];
+        for($i = 0; $i <= (11-count($data_bg)); $i++){
+            array_push($data_bg_final, ['total_profit'=>0,'month'=>$i]);
+        }
+        for($i = 0; $i < count($data_bg); $i++){
+            array_push($data_bg_final, ['total_profit'=>$data_bg[$i]->total_profit,'month'=>$data_bg[$i]->month]);
+        }
+
+        // Cabang -> Regional
+        $data_BR = Payment::
+                select(DB::raw('SUM(paid_bill) as pengeluaran, MONTH(paid_at) as month'))
+                ->where('type', 'branch_to_regional')
+                ->groupBy(DB::raw('MONTH(paid_at)'))
+                ->orderBy('paid_at', 'ASC')
+                ->limit(12)
+                ->get();
+        $data_BR_final = [];
+        for($i = 0; $i <= (11-count($data_BR)); $i++){
+            array_push($data_BR_final, ['pengeluaran'=>0,'month'=>$i]);
+        }
+        for($i = 0; $i < count($data_BR); $i++){
+            array_push($data_BR_final, ['pengeluaran'=>$data_BR[$i]->pengeluaran,'month'=>$data_BR[$i]->month]);
+        }
+
+        // Regional -> Insurance
+        $data_RI = Payment::
+                select(DB::raw('SUM(paid_bill) as pemasukan, MONTH(paid_at) as month'))
+                ->where('type', 'regional_to_insurance')
+                ->groupBy(DB::raw('MONTH(paid_at)'))
+                ->orderBy('paid_at', 'ASC')
+                ->limit(12)
+                ->get();
+        $data_RI_final = [];
+        for($i = 0; $i <= (11-count($data_RI)); $i++){
+            array_push($data_RI_final, ['pemasukan'=>0,'month'=>$i]);
+        }
+        for($i = 0; $i < count($data_RI); $i++){
+            array_push($data_RI_final, ['pemasukan'=>$data_RI[$i]->pemasukan,'month'=>$data_RI[$i]->month]);
+        }
         return view('dashboard', [
             'agen' => $agen_count,
             'lunas' => $sb_paid,
             'non_lunas' => $sb_not_paid,
             'data_sbs' => $data_sb_final,
+            'data_bgs' => $data_bg_final,
+            'data_BR' => $data_BR_final,
+            'data_RI' => $data_RI_final,
         ]);
     }
 }

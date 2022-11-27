@@ -102,9 +102,16 @@
                 clearForm('#form-create')
             })
         })
-
+        $(document).on('click', '#edit-save', function () {
+            loading()
+            let formData = new FormData(document.getElementById('form-edit'))
+            formData.append('is_regional',0)
+            ajaxPost("{{ route('regional.expenses.update', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '', 'pengeluaran' => '-id-']) }}".replace('-id-',expense.id),formData,'#modal-edit',function(){
+                table.ajax.reload()
+            })
+        })
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route('regional.expenses.show', ['regional' => $global->regional->slug, 'pengeluaran' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route('regional.expenses.show', ['regional' => $global->regional ?? '', 'cabang' => $global->branch ?? '', 'pengeluaran' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     expense = response.data
                     $('#show-title').html(expense.title)

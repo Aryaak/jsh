@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use DB;
 use Exception;
+use App\Models\Expense;
+use App\Models\Branch;
 use App\Http\Requests\ExpensesRequest;
-use App\Models\Expenses;
 use Illuminate\Http\Request;
 
-class ExpensesController extends Controller
+class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Expenses::all();
+            $data = Expense::all();
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')
@@ -30,7 +31,7 @@ class ExpensesController extends Controller
     {
         try {
             DB::beginTransaction();
-            Expenses::buat($request->validated());
+            Expense::buat($request->validated());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -43,21 +44,20 @@ class ExpensesController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function show(Expenses $expenses)
+    public function show(Branch $regional, Branch $cabang, Expense $expense)
     {
-        dd($expenses);
-        return response()->json($this->showResponse($expenses->toArray()));
+        return response()->json($this->showResponse($expense->toArray()));
     }
 
-    public function edit(Expenses $expenses)
+    public function edit(Expense $expense)
     {
     }
 
-    public function update(Request $request, Expenses $expenses)
+    public function update(Request $request, Expense $expense)
     {
         try {
             DB::beginTransaction();
-            $expenses->ubah($request->all());
+            $expense->ubah($request->all());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -70,11 +70,11 @@ class ExpensesController extends Controller
         return response()->json($response, $http_code);
     }
 
-    public function destroy(Expenses $expenses)
+    public function destroy(Expense $expense)
     {
         try {
             DB::beginTransaction();
-            $expenses->hapus();
+            $expense->hapus();
             $http_code = 200;
             $response = $this->destroyResponse();
             DB::commit();

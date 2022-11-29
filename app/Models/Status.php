@@ -17,7 +17,4 @@ class Status extends Model
     public static function types(){
         return ['process','insurance','finance'];
     }
-    public static function process(){
-        return ['surety_bond','guarantee_bank'];
-    }
 }

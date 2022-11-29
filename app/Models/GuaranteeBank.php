@@ -250,7 +250,7 @@ class GuaranteeBank extends Model
             'scoring' => $scoring
         ];
     }
-    private static function fetchStatus(object $args): array{
+    private static function initFetchStatus(object $args): array{
         $params = [];
         $type = $args->type;
         $status = $args->status;
@@ -278,10 +278,23 @@ class GuaranteeBank extends Model
         }
         return $params;
     }
+    private function fetchStatus(object $args): array{
+        $params = [];
+        $process = Status::where([['type','process'],['name',$args->process]])->firstOrFail();
+        $processDoesntExist = $this->process_status()->where('status_id',$process->id)->where('type','process')->doesntExist();
+        if($processDoesntExist) $params[] = ['type' => 'process','status_id' => $process->id];
+        $insurance = Status::where([['type','insurance'],['name',$args->insurance]])->firstOrFail();
+        $insuranceDoesntExist = $this->insurance_status()->where('status_id',$insurance->id)->where('type','insurance')->doesntExist();
+        if($insuranceDoesntExist) $params[] = ['type' => 'insurance','status_id' => $insurance->id];
+        $finance = Status::where([['type','finance'],['name',$args->finance]])->firstOrFail();
+        $financeDoesntExist = $this->finance_status()->where('status_id',$finance->id)->where('type','finance')->doesntExist();
+        if($financeDoesntExist) $params[] = ['type' => 'finance','status_id' => $finance->id];
+        return $params;
+    }
     public static function buat(array $params): self{
         $request = self::fetch((object)$params);
         $guaranteeBank = self::create($request->guaranteeBank);
-        $guaranteeBank->ubahStatus(['type' => 'process','status' => 'input']);
+        $guaranteeBank->initStatus(['type' => 'process','status' => 'input']);
         $guaranteeBank->scorings()->createMany($request->scoring);
         return $guaranteeBank;
     }
@@ -292,8 +305,11 @@ class GuaranteeBank extends Model
         }
         return $this->update($request->guaranteeBank);
     }
+    public function initStatus(array $params){
+        return $this->statuses()->createMany(self::initFetchStatus((object)$params));
+    }
     public function ubahStatus(array $params){
-        return $this->statuses()->createMany(self::fetchStatus((object)$params));
+        return $this->statuses()->createMany($this->fetchStatus((object)$params));
     }
     public function hapus(){
         try{

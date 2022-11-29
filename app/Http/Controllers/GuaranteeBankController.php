@@ -28,7 +28,26 @@ class GuaranteeBankController extends Controller
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
-        return view('product.guarantee-banks',compact('scorings'));
+        $statuses = (object)[
+            'process' => [
+                'input' => 'Input',
+                'analisa asuransi' => 'Analisa Asuransi',
+                'analisa bank' => 'Analisa Bank',
+                'terbit' => 'Terbit',
+            ],
+            'insurance' => [
+                'belum terbit' => 'Belum Terbit',
+                'terbit' => 'Terbit',
+                'batal' => 'Batal',
+                'revisi' => 'Revisi',
+                'salah cetak' => 'Salah Cetak',
+            ],
+            'finance' => [
+                'lunas' => 'Lunas',
+                'belum lunas' => 'Belum Lunas',
+            ]
+        ];
+        return view('product.guarantee-banks',compact('scorings','statuses'));
     }
 
     public function create()
@@ -70,6 +89,9 @@ class GuaranteeBankController extends Controller
         $bankGaransi->statuses;
         $bankGaransi->scorings;
         $bankGaransi->statuses;
+        $bankGaransi->process_status->status;
+        $bankGaransi->insurance_status->status;
+        $bankGaransi->finance_status->status;
         foreach ($bankGaransi->statuses as $statuses) {
             $statuses->status;
         }
@@ -106,6 +128,22 @@ class GuaranteeBankController extends Controller
             $bankGaransi->hapus();
             $http_code = 200;
             $response = $this->destroyResponse();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
+    }
+
+    public function changeStatus(Branch $regional, Branch $branch, GuaranteeBank $bankGaransi,Request $request){
+        try {
+            DB::beginTransaction();
+            $bankGaransi->ubahStatus($request->all());
+            $http_code = 200;
+            $response = $this->updateResponse();
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

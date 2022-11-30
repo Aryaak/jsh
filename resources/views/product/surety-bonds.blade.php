@@ -373,7 +373,7 @@
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
                     <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
-                    <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button>
+                    {{-- <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button> --}}
                     <div>
                         <x-button class="btn-edit-status" data-bs-target="#modal-edit-status" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Status</x-button>
                         <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
@@ -540,29 +540,9 @@
             </div>
             <div>
                 <x-form id="form-edit-status" method="put">
-                    @php
-                        $insuranceStatusses = [
-                            'belum terbit' => 'Belum Terbit',
-                            'terbit' => 'Terbit',
-                            'batal' => 'Batal',
-                            'revisi' => 'Revisi',
-                            'salah cetak' => 'Salah Cetak',
-                        ];
-
-                        $processStatusses = [
-                            'input' => 'Input',
-                            'analisa asuransi' => 'Analisa Asuransi',
-                            'terbit' => 'Terbit',
-                        ];
-
-                        $financeStatusses = [
-                            'lunas' => 'Lunas',
-                            'belum lunas' => 'Belum Lunas',
-                        ];
-                    @endphp
-                    <x-form-select label="Status Jaminan" id="edit-status-insurance" name="insurance" class="mb-3" :options="$insuranceStatusses" required />
-                    <x-form-select label="Status Proses" id="edit-status-process" name="process" class="mb-3" :options="$processStatusses" required />
-                    <x-form-select label="Status Keuangan" id="edit-status-finance" name="finance" :options="$financeStatusses" required />
+                    <x-form-select label="Status Proses" id="edit-status-process" name="process" class="mb-3" :options="$statuses->process" required />
+                    <x-form-select label="Status Jaminan" id="edit-status-insurance" name="insurance" class="mb-3" :options="$statuses->insurance" required />
+                    <x-form-select label="Status Keuangan" id="edit-status-finance" name="finance" :options="$statuses->finance" required />
                 </x-form>
             </div>
 
@@ -1039,6 +1019,17 @@
             $(document).on('click', '#edit-save', function () {
                 loading()
                 ajaxPost("{{ route('branch.products.surety-bonds.update', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id),fetchFormData(new FormData(document.getElementById('form-edit'))),'#modal-edit',function(){
+                    table.ajax.reload()
+                })
+            })
+            $(document).on('click', '.btn-edit-status', function () {
+                $('#edit-status-process').val(suretyBond.process_status.status.name).change()
+                $('#edit-status-insurance').val(suretyBond.insurance_status.status.name).change()
+                $('#edit-status-finance').val(suretyBond.finance_status.status.name).change()
+            })
+            $(document).on('click', '#edit-status-save', function () {
+                loading()
+                ajaxPost("{{ route('branch.products.surety-bonds.update-status', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id),new FormData(document.getElementById('form-edit-status')),'#modal-edit-status',function(response){
                     table.ajax.reload()
                 })
             })

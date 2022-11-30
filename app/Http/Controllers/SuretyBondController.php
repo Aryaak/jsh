@@ -28,7 +28,25 @@ class SuretyBondController extends Controller
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
-        return view('product.surety-bonds',compact('scorings'));
+        $statuses = (object)[
+            'process' => [
+                'input' => 'Input',
+                'analisa asuransi' => 'Analisa Asuransi',
+                'terbit' => 'Terbit'
+            ],
+            'insurance' => [
+                'belum terbit' => 'Belum Terbit',
+                'terbit' => 'Terbit',
+                'batal' => 'Batal',
+                'revisi' => 'Revisi',
+                'salah cetak' => 'Salah Cetak',
+            ],
+            'finance' => [
+                'lunas' => 'Lunas',
+                'belum lunas' => 'Belum Lunas'
+            ]
+        ];
+        return view('product.surety-bonds',compact('scorings','statuses'));
     }
 
     public function create()
@@ -68,6 +86,9 @@ class SuretyBondController extends Controller
         $suretyBond->insurance_type;
         $suretyBond->statuses;
         $suretyBond->scorings;
+        $suretyBond->process_status->status;
+        $suretyBond->insurance_status->status;
+        $suretyBond->finance_status->status;
         foreach ($suretyBond->statuses as $statuses) {
             $statuses->status;
         }
@@ -104,6 +125,21 @@ class SuretyBondController extends Controller
             $suretyBond->hapus();
             $http_code = 200;
             $response = $this->destroyResponse();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
+    }
+    public function changeStatus(Branch $regional, Branch $branch, SuretyBond $suretyBond,Request $request){
+        try {
+            DB::beginTransaction();
+            $suretyBond->ubahStatus($request->all());
+            $http_code = 200;
+            $response = $this->updateResponse();
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

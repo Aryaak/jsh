@@ -211,7 +211,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
+            Route::put('surety-bond/{surety_bond}/update-status', [SuretyBondController::class, 'changeStatus'])->name('surety-bonds.update-status');
             Route::apiResource('surety-bond', SuretyBondController::class)->names('surety-bonds');
+            Route::put('bank-garansi/{bank_garansi}/update-status', [GuaranteeBankController::class, 'changeStatus'])->name('guarantee-banks.update-status');
             Route::apiResource('bank-garansi', GuaranteeBankController::class)->names('guarantee-banks');
 
             // Route untuk produk ....

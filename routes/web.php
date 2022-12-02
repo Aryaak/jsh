@@ -26,6 +26,8 @@ use App\Http\Controllers\SuretyBondReportController;
 use App\Http\Controllers\GuaranteeBankReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstalmentController;
+use App\Http\Controllers\SuretyBondDraftController;
+use App\Models\SuretyBondDraft;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -35,6 +37,11 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/design/{page}', DesignController::class);
+Route::get('surety-bond-client', [SuretyBondDraftController::class, 'indexClient'])->name('client');
+Route::post('surety-bond-client', [SuretyBondDraftController::class, 'storeClient'])->name('client');
+Route::get('principal-client/{principal}', [PrincipalController::class, 'show'])->name('client.principal');
+Route::get('obligee-client/{obligee}', [ObligeeController::class, 'show'])->name('client.obligee');
+Route::apiResource('surety-bond-draft', SuretyBondDraftController::class)->names('draft');
 
 /**
  * -------------------------------------------------------------------------

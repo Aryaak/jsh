@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SuretyBondDraft;
 use Illuminate\Http\Request;
+use App\Models\Scoring;
 use App\Helpers\Sirius;
 use App\Models\Branch;
 use DB;
@@ -14,19 +15,21 @@ class SuretyBondDraftController extends Controller
 {
     public function index()
     {
+
     }
 
-    public function create()
+    public function indexClient()
     {
+        $scorings = Scoring::whereNotNull('category')->with('details')->get();
+        return view('surety-bonds-client',compact('scorings'));
     }
 
-    public function store(Branch $branch, SuretyBondRequest $request)
+    public function storeClient(SuretyBondRequest $request)
     {
         try {
             DB::beginTransaction();
             $params = $request->validated();
-            $params['branchId'] = $branch->id;
-            SuretyBond::buat($params);
+            SuretyBondDraft::buat($params);
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -37,6 +40,11 @@ class SuretyBondDraftController extends Controller
         }
 
         return response()->json($response, $http_code);
+    }
+
+    public function store(Branch $branch, SuretyBondRequest $request)
+    {
+
     }
 
     public function show(SuretyBondDraft $suretyBondDraft)

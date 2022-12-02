@@ -41,7 +41,6 @@ class SuretyBondDraft extends Model
         'office_rate',
         'office_net',
         'office_net_total',
-        'branch_id',
         'principal_id',
         'agent_id',
         'obligee_id',
@@ -69,6 +68,44 @@ class SuretyBondDraft extends Model
         'office_net_total_converted',
         'profit_converted',
     ];
+
+    // Relations
+    public function principal(){
+        return $this->belongsTo(Principal::class);
+    }
+    public function agent(){
+        return $this->belongsTo(Agent::class);
+    }
+    public function obligee(){
+        return $this->belongsTo(Obligee::class);
+    }
+    public function insurance(){
+        return $this->belongsTo(Insurance::class);
+    }
+    public function insurance_type(){
+        return $this->belongsTo(InsuranceType::class);
+    }
+    public function revision_from(){
+        return $this->belongsTo(SuretyBondDraft::class,'revision_from_id');
+    }
+    // public function statuses(){
+    //     return $this->hasMany(SuretyBondStatus::class);
+    // }
+    public function scorings(){
+        return $this->hasMany(SuretyBondDraftScore::class);
+    }
+    // public function last_status(){
+    //     return $this->hasOne(SuretyBondStatus::class)->ofMany('id', 'max');
+    // }
+    // public function process_status(){
+    //     return $this->hasOne(SuretyBondStatus::class)->ofMany(['id' => 'max'], function($query){$query->where('type','process'); });
+    // }
+    // public function finance_status(){
+    //     return $this->hasOne(SuretyBondStatus::class)->ofMany(['id' => 'max'], function($query){$query->where('type','finance'); });
+    // }
+    // public function insurance_status(){
+    //     return $this->hasOne(SuretyBondStatus::class)->ofMany(['id' => 'max'], function($query){$query->where('type','insurance'); });
+    // }
 
     public function serviceChargeConverted(): Attribute
     {
@@ -188,7 +225,6 @@ class SuretyBondDraft extends Model
                 'office_rate' => $agentRate->rate_value,
                 'office_net' => $officeNet,
                 'office_net_total' => $officeNetTotal,
-                'branch_id' => $args->branchId,
                 'principal_id' => $args->principalId,
                 'agent_id' => $args->agentId,
                 'obligee_id' => $args->obligeeId,
@@ -203,7 +239,6 @@ class SuretyBondDraft extends Model
     public static function buat(array $params): self{
         $request = self::fetch((object)$params);
         $suretyBond = self::create($request->suretyBond);
-        $suretyBond->ubahStatus(['type' => 'process','status' => 'input']);
         $suretyBond->scorings()->createMany($request->scoring);
         return $suretyBond;
     }

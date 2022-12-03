@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
             $currently_on = 'main';
             if (request()->routeIs('regional.*')) $currently_on = 'regional';
             elseif (request()->routeIs('branch.*')) $currently_on = 'branch';
+            elseif (request()->routeIs('design')) $currently_on = 'design';
             $global['currently_on'] = $currently_on;
 
             if ($currently_on == 'regional' || $currently_on == 'branch') {

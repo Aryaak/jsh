@@ -27,7 +27,7 @@ use App\Http\Controllers\GuaranteeBankReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstalmentController;
 use Illuminate\Support\Facades\Route;
-
+use App\Helpers\Jamsyar;
 /**
  * -------------------------------------------------------------------------
  * Design Only Route
@@ -35,6 +35,11 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/design/{page}', DesignController::class);
+Route::get('/test', function (Request $request) {
+    dd(Jamsyar::cities('jsh','Semangat1','sura'));
+    // dd(\App\Models\Obligee::find(1)->sync());
+    // dd(\App\Models\Principal::find(1)->sync());
+});
 
 /**
  * -------------------------------------------------------------------------

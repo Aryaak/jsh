@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+use Exception;
+use App\Helpers\Jamsyar;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
 
 class Obligee extends Model
@@ -46,5 +49,22 @@ class Obligee extends Model
 
     public function hapus(){
         $this->delete();
+    }
+    public function sync(){
+        $url = config('app.env') == 'local' ? 'http://devmicroservice.jamkrindosyariah.co.id/Api/add_obligee_sbd' : 'http://192.168.190.168:8002/Api/add_obligee_sbd';
+        $response = Http::asJson()->acceptJson()->withToken(Jamsyar::login())
+        ->post($url, [
+            "nama_obligee" => $this->name,
+            "alamat_obligee" => $this->address,
+            "propinsi" => 17,
+            "kota" => 15,
+            "jenis_obligee" => 1
+        ]);
+        dd($response->json());
+        if($response->successful()){
+            return $response->json();
+        }else{
+            // throw new Exception($response->json()['keterangan'], $response->json()['status']);
+        }
     }
 }

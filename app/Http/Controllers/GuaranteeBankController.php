@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Sirius;
-use App\Models\Branch;
 use DB;
 use Exception;
+use App\Models\Branch;
+use App\Helpers\Sirius;
 use App\Models\Scoring;
-use App\Models\GuaranteeBank;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\GuaranteeBank;
 use App\Http\Requests\GuaranteeBankRequest;
 
 class GuaranteeBankController extends Controller
@@ -24,27 +25,30 @@ class GuaranteeBankController extends Controller
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
             ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
+            ->editColumn('insurance_status.status.name', 'datatables.status-surety-bond')
             ->editColumn('action', $action)
+            ->rawColumns(['insurance_status.status.name', 'action'])
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
         $statuses = (object)[
             'process' => [
-                'input' => 'Input',
-                'analisa asuransi' => 'Analisa Asuransi',
-                'analisa bank' => 'Analisa Bank',
-                'terbit' => 'Terbit',
+                'input',
+                'analisa asuransi',
+                'analisa bank',
+                'terbit',
+                'batal',
             ],
             'insurance' => [
-                'belum terbit' => 'Belum Terbit',
-                'terbit' => 'Terbit',
-                'batal' => 'Batal',
-                'revisi' => 'Revisi',
-                'salah cetak' => 'Salah Cetak',
+                'belum terbit',
+                'terbit',
+                'batal',
+                'revisi',
+                'salah cetak',
             ],
             'finance' => [
-                'lunas' => 'Lunas',
-                'belum lunas' => 'Belum Lunas',
+                'lunas',
+                'belum lunas',
             ]
         ];
         return view('product.guarantee-banks',compact('scorings','statuses'));
@@ -92,10 +96,20 @@ class GuaranteeBankController extends Controller
         $bankGaransi->process_status->status;
         $bankGaransi->insurance_status->status;
         $bankGaransi->finance_status->status;
+        $statusStyles = [];
+
         foreach ($bankGaransi->statuses as $statuses) {
             $statuses->status;
+            $statusStyles[$statuses->status->type][$statuses->status->name] = [
+                'name' => GuaranteeBank::{"mapping". Str::title($statuses->status->type) ."StatusNames"}($statuses->status->name),
+                'color' => GuaranteeBank::{"mapping". Str::title($statuses->status->type) ."StatusColors"}($statuses->status->name),
+                'icon' => GuaranteeBank::{"mapping". Str::title($statuses->status->type) ."StatusIcons"}($statuses->status->name),
+            ];
         }
-        return response()->json($this->showResponse($bankGaransi->toArray()));
+
+        return response()->json($this->showResponse(array_merge($bankGaransi->toArray(), [
+            'status_style' => $statusStyles
+        ])));
     }
 
     public function edit(GuaranteeBank $bankGaransi)

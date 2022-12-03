@@ -34,7 +34,7 @@ use App\Helpers\Jamsyar;
  * -------------------------------------------------------------------------
  */
 
-Route::get('/design/{page}', DesignController::class);
+Route::get('/design/{page}', DesignController::class)->name('design');
 Route::get('/test', function (Request $request) {
     dd(Jamsyar::cities('jsh','Semangat1','sura'));
     // dd(\App\Models\Obligee::find(1)->sync());

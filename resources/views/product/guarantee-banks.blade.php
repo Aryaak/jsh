@@ -540,16 +540,32 @@
             @endslot
         </x-modal>
 
-        <x-modal id="modal-edit-status" title="Ubah Status">
+        <x-modal id="modal-edit-status" title="Ubah Status" size="lg">
             <div class="pb-2 mb-2 text-center">
                 <b>No. Bond</b> <br>
                 <span id="edit-status-no-bond">-</span>
             </div>
             <div>
                 <x-form id="form-edit-status" method="put">
-                    <x-form-select label="Status Proses" id="edit-status-process" name="process" class="mb-3" :options="$statuses->process" required />
-                    <x-form-select label="Status Jaminan" id="edit-status-insurance" name="insurance" class="mb-3" :options="$statuses->insurance" required />
-                    <x-form-select label="Status Keuangan" id="edit-status-finance" name="finance" :options="$statuses->finance" required />
+                    {{-- Status Proses --}}
+                    <div class="mb-4">
+                        <div class="text-center">
+                            <label class="form-label mb-2 d-block">Status Proses</label>
+                            @foreach ($statuses->process as $status)
+                                <x-button class="mx-2 my-2 process-status" data-status="{{ $status }}" data-color="{{ App\Models\GuaranteeBank::mappingProcessStatusColors($status) }}" face="outline-{{ App\Models\GuaranteeBank::mappingProcessStatusColors($status) }}" icon="{{ App\Models\GuaranteeBank::mappingProcessStatusIcons($status) }}">{{ App\Models\GuaranteeBank::mappingProcessStatusNames($status) }}</x-button>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Status Jaminan --}}
+                    <div>
+                        <div class="text-center">
+                            <label class="form-label mb-2 d-block">Status Jaminan</label>
+                            @foreach ($statuses->insurance as $status)
+                                <x-button class="mx-2 my-2 insurance-status" data-status="{{ $status }}" data-color="{{ App\Models\GuaranteeBank::mappingInsuranceStatusColors($status) }}" face="outline-{{ App\Models\GuaranteeBank::mappingInsuranceStatusColors($status) }}" icon="{{ App\Models\GuaranteeBank::mappingInsuranceStatusIcons($status) }}">{{ App\Models\GuaranteeBank::mappingInsuranceStatusNames($status) }}</x-button>
+                            @endforeach
+                        </div>
+                    </div>
                 </x-form>
             </div>
 
@@ -865,8 +881,6 @@
             ])
 
             @if ($global->currently_on == 'branch')
-                $("#edit-status-insurance, #edit-status-process, #edit-status-finance").select2({dropdownParent: $('#modal-edit-status')})
-
                 select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,$('#modal-create'))
                 select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-create'))
                 select2Init("#create-principal-id",'{{ route('select2.principal') }}',0,$('#modal-create'))
@@ -978,7 +992,7 @@
                     $('#finance-status-histories').html('')
                     $('#insurance-status-histories').html('')
                     guaranteeBank.statuses.forEach(e => {
-                        const html = `<x-history-item icon="bx bx-check" face="success" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
+                        const html = `<x-history-item icon="` + guaranteeBank.status_style[e.type][e.status.name].icon + `" face="` + guaranteeBank.status_style[e.type][e.status.name].color + `" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
                         $('#'+e.type+'-status-histories').append(html)
                     });
 
@@ -1036,9 +1050,47 @@
                 })
             })
             $(document).on('click', '.btn-edit-status', function () {
-                $('#edit-status-process').val(guaranteeBank.process_status.status.name).change()
-                $('#edit-status-insurance').val(guaranteeBank.insurance_status.status.name).change()
-                $('#edit-status-finance').val(guaranteeBank.finance_status.status.name).change()
+                $.each($('.process-status'), function(index, element) {
+                    $(element).removeClass('btn-' + $(element).data('color'))
+                    $(element).removeClass('btn-outline-' + $(element).data('color'))
+                    $(element).removeClass('d-none')
+                    $(element).prop('disabled', false)
+                    if (guaranteeBank.process_status.status.name == 'analisa asuransi' && $(element).data('status') == 'input') {
+                        $(element).addClass('d-none')
+                    }
+                    if (guaranteeBank.process_status.status.name == 'analisa bank' && ($(element).data('status') == 'input' || $(element).data('status') == 'analisa asuransi')) {
+                        $(element).addClass('d-none')
+                    }
+                    if (guaranteeBank.process_status.status.name == 'terbit' || guaranteeBank.process_status.status.name == 'batal') {
+                        $(element).addClass('d-none')
+                    }
+                    if ($(element).data('status') == guaranteeBank.process_status.status.name) {
+                        $(element).addClass('btn-' + $(element).data('color'))
+                        $(element).prop('disabled', true)
+                        $(element).removeClass('d-none')
+                    }
+                    else {
+                        $(element).addClass('btn-outline-' + $(element).data('color'))
+                    }
+                })
+
+                $.each($('.insurance-status'), function(index, element) {
+                    $(element).removeClass('btn-' + $(element).data('color'))
+                    $(element).removeClass('btn-outline-' + $(element).data('color'))
+                    $(element).removeClass('d-none')
+                    $(element).prop('disabled', false)
+                    if (guaranteeBank.insurance_status.status.name != 'belum terbit') {
+                        $(element).addClass('d-none')
+                    }
+                    if ($(element).data('status') == guaranteeBank.insurance_status.status.name) {
+                        $(element).addClass('btn-' + $(element).data('color'))
+                        $(element).prop('disabled', true)
+                        $(element).removeClass('d-none')
+                    }
+                    else {
+                        $(element).addClass('btn-outline-' + $(element).data('color'))
+                    }
+                })
             })
             $(document).on('click', '#edit-status-save', function () {
                 loading()

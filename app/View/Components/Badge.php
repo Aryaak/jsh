@@ -10,6 +10,7 @@ class Badge extends Component
         private string $face = 'primary',
         private bool $rounded = false,
         private bool $proporsional = false,
+        private ?string $icon = null,
     ) {
         //
     }
@@ -20,6 +21,7 @@ class Badge extends Component
             'face' => $this->face,
             'rounded' => $this->rounded,
             'proporsional' => $this->proporsional,
+            'icon' => $this->icon,
         ]);
     }
 }

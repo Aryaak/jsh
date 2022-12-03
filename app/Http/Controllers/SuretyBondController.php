@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Sirius;
-use App\Models\Branch;
 use DB;
 use Exception;
-use App\Models\SuretyBond;
+use App\Models\Branch;
+use App\Helpers\Sirius;
 use App\Models\Scoring;
+use App\Models\SuretyBond;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\SuretyBondRequest;
 
@@ -24,26 +25,29 @@ class SuretyBondController extends Controller
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
             ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
+            ->editColumn('insurance_status.status.name', 'datatables.status-surety-bond')
             ->editColumn('action', $action)
+            ->rawColumns(['insurance_status.status.name', 'action'])
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
         $statuses = (object)[
             'process' => [
-                'input' => 'Input',
-                'analisa asuransi' => 'Analisa Asuransi',
-                'terbit' => 'Terbit'
+                'input',
+                'analisa asuransi',
+                'terbit',
+                'batal',
             ],
             'insurance' => [
-                'belum terbit' => 'Belum Terbit',
-                'terbit' => 'Terbit',
-                'batal' => 'Batal',
-                'revisi' => 'Revisi',
-                'salah cetak' => 'Salah Cetak',
+                'belum terbit',
+                'terbit',
+                'batal',
+                'revisi',
+                'salah cetak',
             ],
             'finance' => [
-                'lunas' => 'Lunas',
-                'belum lunas' => 'Belum Lunas'
+                'lunas',
+                'belum lunas',
             ]
         ];
         return view('product.surety-bonds',compact('scorings','statuses'));
@@ -89,10 +93,20 @@ class SuretyBondController extends Controller
         $suretyBond->process_status->status;
         $suretyBond->insurance_status->status;
         $suretyBond->finance_status->status;
+
+        $statusStyles = [];
         foreach ($suretyBond->statuses as $statuses) {
             $statuses->status;
+            $statusStyles[$statuses->status->type][$statuses->status->name] = [
+                'name' => SuretyBond::{"mapping". Str::title($statuses->status->type) ."StatusNames"}($statuses->status->name),
+                'color' => SuretyBond::{"mapping". Str::title($statuses->status->type) ."StatusColors"}($statuses->status->name),
+                'icon' => SuretyBond::{"mapping". Str::title($statuses->status->type) ."StatusIcons"}($statuses->status->name),
+            ];
         }
-        return response()->json($this->showResponse($suretyBond->toArray()));
+
+        return response()->json($this->showResponse(array_merge($suretyBond->toArray(), [
+            'status_style' => $statusStyles
+        ])));
     }
 
     public function edit(SurestyBond $suretyBond)

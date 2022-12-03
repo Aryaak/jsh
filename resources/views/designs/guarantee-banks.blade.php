@@ -818,37 +818,51 @@
         @endslot
     </x-modal>
 
-    <x-modal id="modal-edit-status" title="Ubah Status">
+    <x-modal id="modal-edit-status" title="Ubah Status" size="lg">
         <div class="pb-2 mb-2 text-center">
             <b>No. Bond</b> <br>
             <span id="edit-status-no-bond">-</span>
         </div>
         <div>
+
             <x-form id="form-edit-status" method="put">
                 @php
-                    $insuranceStatusses = [
-                        'belum terbit' => 'Belum Terbit',
-                        'terbit' => 'Terbit',
-                        'batal' => 'Batal',
-                        'revisi' => 'Revisi',
-                        'salah cetak' => 'Salah Cetak',
-                    ];
-
                     $processStatusses = [
-                        'input' => 'Input',
-                        'analisa asuransi' => 'Analisa Asuransi',
-                        'analisa bank' => 'Analisa Bank',
-                        'terbit' => 'Terbit',
+                        'input',
+                        'analisa asuransi',
+                        'analisa bank',
+                        'terbit',
+                        'batal',
                     ];
 
-                    $financeStatusses = [
-                        'lunas' => 'Lunas',
-                        'belum lunas' => 'Belum Lunas',
+                    $insuranceStatusses = [
+                        'belum terbit',
+                        'terbit',
+                        'batal',
+                        'revisi',
+                        'salah cetak',
                     ];
                 @endphp
-                <x-form-select label="Status Jaminan" id="edit-status-insurance" name="insurance" class="mb-3" :options="$insuranceStatusses" required />
-                <x-form-select label="Status Proses" id="edit-status-process" name="process" class="mb-3" :options="$processStatusses" required />
-                <x-form-select label="Status Keuangan" id="edit-status-finance" name="finance" :options="$financeStatusses" required />
+
+                {{-- Status Proses --}}
+                <div class="mb-4">
+                    <div class="text-center">
+                        <label class="form-label mb-2 d-block">Status Proses</label>
+                        @foreach ($processStatusses as $status)
+                            <x-button class="mx-2 my-2 process-status" data-status="{{ $status }}" face="outline-{{ App\Models\GuaranteeBank::mappingProcessStatusColors($status) }}" icon="{{ App\Models\GuaranteeBank::mappingProcessStatusIcons($status) }}">{{ App\Models\GuaranteeBank::mappingProcessStatusNames($status) }}</x-button>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Status Jaminan --}}
+                <div>
+                    <div class="text-center">
+                        <label class="form-label mb-2 d-block">Status Jaminan</label>
+                        @foreach ($insuranceStatusses as $status)
+                            <x-button class="mx-2 my-2 insurance-status" data-status="{{ $status }}" face="outline-{{ App\Models\GuaranteeBank::mappingInsuranceStatusColors($status) }}" icon="{{ App\Models\GuaranteeBank::mappingInsuranceStatusIcons($status) }}">{{ App\Models\GuaranteeBank::mappingInsuranceStatusNames($status) }}</x-button>
+                        @endforeach
+                    </div>
+                </div>
             </x-form>
         </div>
 

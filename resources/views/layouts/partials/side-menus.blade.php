@@ -175,4 +175,16 @@
         @endif
     @endif
 
+    {{-- Desain --}}
+
+    @if ($global->currently_on == 'design')
+        @foreach (glob('../resources/views/designs/*.blade.php') as $file)
+            @php $filename = Str::remove('.blade.php', explode('/', $file)[4]) @endphp
+            <x-menu route="design" :route-params="['page' => $filename]" icon="bx bxs-circle">{{ Str::of($filename)->title()->replace('-', ' ') }}</x-menu>
+        @endforeach
+
+        <br>
+        <x-menu route="main.dashboard" icon="bx bx-arrow-back">Kembali</x-menu>
+    @endif
+
 </ul>

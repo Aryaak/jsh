@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\BankRate;
-use App\Models\ScoringDetail;
-use App\Models\AgentRate;
-use App\Models\Scoring;
-use App\Models\Status;
-use App\Helpers\Sirius;
 use DB;
 use Exception;
+use App\Models\Status;
+use App\Helpers\Sirius;
+use App\Models\Scoring;
+use App\Models\BankRate;
+use App\Models\AgentRate;
+use Illuminate\Support\Str;
+use App\Models\ScoringDetail;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GuaranteeBank extends Model
 {
@@ -399,5 +400,68 @@ class GuaranteeBank extends Model
             'labels' => array_map(function($val){ return Sirius::toShortDate($val); },array_keys($data)),
             'datasets' => array_values($data),
         ];
+    }
+    // Status
+    public static function mappingProcessStatusNames($status)
+    {
+        return Str::title($status);
+    }
+    public static function mappingProcessStatusColors($status)
+    {
+        return match ($status) {
+            'input' => 'primary',
+            'analisa asuransi', 'analisa bank' => 'warning',
+            'terbit' => 'success',
+            'batal' => 'danger',
+        };
+    }
+    public static function mappingProcessStatusIcons($status)
+    {
+        return match ($status) {
+            'input' => 'bx bxs-edit-alt',
+            'analisa asuransi', 'analisa bank' => 'bx bx-search-alt',
+            'terbit' => 'bx bx-check',
+            'batal' => 'bx bx-x'
+        };
+    }
+    public static function mappingInsuranceStatusNames($status)
+    {
+        return Str::title($status);
+    }
+    public static function mappingInsuranceStatusColors($status)
+    {
+        return match ($status) {
+            'belum terbit' => 'primary',
+            'terbit' => 'success',
+            'batal', 'salah cetak' => 'danger',
+            'revisi' => 'info',
+        };
+    }
+    public static function mappingInsuranceStatusIcons($status)
+    {
+        return match ($status) {
+            'belum terbit' => 'bx bx-dots-horizontal-rounded',
+            'terbit' => 'bx bx-check',
+            'batal', 'salah cetak' => 'bx bx-x',
+            'revisi' => 'bx bx-undo',
+        };
+    }
+    public static function mappingFinanceStatusNames($status)
+    {
+        return Str::title($status);
+    }
+    public static function mappingFinanceStatusColors($status)
+    {
+        return match ($status) {
+            'belum lunas' => 'danger',
+            'lunas' => 'success',
+        };
+    }
+    public static function mappingFinanceStatusIcons($status)
+    {
+        return match ($status) {
+            'belum lunas' => 'bx bx-x',
+            'lunas' => 'bx bx-check',
+        };
     }
 }

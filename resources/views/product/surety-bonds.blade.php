@@ -376,7 +376,7 @@
                     {{-- <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button> --}}
                     <div>
                         <x-button class="btn-edit-status" data-bs-target="#modal-edit-status" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Status</x-button>
-                        <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
+                        <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Data</x-button>
                     </div>
                 </div>
             @endslot
@@ -533,17 +533,31 @@
             @endslot
         </x-modal>
 
-        <x-modal id="modal-edit-status" title="Ubah Status">
+        <x-modal id="modal-edit-status" title="Ubah Status" size="lg">
             <div class="pb-2 mb-2 text-center">
                 <b>No. Bond</b> <br>
                 <span id="edit-status-no-bond">-</span>
             </div>
             <div>
-                <x-form id="form-edit-status" method="put">
-                    <x-form-select label="Status Proses" id="edit-status-process" name="process" class="mb-3" :options="$statuses->process" required />
-                    <x-form-select label="Status Jaminan" id="edit-status-insurance" name="insurance" class="mb-3" :options="$statuses->insurance" required />
-                    <x-form-select label="Status Keuangan" id="edit-status-finance" name="finance" :options="$statuses->finance" required />
-                </x-form>
+                {{-- Status Proses --}}
+                <div class="mb-4">
+                    <div class="text-center">
+                        <label class="form-label mb-2 d-block">Status Proses</label>
+                        @foreach ($statuses->process as $status)
+                            <x-button class="mx-2 my-2 process-status" data-status="{{ $status }}" data-color="{{ App\Models\SuretyBond::mappingProcessStatusColors($status) }}" face="outline-{{ App\Models\SuretyBond::mappingProcessStatusColors($status) }}" icon="{{ App\Models\SuretyBond::mappingProcessStatusIcons($status) }}">{{ App\Models\SuretyBond::mappingProcessStatusNames($status) }}</x-button>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Status Jaminan --}}
+                <div>
+                    <div class="text-center">
+                        <label class="form-label mb-2 d-block">Status Jaminan</label>
+                        @foreach ($statuses->insurance as $status)
+                            <x-button class="mx-2 my-2 insurance-status" data-status="{{ $status }}" data-color="{{ App\Models\SuretyBond::mappingInsuranceStatusColors($status) }}" face="outline-{{ App\Models\SuretyBond::mappingInsuranceStatusColors($status) }}" icon="{{ App\Models\SuretyBond::mappingInsuranceStatusIcons($status) }}">{{ App\Models\SuretyBond::mappingInsuranceStatusNames($status) }}</x-button>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
             @slot('footer')
@@ -791,7 +805,6 @@
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
                     <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
-                    <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
                 </div>
             @endslot
         </x-modal>
@@ -854,8 +867,6 @@
             ])
 
             @if ($global->currently_on == 'branch')
-                $("#edit-status-insurance, #edit-status-process, #edit-status-finance").select2({dropdownParent: $('#modal-edit-status')})
-
                 select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,$('#modal-create'))
                 select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-create'))
                 select2Init("#create-principal-id",'{{ route('select2.principal') }}',0,$('#modal-create'))
@@ -966,7 +977,7 @@
                     $('#process-status-histories').html('')
                     $('#finance-status-histories').html('')
                     suretyBond.statuses.forEach(e => {
-                        const html = `<x-history-item icon="bx bx-check" face="success" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
+                        const html = `<x-history-item icon="` + suretyBond.status_style[e.type][e.status.name].icon + `" face="` + suretyBond.status_style[e.type][e.status.name].color + `" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
                         $('#'+e.type+'-status-histories').append(html)
                     });
 
@@ -1023,9 +1034,44 @@
                 })
             })
             $(document).on('click', '.btn-edit-status', function () {
-                $('#edit-status-process').val(suretyBond.process_status.status.name).change()
-                $('#edit-status-insurance').val(suretyBond.insurance_status.status.name).change()
-                $('#edit-status-finance').val(suretyBond.finance_status.status.name).change()
+                $.each($('.process-status'), function(index, element) {
+                    $(element).removeClass('btn-' + $(element).data('color'))
+                    $(element).removeClass('btn-outline-' + $(element).data('color'))
+                    $(element).removeClass('d-none')
+                    $(element).prop('disabled', false)
+                    if (suretyBond.process_status.status.name == 'analisa asuransi'  && $(element).data('status') == 'input') {
+                        $(element).addClass('d-none')
+                    }
+                    if (suretyBond.process_status.status.name == 'terbit' || suretyBond.process_status.status.name == 'batal') {
+                        $(element).addClass('d-none')
+                    }
+                    if ($(element).data('status') == suretyBond.process_status.status.name) {
+                        $(element).addClass('btn-' + $(element).data('color'))
+                        $(element).prop('disabled', true)
+                        $(element).removeClass('d-none')
+                    }
+                    else {
+                        $(element).addClass('btn-outline-' + $(element).data('color'))
+                    }
+                })
+
+                $.each($('.insurance-status'), function(index, element) {
+                    $(element).removeClass('btn-' + $(element).data('color'))
+                    $(element).removeClass('btn-outline-' + $(element).data('color'))
+                    $(element).removeClass('d-none')
+                    $(element).prop('disabled', false)
+                    if (suretyBond.insurance_status.status.name != 'belum terbit') {
+                        $(element).addClass('d-none')
+                    }
+                    if ($(element).data('status') == suretyBond.insurance_status.status.name) {
+                        $(element).addClass('btn-' + $(element).data('color'))
+                        $(element).prop('disabled', true)
+                        $(element).removeClass('d-none')
+                    }
+                    else {
+                        $(element).addClass('btn-outline-' + $(element).data('color'))
+                    }
+                })
             })
             $(document).on('click', '#edit-status-save', function () {
                 loading()

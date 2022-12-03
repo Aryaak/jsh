@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
  * -------------------------------------------------------------------------
  */
 
-Route::get('/design/{page}', DesignController::class);
+Route::get('/design/{page}', DesignController::class)->name('design');
 
 /**
  * -------------------------------------------------------------------------

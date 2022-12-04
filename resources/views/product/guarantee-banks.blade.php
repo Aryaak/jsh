@@ -378,7 +378,7 @@
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
                     <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
-                    {{-- <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button> --}}
+                    <x-button id="btn-paid-off-payment" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button>
                     <div>
                         <x-button class="btn-edit-status" data-bs-target="#modal-edit-status" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Status</x-button>
                         <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
@@ -996,17 +996,11 @@
                         $('#'+e.type+'-status-histories').append(html)
                     });
 
-                    $("#btn-paid-off-payment").attr('data-id', guaranteeBank.id)
-                }
-            })
-        })
-
-        $("#btn-paid-off-payment").click(function () {
-            Confirm.fire({
-                text: 'Yakin ingin melunasi pembayaran bank garansi ini?'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Aksi lunasi pembayaran
+                    if(guaranteeBank.finance_status.status.name == 'lunas'){
+                        $('#btn-paid-off-payment').hide()
+                    }else{
+                        $('#btn-paid-off-payment').show()
+                    }
                 }
             })
         })
@@ -1050,6 +1044,7 @@
                 })
             })
             $(document).on('click', '.btn-edit-status', function () {
+                $('#edit-status-no-bond').html(guaranteeBank.bond_number)
                 $.each($('.process-status'), function(index, element) {
                     $(element).removeClass('btn-' + $(element).data('color'))
                     $(element).removeClass('btn-outline-' + $(element).data('color'))
@@ -1079,9 +1074,9 @@
                     $(element).removeClass('btn-outline-' + $(element).data('color'))
                     $(element).removeClass('d-none')
                     $(element).prop('disabled', false)
-                    if (guaranteeBank.insurance_status.status.name != 'belum terbit') {
-                        $(element).addClass('d-none')
-                    }
+                    // if (guaranteeBank.insurance_status.status.name != 'belum terbit') {
+                    //     $(element).addClass('d-none')
+                    // }
                     if ($(element).data('status') == guaranteeBank.insurance_status.status.name) {
                         $(element).addClass('btn-' + $(element).data('color'))
                         $(element).prop('disabled', true)
@@ -1111,6 +1106,38 @@
                     }
                 })
             })
+            $(document).on('click', '.process-status', function () {
+                updateStatus('process',{
+                    _method: 'put',
+                    type: 'process',
+                    status: $(this).data('status')
+                },'#modal-edit-status')
+            })
+            $(document).on('click', '.insurance-status', function () {
+                updateStatus('insurance',{
+                    _method: 'put',
+                    type: 'insurance',
+                    status: $(this).data('status')
+                },'#modal-edit-status')
+            })
+            $(document).on('click', '#btn-paid-off-payment', function () {
+                Confirm.fire({
+                    text: 'Yakin ingin melunasi pembayaran surety bond ini?'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        updateStatus('finance',{
+                            _method: 'put',
+                            type: 'finance',
+                            status: 'lunas'
+                        },'#modal-show')
+                    }
+                })
+            })
+            function updateStatus(type,params,modal){
+                ajaxPost("{{ route('branch.products.guarantee-banks.update-status', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi' => '-id-']) }}".replace('-id-',guaranteeBank.id),params,modal,function(){
+                    table.ajax.reload()
+                })
+            }
         @endif
 
     </script>

@@ -313,6 +313,9 @@ class GuaranteeBank extends Model
             throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
         }
     }
+    public function cetakSkor(){
+
+    }
     private static function fetchQuery(object $args): object{
         $columns = [
             'startDate' => 'gb.created_at',

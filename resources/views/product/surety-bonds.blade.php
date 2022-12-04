@@ -357,16 +357,16 @@
                             </div>
                         @endforeach
                     </div>
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-12 mt-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>Total Nilai: <b>69</b></div>
+                                <div>Total Nilai: <b id="show-total-score">69</b></div>
                                 <div>
-                                    <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
+                                    <x-button face='secondary' id="print-score" icon="bx bxs-printer">Cetak Scoring</x-button>
                                 </div>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                 </x-card>
             </div>
 
@@ -971,6 +971,7 @@
                     $('#show-office-polish-cost').html(suretyBond.office_polish_cost_converted)
                     $('#show-office-stamp-cost').html(suretyBond.office_stamp_cost_converted)
                     $('#show-profit').html(suretyBond.profit_converted)
+                    $('#show-total-score').html(suretyBond.score)
                     $('input[type="radio"]:checked').prop('checked',false)
                     const groupByCategory = scoringGroupBy(suretyBond.scorings)
                     Object.keys(groupByCategory).forEach(key => {
@@ -998,6 +999,9 @@
                     }
                 }
             })
+        })
+        $(document).on('click', '#print-score', function () {
+            window.open("{{ route('branch.products.surety-bonds.print-score', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id));
         })
 
         @if ($global->currently_on == 'branch')

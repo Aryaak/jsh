@@ -6,6 +6,8 @@ namespace App\Models;
 use Exception;
 use App\Models\Scoring;
 use App\Helpers\Sirius;
+use App\Helpers\Jamsyar;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -126,6 +128,25 @@ class Principal extends Model
             return $this->delete();
         } catch (Exception $ex) {
             throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
+        }
+    }
+    public function sync(){
+        $url = config('app.env') == 'local' ? 'http://devmicroservice.jamkrindosyariah.co.id/Api/add_principal_sbd' : 'http://192.168.190.168:8002/Api/add_principal_sbd';
+        $response = Http::asJson()->acceptJson()->withToken(Jamsyar::login())
+        ->post($url, [
+            "nama_principal" => $this->name,
+            "alamat_principal" => $this->address,
+            "npwp_principal" => $this->npwp_number,
+            "email_principal" => $this->email,
+            "jenis_obligee" => 1,
+            "nama_penanggung_jawab" => $this->pic_name,
+            "jabatan_penanggung_jawab" => $this->pic_position
+        ]);
+        dd($response->json());
+        if($response->successful()){
+            return $response->json();
+        }else{
+            // throw new Exception($response->json()['keterangan'], $response->json()['status']);
         }
     }
 }

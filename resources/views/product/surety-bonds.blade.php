@@ -357,23 +357,23 @@
                             </div>
                         @endforeach
                     </div>
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-12 mt-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>Total Nilai: <b>69</b></div>
+                                <div>Total Nilai: <b id="show-total-score">69</b></div>
                                 <div>
-                                    <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
+                                    <x-button face='secondary' id="print-score" icon="bx bxs-printer">Cetak Scoring</x-button>
                                 </div>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                 </x-card>
             </div>
 
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
                     <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
-                    {{-- <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button> --}}
+                    <x-button id="btn-paid-off-payment" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button>
                     <div>
                         <x-button class="btn-edit-status" data-bs-target="#modal-edit-status" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Status</x-button>
                         <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Data</x-button>
@@ -544,7 +544,12 @@
                     <div class="text-center">
                         <label class="form-label mb-2 d-block">Status Proses</label>
                         @foreach ($statuses->process as $status)
-                            <x-button class="mx-2 my-2 process-status" data-status="{{ $status }}" data-color="{{ App\Models\SuretyBond::mappingProcessStatusColors($status) }}" face="outline-{{ App\Models\SuretyBond::mappingProcessStatusColors($status) }}" icon="{{ App\Models\SuretyBond::mappingProcessStatusIcons($status) }}">{{ App\Models\SuretyBond::mappingProcessStatusNames($status) }}</x-button>
+                            <x-button class="mx-2 my-2 process-status" data-status="{{ $status }}"
+                                data-color="{{ App\Models\SuretyBond::mappingProcessStatusColors($status) }}"
+                                face="outline-{{ App\Models\SuretyBond::mappingProcessStatusColors($status) }}"
+                                icon="{{ App\Models\SuretyBond::mappingProcessStatusIcons($status) }}">
+                                {{ App\Models\SuretyBond::mappingProcessStatusNames($status) }}
+                            </x-button>
                         @endforeach
                     </div>
                 </div>
@@ -554,7 +559,12 @@
                     <div class="text-center">
                         <label class="form-label mb-2 d-block">Status Jaminan</label>
                         @foreach ($statuses->insurance as $status)
-                            <x-button class="mx-2 my-2 insurance-status" data-status="{{ $status }}" data-color="{{ App\Models\SuretyBond::mappingInsuranceStatusColors($status) }}" face="outline-{{ App\Models\SuretyBond::mappingInsuranceStatusColors($status) }}" icon="{{ App\Models\SuretyBond::mappingInsuranceStatusIcons($status) }}">{{ App\Models\SuretyBond::mappingInsuranceStatusNames($status) }}</x-button>
+                            <x-button class="mx-2 my-2 insurance-status" data-status="{{ $status }}"
+                                data-color="{{ App\Models\SuretyBond::mappingInsuranceStatusColors($status) }}"
+                                face="outline-{{ App\Models\SuretyBond::mappingInsuranceStatusColors($status) }}"
+                                icon="{{ App\Models\SuretyBond::mappingInsuranceStatusIcons($status) }}">
+                                {{ App\Models\SuretyBond::mappingInsuranceStatusNames($status) }}
+                            </x-button>
                         @endforeach
                     </div>
                 </div>
@@ -961,6 +971,7 @@
                     $('#show-office-polish-cost').html(suretyBond.office_polish_cost_converted)
                     $('#show-office-stamp-cost').html(suretyBond.office_stamp_cost_converted)
                     $('#show-profit').html(suretyBond.profit_converted)
+                    $('#show-total-score').html(suretyBond.score)
                     $('input[type="radio"]:checked').prop('checked',false)
                     const groupByCategory = scoringGroupBy(suretyBond.scorings)
                     Object.keys(groupByCategory).forEach(key => {
@@ -981,19 +992,16 @@
                         $('#'+e.type+'-status-histories').append(html)
                     });
 
-                    $("#btn-paid-off-payment").attr('data-id', suretyBond.id)
+                    if(suretyBond.finance_status.status.name == 'lunas'){
+                        $('#btn-paid-off-payment').hide()
+                    }else{
+                        $('#btn-paid-off-payment').show()
+                    }
                 }
             })
         })
-
-        $("#btn-paid-off-payment").click(function () {
-            Confirm.fire({
-                text: 'Yakin ingin melunasi pembayaran surety bond ini?'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Aksi lunasi pembayaran
-                }
-            })
+        $(document).on('click', '#print-score', function () {
+            window.open("{{ route('branch.products.surety-bonds.print-score', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id));
         })
 
         @if ($global->currently_on == 'branch')
@@ -1034,6 +1042,7 @@
                 })
             })
             $(document).on('click', '.btn-edit-status', function () {
+                $('#edit-status-no-bond').html(suretyBond.bond_number)
                 $.each($('.process-status'), function(index, element) {
                     $(element).removeClass('btn-' + $(element).data('color'))
                     $(element).removeClass('btn-outline-' + $(element).data('color'))
@@ -1060,16 +1069,18 @@
                     $(element).removeClass('btn-outline-' + $(element).data('color'))
                     $(element).removeClass('d-none')
                     $(element).prop('disabled', false)
-                    if (suretyBond.insurance_status.status.name != 'belum terbit') {
-                        $(element).addClass('d-none')
-                    }
+                    // if (suretyBond.insurance_status.status.name != 'belum terbit') {
+                    //     $(element).addClass('d-none')
+                    // }
                     if ($(element).data('status') == suretyBond.insurance_status.status.name) {
                         $(element).addClass('btn-' + $(element).data('color'))
                         $(element).prop('disabled', true)
                         $(element).removeClass('d-none')
-                    }
-                    else {
+                    }else {
                         $(element).addClass('btn-outline-' + $(element).data('color'))
+                    }
+                    if(suretyBond.process_status.status.name != 'terbit'){
+                        $(element).addClass('d-none')
                     }
                 })
             })
@@ -1092,6 +1103,38 @@
                     }
                 })
             })
+            $(document).on('click', '.process-status', function () {
+                updateStatus('process',{
+                    _method: 'put',
+                    type: 'process',
+                    status: $(this).data('status')
+                },'#modal-edit-status')
+            })
+            $(document).on('click', '.insurance-status', function () {
+                updateStatus('insurance',{
+                    _method: 'put',
+                    type: 'insurance',
+                    status: $(this).data('status')
+                },'#modal-edit-status')
+            })
+            $(document).on('click', '#btn-paid-off-payment', function () {
+                Confirm.fire({
+                    text: 'Yakin ingin melunasi pembayaran surety bond ini?'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        updateStatus('finance',{
+                            _method: 'put',
+                            type: 'finance',
+                            status: 'lunas'
+                        },'#modal-show')
+                    }
+                })
+            })
+            function updateStatus(type,params,modal){
+                ajaxPost("{{ route('branch.products.surety-bonds.update-status', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id),params,modal,function(){
+                    table.ajax.reload()
+                })
+            }
         @endif
     </script>
 @endpush

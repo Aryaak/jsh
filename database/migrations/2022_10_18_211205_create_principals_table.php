@@ -11,20 +11,20 @@ return new class extends Migration
         Schema::create('principals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('phone');
-            $table->string('email');
-            $table->text('address');
-            $table->string('domicile');
-            $table->float('score');
-            $table->string('npwp_number');
-            $table->date('npwp_expired_at');
-            $table->string('nib_number');
-            $table->date('nib_expired_at');
-            $table->string('pic_name');
-            $table->string('pic_position');
-            $table->string('jamsyar_id');
-            $table->string('jamsyar_code');
-            $table->foreignId('city_id')->constrained();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->text('address')->nullable();
+            $table->string('domicile')->nullable();
+            $table->float('score')->nullable();
+            $table->string('npwp_number')->nullable();
+            $table->date('npwp_expired_at')->nullable();
+            $table->string('nib_number')->nullable();
+            $table->date('nib_expired_at')->nullable();
+            $table->string('pic_name')->nullable();
+            $table->string('pic_position')->nullable();
+            $table->string('jamsyar_id')->nullable();
+            $table->string('jamsyar_code')->nullable();
+            $table->foreignId('city_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

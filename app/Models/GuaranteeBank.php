@@ -251,7 +251,7 @@ class GuaranteeBank extends Model
             'scoring' => $scoring
         ];
     }
-    private static function initFetchStatus(object $args): array{
+    private static function fetchStatus(object $args): array{
         $params = [];
         $type = $args->type;
         $status = $args->status;
@@ -264,10 +264,18 @@ class GuaranteeBank extends Model
                 ];
             }else if($status == 'terbit'){
                 $params = [
+                    ['type' => $type,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
+                    ['type' => $type,'status_id' => Status::where([['type',$type],['name','analisa bank']])->firstOrFail()->id],
                     ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
                     ['type' => 'insurance','status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
                 ];
-            }else{
+            }else if($status == 'analisa bank'){
+                $params = [
+                    ['type' => $type,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
+                    ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                ];
+            }
+            else{
                 $params = [
                     ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
                 ];
@@ -277,19 +285,6 @@ class GuaranteeBank extends Model
                 ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
             ];
         }
-        return $params;
-    }
-    private function fetchStatus(object $args): array{
-        $params = [];
-        $process = Status::where([['type','process'],['name',$args->process]])->firstOrFail();
-        $processDoesntExist = $this->process_status()->where('status_id',$process->id)->where('type','process')->doesntExist();
-        if($processDoesntExist) $params[] = ['type' => 'process','status_id' => $process->id];
-        $insurance = Status::where([['type','insurance'],['name',$args->insurance]])->firstOrFail();
-        $insuranceDoesntExist = $this->insurance_status()->where('status_id',$insurance->id)->where('type','insurance')->doesntExist();
-        if($insuranceDoesntExist) $params[] = ['type' => 'insurance','status_id' => $insurance->id];
-        $finance = Status::where([['type','finance'],['name',$args->finance]])->firstOrFail();
-        $financeDoesntExist = $this->finance_status()->where('status_id',$finance->id)->where('type','finance')->doesntExist();
-        if($financeDoesntExist) $params[] = ['type' => 'finance','status_id' => $finance->id];
         return $params;
     }
     public static function buat(array $params): self{
@@ -306,9 +301,6 @@ class GuaranteeBank extends Model
         }
         return $this->update($request->guaranteeBank);
     }
-    public function initStatus(array $params){
-        return $this->statuses()->createMany(self::initFetchStatus((object)$params));
-    }
     public function ubahStatus(array $params){
         return $this->statuses()->createMany($this->fetchStatus((object)$params));
     }
@@ -320,6 +312,9 @@ class GuaranteeBank extends Model
         } catch (Exception $ex) {
             throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
         }
+    }
+    public function cetakSkor(){
+
     }
     private static function fetchQuery(object $args): object{
         $columns = [

@@ -362,23 +362,23 @@
                             </div>
                         @endforeach
                     </div>
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-12 mt-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>Total Nilai: <b>69</b></div>
+                                <div>Total Nilai: <b id="show-total-score">69</b></div>
                                 <div>
-                                    <x-button face='secondary' icon="bx bxs-printer">Cetak Scoring</x-button>
+                                    <x-button face='secondary' id="print-score" icon="bx bxs-printer">Cetak Scoring</x-button>
                                 </div>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                 </x-card>
             </div>
 
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
                     <x-button class="btn-status-histories" data-bs-target="#modal-status-histories" data-bs-toggle="modal" data-bs-dismiss="modal" face='secondary' icon="bx bx-history">Riwayat Status</x-button>
-                    {{-- <x-button id="btn-paid-off-payment" data-id="" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button> --}}
+                    <x-button id="btn-paid-off-payment" face="success" icon="bx bxs-badge-check">Lunasi Pembayaran</x-button>
                     <div>
                         <x-button class="btn-edit-status" data-bs-target="#modal-edit-status" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah Status</x-button>
                         <x-button class="btn-edit" data-bs-target="#modal-edit" data-bs-toggle="modal" data-bs-dismiss="modal" face="warning" icon="bx bxs-edit">Ubah</x-button>
@@ -977,6 +977,7 @@
                     $('#show-office-nett-total').html(guaranteeBank.office_net_total_converted)
                     $('#show-office-polish-cost').html(guaranteeBank.office_polish_cost_converted)
                     $('#show-office-stamp-cost').html(guaranteeBank.office_stamp_cost_converted)
+                    $('#show-total-score').html(guaranteeBank.score)
                     $('#show-profit').html(guaranteeBank.profit_converted)
                     const groupByCategory = scoringGroupBy(guaranteeBank.scorings)
                     Object.keys(groupByCategory).forEach(key => {
@@ -996,21 +997,17 @@
                         $('#'+e.type+'-status-histories').append(html)
                     });
 
-                    $("#btn-paid-off-payment").attr('data-id', guaranteeBank.id)
+                    if(guaranteeBank.finance_status.status.name == 'lunas'){
+                        $('#btn-paid-off-payment').hide()
+                    }else{
+                        $('#btn-paid-off-payment').show()
+                    }
                 }
             })
         })
-
-        $("#btn-paid-off-payment").click(function () {
-            Confirm.fire({
-                text: 'Yakin ingin melunasi pembayaran bank garansi ini?'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Aksi lunasi pembayaran
-                }
-            })
+        $(document).on('click', '#print-score', function () {
+            window.open("{{ route('branch.products.guarantee-banks.print-score', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi' => '-id-']) }}".replace('-id-',guaranteeBank.id));
         })
-
         @if ($global->currently_on == 'branch')
             $(document).on('click', '.btn-edit', function () {
                 $('input[type="radio"]:checked').prop('checked',false)
@@ -1050,6 +1047,7 @@
                 })
             })
             $(document).on('click', '.btn-edit-status', function () {
+                $('#edit-status-no-bond').html(guaranteeBank.bond_number)
                 $.each($('.process-status'), function(index, element) {
                     $(element).removeClass('btn-' + $(element).data('color'))
                     $(element).removeClass('btn-outline-' + $(element).data('color'))
@@ -1079,9 +1077,9 @@
                     $(element).removeClass('btn-outline-' + $(element).data('color'))
                     $(element).removeClass('d-none')
                     $(element).prop('disabled', false)
-                    if (guaranteeBank.insurance_status.status.name != 'belum terbit') {
-                        $(element).addClass('d-none')
-                    }
+                    // if (guaranteeBank.insurance_status.status.name != 'belum terbit') {
+                    //     $(element).addClass('d-none')
+                    // }
                     if ($(element).data('status') == guaranteeBank.insurance_status.status.name) {
                         $(element).addClass('btn-' + $(element).data('color'))
                         $(element).prop('disabled', true)
@@ -1111,6 +1109,38 @@
                     }
                 })
             })
+            $(document).on('click', '.process-status', function () {
+                updateStatus('process',{
+                    _method: 'put',
+                    type: 'process',
+                    status: $(this).data('status')
+                },'#modal-edit-status')
+            })
+            $(document).on('click', '.insurance-status', function () {
+                updateStatus('insurance',{
+                    _method: 'put',
+                    type: 'insurance',
+                    status: $(this).data('status')
+                },'#modal-edit-status')
+            })
+            $(document).on('click', '#btn-paid-off-payment', function () {
+                Confirm.fire({
+                    text: 'Yakin ingin melunasi pembayaran surety bond ini?'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        updateStatus('finance',{
+                            _method: 'put',
+                            type: 'finance',
+                            status: 'lunas'
+                        },'#modal-show')
+                    }
+                })
+            })
+            function updateStatus(type,params,modal){
+                ajaxPost("{{ route('branch.products.guarantee-banks.update-status', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi' => '-id-']) }}".replace('-id-',guaranteeBank.id),params,modal,function(){
+                    table.ajax.reload()
+                })
+            }
         @endif
 
     </script>

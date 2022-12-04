@@ -153,7 +153,7 @@ class SuretyBondController extends Controller
             DB::beginTransaction();
             $suretyBond->ubahStatus($request->all());
             $http_code = 200;
-            $response = $this->updateResponse();
+            $response = $this->updateResponse('Ubah status berhasil!');
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
@@ -162,5 +162,9 @@ class SuretyBondController extends Controller
         }
 
         return response()->json($response, $http_code);
+    }
+    public function printScore(Branch $regional, Branch $branch, SuretyBond $suretyBond){
+        $scorings = Scoring::whereNotNull('category')->with('details')->get();
+        return view('product.pdf.score',compact('scorings'));
     }
 }

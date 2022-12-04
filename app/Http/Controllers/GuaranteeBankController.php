@@ -157,7 +157,7 @@ class GuaranteeBankController extends Controller
             DB::beginTransaction();
             $bankGaransi->ubahStatus($request->all());
             $http_code = 200;
-            $response = $this->updateResponse();
+            $response = $this->updateResponse('Ubah status berhasil!');
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
@@ -166,5 +166,9 @@ class GuaranteeBankController extends Controller
         }
 
         return response()->json($response, $http_code);
+    }
+    public function printScore(Branch $regional, Branch $branch, GuaranteeBank $bankGaransi){
+        $scorings = Scoring::whereNotNull('category')->with('details')->get();
+        return view('product.pdf.score',compact('scorings'));
     }
 }

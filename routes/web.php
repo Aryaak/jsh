@@ -27,7 +27,7 @@ use App\Http\Controllers\GuaranteeBankReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstalmentController;
 use Illuminate\Support\Facades\Route;
-
+use App\Helpers\Jamsyar;
 /**
  * -------------------------------------------------------------------------
  * Design Only Route
@@ -35,6 +35,11 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/design/{page}', DesignController::class)->name('design');
+Route::get('/test', function (Request $request) {
+    dd(Jamsyar::cities('jsh','Semangat1','sura'));
+    // dd(\App\Models\Obligee::find(1)->sync());
+    // dd(\App\Models\Principal::find(1)->sync());
+});
 
 /**
  * -------------------------------------------------------------------------
@@ -212,8 +217,10 @@ Route::middleware(['auth'])->group(function () {
         Route::group(['prefix' => '/produk', 'as' => 'products.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::put('surety-bond/{surety_bond}/update-status', [SuretyBondController::class, 'changeStatus'])->name('surety-bonds.update-status');
+            Route::get('surety-bond/{surety_bond}/print-score', [SuretyBondController::class, 'printScore'])->name('surety-bonds.print-score');
             Route::apiResource('surety-bond', SuretyBondController::class)->names('surety-bonds');
             Route::put('bank-garansi/{bank_garansi}/update-status', [GuaranteeBankController::class, 'changeStatus'])->name('guarantee-banks.update-status');
+            Route::get('bank-garansi/{bank_garansi}/print-score', [GuaranteeBankController::class, 'printScore'])->name('guarantee-banks.print-score');
             Route::apiResource('bank-garansi', GuaranteeBankController::class)->names('guarantee-banks');
 
             // Route untuk produk ....

@@ -301,8 +301,10 @@ function clearForm(formselector) {
         $(this).val('')
     })
     $(formselector).find('select').each(function () {
-        $(this).val('').trigger('change')
+        $(this).val(null).trigger('change')
     })
+    $(formselector).find('input[type="radio"]').prop('checked', false);
+    $(formselector).find('input[type="checkbox"]').prop('checked', false);
 }
 
 function numberFormat(number, decimals = 0, thousand_separator = '.', decimal_separator = ',') {

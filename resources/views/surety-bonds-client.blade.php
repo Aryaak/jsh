@@ -175,8 +175,8 @@
             loading()
             $('#create-day-count-input').val(5)
             ajaxPost("{{ route('client') }}",fetchFormData(new FormData(document.getElementById('form-create'))),function(){
+                Swal.close()
                 clearForm('#form-create')
-                $('input[type="radio"]').prop('checked', false);
                 $('#create-principal-address').html('')
                 $('#create-pic-name').html('')
                 $('#create-pic-position').html('')
@@ -185,19 +185,23 @@
             })
         })
         $(document).on('change', '#create-obligee-id', function () {
-            const creadit = $(this).attr('id').split('-')[0] //create or edit
-            ajaxGet('{{ route('client.obligee','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
-                $('#'+creadit+'-obligee-address').html(response.data.address)
-            })
+            if($(this).val() != ''){
+                const creadit = $(this).attr('id').split('-')[0] //create or edit
+                ajaxGet('{{ route('client.obligee','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
+                    $('#'+creadit+'-obligee-address').html(response.data.address)
+                })
+            }
         })
         $(document).on('change', '#create-principal-id', function () {
-            const creadit = $(this).attr('id').split('-')[0] //create or edit
-            ajaxGet('{{ route('client.principal','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
-                const data = response.data
-                $('#'+creadit+'-principal-address').html(data.address)
-                $('#'+creadit+'-pic-name').html(data.pic_name)
-                $('#'+creadit+'-pic-position').html(data.pic_position)
-            })
+            if($(this).val() != ''){
+                const creadit = $(this).attr('id').split('-')[0] //create or edit
+                ajaxGet('{{ route('client.principal','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
+                    const data = response.data
+                    $('#'+creadit+'-principal-address').html(data.address)
+                    $('#'+creadit+'-pic-name').html(data.pic_name)
+                    $('#'+creadit+'-pic-position').html(data.pic_position)
+                })
+            }
         })
         $(document).on('input', '#create-start-date, #create-end-date, .create-due-day-tolerance', function () {
             // const split = $(this).attr('id').split('-')

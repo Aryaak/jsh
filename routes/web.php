@@ -46,7 +46,7 @@ Route::get('/design/{page}', DesignController::class);
  * -------------------------------------------------------------------------
  */
 Route::get('surety-bond-client', [SuretyBondDraftController::class, 'indexClient'])->name('client');
-Route::post('surety-bond-client', [SuretyBondDraftController::class, 'storeClient'])->name('client');
+Route::post('surety-bond-client', [SuretyBondDraftController::class, 'storeClient']);
 
 /**
  * -------------------------------------------------------------------------
@@ -54,7 +54,7 @@ Route::post('surety-bond-client', [SuretyBondDraftController::class, 'storeClien
  * -------------------------------------------------------------------------
  */
 Route::get('guarantee-bank-client', [GuaranteeBankDraftController::class, 'indexClient'])->name('bgc');
-Route::post('guarantee-bank-client', [GuaranteeBankDraftController::class, 'storeClient'])->name('bgc');
+Route::post('guarantee-bank-client', [GuaranteeBankDraftController::class, 'storeClient']);
 
  /**
  * -------------------------------------------------------------------------

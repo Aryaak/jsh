@@ -10,6 +10,7 @@ use App\Models\Scoring;
 use App\Models\GuaranteeBank;
 use Illuminate\Http\Request;
 use App\Http\Requests\GuaranteeBankRequest;
+use App\Models\GuaranteeBankDraft;
 
 class GuaranteeBankController extends Controller
 {
@@ -27,6 +28,7 @@ class GuaranteeBankController extends Controller
             ->editColumn('action', $action)
             ->toJson();
         }
+        $count_draft = count(GuaranteeBankDraft::where('approved_status','Belum Disetujui')->get());
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
         $statuses = (object)[
             'process' => [
@@ -47,7 +49,7 @@ class GuaranteeBankController extends Controller
                 'belum lunas' => 'Belum Lunas',
             ]
         ];
-        return view('product.guarantee-banks',compact('scorings','statuses'));
+        return view('product.guarantee-banks',compact('scorings','statuses','count_draft'));
     }
 
     public function create()

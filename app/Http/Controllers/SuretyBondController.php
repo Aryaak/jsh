@@ -10,6 +10,7 @@ use App\Models\SuretyBond;
 use App\Models\Scoring;
 use Illuminate\Http\Request;
 use App\Http\Requests\SuretyBondRequest;
+use App\Models\SuretyBondDraft;
 
 class SuretyBondController extends Controller
 {
@@ -27,6 +28,7 @@ class SuretyBondController extends Controller
             ->editColumn('action', $action)
             ->toJson();
         }
+        $count_draft = count(SuretyBondDraft::where('approved_status','Belum Disetujui')->get());
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
         $statuses = (object)[
             'process' => [
@@ -46,7 +48,7 @@ class SuretyBondController extends Controller
                 'belum lunas' => 'Belum Lunas'
             ]
         ];
-        return view('product.surety-bonds',compact('scorings','statuses'));
+        return view('product.surety-bonds',compact('scorings','statuses','count_draft'));
     }
 
     public function create()

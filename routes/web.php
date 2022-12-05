@@ -20,6 +20,7 @@ use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\UploaderController;
 use App\Http\Controllers\SuretyBondController;
 use App\Http\Controllers\GuaranteeBankController;
+use App\Http\Controllers\GuaranteeBankDraftController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\SuretyBondReportController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\GuaranteeBankReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstalmentController;
 use App\Http\Controllers\SuretyBondDraftController;
+use App\Models\GuaranteeBankDraft;
 use App\Models\SuretyBondDraft;
 use Illuminate\Support\Facades\Route;
 
@@ -37,11 +39,30 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/design/{page}', DesignController::class);
+
+/**
+ * -------------------------------------------------------------------------
+ * Surety Bond for Client Route
+ * -------------------------------------------------------------------------
+ */
 Route::get('surety-bond-client', [SuretyBondDraftController::class, 'indexClient'])->name('client');
 Route::post('surety-bond-client', [SuretyBondDraftController::class, 'storeClient'])->name('client');
+
+/**
+ * -------------------------------------------------------------------------
+ * Guarantee Bank for Client Route
+ * -------------------------------------------------------------------------
+ */
+Route::get('guarantee-bank-client', [GuaranteeBankDraftController::class, 'indexClient'])->name('bgc');
+Route::post('guarantee-bank-client', [GuaranteeBankDraftController::class, 'storeClient'])->name('bgc');
+
+ /**
+ * -------------------------------------------------------------------------
+ * Others non-login for Client Route
+ * -------------------------------------------------------------------------
+ */
 Route::get('principal-client/{principal}', [PrincipalController::class, 'show'])->name('client.principal');
 Route::get('obligee-client/{obligee}', [ObligeeController::class, 'show'])->name('client.obligee');
-Route::apiResource('surety-bond-draft', SuretyBondDraftController::class)->names('draft');
 
 /**
  * -------------------------------------------------------------------------
@@ -220,8 +241,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::put('surety-bond/{surety_bond}/update-status', [SuretyBondController::class, 'changeStatus'])->name('surety-bonds.update-status');
             Route::apiResource('surety-bond', SuretyBondController::class)->names('surety-bonds');
+            Route::apiResource('surety-bond-draft', SuretyBondDraftController::class)->names('draft');
+            Route::post('surety-bond-draft/{surety_bond_draft}', [SuretyBondDraftController::class, 'approve'])->name('client.approve');
+            Route::put('surety-bond-draft/{surety_bond_draft}', [SuretyBondDraftController::class, 'decline'])->name('client.decline');
             Route::put('bank-garansi/{bank_garansi}/update-status', [GuaranteeBankController::class, 'changeStatus'])->name('guarantee-banks.update-status');
             Route::apiResource('bank-garansi', GuaranteeBankController::class)->names('guarantee-banks');
+            Route::apiResource('bank-garansi-draft', GuaranteeBankDraftController::class)->names('draft.bg');
+            Route::post('bank-garansi-draft/{bank_garansi_draft}', [GuaranteeBankDraftController::class, 'approve'])->name('client.approve.bg');
+            Route::put('bank-garansi-draft/{bank_garansi_draft}', [GuaranteeBankDraftController::class, 'decline'])->name('client.decline.bg');
 
             // Route untuk produk ....
         });

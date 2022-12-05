@@ -10,7 +10,7 @@
         @slot('headerAction')
             @if ($global->currently_on == 'branch')
                 <div>
-                    <x-button link="" size="sm" icon="bx bx-search" face="info">Lihat Draft<x-badge face="danger" class="ms-2">2</x-badge></x-button>
+                    <x-button link="{{ route('branch.products.draft.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug]) }}" size="sm" icon="bx bx-search" face="info">Lihat Draft<x-badge face="danger" class="ms-2">{{ $count_draft }}</x-badge></x-button>
                     <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Surety Bond</x-button>
                 </div>
             @endif

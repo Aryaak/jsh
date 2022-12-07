@@ -49,25 +49,13 @@ Route::get('/test', function (Request $request) {
 
 /**
  * -------------------------------------------------------------------------
- * Surety Bond for Client Route
+ * Guest routes
  * -------------------------------------------------------------------------
  */
-Route::get('surety-bond-client', [SuretyBondDraftController::class, 'indexClient'])->name('client');
-Route::post('surety-bond-client', [SuretyBondDraftController::class, 'storeClient']);
-
-/**
- * -------------------------------------------------------------------------
- * Guarantee Bank for Client Route
- * -------------------------------------------------------------------------
- */
-Route::get('guarantee-bank-client', [GuaranteeBankDraftController::class, 'indexClient'])->name('bgc');
-Route::post('guarantee-bank-client', [GuaranteeBankDraftController::class, 'storeClient']);
-
- /**
- * -------------------------------------------------------------------------
- * Others non-login for Client Route
- * -------------------------------------------------------------------------
- */
+Route::get('requst-surety-bond', [SuretyBondDraftController::class, 'indexClient'])->name('client');
+Route::post('requst-surety-bond', [SuretyBondDraftController::class, 'storeClient']);
+Route::get('request-bank-garansi', [GuaranteeBankDraftController::class, 'indexClient'])->name('bgc');
+Route::post('request-bank-garansi', [GuaranteeBankDraftController::class, 'storeClient']);
 Route::get('principal-client/{principal}', [PrincipalController::class, 'show'])->name('client.principal');
 Route::get('obligee-client/{obligee}', [ObligeeController::class, 'show'])->name('client.obligee');
 

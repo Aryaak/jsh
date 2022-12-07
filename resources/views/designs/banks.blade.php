@@ -38,6 +38,39 @@
             <div id="create-template-container">
                 {{-- Tempat Tambah Template --}}
             </div>
+            <div class="alert alert-primary mt-3">
+                <b class="d-flex align-items-center mb-3"><i class="bx bxs-info-circle me-2"></i>Petunjuk Penggunaan</b>
+                <p>Berikut beberapa parameter <i>placeholder</i> yang dapat Anda gunakan di template Anda:</p>
+                <x-template-placeholder>[[NoKwitansi]]</x-template-placeholder>
+                <x-template-placeholder>[[NoBond]]</x-template-placeholder>
+                <x-template-placeholder>[[NoPolis]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaAgen]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaAsuransi]]</x-template-placeholder>
+                <x-template-placeholder>[[JenisJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[AlamatPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaPICPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[JabatanPICPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiKontrak]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[JangkaAwal]]</x-template-placeholder>
+                <x-template-placeholder>[[JangkaAkhir]]</x-template-placeholder>
+                <x-template-placeholder>[[BatasToleransiJatuhTempo]]</x-template-placeholder>
+                <x-template-placeholder>[[JumlahHari]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaProyek]]</x-template-placeholder>
+                <x-template-placeholder>[[DokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[NoDokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[TanggalBerakhirDokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaObligee]]</x-template-placeholder>
+                <x-template-placeholder>[[AlamatObligee]]</x-template-placeholder>
+                <x-template-placeholder>[[ServiceCharge]]</x-template-placeholder>
+                <x-template-placeholder>[[BiayaAdmin]]</x-template-placeholder>
+                <x-template-placeholder>[[PremiBayar]]</x-template-placeholder>
+                <x-template-placeholder>[[TotalNilai]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusProses]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusPembayaran]]</x-template-placeholder>
+            </div>
         </x-form>
 
         @slot('footer')
@@ -69,6 +102,39 @@
             <x-button id="edit-new-template" icon="bx bx-plus">Tambah Template Syarat Bank</x-button>
             <div id="edit-template-container">
                 {{-- Tempat Tambah Template --}}
+            </div>
+            <div class="alert alert-primary mt-3">
+                <b class="d-flex align-items-center mb-3"><i class="bx bxs-info-circle me-2"></i>Petunjuk Penggunaan</b>
+                <p>Berikut beberapa parameter <i>placeholder</i> yang dapat Anda gunakan di template Anda:</p>
+                <x-template-placeholder>[[NoKwitansi]]</x-template-placeholder>
+                <x-template-placeholder>[[NoBond]]</x-template-placeholder>
+                <x-template-placeholder>[[NoPolis]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaAgen]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaAsuransi]]</x-template-placeholder>
+                <x-template-placeholder>[[JenisJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[AlamatPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaPICPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[JabatanPICPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiKontrak]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[JangkaAwal]]</x-template-placeholder>
+                <x-template-placeholder>[[JangkaAkhir]]</x-template-placeholder>
+                <x-template-placeholder>[[BatasToleransiJatuhTempo]]</x-template-placeholder>
+                <x-template-placeholder>[[JumlahHari]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaProyek]]</x-template-placeholder>
+                <x-template-placeholder>[[DokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[NoDokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[TanggalBerakhirDokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaObligee]]</x-template-placeholder>
+                <x-template-placeholder>[[AlamatObligee]]</x-template-placeholder>
+                <x-template-placeholder>[[ServiceCharge]]</x-template-placeholder>
+                <x-template-placeholder>[[BiayaAdmin]]</x-template-placeholder>
+                <x-template-placeholder>[[PremiBayar]]</x-template-placeholder>
+                <x-template-placeholder>[[TotalNilai]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusProses]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusPembayaran]]</x-template-placeholder>
             </div>
         </x-form>
 

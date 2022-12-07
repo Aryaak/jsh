@@ -157,14 +157,18 @@
     <script src="{{ asset('theme/js/main.js') }}"></script>
     <script src="{{ asset('js/my.js') }}"></script>
 
-    <!-- Page JS -->
-    @stack('js')
-
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-    <script>
+    <!-- Page JS -->
+    @stack('js')
 
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', "[data-bs-toggle='tooltip']", function () {
+                $("[data-bs-toggle='tooltip']").tooltip('hide')
+            })
+        })
     </script>
 </body>
 </html>

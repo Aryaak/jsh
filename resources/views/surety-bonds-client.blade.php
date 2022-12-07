@@ -175,13 +175,16 @@
             loading()
             $('#create-day-count-input').val(5)
             ajaxPost("{{ route('client') }}",fetchFormData(new FormData(document.getElementById('form-create'))),function(){
-                Swal.close()
                 clearForm('#form-create')
-                $('#create-principal-address').html('')
-                $('#create-pic-name').html('')
-                $('#create-pic-position').html('')
-                $('#create-obligee-address').html('')
+                $('#create-principal-address').html('-')
+                $('#create-pic-name').html('-')
+                $('#create-pic-position').html('-')
+                $('#create-obligee-address').html('-')
                 $('#create-premi-charge').html('Rp0,-')
+                Swal.fire({
+                    icon: "success",
+                    title: "Request surety bond berhasil dilakukan!",
+                })
             })
         })
         $(document).on('change', '#create-obligee-id', function () {

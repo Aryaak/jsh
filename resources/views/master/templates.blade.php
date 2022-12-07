@@ -32,8 +32,44 @@
 
     <x-modal id="modal-edit" title="Ubah Template" size="fullscreen">
         <x-form id="form-edit" method="put">
-            <x-form-input id="edit-name" name="title" label="Nama" class="mb-3" required />
-            <x-form-textarea id="edit-text" name="text" label="Template" tinymce required />
+            <div class="mb-3">
+                <x-form-label required>Nama</x-form-label>
+                <div id="edit-name">Tes</div>
+            </div>
+            <x-form-textarea id="edit-text" name="text" label="Template" class="mb-3" tinymce required />
+            <div class="alert alert-primary">
+                <b class="d-flex align-items-center mb-3"><i class="bx bxs-info-circle me-2"></i>Petunjuk Penggunaan</b>
+                <p>Berikut beberapa parameter <i>placeholder</i> yang dapat Anda gunakan di template Anda:</p>
+                <x-template-placeholder>[[NoKwitansi]]</x-template-placeholder>
+                <x-template-placeholder>[[NoBond]]</x-template-placeholder>
+                <x-template-placeholder>[[NoPolis]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaAgen]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaAsuransi]]</x-template-placeholder>
+                <x-template-placeholder>[[JenisJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[AlamatPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaPICPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[JabatanPICPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiKontrak]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[JangkaAwal]]</x-template-placeholder>
+                <x-template-placeholder>[[JangkaAkhir]]</x-template-placeholder>
+                <x-template-placeholder>[[BatasToleransiJatuhTempo]]</x-template-placeholder>
+                <x-template-placeholder>[[JumlahHari]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaProyek]]</x-template-placeholder>
+                <x-template-placeholder>[[DokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[NoDokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[TanggalBerakhirDokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaObligee]]</x-template-placeholder>
+                <x-template-placeholder>[[AlamatObligee]]</x-template-placeholder>
+                <x-template-placeholder>[[ServiceCharge]]</x-template-placeholder>
+                <x-template-placeholder>[[BiayaAdmin]]</x-template-placeholder>
+                <x-template-placeholder>[[PremiBayar]]</x-template-placeholder>
+                <x-template-placeholder>[[TotalNilai]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusProses]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusPembayaran]]</x-template-placeholder>
+            </div>
         </x-form>
 
         @slot('footer')
@@ -84,7 +120,7 @@
 
         $(document).on('click', '.btn-edit', function () {
             let formData = new FormData(document.getElementById('form-edit'))
-            $('#edit-name').val(template.title);
+            $('#edit-name').html(template.title);
             tinymce.get("edit-text").setContent(template.text);
         })
     </script>

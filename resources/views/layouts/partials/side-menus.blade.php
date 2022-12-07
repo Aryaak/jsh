@@ -179,7 +179,7 @@
 
     @if ($global->currently_on == 'design')
         <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">General</span>
+            <span class="menu-header-text">Halaman</span>
         </li>
 
         @foreach (glob('../resources/views/designs/*.blade.php') as $file)

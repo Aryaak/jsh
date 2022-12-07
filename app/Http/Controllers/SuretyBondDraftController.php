@@ -47,7 +47,7 @@ class SuretyBondDraftController extends Controller
                 'belum lunas' => 'Belum Lunas'
             ]
         ];
-        return view('surety-bonds-draft',compact('scorings','statuses'));
+        return view('product.surety-bonds-draft',compact('scorings','statuses'));
     }
 
     public function indexClient()

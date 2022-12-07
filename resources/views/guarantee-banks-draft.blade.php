@@ -1,4 +1,4 @@
-@extends('layouts.main', ['title' => 'Draf Surety Bond'])
+@extends('layouts.main', ['title' => 'Draf Bank Garansi'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
@@ -6,7 +6,7 @@
 @endpush
 
 @section('contents')
-    <x-card header="Daftar Draf Surety Bond">
+    <x-card header="Daftar Draf Bank Garansi">
         <x-table id="table">
             @slot('thead')
                 <tr>
@@ -14,7 +14,7 @@
                     <th>No. Kwitansi</th>
                     <th>No. Bond</th>
                     <th>No. Polis</th>
-                    <th>Status SB</th>
+                    <th>Status BG</th>
                     <th>Status Sinkron</th>
                     <th>Tanggal</th>
                     <th width="105px">Tindakan</th>
@@ -25,10 +25,10 @@
 @endsection
 
 @section('modals')
-    <x-modal id="modal-show" title="Detail Surety Bond" size="fullscreen" darkBody>
+    <x-modal id="modal-show" title="Detail Bank Garansi" size="fullscreen" darkBody>
         <div class="row mb-4">
             <div class="col-12 text-center">
-                <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Surety Bond</div>
+                <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Bank Garansi</div>
             </div>
         </div>
         <div class="row">
@@ -50,6 +50,10 @@
                         <div class="mb-3">
                             <x-form-label>Nama Agen</x-form-label>
                             <div id="show-agent">-</div>
+                        </div>
+                        <div class="mb-3">
+                            <x-form-label>Nama Bank</x-form-label>
+                            <div id="show-bank">-</div>
                         </div>
                         <div class="mb-3">
                             <x-form-label>Nama Asuransi</x-form-label>
@@ -168,37 +172,34 @@
 
         <div class="row mb-2">
             <div class="col-12 text-center">
-                <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Surety Bond</div>
+                <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Bank Garansi</div>
             </div>
         </div>
         <div class="row mx-1">
-            <x-card>
-                <div class="row">
+            <x-card class="p-1">
+                <div class="d-flex flex-column flex-lg-row">
                     @foreach ($scorings->groupBy('category') as $grouped)
-                        <div class="col border p-0" style="position: relative">
-                            {{-- <div class="border-bottom p-1 text-center">30</div> --}}
-                            <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
-                            <div class="px-3 pt-3 pb-5">
-                                @foreach ($grouped as $score)
-                                <div class="mb-3">
-                                    <div class="fw-bold">{{ $score->title }}</div>
-                                    @foreach ($score->details as $detail)
-                                        <x-form-check type="radio" id="show-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}" disabled>{{ $detail->text }}</x-form-check>
-                                    @endforeach
-                                </div>
+                    <div class="border p-0" style="position: relative; flex: 100%;">
+                        {{-- <div class="border-bottom p-1 text-center">30</div> --}}
+                        <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
+                        <div class="px-3 pt-3 pb-5">
+                            @foreach ($grouped as $score)
+                            <div class="mb-3">
+                                <div class="fw-bold">{{ $score->title }}</div>
+                                @foreach ($score->details as $detail)
+                                    <x-form-check type="radio" id="show-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}" disabled>{{ $detail->text }}</x-form-check>
                                 @endforeach
                             </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai {{ $grouped->first()->category }}:</div>
-                                    <div><b id="show-sub-total-{{ $grouped->first()->category }}">-</b></div>
-                                </div>
+                            @endforeach
+                        </div>
+                        <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>Sub Total Nilai {{ $grouped->first()->category }}:</div>
+                                <div><b id="show-sub-total-{{ $grouped->first()->category }}">-</b></div>
                             </div>
                         </div>
+                    </div>
                     @endforeach
-                    {{-- <div class="col-12 mt-3">
-                        Total Nilai: <b>69</b>
-                    </div> --}}
                 </div>
             </x-card>
         </div>
@@ -215,9 +216,9 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         let table = null
-        let suretyBond = null
+        let guaranteeBank = null
         $(document).ready(function () {
-            table = dataTableInit('table','Draf Surety Bond',{url : '{{ route($global->currently_on.'.products.draft.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '']) }}'},[
+            table = dataTableInit('table','Bank Garansi Draft',{url : '{{ route($global->currently_on.'.products.draft.bg.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '']) }}'},[
                 {data: 'receipt_number', name: 'receipt_number'},
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
@@ -228,47 +229,48 @@
         })
 
         $(document).on('click', '.btn-show', function () {
-            ajaxGet("{{ route($global->currently_on.'.products.draft.show', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond_draft' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
+            ajaxGet("{{ route($global->currently_on.'.products.draft.bg.show', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi_draft' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
-                    suretyBond = response.data
-                    $('#show-receipt-number').html(suretyBond.receipt_number)
-                    $('#show-bond-number').html(suretyBond.bond_number)
-                    $('#show-polish-number').html(suretyBond.polish_number)
-                    $('#show-agent').html(suretyBond.agent.name)
-                    $('#show-insurance').html(suretyBond.insurance.name)
-                    $('#show-insurance-type').html(suretyBond.insurance_type.name)
-                    $('#show-obligee-name').html(suretyBond.obligee.name)
-                    $('#show-obligee-address').html(suretyBond.obligee.name)
-                    $('#show-principal-name').html(suretyBond.principal.name)
-                    $('#show-principal-address').html(suretyBond.principal.address)
-                    $('#show-pic-name').html(suretyBond.principal.pic_name)
-                    $('#show-pic-position').html(suretyBond.principal.pic_position)
-                    $('#show-service-charge').html(suretyBond.service_charge_converted)
-                    $('#show-admin-charge').html(suretyBond.admin_charge_converted)
-                    $('#show-premi-charge').html(suretyBond.total_charge_converted)
-                    $('#show-contract-value').html(suretyBond.contract_value_converted)
-                    $('#show-insurance-value').html(suretyBond.insurance_value_converted)
-                    $('#show-start-date').html(suretyBond.start_date_converted)
-                    $('#show-end-date').html(suretyBond.end_date_converted)
-                    $('#show-due-day-tolerance').html(suretyBond.due_day_tolerance)
-                    $('#show-day-count').html(suretyBond.day_count)
-                    $('#show-project-name').html(suretyBond.project_name)
-                    $('#show-document-title').html(suretyBond.document_title)
-                    $('#show-document-number').html(suretyBond.document_number)
-                    $('#show-document-expired-at').html(suretyBond.document_expired_at_converted)
-                    $('#show-insurance-rate').html(suretyBond.insurance_rate)
-                    $('#show-insurance-polish-cost').html(suretyBond.insurance_polish_cost_converted)
-                    $('#show-insurance-stamp').html(suretyBond.insurance_stamp_cost_converted)
-                    $('#show-premi-nett').html(suretyBond.insurance_net_converted)
-                    $('#show-premi-nett-total').html(suretyBond.insurance_net_total_converted)
-                    $('#show-office-rate').html(suretyBond.office_rate)
-                    $('#show-office-nett').html(suretyBond.office_net_converted)
-                    $('#show-office-nett-total').html(suretyBond.office_net_total_converted)
-                    $('#show-office-polish-cost').html(suretyBond.office_polish_cost_converted)
-                    $('#show-office-stamp-cost').html(suretyBond.office_stamp_cost_converted)
-                    $('#show-profit').html(suretyBond.profit_converted)
+                    guaranteeBank = response.data
+                    $('#show-receipt-number').html(guaranteeBank.receipt_number)
+                    $('#show-bond-number').html(guaranteeBank.bond_number)
+                    $('#show-polish-number').html(guaranteeBank.polish_number)
+                    $('#show-agent').html(guaranteeBank.agent.name)
+                    $('#show-bank').html(guaranteeBank.bank.name)
+                    $('#show-insurance').html(guaranteeBank.insurance.name)
+                    $('#show-insurance-type').html(guaranteeBank.insurance_type.name)
+                    $('#show-obligee-name').html(guaranteeBank.obligee.name)
+                    $('#show-obligee-address').html(guaranteeBank.obligee.name)
+                    $('#show-principal-name').html(guaranteeBank.principal.name)
+                    $('#show-principal-address').html(guaranteeBank.principal.address)
+                    $('#show-pic-name').html(guaranteeBank.principal.pic_name)
+                    $('#show-pic-position').html(guaranteeBank.principal.pic_position)
+                    $('#show-service-charge').html(guaranteeBank.service_charge_converted)
+                    $('#show-admin-charge').html(guaranteeBank.admin_charge_converted)
+                    $('#show-premi-charge').html(guaranteeBank.total_charge_converted)
+                    $('#show-contract-value').html(guaranteeBank.contract_value_converted)
+                    $('#show-insurance-value').html(guaranteeBank.insurance_value_converted)
+                    $('#show-start-date').html(guaranteeBank.start_date_converted)
+                    $('#show-end-date').html(guaranteeBank.end_date_converted)
+                    $('#show-due-day-tolerance').html(guaranteeBank.due_day_tolerance)
+                    $('#show-day-count').html(guaranteeBank.day_count)
+                    $('#show-project-name').html(guaranteeBank.project_name)
+                    $('#show-document-title').html(guaranteeBank.document_title)
+                    $('#show-document-number').html(guaranteeBank.document_number)
+                    $('#show-document-expired-at').html(guaranteeBank.document_expired_at_converted)
+                    $('#show-insurance-rate').html(guaranteeBank.insurance_rate)
+                    $('#show-insurance-polish-cost').html(guaranteeBank.insurance_polish_cost_converted)
+                    $('#show-insurance-stamp').html(guaranteeBank.insurance_stamp_cost_converted)
+                    $('#show-premi-nett').html(guaranteeBank.insurance_net_converted)
+                    $('#show-premi-nett-total').html(guaranteeBank.insurance_net_total_converted)
+                    $('#show-office-rate').html(guaranteeBank.office_rate)
+                    $('#show-office-nett').html(guaranteeBank.office_net_converted)
+                    $('#show-office-nett-total').html(guaranteeBank.office_net_total_converted)
+                    $('#show-office-polish-cost').html(guaranteeBank.office_polish_cost_converted)
+                    $('#show-office-stamp-cost').html(guaranteeBank.office_stamp_cost_converted)
+                    $('#show-profit').html(guaranteeBank.profit_converted)
                     $('input[type="radio"]:checked').prop('checked',false)
-                    const groupByCategory = scoringGroupBy(suretyBond.scorings)
+                    const groupByCategory = scoringGroupBy(guaranteeBank.scorings)
                     Object.keys(groupByCategory).forEach(key => {
                         $('#show-scoring-category').html(key)
                         let subtotal = 0
@@ -289,7 +291,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()
-                    ajaxPost("{{ route('branch.products.draft.destroy', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond_draft' => '-id-']) }}".replace('-id-',$(this).data('id')),{_method : 'delete'},'',function(response){
+                    ajaxPost("{{ route('branch.products.draft.bg.destroy', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi_draft' => '-id-']) }}".replace('-id-',$(this).data('id')),{_method : 'delete'},'',function(response){
                         table.ajax.reload()
                     })
                 }
@@ -299,11 +301,11 @@
         $(document).on('click', '.btn-approve', function () {
             // Delete
             Confirm.fire({
-                title: "Yakin ingin menyetujui Draf Surety Bond?",
+                title: "Yakin ingin menyetujui Draf Bank Garansi?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()
-                    ajaxPost("{{ route('branch.products.client.approve', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond_draft' => '-id-']) }}".replace('-id-',suretyBond.id),{_method : 'post'},'',function(response){
+                    ajaxPost("{{ route('branch.products.client.approve.bg', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi_draft' => '-id-']) }}".replace('-id-',guaranteeBank.id),{_method : 'post'},'',function(response){
                         table.ajax.reload()
                         $("#modal-show").modal('hide')
                     })
@@ -314,11 +316,11 @@
         $(document).on('click', '.btn-decline', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menolak Draf Surety Bond?",
+                title: "Yakin ingin menolak Draf Bank Garansi?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()
-                    ajaxPost("{{ route('branch.products.client.decline', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond_draft' => '-id-']) }}".replace('-id-',suretyBond.id),{_method : 'put'},'',function(response){
+                    ajaxPost("{{ route('branch.products.client.decline.bg', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi_draft' => '-id-']) }}".replace('-id-',guaranteeBank.id),{_method : 'put'},'',function(response){
                         table.ajax.reload()
                         $("#modal-show").modal('hide')
                     })

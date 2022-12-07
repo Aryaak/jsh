@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('surety_bond_drafts', function (Blueprint $table) {
+        Schema::create('guarantee_bank_drafts', function (Blueprint $table) {
             $table->id();
             $table->string('receipt_number');
             $table->string('bond_number')->nullable();
@@ -38,6 +38,7 @@ return new class extends Migration
             $table->unsignedDecimal('office_rate');
             $table->unsignedDecimal('office_net',10,2);
             $table->unsignedDecimal('office_net_total',10,2);
+            $table->foreignId('bank_id')->constrained();
             $table->foreignId('principal_id')->constrained();
             $table->foreignId('agent_id')->constrained();
             $table->foreignId('obligee_id')->constrained();
@@ -46,7 +47,11 @@ return new class extends Migration
             $table->unsignedBigInteger('revision_from_id')->nullable();
             $table->float('score');
             $table->timestamps();
-            $table->foreign('revision_from_id')->references('id')->on('surety_bond_drafts');
+            $table->foreign('revision_from_id')->references('id')->on('guarantee_bank_drafts');
         });
+    }
+    public function down()
+    {
+        Schema::dropIfExists('guarantee_bank_drafts');
     }
 };

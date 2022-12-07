@@ -278,6 +278,13 @@ class SuretyBond extends Model
         $suretyBond->scorings()->createMany($request->scoring);
         return $suretyBond;
     }
+    public static function buatDraft(array $params): self{
+        $request = (object)$params;
+        $suretyBond = self::create($request->suretyBond);
+        $suretyBond->initStatus(['type' => 'process','status' => 'input']);
+        $suretyBond->scorings()->createMany($request->scoring);
+        return $suretyBond;
+    }
     public function ubah(array $params): bool{
         $request = self::fetch((object)$params);
         foreach ($request->scoring as $score) {

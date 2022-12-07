@@ -294,6 +294,13 @@ class GuaranteeBank extends Model
         $guaranteeBank->scorings()->createMany($request->scoring);
         return $guaranteeBank;
     }
+    public static function buatDraft(array $params): self{
+        $request = (object)$params;
+        $guaranteeBank = self::create($request->guaranteeBank);
+        $guaranteeBank->initStatus(['type' => 'process','status' => 'input']);
+        $guaranteeBank->scorings()->createMany($request->scoring);
+        return $guaranteeBank;
+    }
     public function ubah(array $params): bool{
         $request = self::fetch((object)$params);
         foreach ($request->scoring as $score) {

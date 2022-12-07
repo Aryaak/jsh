@@ -162,13 +162,5 @@
 
     <!-- Page JS -->
     @stack('js')
-
-    <script>
-        $(document).ready(function () {
-            $(document).on('click', "[data-bs-toggle='tooltip']", function () {
-                $("[data-bs-toggle='tooltip']").tooltip('hide')
-            })
-        })
-    </script>
 </body>
 </html>

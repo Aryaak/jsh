@@ -1,13 +1,13 @@
 @if ($type == 'icon')
     @isset ($link)
         <span {!! $attributes !!}>
-            <a href="{{ $link }}" class="btn btn-{{ $face }} btn-{{ $size }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{!! $slot !!}">
+            <a href="{{ $link }}" class="btn btn-{{ $face }} btn-{{ $size }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-trigger="hover" title="{!! $slot !!}">
                 <i class="{{ $icon }} align-middle"></i>
             </a>
         </span>
     @else
         <span {!! $attributes !!}>
-            <button type="button" class="btn btn-{{ $face }} btn-{{ $size }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="{!! $slot !!}">
+            <button type="button" class="btn btn-{{ $face }} btn-{{ $size }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-trigger="hover" title="{!! $slot !!}">
                 <i class="{{ $icon }} align-middle"></i>
             </button>
         </span>

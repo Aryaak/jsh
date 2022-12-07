@@ -32,17 +32,19 @@ use App\Models\GuaranteeBankDraft;
 use App\Models\SuretyBondDraft;
 use Illuminate\Support\Facades\Route;
 use App\Helpers\Jamsyar;
+use Illuminate\Support\Facades\Request;
+
 /**
  * -------------------------------------------------------------------------
  * Design Only Route
  * -------------------------------------------------------------------------
  */
 
-Route::get('/design/{page}', DesignController::class)->name('design');
+Route::get('/design/pdf/{page}', [DesignController::class, 'pdf'])->name('design.pdf');
+Route::get('/design/{page}', [DesignController::class, 'page'])->name('design.page');
+
 Route::get('/test', function (Request $request) {
     dd(Jamsyar::cities('jsh','Semangat1','sura'));
-    // dd(\App\Models\Obligee::find(1)->sync());
-    // dd(\App\Models\Principal::find(1)->sync());
 });
 
 /**

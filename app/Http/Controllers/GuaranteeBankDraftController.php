@@ -30,7 +30,7 @@ class GuaranteeBankDraftController extends Controller
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
-        return view('guarantee-banks-draft',compact('scorings'));
+        return view('product.guarantee-banks-draft',compact('scorings'));
     }
 
     public function indexClient()

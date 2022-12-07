@@ -1048,6 +1048,29 @@
             })
             $(document).on('click', '.btn-edit-status', function () {
                 $('#edit-status-no-bond').html(guaranteeBank.bond_number)
+
+                $.each($('.insurance-status'), function(index, element) {
+                    $(element).removeClass('btn-' + $(element).data('color'))
+                    $(element).removeClass('btn-outline-' + $(element).data('color'))
+                    $(element).removeClass('d-none')
+                    $(element).prop('disabled', false)
+                    if ($(element).data('status') == guaranteeBank.insurance_status.status.name) {
+                        $(element).addClass('btn-' + $(element).data('color'))
+                        $(element).prop('disabled', true)
+                        $(element).removeClass('d-none')
+                    }
+                    else {
+                        $(element).addClass('btn-outline-' + $(element).data('color'))
+                    }
+
+                    if (suretyBond.process_status.status.name != 'terbit' && $(element).data('status') != 'belum terbit') {
+                        $(element).addClass('d-none')
+                    }
+                    else if (suretyBond.process_status.status.name == 'terbit' && $(element).data('status') == 'belum terbit') {
+                        $(element).addClass('d-none')
+                    }
+                })
+
                 $.each($('.process-status'), function(index, element) {
                     $(element).removeClass('btn-' + $(element).data('color'))
                     $(element).removeClass('btn-outline-' + $(element).data('color'))
@@ -1063,24 +1086,6 @@
                         $(element).addClass('d-none')
                     }
                     if ($(element).data('status') == guaranteeBank.process_status.status.name) {
-                        $(element).addClass('btn-' + $(element).data('color'))
-                        $(element).prop('disabled', true)
-                        $(element).removeClass('d-none')
-                    }
-                    else {
-                        $(element).addClass('btn-outline-' + $(element).data('color'))
-                    }
-                })
-
-                $.each($('.insurance-status'), function(index, element) {
-                    $(element).removeClass('btn-' + $(element).data('color'))
-                    $(element).removeClass('btn-outline-' + $(element).data('color'))
-                    $(element).removeClass('d-none')
-                    $(element).prop('disabled', false)
-                    // if (guaranteeBank.insurance_status.status.name != 'belum terbit') {
-                    //     $(element).addClass('d-none')
-                    // }
-                    if ($(element).data('status') == guaranteeBank.insurance_status.status.name) {
                         $(element).addClass('btn-' + $(element).data('color'))
                         $(element).prop('disabled', true)
                         $(element).removeClass('d-none')

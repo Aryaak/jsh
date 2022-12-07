@@ -13,7 +13,7 @@ class PDFDownloadController extends Controller
         $template = Template::find($id);
         $data = ['content' => $template->text,];
         $pdf = Pdf::loadView('pdf', $data);
-        $pdf->getDomPDF()->setBasePath(public_path('images/'));
+        $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
         $fileName =  $template->title . '.' . 'pdf';
 
         return $pdf->download($fileName);

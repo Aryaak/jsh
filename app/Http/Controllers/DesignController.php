@@ -3,11 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DesignController
 {
-    public function __invoke(Request $request, $page)
+    public function page(Request $request, $page)
     {
         return view("designs.$page");
+    }
+
+    public function pdf(Request $request, $page)
+    {
+        $pdf = Pdf::loadView("designs.pdf.$page");
+        $pdf->setPaper('A4', 'landscape');
+
+        return $pdf->stream();
     }
 }

@@ -178,9 +178,22 @@
     {{-- Desain --}}
 
     @if ($global->currently_on == 'design')
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">General</span>
+        </li>
+
         @foreach (glob('../resources/views/designs/*.blade.php') as $file)
             @php $filename = Str::remove('.blade.php', explode('/', $file)[4]) @endphp
-            <x-menu route="design" :route-params="['page' => $filename]" icon="bx bxs-circle">{{ Str::of($filename)->title()->replace('-', ' ') }}</x-menu>
+            <x-menu route="design.page" :route-params="['page' => $filename]" icon="bx bxs-circle">{{ Str::of($filename)->title()->replace('-', ' ') }}</x-menu>
+        @endforeach
+
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">PDF</span>
+        </li>
+
+        @foreach (glob('../resources/views/designs/pdf/*.blade.php') as $file)
+            @php $filename = Str::remove('.blade.php', explode('/', $file)[5]) @endphp
+            <x-menu route="design.pdf" :route-params="['page' => $filename]" icon="bx bxs-circle">{{ Str::of($filename)->title()->replace('-', ' ') }}</x-menu>
         @endforeach
 
         <br>

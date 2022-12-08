@@ -10,7 +10,7 @@
         @slot('headerAction')
             @if ($global->currently_on == 'branch')
                 <div>
-                    <x-button link="" size="sm" icon="bx bx-search" face="info">Lihat Draft<x-badge face="danger" class="ms-2">2</x-badge></x-button>
+                    <x-button link="{{ route('branch.products.draft.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug]) }}" size="sm" icon="bx bx-search" face="info">Lihat Draft<x-badge face="danger" class="ms-2">{{ $count_draft }}</x-badge></x-button>
                     <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Surety Bond</x-button>
                 </div>
             @endif
@@ -26,7 +26,7 @@
                     <th>Status Jaminan</th>
                     <th>Nilai Jaminan</th>
                     <th>Tanggal</th>
-                    <th width="105px">Tindakan</th>
+                    <th width="125px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -1043,12 +1043,34 @@
             })
             $(document).on('click', '.btn-edit-status', function () {
                 $('#edit-status-no-bond').html(suretyBond.bond_number)
+
+                $.each($('.insurance-status'), function(index, element) {
+                    $(element).removeClass('btn-' + $(element).data('color'))
+                    $(element).removeClass('btn-outline-' + $(element).data('color'))
+                    $(element).removeClass('d-none')
+                    $(element).prop('disabled', false)
+                    if ($(element).data('status') == suretyBond.insurance_status.status.name) {
+                        $(element).addClass('btn-' + $(element).data('color'))
+                        $(element).prop('disabled', true)
+                        $(element).removeClass('d-none')
+                    }else {
+                        $(element).addClass('btn-outline-' + $(element).data('color'))
+                    }
+
+                    if (suretyBond.process_status.status.name != 'terbit' && $(element).data('status') != 'belum terbit') {
+                        $(element).addClass('d-none')
+                    }
+                    else if (suretyBond.process_status.status.name == 'terbit' && $(element).data('status') == 'belum terbit') {
+                        $(element).addClass('d-none')
+                    }
+                })
+
                 $.each($('.process-status'), function(index, element) {
                     $(element).removeClass('btn-' + $(element).data('color'))
                     $(element).removeClass('btn-outline-' + $(element).data('color'))
                     $(element).removeClass('d-none')
                     $(element).prop('disabled', false)
-                    if (suretyBond.process_status.status.name == 'analisa asuransi'  && $(element).data('status') == 'input') {
+                    if (suretyBond.process_status.status.name == 'analisa asuransi' && $(element).data('status') == 'input') {
                         $(element).addClass('d-none')
                     }
                     if (suretyBond.process_status.status.name == 'terbit' || suretyBond.process_status.status.name == 'batal') {
@@ -1061,26 +1083,6 @@
                     }
                     else {
                         $(element).addClass('btn-outline-' + $(element).data('color'))
-                    }
-                })
-
-                $.each($('.insurance-status'), function(index, element) {
-                    $(element).removeClass('btn-' + $(element).data('color'))
-                    $(element).removeClass('btn-outline-' + $(element).data('color'))
-                    $(element).removeClass('d-none')
-                    $(element).prop('disabled', false)
-                    // if (suretyBond.insurance_status.status.name != 'belum terbit') {
-                    //     $(element).addClass('d-none')
-                    // }
-                    if ($(element).data('status') == suretyBond.insurance_status.status.name) {
-                        $(element).addClass('btn-' + $(element).data('color'))
-                        $(element).prop('disabled', true)
-                        $(element).removeClass('d-none')
-                    }else {
-                        $(element).addClass('btn-outline-' + $(element).data('color'))
-                    }
-                    if(suretyBond.process_status.status.name != 'terbit'){
-                        $(element).addClass('d-none')
                     }
                 })
             })

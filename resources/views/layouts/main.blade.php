@@ -157,14 +157,10 @@
     <script src="{{ asset('theme/js/main.js') }}"></script>
     <script src="{{ asset('js/my.js') }}"></script>
 
-    <!-- Page JS -->
-    @stack('js')
-
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-    <script>
-
-    </script>
+    <!-- Page JS -->
+    @stack('js')
 </body>
 </html>

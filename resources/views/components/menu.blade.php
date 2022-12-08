@@ -1,6 +1,6 @@
 @php
     $isActive = Route::is($activeRoute);
-    if ($activeRoute == 'design') {
+    if ($activeRoute == 'design.page') {
         $isActive = false;
         if ($routeParams['page'] == explode('/', url()->current())[4]) {
             $isActive = true;

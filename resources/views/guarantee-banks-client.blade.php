@@ -1,4 +1,4 @@
-@extends('layouts.client', ['title' => 'Request Surety Bond'])
+@extends('layouts.client', ['title' => 'Request Bank Garansi'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
@@ -6,12 +6,12 @@
 @endpush
 
 @section('contents')
-    <x-card header="Request Surety Bond">
+    <x-card header="Request Bank Garansi">
         <div class="border rounded p-2" style="background-color: #EEE">
             <x-form id="form-create" method="post">
                 <div class="row mb-2">
                     <div class="col-12 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Surety Bond</div>
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Bank Garansi</div>
                     </div>
                 </div>
                 <div class="d-flex flex-column flex-lg-row flex-wrap gap-2">
@@ -21,16 +21,17 @@
                                 <x-form-input label="No. Kwitansi" id="create-receipt-number" name="receiptNumber" class="mb-3" required />
                                 <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
-                                <x-form-select label="Nama Agen" id="create-agent-id" name="agentId" class="mb-3" required/>
-                                <x-form-select label="Nama Asuransi" id="create-insurance-id" name="insuranceId" class="mb-3" required/>
-                                <x-form-select label="Jenis Jaminan" id="create-insurance-type-id" name="insuranceTypeId" required/>
+                                <x-form-select label="Nama Agen" id="create-agent-id" :options="[]" name="agentId" class="mb-3" required/>
+                                <x-form-select label="Nama Bank" id="create-bank-id" :options="[]" name="bankId" class="mb-3" required/>
+                                <x-form-select label="Nama Asuransi" id="create-insurance-id" :options="[]" name="insuranceId" class="mb-3" required/>
+                                <x-form-select label="Jenis Jaminan" id="create-insurance-type-id" :options="[]" name="insuranceTypeId" required/>
                             </x-card>
                         </div>
                     </div>
                     <div style="flex: 25%;">
                         <div class="w-100 mb-2">
                             <x-card header="2. Principal" smallHeader>
-                                <x-form-select label="Nama" id="create-principal-id" name="principalId" class="mb-3" required/>
+                                <x-form-select label="Nama" id="create-principal-id" :options="[]" name="principalId" class="mb-3" required/>
                                 <div class="mb-3">
                                     <x-form-label>Alamat</x-form-label>
                                     <div id="create-principal-address">-</div>
@@ -82,7 +83,7 @@
                     <div style="flex: 25%;">
                         <div class="w-100 mb-2">
                             <x-card header="4. Obligee" smallHeader>
-                                <x-form-select label="Nama" id="create-obligee-id" name="obligeeId" class="mb-3" required/>
+                                <x-form-select label="Nama" id="create-obligee-id" :options="[]" name="obligeeId" class="mb-3" required/>
                                 <div>
                                     <x-form-label>Alamat</x-form-label>
                                     <div id="create-obligee-address">-</div>
@@ -106,37 +107,28 @@
 
                 <div class="row mb-2">
                     <div class="col-12 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Surety Bond</div>
+                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Bank Garansi</div>
                     </div>
                 </div>
                 <div class="row mx-1">
                     <x-card class="p-1">
                         <div class="d-flex flex-column flex-lg-row">
                             @foreach ($scorings->groupBy('category') as $grouped)
-                                <div class="col border p-0" style="position: relative; flex: 100%;">
-                                    {{-- <div class="border-bottom p-1 text-center">30</div> --}}
-                                    <div class="border-bottom p-1 text-center">{{ $grouped->first()->category }}</div>
-                                    <div class="px-3 pt-3 pb-5">
-                                        @foreach ($grouped as $score)
-                                        <div class="mb-3">
-                                            <div class="fw-bold">{{ $score->title }}</div>
-                                            @foreach ($score->details as $detail)
-                                                <x-form-check type="radio" id="create-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}">{{ $detail->text }}</x-form-check>
-                                            @endforeach
-                                        </div>
+                            <div class="border p-0" style="position: relative; flex: 100%;">
+                                {{-- <div class="border-bottom p-1 text-center">30</div> --}}
+                                <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
+                                <div class="px-3 pt-3 pb-5">
+                                    @foreach ($grouped as $score)
+                                    <div class="mb-3">
+                                        <div class="fw-bold">{{ $score->title }}</div>
+                                        @foreach ($score->details as $detail)
+                                            <x-form-check type="radio" id="show-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}">{{ $detail->text }}</x-form-check>
                                         @endforeach
                                     </div>
-                                    {{-- <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>Sub Total Nilai {{ $grouped->first()->category }}:</div>
-                                            <div><b>20</b></div>
-                                        </div>
-                                    </div> --}}
+                                    @endforeach
                                 </div>
+                            </div>
                             @endforeach
-                            {{-- <div class="col-12 mt-3">
-                                Total Nilai: <b>69</b>
-                            </div> --}}
                         </div>
                     </x-card>
                 </div>
@@ -154,12 +146,15 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        let table = null
+        let guaranteeBank = null
         $(document).ready(function () {
             select2Init("#create-agent-id",'{{ route('select2.agent') }}',0)
             select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0)
             select2Init("#create-principal-id",'{{ route('select2.principal') }}',0)
             select2Init("#create-insurance-id",'{{ route('select2.insurance') }}',0)
             select2Init("#create-insurance-type-id",'{{ route('select2.insuranceType') }}',0)
+            select2Init("#create-bank-id",'{{ route('select2.bank') }}',0)
         })
 
         $(document).on('input', '#create-service-charge, #create-admin-charge', function () {
@@ -174,7 +169,7 @@
         $(document).on('click', '#create-save', function () {
             loading()
             $('#create-day-count-input').val(5)
-            ajaxPost("{{ route('client') }}",fetchFormData(new FormData(document.getElementById('form-create'))),function(){
+            ajaxPost("{{ route('bgc') }}",fetchFormData(new FormData(document.getElementById('form-create'))),function(){
                 clearForm('#form-create')
                 $('#create-principal-address').html('-')
                 $('#create-pic-name').html('-')
@@ -183,7 +178,7 @@
                 $('#create-premi-charge').html('Rp0,-')
                 Swal.fire({
                     icon: "success",
-                    title: "Request surety bond berhasil dilakukan!",
+                    title: "Request bank garansi berhasil dilakukan!",
                 })
             })
         })

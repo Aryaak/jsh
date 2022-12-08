@@ -294,6 +294,13 @@ class GuaranteeBank extends Model
         $guaranteeBank->scorings()->createMany($request->scoring);
         return $guaranteeBank;
     }
+    public static function buatDraft(array $params): self{
+        $request = (object)$params;
+        $guaranteeBank = self::create($request->guaranteeBank);
+        $guaranteeBank->initStatus(['type' => 'process','status' => 'input']);
+        $guaranteeBank->scorings()->createMany($request->scoring);
+        return $guaranteeBank;
+    }
     public function ubah(array $params): bool{
         $request = self::fetch((object)$params);
         foreach ($request->scoring as $score) {
@@ -408,6 +415,7 @@ class GuaranteeBank extends Model
             'analisa asuransi', 'analisa bank' => 'warning',
             'terbit' => 'success',
             'batal' => 'danger',
+            null => ''
         };
     }
     public static function mappingProcessStatusIcons($status)
@@ -416,7 +424,8 @@ class GuaranteeBank extends Model
             'input' => 'bx bxs-edit-alt',
             'analisa asuransi', 'analisa bank' => 'bx bx-search-alt',
             'terbit' => 'bx bx-check',
-            'batal' => 'bx bx-x'
+            'batal' => 'bx bx-x',
+            null => ''
         };
     }
     public static function mappingInsuranceStatusNames($status)
@@ -430,6 +439,7 @@ class GuaranteeBank extends Model
             'terbit' => 'success',
             'batal', 'salah cetak' => 'danger',
             'revisi' => 'info',
+            null => ''
         };
     }
     public static function mappingInsuranceStatusIcons($status)
@@ -439,6 +449,7 @@ class GuaranteeBank extends Model
             'terbit' => 'bx bx-check',
             'batal', 'salah cetak' => 'bx bx-x',
             'revisi' => 'bx bx-undo',
+            null => ''
         };
     }
     public static function mappingFinanceStatusNames($status)
@@ -450,6 +461,7 @@ class GuaranteeBank extends Model
         return match ($status) {
             'belum lunas' => 'danger',
             'lunas' => 'success',
+            null => ''
         };
     }
     public static function mappingFinanceStatusIcons($status)
@@ -457,6 +469,7 @@ class GuaranteeBank extends Model
         return match ($status) {
             'belum lunas' => 'bx bx-x',
             'lunas' => 'bx bx-check',
+            null => ''
         };
     }
 }

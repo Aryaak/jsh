@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\GuaranteeBank;
 use App\Http\Requests\GuaranteeBankRequest;
+use App\Models\GuaranteeBankDraft;
 
 class GuaranteeBankController extends Controller
 {
@@ -18,18 +19,19 @@ class GuaranteeBankController extends Controller
     {
         if($request->ajax()){
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
-            elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
+            elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
             $data = GuaranteeBank::with('insurance_status','insurance_status.status')->select('guarantee_banks.*')->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
             ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
-            ->editColumn('insurance_status.status.name', 'datatables.status-surety-bond')
+            ->editColumn('insurance_status.status.name', 'datatables.status-guarantee-bank')
             ->editColumn('action', $action)
             ->rawColumns(['insurance_status.status.name', 'action'])
             ->toJson();
         }
+        $count_draft = count(GuaranteeBankDraft::where('approved_status','Belum Disetujui')->get());
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
         $statuses = (object)[
             'process' => [
@@ -51,7 +53,7 @@ class GuaranteeBankController extends Controller
                 'belum lunas',
             ]
         ];
-        return view('product.guarantee-banks',compact('scorings','statuses'));
+        return view('product.guarantee-banks',compact('scorings','statuses','count_draft'));
     }
 
     public function create()

@@ -3,13 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use Illuminate\Database\Eloquent\Model;
+use App\Models\BankRate;
+use App\Models\ScoringDetail;
+use App\Models\AgentRate;
+use App\Models\Scoring;
+use App\Models\Status;
 use App\Helpers\Sirius;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Model;
 
-class SuretyBondDraft extends Model
+class GuaranteeBankDraft extends Model
 {
     use HasFactory;
 
@@ -41,6 +47,7 @@ class SuretyBondDraft extends Model
         'office_rate',
         'office_net',
         'office_net_total',
+        'bank_id',
         'principal_id',
         'agent_id',
         'obligee_id',
@@ -48,6 +55,7 @@ class SuretyBondDraft extends Model
         'insurance_type_id',
         'revision_from_id',
         'score',
+        'revision_from_id',
         'approved_status'
     ];
 
@@ -56,12 +64,13 @@ class SuretyBondDraft extends Model
         'admin_charge_converted',
         'total_charge_converted',
         'contract_value_converted',
+        'insurance_value_converted',
         'start_date_converted',
         'end_date_converted',
         'document_expired_at_converted',
         'insurance_stamp_cost_converted',
         'insurance_polish_cost_converted',
-        'insurance_value_converted',
+        'insurance_net_converted',
         'insurance_net_total_converted',
         'office_stamp_cost_converted',
         'office_polish_cost_converted',
@@ -70,43 +79,7 @@ class SuretyBondDraft extends Model
         'profit_converted',
     ];
 
-    // Relations
-    public function principal(){
-        return $this->belongsTo(Principal::class);
-    }
-    public function agent(){
-        return $this->belongsTo(Agent::class);
-    }
-    public function obligee(){
-        return $this->belongsTo(Obligee::class);
-    }
-    public function insurance(){
-        return $this->belongsTo(Insurance::class);
-    }
-    public function insurance_type(){
-        return $this->belongsTo(InsuranceType::class);
-    }
-    public function revision_from(){
-        return $this->belongsTo(SuretyBondDraft::class,'revision_from_id');
-    }
-    // public function statuses(){
-    //     return $this->hasMany(SuretyBondStatus::class);
-    // }
-    public function scorings(){
-        return $this->hasMany(SuretyBondDraftScore::class);
-    }
-    // public function last_status(){
-    //     return $this->hasOne(SuretyBondStatus::class)->ofMany('id', 'max');
-    // }
-    // public function process_status(){
-    //     return $this->hasOne(SuretyBondStatus::class)->ofMany(['id' => 'max'], function($query){$query->where('type','process'); });
-    // }
-    // public function finance_status(){
-    //     return $this->hasOne(SuretyBondStatus::class)->ofMany(['id' => 'max'], function($query){$query->where('type','finance'); });
-    // }
-    // public function insurance_status(){
-    //     return $this->hasOne(SuretyBondStatus::class)->ofMany(['id' => 'max'], function($query){$query->where('type','insurance'); });
-    // }
+    // Accessors
 
     public function serviceChargeConverted(): Attribute
     {
@@ -177,9 +150,35 @@ class SuretyBondDraft extends Model
         return Attribute::make(get: fn () => Sirius::toLongDate($this->document_expired_at));
     }
 
+    // Relations
+    public function bank(){
+        return $this->belongsTo(Bank::class);
+    }
+    public function principal(){
+        return $this->belongsTo(Principal::class);
+    }
+    public function agent(){
+        return $this->belongsTo(Agent::class);
+    }
+    public function obligee(){
+        return $this->belongsTo(Obligee::class);
+    }
+    public function insurance(){
+        return $this->belongsTo(Insurance::class);
+    }
+    public function insurance_type(){
+        return $this->belongsTo(InsuranceType::class);
+    }
+    public function revision_from(){
+        return $this->belongsTo(GuaranteeBankDraft::class,'revision_from_id');
+    }
+    public function scorings(){
+        return $this->hasMany(GuaranteeBankDraftScore::class);
+    }
+
     private static function fetch(object $args): object{
-        $insuranceRate = InsuranceRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId]])->firstOrFail();
-        $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',null]])->firstOrFail();
+        $bankRate = BankRate::where([['bank_id',$args->bankId],['insurance_type_id',$args->insuranceTypeId],['insurance_id',$args->insuranceId]])->firstOrFail();
+        $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',$args->bankId]])->firstOrFail();
         $scoring = array_map(function($key,$value){
             return [
                 'scoring_id' => $key,
@@ -189,16 +188,16 @@ class SuretyBondDraft extends Model
             ];
         },array_keys($args->scoring),array_values($args->scoring));
         $totalScore = array_sum(array_column($scoring, 'value'));
-        $insuranceNet = ((int)$args->insuranceValue * $insuranceRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
+        $bankNet = ((int)$args->insuranceValue * $bankRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
         $officeNet = ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
 
-        $insuranceNet = $insuranceNet >= $insuranceRate->min_value ? $insuranceNet : $insuranceRate->min_value;
+        $bankNet = $bankNet >= $bankRate->min_value ? $bankNet : $bankRate->min_value;
         $officeNet = $officeNet >= $agentRate->min_value ? $officeNet : $agentRate->min_value;
 
-        $insuranceNetTotal = $insuranceNet + $insuranceRate->polish_cost + $insuranceRate->rate_value;
+        $bankNetTotal = $bankNet + $bankRate->polish_cost + $bankRate->stamp_cost;
         $officeNetTotal = $officeNet + $agentRate->polish_cost + $agentRate->stamp_cost;
         return (object)[
-            'suretyBond' => [
+            'guaranteeBank' => [
                 'receipt_number' => $args->receiptNumber,
                 'bond_number' => $args->bondNumber,
                 'polish_number' => $args->polishNumber,
@@ -215,18 +214,19 @@ class SuretyBondDraft extends Model
                 'service_charge' => $args->serviceCharge,
                 'admin_charge' => $args->adminCharge,
                 'total_charge' => $args->serviceCharge + $args->adminCharge,
-                'profit' => $officeNetTotal - $insuranceNetTotal,
-                'insurance_polish_cost' => $insuranceRate->polish_cost,
-                'insurance_stamp_cost' =>  $insuranceRate->stamp_cost,
-                'insurance_rate' => $insuranceRate->rate_value,
-                'insurance_net' => $insuranceNet,
-                'insurance_net_total' => $insuranceNetTotal,
+                'profit' => $officeNetTotal - $bankNetTotal,
+                'insurance_polish_cost' => $bankRate->polish_cost,
+                'insurance_stamp_cost' =>  $bankRate->stamp_cost,
+                'insurance_rate' => $bankRate->rate_value,
+                'insurance_net' => $bankNet,
+                'insurance_net_total' => $bankNetTotal,
                 'office_polish_cost' => $agentRate->polish_cost,
                 'office_stamp_cost' => $agentRate->stamp_cost,
                 'office_rate' => $agentRate->rate_value,
                 'office_net' => $officeNet,
                 'office_net_total' => $officeNetTotal,
                 'principal_id' => $args->principalId,
+                'bank_id' => $args->bankId,
                 'agent_id' => $args->agentId,
                 'obligee_id' => $args->obligeeId,
                 'insurance_id' => $args->insuranceId,
@@ -240,9 +240,9 @@ class SuretyBondDraft extends Model
 
     public static function buat(array $params): self{
         $request = self::fetch((object)$params);
-        $suretyBond = self::create($request->suretyBond);
-        $suretyBond->scorings()->createMany($request->scoring);
-        return $suretyBond;
+        $guaranteeBank = self::create($request->guaranteeBank);
+        $guaranteeBank->scorings()->createMany($request->scoring);
+        return $guaranteeBank;
     }
 
     public function ubah(array $params): bool{
@@ -250,7 +250,7 @@ class SuretyBondDraft extends Model
         foreach ($request->scoring as $score) {
             $this->scorings()->where('scoring_id',$score['scoring_id'])->update($score);
         }
-        return $this->update($request->suretyBond);
+        return $this->update($request->guaranteeBank);
     }
 
     public function hapus(){

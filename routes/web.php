@@ -20,26 +20,44 @@ use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\UploaderController;
 use App\Http\Controllers\SuretyBondController;
 use App\Http\Controllers\GuaranteeBankController;
+use App\Http\Controllers\GuaranteeBankDraftController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\SuretyBondReportController;
 use App\Http\Controllers\GuaranteeBankReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstalmentController;
+use App\Http\Controllers\SuretyBondDraftController;
+use App\Models\GuaranteeBankDraft;
+use App\Models\SuretyBondDraft;
 use Illuminate\Support\Facades\Route;
 use App\Helpers\Jamsyar;
+use Illuminate\Support\Facades\Request;
+
 /**
  * -------------------------------------------------------------------------
  * Design Only Route
  * -------------------------------------------------------------------------
  */
 
-Route::get('/design/{page}', DesignController::class)->name('design');
+Route::get('/design/pdf/{page}', [DesignController::class, 'pdf'])->name('design.pdf');
+Route::get('/design/{page}', [DesignController::class, 'page'])->name('design.page');
+
 Route::get('/test', function (Request $request) {
     dd(Jamsyar::cities('jsh','Semangat1','sura'));
-    // dd(\App\Models\Obligee::find(1)->sync());
-    // dd(\App\Models\Principal::find(1)->sync());
 });
+
+/**
+ * -------------------------------------------------------------------------
+ * Guest routes
+ * -------------------------------------------------------------------------
+ */
+Route::get('requst-surety-bond', [SuretyBondDraftController::class, 'indexClient'])->name('client');
+Route::post('requst-surety-bond', [SuretyBondDraftController::class, 'storeClient']);
+Route::get('request-bank-garansi', [GuaranteeBankDraftController::class, 'indexClient'])->name('bgc');
+Route::post('request-bank-garansi', [GuaranteeBankDraftController::class, 'storeClient']);
+Route::get('principal-client/{principal}', [PrincipalController::class, 'show'])->name('client.principal');
+Route::get('obligee-client/{obligee}', [ObligeeController::class, 'show'])->name('client.obligee');
 
 /**
  * -------------------------------------------------------------------------
@@ -218,10 +236,18 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::put('surety-bond/{surety_bond}/update-status', [SuretyBondController::class, 'changeStatus'])->name('surety-bonds.update-status');
             Route::get('surety-bond/{surety_bond}/print-score', [SuretyBondController::class, 'printScore'])->name('surety-bonds.print-score');
+            Route::get('surety-bond/{surety_bond}/cetak', [SuretyBondController::class, 'print'])->name('surety-bonds.print');
             Route::apiResource('surety-bond', SuretyBondController::class)->names('surety-bonds');
+            Route::apiResource('surety-bond-draft', SuretyBondDraftController::class)->names('draft');
+            Route::post('surety-bond-draft/{surety_bond_draft}', [SuretyBondDraftController::class, 'approve'])->name('client.approve');
+            Route::put('surety-bond-draft/{surety_bond_draft}', [SuretyBondDraftController::class, 'decline'])->name('client.decline');
             Route::put('bank-garansi/{bank_garansi}/update-status', [GuaranteeBankController::class, 'changeStatus'])->name('guarantee-banks.update-status');
             Route::get('bank-garansi/{bank_garansi}/print-score', [GuaranteeBankController::class, 'printScore'])->name('guarantee-banks.print-score');
+            Route::get('bank-garansi/{bank_garansi}/cetak', [GuaranteeBankController::class, 'print'])->name('guarantee-banks.print');
             Route::apiResource('bank-garansi', GuaranteeBankController::class)->names('guarantee-banks');
+            Route::apiResource('bank-garansi-draft', GuaranteeBankDraftController::class)->names('draft.bg');
+            Route::post('bank-garansi-draft/{bank_garansi_draft}', [GuaranteeBankDraftController::class, 'approve'])->name('client.approve.bg');
+            Route::put('bank-garansi-draft/{bank_garansi_draft}', [GuaranteeBankDraftController::class, 'decline'])->name('client.decline.bg');
 
             // Route untuk produk ....
         });

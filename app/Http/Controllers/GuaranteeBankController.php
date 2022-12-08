@@ -19,14 +19,14 @@ class GuaranteeBankController extends Controller
     {
         if($request->ajax()){
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
-            elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
+            elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
             $data = GuaranteeBank::with('insurance_status','insurance_status.status')->select('guarantee_banks.*')->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
             ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
-            ->editColumn('insurance_status.status.name', 'datatables.status-surety-bond')
+            ->editColumn('insurance_status.status.name', 'datatables.status-guarantee-bank')
             ->editColumn('action', $action)
             ->rawColumns(['insurance_status.status.name', 'action'])
             ->toJson();

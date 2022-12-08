@@ -236,12 +236,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::put('surety-bond/{surety_bond}/update-status', [SuretyBondController::class, 'changeStatus'])->name('surety-bonds.update-status');
             Route::get('surety-bond/{surety_bond}/print-score', [SuretyBondController::class, 'printScore'])->name('surety-bonds.print-score');
+            Route::get('surety-bond/{surety_bond}/cetak', [SuretyBondController::class, 'print'])->name('surety-bonds.print');
             Route::apiResource('surety-bond', SuretyBondController::class)->names('surety-bonds');
             Route::apiResource('surety-bond-draft', SuretyBondDraftController::class)->names('draft');
             Route::post('surety-bond-draft/{surety_bond_draft}', [SuretyBondDraftController::class, 'approve'])->name('client.approve');
             Route::put('surety-bond-draft/{surety_bond_draft}', [SuretyBondDraftController::class, 'decline'])->name('client.decline');
             Route::put('bank-garansi/{bank_garansi}/update-status', [GuaranteeBankController::class, 'changeStatus'])->name('guarantee-banks.update-status');
             Route::get('bank-garansi/{bank_garansi}/print-score', [GuaranteeBankController::class, 'printScore'])->name('guarantee-banks.print-score');
+            Route::get('bank-garansi/{bank_garansi}/cetak', [GuaranteeBankController::class, 'print'])->name('guarantee-banks.print');
             Route::apiResource('bank-garansi', GuaranteeBankController::class)->names('guarantee-banks');
             Route::apiResource('bank-garansi-draft', GuaranteeBankDraftController::class)->names('draft.bg');
             Route::post('bank-garansi-draft/{bank_garansi_draft}', [GuaranteeBankDraftController::class, 'approve'])->name('client.approve.bg');

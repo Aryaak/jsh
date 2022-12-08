@@ -26,7 +26,7 @@
                     <th>Status Jaminan</th>
                     <th>Nilai Jaminan</th>
                     <th>Tanggal</th>
-                    <th width="105px">Tindakan</th>
+                    <th width="125px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>

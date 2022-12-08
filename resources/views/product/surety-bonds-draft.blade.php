@@ -15,7 +15,6 @@
                     <th>No. Bond</th>
                     <th>No. Polis</th>
                     <th>Status SB</th>
-                    <th>Status Sinkron</th>
                     <th>Tanggal</th>
                     <th width="105px">Tindakan</th>
                 </tr>
@@ -221,7 +220,6 @@
                 {data: 'receipt_number', name: 'receipt_number'},
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
-                {data: 'approved_status', name: 'approved_status'},
                 {data: 'approved_status', name: 'approved_status'},
                 {data: 'start_date', name: 'start_date'},
             ])

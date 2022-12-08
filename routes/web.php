@@ -52,8 +52,8 @@ Route::get('/test', function (Request $request) {
  * Guest routes
  * -------------------------------------------------------------------------
  */
-Route::get('requst-surety-bond', [SuretyBondDraftController::class, 'indexClient'])->name('client');
-Route::post('requst-surety-bond', [SuretyBondDraftController::class, 'storeClient']);
+Route::get('request-surety-bond', [SuretyBondDraftController::class, 'indexClient'])->name('client');
+Route::post('request-surety-bond', [SuretyBondDraftController::class, 'storeClient']);
 Route::get('request-bank-garansi', [GuaranteeBankDraftController::class, 'indexClient'])->name('bgc');
 Route::post('request-bank-garansi', [GuaranteeBankDraftController::class, 'storeClient']);
 Route::get('principal-client/{principal}', [PrincipalController::class, 'show'])->name('client.principal');

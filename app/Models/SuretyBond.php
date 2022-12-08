@@ -281,7 +281,7 @@ class SuretyBond extends Model
     public static function buatDraft(array $params): self{
         $request = (object)$params;
         $suretyBond = self::create($request->suretyBond);
-        $suretyBond->initStatus(['type' => 'process','status' => 'input']);
+        $suretyBond->ubahStatus(['type' => 'process','status' => 'input']);
         $suretyBond->scorings()->createMany($request->scoring);
         return $suretyBond;
     }

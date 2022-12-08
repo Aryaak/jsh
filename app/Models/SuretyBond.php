@@ -401,6 +401,7 @@ class SuretyBond extends Model
             'analisa asuransi' => 'warning',
             'terbit' => 'success',
             'batal' => 'danger',
+            null => ''
         };
     }
     public static function mappingProcessStatusIcons($status)
@@ -410,6 +411,7 @@ class SuretyBond extends Model
             'analisa asuransi' => 'bx bx-search-alt',
             'terbit' => 'bx bx-check',
             'batal' => 'bx bx-x'
+            null => ''
         };
     }
     public static function mappingInsuranceStatusNames($status)
@@ -423,6 +425,7 @@ class SuretyBond extends Model
             'terbit' => 'success',
             'batal', 'salah cetak' => 'danger',
             'revisi' => 'info',
+            null => ''
         };
     }
     public static function mappingInsuranceStatusIcons($status)
@@ -432,6 +435,7 @@ class SuretyBond extends Model
             'terbit' => 'bx bx-check',
             'batal', 'salah cetak' => 'bx bx-x',
             'revisi' => 'bx bx-undo',
+            null => ''
         };
     }
     public static function mappingFinanceStatusNames($status)
@@ -443,6 +447,7 @@ class SuretyBond extends Model
         return match ($status) {
             'belum lunas' => 'danger',
             'lunas' => 'success',
+            null => ''
         };
     }
     public static function mappingFinanceStatusIcons($status)
@@ -450,6 +455,7 @@ class SuretyBond extends Model
         return match ($status) {
             'belum lunas' => 'bx bx-x',
             'lunas' => 'bx bx-check',
+            null => ''
         };
     }
 

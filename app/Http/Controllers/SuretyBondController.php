@@ -19,7 +19,7 @@ class SuretyBondController extends Controller
     {
         if($request->ajax()){
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
-            elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
+            elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
             $data = SuretyBond::with('insurance_status','insurance_status.status')->select('surety_bonds.*')->orderBy('created_at','desc');
             return datatables()->of($data)

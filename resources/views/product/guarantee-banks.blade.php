@@ -989,6 +989,7 @@
                         });
                         $('#show-sub-total-'+key).html(subtotal)
                     });
+                    $('#status-histories-no-bond').html(guaranteeBank.bond_number)
                     $('#process-status-histories').html('')
                     $('#finance-status-histories').html('')
                     $('#insurance-status-histories').html('')

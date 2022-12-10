@@ -983,7 +983,7 @@
                         });
                         $('#show-sub-total-'+key).html(subtotal)
                     });
-
+                    $('#status-histories-no-bond').html(suretyBond.bond_number)
                     $('#insurance-status-histories').html('')
                     $('#process-status-histories').html('')
                     $('#finance-status-histories').html('')

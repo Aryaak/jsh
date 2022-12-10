@@ -190,6 +190,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         /**
          * Custom Service Providers...
          */
@@ -209,6 +210,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Sirius' => App\Helpers\Sirius::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ])->toArray(),
 
     /**

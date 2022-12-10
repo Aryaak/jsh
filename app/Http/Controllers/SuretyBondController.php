@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use PDF;
 use Exception;
 use App\Models\Branch;
 use App\Helpers\Sirius;
@@ -166,7 +167,17 @@ class SuretyBondController extends Controller
         return response()->json($response, $http_code);
     }
     public function printScore(Branch $regional, Branch $branch, SuretyBond $suretyBond){
-        $scorings = Scoring::whereNotNull('category')->with('details')->get();
-        return view('product.pdf.score',compact('scorings'));
+        $product = $suretyBond;
+        $selected = $product->scorings->pluck('scoring_detail_id')->toArray();
+        $subTotals = [];
+        foreach ($product->scorings->groupBy('category') as $scoring) {
+            $subTotals[$scoring->first()->category] = $scoring->sum('value');
+        }
+        $pdf = Pdf::loadView('product.pdf.scoring', [
+            'selected' => $selected,
+            'subTotals' => $subTotals,
+            'product' => $product
+        ])->setPaper('a4', 'landscape');
+        return $pdf->download('scoring.pdf');
     }
 }

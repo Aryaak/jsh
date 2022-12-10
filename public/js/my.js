@@ -796,7 +796,7 @@ function calculateDayFromDates(calender,action){
         const endDate = $('#'+action+'-end-date').val()
         if(startDate && endDate) dayCount = dateDiffDays(startDate,endDate)
     }
-    return dayCount + parseInt($('.'+action+'-due-day-tolerance:checked').val())
+    return dayCount + (parseInt($('.'+action+'-due-day-tolerance:checked').val() ?? 0))
 }
 function scoringGroupBy(scorings) {
     return scorings.reduce((group, scoring) => {

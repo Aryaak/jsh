@@ -7,6 +7,7 @@ use Exception;
 use App\Models\Status;
 use App\Helpers\Sirius;
 use App\Models\Scoring;
+use App\Models\Payment;
 use App\Models\AgentRate;
 use Illuminate\Support\Str;
 use App\Models\InsuranceRate;
@@ -267,7 +268,7 @@ class SuretyBond extends Model
             }
         }else if($type == 'insurance' || $type == 'finance'){
             $params = [
-                ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status]
             ];
         }
         return $params;
@@ -294,8 +295,23 @@ class SuretyBond extends Model
         return $this->update($request->suretyBond);
     }
     public function ubahStatus(array $params): bool{
-        foreach ($this->fetchStatus((object)$params) as $param) {
-            SuretyBondStatus::updateOrCreate($param,['surety_bond_id','status_id'],['type']);
+        $request = $this->fetchStatus((object)$params);
+        foreach ($request as $param) {
+            SuretyBondStatus::updateOrCreate([
+                'surety_bond_id' => $param['surety_bond_id'],
+                'status_id' => $param['status_id'],
+            ],$param);
+        }
+        if(!collect($request)->where('name','lunas')->isEmpty()){
+            Payment::buat([
+                'type' => 'principal_to_branch',
+                'year' => date('Y'),
+                'month' => date('m'),
+                'datetime' => now(),
+                'branchId' => $this->branch_id,
+                'principalId' => $this->principal_id,
+                'suretyBondId' => $this->id,
+            ]);
         }
         return true;
     }

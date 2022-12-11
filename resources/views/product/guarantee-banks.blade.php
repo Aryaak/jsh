@@ -998,7 +998,7 @@
                         $('#'+e.type+'-status-histories').append(html)
                     });
 
-                    if(guaranteeBank.finance_status.status.name == 'lunas'){
+                    if(guaranteeBank.finance_status.status.name == 'lunas' || guaranteeBank.insurance_status.status.name == 'belum terbit'){
                         $('#btn-paid-off-payment').hide()
                     }else{
                         $('#btn-paid-off-payment').show()

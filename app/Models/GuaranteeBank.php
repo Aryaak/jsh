@@ -7,6 +7,7 @@ use Exception;
 use App\Models\Status;
 use App\Helpers\Sirius;
 use App\Models\Scoring;
+use App\Models\Payment;
 use App\Models\BankRate;
 use App\Models\AgentRate;
 use App\Models\GuaranteeBankStatus;
@@ -283,7 +284,7 @@ class GuaranteeBank extends Model
             }
         }else if($type == 'insurance' || $type == 'finance'){
             $params = [
-                ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status]
             ];
         }
         return $params;
@@ -310,9 +311,23 @@ class GuaranteeBank extends Model
         return $this->update($request->guaranteeBank);
     }
     public function ubahStatus(array $params){
-        // return $this->statuses()->createMany($this->fetchStatus((object)$params));
-        foreach ($this->fetchStatus((object)$params) as $param) {
-            GuaranteeBankStatus::updateOrCreate($param,['guarantee_bank_id','status_id'],['type']);
+        $request = $this->fetchStatus((object)$params);
+        foreach ($request as $param) {
+            GuaranteeBankStatus::updateOrCreate([
+                'guarantee_bank_id' => $param['guarantee_bank_id'],
+                'status_id' => $param['status_id'],
+            ],$param);
+        }
+        if(!collect($request)->where('name','lunas')->isEmpty()){
+            Payment::buat([
+                'type' => 'principal_to_branch',
+                'year' => date('Y'),
+                'month' => date('m'),
+                'datetime' => now(),
+                'branchId' => $this->branch_id,
+                'principalId' => $this->principal_id,
+                'guaranteeBankId' => $this->id,
+            ]);
         }
         return true;
     }

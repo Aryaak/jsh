@@ -11,6 +11,7 @@ use App\Models\AgentRate;
 use Illuminate\Support\Str;
 use App\Models\InsuranceRate;
 use App\Models\ScoringDetail;
+use App\Models\SuretyBondStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -242,31 +243,31 @@ class SuretyBond extends Model
             'scoring' => $scoring
         ];
     }
-    private static function fetchStatus(object $args): array{
+    private function fetchStatus(object $args): array{
         $params = [];
         $type = $args->type;
         $status = $args->status;
         if($type == 'process'){
             if($status == 'input'){
                 $params = [
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'finance','status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id],
-                    ['type' => 'insurance','status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
+                    ['type' => 'finance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id],
+                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id]
                 ];
             }else if($status == 'terbit'){
                 $params = [
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'insurance','status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
+                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
                 ];
             }else{
                 $params = [
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
                 ];
             }
         }else if($type == 'insurance' || $type == 'finance'){
             $params = [
-                ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
             ];
         }
         return $params;
@@ -292,8 +293,11 @@ class SuretyBond extends Model
         }
         return $this->update($request->suretyBond);
     }
-    public function ubahStatus(array $params){
-        return $this->statuses()->createMany(self::fetchStatus((object)$params));
+    public function ubahStatus(array $params): bool{
+        foreach ($this->fetchStatus((object)$params) as $param) {
+            SuretyBondStatus::updateOrCreate($param,['surety_bond_id','status_id'],['type']);
+        }
+        return true;
     }
     public function hapus(){
         try{

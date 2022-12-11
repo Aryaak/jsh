@@ -1064,10 +1064,10 @@
                         $(element).addClass('btn-outline-' + $(element).data('color'))
                     }
 
-                    if (suretyBond.process_status.status.name != 'terbit' && $(element).data('status') != 'belum terbit') {
+                    if (guaranteeBank.process_status.status.name != 'terbit' && $(element).data('status') != 'belum terbit') {
                         $(element).addClass('d-none')
                     }
-                    else if (suretyBond.process_status.status.name == 'terbit' && $(element).data('status') == 'belum terbit') {
+                    else if (guaranteeBank.process_status.status.name == 'terbit' && $(element).data('status') == 'belum terbit') {
                         $(element).addClass('d-none')
                     }
                 })

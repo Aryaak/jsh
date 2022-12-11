@@ -110,9 +110,9 @@
                                 <div class="mb-3">
                                     <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
                                     <div class="d-flex flex-xl-row flex-column gap-2">
-                                        <x-form-check id="create-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                        <x-form-check id="create-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                        <x-form-check id="create-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                        <x-form-check id="create-due-day-tolerance-0" input-class='create-due-day-tolerance' name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                        <x-form-check id="create-due-day-tolerance-1" input-class='create-due-day-tolerance' name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                        <x-form-check id="create-due-day-tolerance-2" input-class='create-due-day-tolerance' name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -462,9 +462,9 @@
                                 <div class="mb-3">
                                     <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
                                     <div class="d-flex flex-xl-row flex-column gap-2">
-                                        <x-form-check id="edit-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                        <x-form-check id="edit-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                        <x-form-check id="edit-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                        <x-form-check id="edit-due-day-tolerance-0" input-class='edit-due-day-tolerance' name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                        <x-form-check id="edit-due-day-tolerance-1" input-class='edit-due-day-tolerance' name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                        <x-form-check id="edit-due-day-tolerance-2" input-class='edit-due-day-tolerance' name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -989,6 +989,7 @@
                         });
                         $('#show-sub-total-'+key).html(subtotal)
                     });
+                    $('#status-histories-no-bond').html(guaranteeBank.bond_number)
                     $('#process-status-histories').html('')
                     $('#finance-status-histories').html('')
                     $('#insurance-status-histories').html('')

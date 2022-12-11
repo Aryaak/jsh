@@ -410,7 +410,7 @@ class SuretyBond extends Model
             'input' => 'bx bxs-edit-alt',
             'analisa asuransi' => 'bx bx-search-alt',
             'terbit' => 'bx bx-check',
-            'batal' => 'bx bx-x'
+            'batal' => 'bx bx-x',
             null => ''
         };
     }

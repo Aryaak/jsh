@@ -180,4 +180,21 @@ class SuretyBondController extends Controller
         ])->setPaper('a4', 'landscape');
         return $pdf->download('scoring.pdf');
     }
+
+    public function print(Branch $regional, Branch $branch, SuretyBond $suretyBond){
+        $suretyBond->principal;
+        $suretyBond->obligee;
+        $suretyBond->agent;
+        $suretyBond->insurance;
+        $suretyBond->insurance_type;
+        $suretyBond->statuses;
+        $suretyBond->scorings;
+        $suretyBond->statuses;
+        $suretyBond->process_status->status;
+        $suretyBond->insurance_status->status;
+        $suretyBond->finance_status->status;
+
+        $now = 'surety';
+        return view('product.pdf.product-print',compact('now','suretyBond'));
+    }
 }

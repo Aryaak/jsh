@@ -90,7 +90,7 @@ class GuaranteeBankController extends Controller
         $bankGaransi->principal;
         $bankGaransi->obligee;
         $bankGaransi->agent;
-        $bankGaransi->bank;
+        $bankGaransi->bank->templates;
         $bankGaransi->insurance;
         $bankGaransi->insurance_type;
         $bankGaransi->statuses;
@@ -183,5 +183,24 @@ class GuaranteeBankController extends Controller
             'product' => $product
         ])->setPaper('a4', 'landscape');
         return $pdf->download('scoring.pdf');
+    }
+
+    public function print(Branch $regional, Branch $branch, GuaranteeBank $bankGaransi){
+        $bankGaransi->principal;
+        $bankGaransi->obligee;
+        $bankGaransi->agent;
+        $bankGaransi->bank->templates;
+        $bankGaransi->insurance;
+        $bankGaransi->insurance_type;
+        $bankGaransi->statuses;
+        $bankGaransi->scorings;
+        $bankGaransi->statuses;
+        $bankGaransi->process_status->status;
+        $bankGaransi->insurance_status->status;
+        $bankGaransi->finance_status->status;
+
+        $id = $bankGaransi->bank->id;
+        $now = 'bank';
+        return view('product.pdf.product-print',compact('id','now','bankGaransi'));
     }
 }

@@ -297,6 +297,7 @@ class SuretyBond extends Model
     public function ubahStatus(array $params): bool{
         $request = $this->fetchStatus((object)$params);
         foreach ($request as $param) {
+            unset($param['name']);
             SuretyBondStatus::updateOrCreate([
                 'surety_bond_id' => $param['surety_bond_id'],
                 'status_id' => $param['status_id'],

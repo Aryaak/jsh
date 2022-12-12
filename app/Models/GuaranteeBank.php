@@ -313,6 +313,7 @@ class GuaranteeBank extends Model
     public function ubahStatus(array $params){
         $request = $this->fetchStatus((object)$params);
         foreach ($request as $param) {
+            unset($param['name']);
             GuaranteeBankStatus::updateOrCreate([
                 'guarantee_bank_id' => $param['guarantee_bank_id'],
                 'status_id' => $param['status_id'],

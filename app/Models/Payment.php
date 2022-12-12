@@ -109,7 +109,7 @@ class Payment extends Model
             }
             $insuranceLastStatus = $product->insurance_status->status->name;
             $totalBill = 0;
-            if($insuranceLastStatus == 'terbit'){
+            if(in_array($insuranceLastStatus,['belum terbit','terbit'])){
                 $totalBill = $product->total_charge;
             }else{
                 $totalBill = $product->office_polish_cost + $product->office_stamp_cost + $product->admin_charge;

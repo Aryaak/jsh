@@ -251,19 +251,19 @@ class SuretyBond extends Model
         if($type == 'process'){
             if($status == 'input'){
                 $params = [
-                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'finance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id],
-                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status],
+                    ['type' => 'finance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id,'name' => 'belum lunas'],
+                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id,'name' => 'belum terbit']
                 ];
             }else if($status == 'terbit'){
                 $params = [
-                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
-                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id,'name' => 'analisa asuransi'],
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status],
+                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id,'name' => $status]
                 ];
             }else{
                 $params = [
-                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status]
                 ];
             }
         }else if($type == 'insurance' || $type == 'finance'){
@@ -303,15 +303,17 @@ class SuretyBond extends Model
             ],$param);
         }
         if(!collect($request)->where('name','lunas')->isEmpty()){
-            Payment::buat([
-                'type' => 'principal_to_branch',
-                'year' => date('Y'),
-                'month' => date('m'),
-                'datetime' => now(),
-                'branchId' => $this->branch_id,
-                'principalId' => $this->principal_id,
-                'suretyBondId' => $this->id,
-            ]);
+            $this->bayar();
+        }
+        if(!collect($request)->where('type','insurance')->where('name','<>','terbit')->isEmpty()){
+            $suretyBondId = $this->id;
+            $payment = Payment::whereHas('details',function($query) use ($suretyBondId){
+                $query->where('surety_bond_id',$suretyBondId);
+            })->first();
+            if(!empty($payment)){
+                $payment->hapus();
+                $this->bayar();
+            }
         }
         return true;
     }
@@ -324,8 +326,16 @@ class SuretyBond extends Model
             throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
         }
     }
-    public function cetakSkor(){
-
+    private function bayar(){
+        Payment::buat([
+            'type' => 'principal_to_branch',
+            'year' => date('Y'),
+            'month' => date('m'),
+            'datetime' => now(),
+            'branchId' => $this->branch_id,
+            'principalId' => $this->principal_id,
+            'suretyBondId' => $this->id,
+        ]);
     }
     private static function fetchQuery(object $args): object{
         $columns = [

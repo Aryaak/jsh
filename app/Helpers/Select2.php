@@ -7,10 +7,12 @@ use App\Models\Branch;
 use App\Models\Province;
 use App\Models\City;
 use App\Models\Agent;
+use App\Models\GuaranteeBank;
 use App\Models\Insurance;
 use App\Models\InsuranceType;
 use App\Models\Obligee;
 use App\Models\Principal;
+use App\Models\Template;
 
 class Select2
 {
@@ -19,7 +21,7 @@ class Select2
         return array_values($data->map(function ($item, $key) {
             return [
                 'id' => $item->id,
-                'text' => $item->name,
+                'text' => $item->name ?? $item->title,
             ];
         })->all());
     }
@@ -82,6 +84,18 @@ class Select2
     public static function principal(?string $keyword = null){
         return self::fetch(Principal::when($keyword != '', function ($query) use ($keyword){
             return $query->where('name', 'like', "%$keyword%");
+        })->get());
+    }
+
+    public static function suretyTemplate(?string $keyword = null){
+        return self::fetch(Template::where('bank_id',null)->when($keyword != '', function ($query) use ($keyword){
+            return $query->where('title', 'like', "%$keyword%");
+        })->get());
+    }
+
+    public static function bankTemplate(?string $keyword = null, $id){
+        return self::fetch(Template::where('bank_id',null)->orWhere('bank_id',$id)->when($keyword != '', function ($query) use ($keyword){
+            return $query->where('title', 'like', "%$keyword%");
         })->get());
     }
 }

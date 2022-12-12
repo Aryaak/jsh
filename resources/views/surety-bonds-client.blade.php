@@ -62,15 +62,15 @@
                                 <div class="mb-3">
                                     <x-form-label>Batas Toleransi Jatuh Tempo</x-form-label>
                                     <div class="d-flex flex-xl-row flex-column gap-2">
-                                        <x-form-check id="create-due-day-tolerance-0" name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
-                                        <x-form-check id="create-due-day-tolerance-1" name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
-                                        <x-form-check id="create-due-day-tolerance-2" name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
+                                        <x-form-check id="create-due-day-tolerance-0" input-class='create-due-day-tolerance' name='dueDayTolerance' value="0" type="radio" inline checked>0 Hari</x-form-check>
+                                        <x-form-check id="create-due-day-tolerance-1" input-class='create-due-day-tolerance' name='dueDayTolerance' value="1" type="radio" inline>1 Hari</x-form-check>
+                                        <x-form-check id="create-due-day-tolerance-2" input-class='create-due-day-tolerance' name='dueDayTolerance' value="2" type="radio" inline>2 Hari</x-form-check>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <x-form-label required>Jumlah Hari</x-form-label>
                                     <input type="hidden" id="create-day-count-input" name="dayCount" value="0">
-                                    <div><span class="create-day-count">0</span> Hari</div>
+                                    <div><span id="create-day-count">0</span> Hari</div>
                                 </div>
                                 <x-form-input label="Nama Proyek" id="create-project-name" name="projectName" class="mb-3" required />
                                 <x-form-input label="Dokumen Pendukung" id="create-document-title" name="documentTitle" class="mb-3" />
@@ -173,7 +173,6 @@
         })
         $(document).on('click', '#create-save', function () {
             loading()
-            $('#create-day-count-input').val(5)
             ajaxPost("{{ route('client') }}",fetchFormData(new FormData(document.getElementById('form-create'))),function(){
                 clearForm('#form-create')
                 $('#create-principal-address').html('-')
@@ -207,10 +206,10 @@
             }
         })
         $(document).on('input', '#create-start-date, #create-end-date, .create-due-day-tolerance', function () {
-            // const split = $(this).attr('id').split('-')
-            // let dayCount = (split[1]  == 'due') ? parseInt(calculateDayFromDates('start',split[0])) : calculateDayFromDates(split[1],split[0])
-            // $('#'+split[0]+'-day-count-input').val(dayCount)
-            // $('#'+split[0]+'-day-count').html(dayCount)
+            const split = $(this).attr('id').split('-')
+            let dayCount = (split[1]  == 'due') ? parseInt(calculateDayFromDates('start',split[0])) : calculateDayFromDates(split[1],split[0])
+            $('#'+split[0]+'-day-count-input').val(dayCount)
+            $('#'+split[0]+'-day-count').html(dayCount)
         })
     </script>
 @endpush

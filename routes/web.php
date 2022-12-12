@@ -52,8 +52,8 @@ Route::get('/test', function (Request $request) {
  * Guest routes
  * -------------------------------------------------------------------------
  */
-Route::get('requst-surety-bond', [SuretyBondDraftController::class, 'indexClient'])->name('client');
-Route::post('requst-surety-bond', [SuretyBondDraftController::class, 'storeClient']);
+Route::get('request-surety-bond', [SuretyBondDraftController::class, 'indexClient'])->name('client');
+Route::post('request-surety-bond', [SuretyBondDraftController::class, 'storeClient']);
 Route::get('request-bank-garansi', [GuaranteeBankDraftController::class, 'indexClient'])->name('bgc');
 Route::post('request-bank-garansi', [GuaranteeBankDraftController::class, 'storeClient']);
 Route::get('principal-client/{principal}', [PrincipalController::class, 'show'])->name('client.principal');
@@ -76,6 +76,8 @@ Route::group(['prefix' => '/select2', 'as' => 'select2.'], function () {
     Route::get('obligee',[Select2Controller::class,'obligee'])->name('obligee');
     Route::get('principal',[Select2Controller::class,'principal'])->name('principal');
     Route::get('insurance-type',[Select2Controller::class,'insuranceType'])->name('insuranceType');
+    Route::get('suretyTemplate',[Select2Controller::class,'suretyTemplate'])->name('suretyTemplate');
+    Route::get('bankTemplate/{id}',[Select2Controller::class,'bankTemplate'])->name('bankTemplate');
 });
 
 /*
@@ -88,6 +90,7 @@ Route::group(['prefix' => '/select2', 'as' => 'select2.'], function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
     Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
+    Route::post('/pdf/download-template/', [PDFDownloadController::class, 'pdfTemplate'])->name('pdf.print');
 
     // Master Data (bisa diakses di semua role)
 

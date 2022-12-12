@@ -299,7 +299,7 @@ class GuaranteeBank extends Model
     public static function buatDraft(array $params): self{
         $request = (object)$params;
         $guaranteeBank = self::create($request->guaranteeBank);
-        $guaranteeBank->initStatus(['type' => 'process','status' => 'input']);
+        $guaranteeBank->ubahStatus(['type' => 'process','status' => 'input']);
         $guaranteeBank->scorings()->createMany($request->scoring);
         return $guaranteeBank;
     }

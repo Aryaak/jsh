@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Helpers\Select2;
+use App\Models\GuaranteeBank;
 
 class Select2Controller extends Controller
 {
@@ -45,5 +46,13 @@ class Select2Controller extends Controller
 
     public function principal(Request $request){
         return response()->json(Select2::principal($request->search));
+    }
+
+    public function suretyTemplate(Request $request){
+        return response()->json(Select2::suretyTemplate($request->search));
+    }
+
+    public function bankTemplate(Request $request, $id){
+        return response()->json(Select2::bankTemplate($request->search, $id));
     }
 }

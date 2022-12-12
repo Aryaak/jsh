@@ -356,12 +356,14 @@ class GuaranteeBank extends Model
         if(isset($args->request_for)) unset($args->request_for);
         foreach ($args as $key => $param) {
             if(!in_array($key,['startDate','endDate'])){
-                if(isset($columns[$param['name']])){
-                    $params[] = (object)[
-                        'column' => $columns[$param['name']],
-                        'operator' => $param['operator'],
-                        'value' => $param['value']
-                    ];
+                if(isset($param['name'])){
+                    if(isset($columns[$param['name']])){
+                        $params[] = (object)[
+                            'column' => $columns[$param['name']],
+                            'operator' => $param['operator'],
+                            'value' => $param['value']
+                        ];
+                    }
                 }
             }else{
                 $operator = '';
@@ -402,9 +404,9 @@ class GuaranteeBank extends Model
         }else if($type == 'expense'){
             return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.insurance_total_net as nominal');
         }else if($type == 'product'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_total_net as nominal');
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_net_total as nominal');
         }else if($type == 'finance'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_total_net as nominal');
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_net_total as nominal');
         }
     }
     public static function chart(string $type,array $params){
@@ -414,9 +416,9 @@ class GuaranteeBank extends Model
         }else if($type == 'expense'){
             $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.insurance_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'product'){
-            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'finance'){
-            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }
         return [
             'labels' => array_map(function($val){ return Sirius::toShortDate($val); },array_keys($data)),

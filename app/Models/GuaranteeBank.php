@@ -7,8 +7,10 @@ use Exception;
 use App\Models\Status;
 use App\Helpers\Sirius;
 use App\Models\Scoring;
+use App\Models\Payment;
 use App\Models\BankRate;
 use App\Models\AgentRate;
+use App\Models\GuaranteeBankStatus;
 use Illuminate\Support\Str;
 use App\Models\ScoringDetail;
 use Illuminate\Database\Eloquent\Model;
@@ -251,38 +253,38 @@ class GuaranteeBank extends Model
             'scoring' => $scoring
         ];
     }
-    private static function fetchStatus(object $args): array{
+    private function fetchStatus(object $args): array{
         $params = [];
         $type = $args->type;
         $status = $args->status;
         if($type == 'process'){
             if($status == 'input'){
                 $params = [
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'finance','status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id],
-                    ['type' => 'insurance','status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id]
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
+                    ['type' => 'finance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id],
+                    ['type' => 'insurance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id]
                 ];
             }else if($status == 'terbit'){
                 $params = [
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name','analisa bank']])->firstOrFail()->id],
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'insurance','status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa bank']])->firstOrFail()->id],
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
+                    ['type' => 'insurance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
                 ];
             }else if($status == 'analisa bank'){
                 $params = [
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
                 ];
             }
             else{
                 $params = [
-                    ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
                 ];
             }
         }else if($type == 'insurance' || $type == 'finance'){
             $params = [
-                ['type' => $type,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status]
             ];
         }
         return $params;
@@ -309,7 +311,25 @@ class GuaranteeBank extends Model
         return $this->update($request->guaranteeBank);
     }
     public function ubahStatus(array $params){
-        return $this->statuses()->createMany($this->fetchStatus((object)$params));
+        $request = $this->fetchStatus((object)$params);
+        foreach ($request as $param) {
+            GuaranteeBankStatus::updateOrCreate([
+                'guarantee_bank_id' => $param['guarantee_bank_id'],
+                'status_id' => $param['status_id'],
+            ],$param);
+        }
+        if(!collect($request)->where('name','lunas')->isEmpty()){
+            Payment::buat([
+                'type' => 'principal_to_branch',
+                'year' => date('Y'),
+                'month' => date('m'),
+                'datetime' => now(),
+                'branchId' => $this->branch_id,
+                'principalId' => $this->principal_id,
+                'guaranteeBankId' => $this->id,
+            ]);
+        }
+        return true;
     }
     public function hapus(){
         try{

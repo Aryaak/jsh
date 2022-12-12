@@ -998,7 +998,7 @@
                         $('#'+e.type+'-status-histories').append(html)
                     });
 
-                    if(guaranteeBank.finance_status.status.name == 'lunas'){
+                    if(guaranteeBank.finance_status.status.name == 'lunas' || guaranteeBank.insurance_status.status.name == 'belum terbit'){
                         $('#btn-paid-off-payment').hide()
                     }else{
                         $('#btn-paid-off-payment').show()
@@ -1064,10 +1064,10 @@
                         $(element).addClass('btn-outline-' + $(element).data('color'))
                     }
 
-                    if (suretyBond.process_status.status.name != 'terbit' && $(element).data('status') != 'belum terbit') {
+                    if (guaranteeBank.process_status.status.name != 'terbit' && $(element).data('status') != 'belum terbit') {
                         $(element).addClass('d-none')
                     }
-                    else if (suretyBond.process_status.status.name == 'terbit' && $(element).data('status') == 'belum terbit') {
+                    else if (guaranteeBank.process_status.status.name == 'terbit' && $(element).data('status') == 'belum terbit') {
                         $(element).addClass('d-none')
                     }
                 })

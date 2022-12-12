@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SuretyBond;
+use App\Models\GuaranteeBank;
 use App\Models\Payable;
 use DB;
 use Exception;
@@ -16,7 +17,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    public $fillable = ['total_bill','paid_bill','unpaid_bill','paid_at','month','year','desc','type','agent_id','insurance_id','principal_id','branch_id','regional_id'];
+    public $fillable = ['total_bill','paid_at','month','year','desc','type','agent_id','insurance_id','principal_id','branch_id'];
 
     protected $appends = ['paid_at_converted', 'total_bill_converted','paid_bill_converted','unpaid_bill_converted'];
 
@@ -80,7 +81,7 @@ class Payment extends Model
                 return [
                     'surety_bond_id' => $item->id,
                     'guarantee_bank_id' => null,
-                    'total' => floatval($item->insurance_net_total)
+                    'nominal' => floatval($item->insurance_net_total)
                 ];
             })->all());
             $totalBill = array_sum(array_column($details,'total'));
@@ -93,11 +94,31 @@ class Payment extends Model
                 return [
                     'surety_bond_id' => $item->id,
                     'guarantee_bank_id' => null,
-                    'total' => floatval($item->total_charge) - floatval($item->office_net_total)
+                    'nominal' => floatval($item->total_charge) - floatval($item->office_net_total)
                 ];
             })->all());
             $totalBill = array_sum(array_column($details,'total'));
             $paidBill = $totalBill;
+        }else if($type == 'principal_to_branch'){
+            $product = null;
+            $details = [];
+            if(isset($args->suretyBondId)){
+                $product = SuretyBond::findOrFail($args->suretyBondId);
+            }else if($args->guaranteeBankId){
+                $product = GuaranteeBank::findOrFail($args->guaranteeBankId);
+            }
+            $insuranceLastStatus = $product->insurance_status->status->name;
+            $totalBill = 0;
+            if($insuranceLastStatus == 'terbit'){
+                $totalBill = $product->total_charge;
+            }else{
+                $totalBill = $product->office_polish_cost + $product->office_stamp_cost + $product->admin_charge;
+            }
+            $details[] = [
+                'nominal' => $totalBill,
+                'surety_bond_id' => $args->suretyBondId ?? null,
+                'guarantee_bank_id' => $args->guaranteeBankId ?? null
+            ];
         }
 
         return (object)[
@@ -106,15 +127,12 @@ class Payment extends Model
                 'year' => $args->year,
                 'month' => $args->month,
                 'total_bill' => $totalBill,
-                'paid_bill' => $paidBill,
-                'unpaid_bill' => $unpaidBill,
                 'type' => $type,
-                'desc' => $args->desc,
+                'desc' => $args->desc ?? null,
                 'agent_id' => $args->agentId ?? null,
                 'insurance_id' => $args->insuranceId ?? null,
                 'principal_id' => $args->principalId ?? null,
-                'branch_id' => $args->branchId ?? null,
-                'regional_id' => $args->regionalId ?? null
+                'branch_id' => $args->branchId ?? null
             ],
             'details' => $details,
         ];

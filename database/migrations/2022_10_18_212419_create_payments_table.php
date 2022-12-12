@@ -11,8 +11,6 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedDecimal('total_bill',20,5);
-            $table->unsignedDecimal('paid_bill',20,5);
-            $table->unsignedDecimal('unpaid_bill',20,5);
             $table->timestamp('paid_at');
             $table->integer('month')->comment('ex. 01..09..12');
             $table->year('year');
@@ -22,8 +20,6 @@ return new class extends Migration
             $table->foreignId('insurance_id')->nullable()->constrained();
             $table->foreignId('principal_id')->nullable()->constrained();
             $table->foreignId('branch_id')->nullable()->constrained();
-            $table->unsignedBigInteger('regional_id')->nullable();
-            $table->foreign('regional_id')->references('id')->on('branches');
             $table->timestamps();
         });
     }

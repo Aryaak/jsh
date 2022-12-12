@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('payment_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedDecimal('total',20,5);
+            $table->unsignedDecimal('nominal',20,5);
             $table->foreignId('payment_id')->constrained();
             $table->foreignId('surety_bond_id')->nullable()->constrained();
             $table->foreignId('guarantee_bank_id')->nullable()->constrained();

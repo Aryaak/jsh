@@ -74,28 +74,70 @@ class Payment extends Model
         $type = $args->type;
         $details = [];
         if($type == 'regional_to_insurance'){
-            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('insurance_id',$args->insuranceId)->exists()){
+            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->exists()){
                 throw new Exception("Pembayaran pada periode ini sudah dilakukan",422);
             }
-            $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
-                return [
-                    'surety_bond_id' => $item->id,
-                    'guarantee_bank_id' => null,
-                    'nominal' => floatval($item->insurance_net_total)
-                ];
-            })->all());
+            $details = array_merge(
+                array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
+                    $lastInsuranceStatus = $item->insurance_status->status->name;
+                    $nominal = 0;
+                    if($lastInsuranceStatus == 'terbit'){
+                        $nominal = floatval($item->insurance_net_total);
+                    }elseif(in_array($lastInsuranceStatus,['batal','revisi','salah cetak'])){
+                        $nominal = floatval($item->insurance_polish_cost) + floatval($item->insurance_stamp_cost);
+                    }
+                    return [
+                        'surety_bond_id' => $item->id,
+                        'guarantee_bank_id' => null,
+                        'nominal' => $nominal
+                    ];
+                })->all()),
+                array_values(GuaranteeBank::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
+                    $lastInsuranceStatus = $item->insurance_status->status->name;
+                    $nominal = 0;
+                    if($lastInsuranceStatus == 'terbit'){
+                        $nominal = floatval($item->insurance_net_total);
+                    }elseif(in_array($lastInsuranceStatus,['batal','revisi','salah cetak'])){
+                        $nominal = floatval($item->insurance_polish_cost) + floatval($item->insurance_stamp_cost);
+                    }
+                    return [
+                        'surety_bond_id' => null,
+                        'guarantee_bank_id' => $item->id,
+                        'nominal' => $nominal
+                    ];
+                })->all())
+            );
             $totalBill = array_sum(array_column($details,'nominal'));
         }else if($type == 'branch_to_agent'){
-            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('agent_id',$args->agentId)->exists()){
+            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('agent_id',$args->agentId)->exists()){
                 throw new Exception("Pembayaran pada periode ini sudah dilakukan",422);
             }
-            $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('agent_id',$args->agentId)->get()->map(function ($item){
-                return [
-                    'surety_bond_id' => $item->id,
-                    'guarantee_bank_id' => null,
-                    'nominal' => floatval($item->office_net_total) - floatval($item->insurance_net_total)
-                ];
-            })->all());
+            $details = array_merge(
+                array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('agent_id',$args->agentId)->get()->map(function ($item){
+                    $lastInsuranceStatus = $item->insurance_status->status->name;
+                    $nominal = 0;
+                    if($lastInsuranceStatus == 'terbit'){
+                        $nominal = floatval($item->total_charge) - floatval($item->office_net_total);
+                    }
+                    return [
+                        'surety_bond_id' => $item->id,
+                        'guarantee_bank_id' => null,
+                        'nominal' => $nominal
+                    ];
+                })->all()),
+                array_values(GuaranteeBank::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('agent_id',$args->agentId)->get()->map(function ($item){
+                    $lastInsuranceStatus = $item->insurance_status->status->name;
+                    $nominal = 0;
+                    if($lastInsuranceStatus == 'terbit'){
+                        $nominal = floatval($item->total_charge) - floatval($item->office_net_total);
+                    }
+                    return [
+                        'surety_bond_id' => null,
+                        'guarantee_bank_id' => $item->id,
+                        'nominal' => $nominal
+                    ];
+                })->all())
+            );
             $totalBill = array_sum(array_column($details,'nominal'));
         }else if($type == 'principal_to_branch'){
             $product = null;

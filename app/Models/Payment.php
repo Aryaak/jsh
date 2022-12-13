@@ -17,9 +17,9 @@ class Payment extends Model
 {
     use HasFactory;
 
-    public $fillable = ['total_bill','paid_at','month','year','desc','type','agent_id','insurance_id','principal_id','branch_id'];
+    public $fillable = ['total_bill','paid_at','month','year','desc','type','agent_id','insurance_id','principal_id','branch_id','regional_id'];
 
-    protected $appends = ['paid_at_converted', 'total_bill_converted','paid_bill_converted','unpaid_bill_converted'];
+    protected $appends = ['paid_at_converted', 'total_bill_converted'];
 
     // Accessors
 
@@ -31,14 +31,14 @@ class Payment extends Model
     {
         return Attribute::make(get: fn () => Sirius::toRupiah($this->total_bill, 2));
     }
-    public function paidBillConverted(): Attribute
-    {
-        return Attribute::make(get: fn () => Sirius::toRupiah($this->paid_bill, 2));
-    }
-    public function unpaidBillConverted(): Attribute
-    {
-        return Attribute::make(get: fn () => Sirius::toRupiah($this->unpaid_bill, 2));
-    }
+    // public function paidBillConverted(): Attribute
+    // {
+    //     return Attribute::make(get: fn () => Sirius::toRupiah($this->paid_bill, 2));
+    // }
+    // public function unpaidBillConverted(): Attribute
+    // {
+    //     return Attribute::make(get: fn () => Sirius::toRupiah($this->unpaid_bill, 2));
+    // }
 
     // Relations
     public function payable(){
@@ -74,31 +74,71 @@ class Payment extends Model
         $type = $args->type;
         $details = [];
         if($type == 'regional_to_insurance'){
-            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('insurance_id',$args->insuranceId)->exists()){
+            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->exists()){
                 throw new Exception("Pembayaran pada periode ini sudah dilakukan",422);
             }
-            $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
-                return [
-                    'surety_bond_id' => $item->id,
-                    'guarantee_bank_id' => null,
-                    'nominal' => floatval($item->insurance_net_total)
-                ];
-            })->all());
-            $totalBill = array_sum(array_column($details,'total'));
-            $paidBill = $totalBill;
+            $details = array_merge(
+                array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
+                    $lastInsuranceStatus = $item->insurance_status->status->name;
+                    $nominal = 0;
+                    if($lastInsuranceStatus == 'terbit'){
+                        $nominal = floatval($item->insurance_net_total);
+                    }elseif(in_array($lastInsuranceStatus,['batal','revisi','salah cetak'])){
+                        $nominal = floatval($item->insurance_polish_cost) + floatval($item->insurance_stamp_cost);
+                    }
+                    return [
+                        'surety_bond_id' => $item->id,
+                        'guarantee_bank_id' => null,
+                        'nominal' => $nominal
+                    ];
+                })->all()),
+                array_values(GuaranteeBank::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
+                    $lastInsuranceStatus = $item->insurance_status->status->name;
+                    $nominal = 0;
+                    if($lastInsuranceStatus == 'terbit'){
+                        $nominal = floatval($item->insurance_net_total);
+                    }elseif(in_array($lastInsuranceStatus,['batal','revisi','salah cetak'])){
+                        $nominal = floatval($item->insurance_polish_cost) + floatval($item->insurance_stamp_cost);
+                    }
+                    return [
+                        'surety_bond_id' => null,
+                        'guarantee_bank_id' => $item->id,
+                        'nominal' => $nominal
+                    ];
+                })->all())
+            );
+            $totalBill = array_sum(array_column($details,'nominal'));
         }else if($type == 'branch_to_agent'){
-            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('agent_id',$args->agentId)->exists()){
+            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('agent_id',$args->agentId)->exists()){
                 throw new Exception("Pembayaran pada periode ini sudah dilakukan",422);
             }
-            $details = array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('agent_id',$args->agentId)->get()->map(function ($item){
-                return [
-                    'surety_bond_id' => $item->id,
-                    'guarantee_bank_id' => null,
-                    'nominal' => floatval($item->total_charge) - floatval($item->office_net_total)
-                ];
-            })->all());
-            $totalBill = array_sum(array_column($details,'total'));
-            $paidBill = $totalBill;
+            $details = array_merge(
+                array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('agent_id',$args->agentId)->get()->map(function ($item){
+                    $lastInsuranceStatus = $item->insurance_status->status->name;
+                    $nominal = 0;
+                    if($lastInsuranceStatus == 'terbit'){
+                        $nominal = floatval($item->total_charge) - floatval($item->office_net_total);
+                    }
+                    return [
+                        'surety_bond_id' => $item->id,
+                        'guarantee_bank_id' => null,
+                        'nominal' => $nominal
+                    ];
+                })->all()),
+                array_values(GuaranteeBank::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('agent_id',$args->agentId)->get()->map(function ($item){
+                    $lastInsuranceStatus = $item->insurance_status->status->name;
+                    $nominal = 0;
+                    if($lastInsuranceStatus == 'terbit'){
+                        $nominal = floatval($item->total_charge) - floatval($item->office_net_total);
+                    }
+                    return [
+                        'surety_bond_id' => null,
+                        'guarantee_bank_id' => $item->id,
+                        'nominal' => $nominal
+                    ];
+                })->all())
+            );
+            $totalBill = array_sum(array_column($details,'nominal'));
         }else if($type == 'principal_to_branch'){
             $product = null;
             $details = [];
@@ -109,7 +149,7 @@ class Payment extends Model
             }
             $insuranceLastStatus = $product->insurance_status->status->name;
             $totalBill = 0;
-            if($insuranceLastStatus == 'terbit'){
+            if(in_array($insuranceLastStatus,['belum terbit','terbit'])){
                 $totalBill = $product->total_charge;
             }else{
                 $totalBill = $product->office_polish_cost + $product->office_stamp_cost + $product->admin_charge;
@@ -132,17 +172,11 @@ class Payment extends Model
                 'agent_id' => $args->agentId ?? null,
                 'insurance_id' => $args->insuranceId ?? null,
                 'principal_id' => $args->principalId ?? null,
-                'branch_id' => $args->branchId ?? null
+                'branch_id' => $args->branchId ?? null,
+                'regional_id' => $args->regionalId ?? null
             ],
             'details' => $details,
         ];
-    }
-    public static function calculatePayable($params = []){
-        $params = (object)$params;
-        $payables = self::where('unpaid_bill','<>',0)->where('branch_id',$params->branchId)->whereHas('payable',function($query){
-            $query->where('is_paid_off',false);
-        })->get();
-        return $payables->sum('unpaid_total');
     }
     public static function buat(array $params): self{
         $request = self::fetch((object)$params);

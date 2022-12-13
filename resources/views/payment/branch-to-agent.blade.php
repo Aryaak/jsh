@@ -41,12 +41,12 @@
     <x-modal id="modal-create" title="Tambah Pembayaran" size="fullscreen">
         <x-form id="form-create" method="post">
             <input type="hidden" id="create-branch-id" class="calculate-params" name="branchId" value="{{ $global->branch->id }}">
-            <x-form-input label="Waktu Bayar" id="create-paid-at" class-input="calculate-params" name="paidAt" type="datetime-local" class="mb-3" required />
+            <x-form-input label="Waktu Bayar" id="create-paid-at" class-input="calculate-params" name="datetime" type="datetime-local" class="mb-3" required />
             <x-form-select label="Bulan" id="create-month" class-input="calculate-params" name="month" class="mb-3" :options="$months" value="{{ date('m') }}" required />
             <x-form-select label="Tahun" id="create-year" class-input="calculate-params" name="year" class="mb-3" :options="$years" value="{{ date('Y') }}" required />
             <x-form-select label="Ke Agen" id="create-agent-id" class-input="calculate-params" name="agentId" :options="[]" class="mb-3" required />
             <div class="mb-3">
-                <x-form-label required>Nominal Bayar</x-form-label>
+                <x-form-label required>Total Tagihan</x-form-label>
                 <div id="create-nominal">-</div>
             </div>
             <x-form-textarea label="Keterangan" id="create-desc" class-input="calculate-params" name="desc" />
@@ -107,10 +107,10 @@
                 formData.append('type',type)
                 ajaxPost("{{ route('payments.calculate') }}",formData,'',function(response){
                     if(response.success){
-                        $('#create-nominal').html(response.data.total_converted)
+                        $('#create-nominal').html(response.data.total_bill_converted)
                     }
                 },function (response) {
-                    $('#create-nominal').html(`<span class='color-danger'><i class='fa-solid fa-x me-2'></i>Terjadi masalah pada sistem</span>`)
+                    $('#create-nominal').html(`<span class='color-danger'><i class='fa-solid fa-x me-2'></i>`+response.message+`</span>`)
                 },false)
             }
         })

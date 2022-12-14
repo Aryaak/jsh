@@ -260,26 +260,26 @@ class GuaranteeBank extends Model
         if($type == 'process'){
             if($status == 'input'){
                 $params = [
-                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'finance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id],
-                    ['type' => 'insurance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id]
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status],
+                    ['type' => 'finance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id,'name' => 'belum lunas'],
+                    ['type' => 'insurance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id,'name' => 'belum terbit']
                 ];
             }else if($status == 'terbit'){
                 $params = [
-                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
-                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa bank']])->firstOrFail()->id],
-                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'insurance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id,'name' => 'analisa asuransi'],
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa bank']])->firstOrFail()->id,'name' => 'analisa bank'],
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status],
+                    ['type' => 'insurance','guarantee_bank_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id,'name' => $status]
                 ];
             }else if($status == 'analisa bank'){
                 $params = [
-                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
-                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id,'name' => 'analisa asuransi'],
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status]
                 ];
             }
             else{
                 $params = [
-                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'guarantee_bank_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status]
                 ];
             }
         }else if($type == 'insurance' || $type == 'finance'){
@@ -313,21 +313,24 @@ class GuaranteeBank extends Model
     public function ubahStatus(array $params){
         $request = $this->fetchStatus((object)$params);
         foreach ($request as $param) {
+            unset($param['name']);
             GuaranteeBankStatus::updateOrCreate([
                 'guarantee_bank_id' => $param['guarantee_bank_id'],
                 'status_id' => $param['status_id'],
             ],$param);
         }
         if(!collect($request)->where('name','lunas')->isEmpty()){
-            Payment::buat([
-                'type' => 'principal_to_branch',
-                'year' => date('Y'),
-                'month' => date('m'),
-                'datetime' => now(),
-                'branchId' => $this->branch_id,
-                'principalId' => $this->principal_id,
-                'guaranteeBankId' => $this->id,
-            ]);
+            $this->bayar();
+        }
+        if(!collect($request)->where('type','insurance')->where('name','<>','terbit')->isEmpty()){
+            $guaranteeBankId = $this->id;
+            $payment = Payment::whereHas('details',function($query) use ($guaranteeBankId){
+                $query->where('guarantee_bank_id',$guaranteeBankId);
+            })->first();
+            if(!empty($payment)){
+                $payment->hapus();
+                $this->bayar();
+            }
         }
         return true;
     }
@@ -340,9 +343,18 @@ class GuaranteeBank extends Model
             throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
         }
     }
-    public function cetakSkor(){
-
+    private function bayar(){
+        Payment::buat([
+            'type' => 'principal_to_branch',
+            'year' => date('Y'),
+            'month' => date('m'),
+            'datetime' => now(),
+            'branchId' => $this->branch_id,
+            'principalId' => $this->principal_id,
+            'guaranteeBankId' => $this->id,
+        ]);
     }
+
     private static function fetchQuery(object $args): object{
         $columns = [
             'startDate' => 'gb.created_at',
@@ -356,12 +368,14 @@ class GuaranteeBank extends Model
         if(isset($args->request_for)) unset($args->request_for);
         foreach ($args as $key => $param) {
             if(!in_array($key,['startDate','endDate'])){
-                if(isset($columns[$param['name']])){
-                    $params[] = (object)[
-                        'column' => $columns[$param['name']],
-                        'operator' => $param['operator'],
-                        'value' => $param['value']
-                    ];
+                if(isset($param['name'])){
+                    if(isset($columns[$param['name']])){
+                        $params[] = (object)[
+                            'column' => $columns[$param['name']],
+                            'operator' => $param['operator'],
+                            'value' => $param['value']
+                        ];
+                    }
                 }
             }else{
                 $operator = '';
@@ -402,9 +416,9 @@ class GuaranteeBank extends Model
         }else if($type == 'expense'){
             return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.insurance_total_net as nominal');
         }else if($type == 'product'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_total_net as nominal');
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_net_total as nominal');
         }else if($type == 'finance'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_total_net as nominal');
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_net_total as nominal');
         }
     }
     public static function chart(string $type,array $params){
@@ -414,9 +428,9 @@ class GuaranteeBank extends Model
         }else if($type == 'expense'){
             $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.insurance_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'product'){
-            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'finance'){
-            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }
         return [
             'labels' => array_map(function($val){ return Sirius::toShortDate($val); },array_keys($data)),

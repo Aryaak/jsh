@@ -991,7 +991,7 @@
                         const html = `<x-history-item icon="` + suretyBond.status_style[e.type][e.status.name].icon + `" face="` + suretyBond.status_style[e.type][e.status.name].color + `" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
                         $('#'+e.type+'-status-histories').append(html)
                     });
-                    if(suretyBond.finance_status.status.name == 'lunas' || suretyBond.insurance_status.status.name == 'belum terbit'){
+                    if(suretyBond.finance_status.status.name == 'lunas'){
                         $('#btn-paid-off-payment').hide()
                     }else{
                         $('#btn-paid-off-payment').show()

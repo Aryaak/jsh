@@ -588,7 +588,6 @@
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
                     <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
-                    <x-button id="edit-status-save" face="success" icon="bx bxs-save">Simpan</x-button>
                 </div>
             @endslot
         </x-modal>
@@ -1161,6 +1160,7 @@
                 })
             })
             function updateStatus(type,params,modal){
+                loading()
                 ajaxPost("{{ route('branch.products.guarantee-banks.update-status', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi' => '-id-']) }}".replace('-id-',guaranteeBank.id),params,modal,function(){
                     table.ajax.reload()
                 })

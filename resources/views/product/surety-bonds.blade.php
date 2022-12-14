@@ -808,9 +808,16 @@
                                 </div>
                             </div>
                         @endforeach
-                        {{-- <div class="col-12 mt-3">
-                            Total Nilai: <b>69</b>
-                        </div> --}}
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>Total Nilai: <b id="show-total-score">69</b></div>
+                                <div>
+                                    <x-button face='secondary' id="print-score" icon="bx bxs-printer">Cetak Scoring</x-button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </x-card>
             </div>
@@ -1003,7 +1010,7 @@
             })
         })
         $(document).on('click', '#print-score', function () {
-            window.open("{{ route('branch.products.surety-bonds.print-score', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id));
+            window.open("{{ route($global->currently_on.'.products.surety-bonds.print-score', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id));
         })
 
         @if ($global->currently_on == 'branch')

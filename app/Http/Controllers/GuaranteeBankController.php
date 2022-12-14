@@ -170,7 +170,13 @@ class GuaranteeBankController extends Controller
 
         return response()->json($response, $http_code);
     }
-    public function printScore(Branch $regional, Branch $branch, GuaranteeBank $bankGaransi){
+
+    public function printScoreRegional(Branch $regional, GuaranteeBank $bankGaransi)
+    {
+        return $this->printScore($regional, null, $bankGaransi);
+    }
+
+    public function printScore(Branch $regional, ?Branch $branch, GuaranteeBank $bankGaransi){
         $product = $bankGaransi;
         $selected = $product->scorings->pluck('scoring_detail_id')->toArray();
         $subTotals = [];

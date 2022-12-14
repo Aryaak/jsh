@@ -823,9 +823,16 @@
                                 </div>
                             </div>
                         @endforeach
-                        {{-- <div class="col-12 mt-3">
-                            Total Nilai: <b>69</b>
-                        </div> --}}
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>Total Nilai: <b id="show-total-score">69</b></div>
+                                <div>
+                                    <x-button face='secondary' id="print-score" icon="bx bxs-printer">Cetak Scoring</x-button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </x-card>
             </div>
@@ -1022,7 +1029,7 @@
             })
         })
         $(document).on('click', '#print-score', function () {
-            window.open("{{ route('branch.products.guarantee-banks.print-score', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi' => '-id-']) }}".replace('-id-',guaranteeBank.id));
+            window.open("{{ route($global->currently_on.'.products.guarantee-banks.print-score', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi' => '-id-']) }}".replace('-id-',guaranteeBank.id));
         })
         @if ($global->currently_on == 'branch')
             $(document).on('click', '.btn-edit', function () {

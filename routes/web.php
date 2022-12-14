@@ -185,8 +185,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::get('surety-bond', [SuretyBondController::class, 'index'])->name('surety-bonds.index');
             Route::get('surety-bond/{surety_bond}', [SuretyBondController::class, 'showRegional'])->name('surety-bonds.show');
+            Route::get('surety-bond/{surety_bond}/print-score', [SuretyBondController::class, 'printScoreRegional'])->name('surety-bonds.print-score');
             Route::get('bank-garansi', [GuaranteeBankController::class, 'index'])->name('guarantee-banks.index');
             Route::get('bank-garansi/{bank_garansi}', [GuaranteeBankController::class, 'showRegional'])->name('guarantee-banks.show');
+            Route::get('bank-garansi/{bank_garansi}/print-score', [GuaranteeBankController::class, 'printScoreRegional'])->name('guarantee-banks.print-score');
 
             // Route untuk produk ....
         });

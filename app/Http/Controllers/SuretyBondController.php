@@ -166,7 +166,13 @@ class SuretyBondController extends Controller
 
         return response()->json($response, $http_code);
     }
-    public function printScore(Branch $regional, Branch $branch, SuretyBond $suretyBond){
+
+    public function printScoreRegional(Branch $regional, SuretyBond $suretyBond)
+    {
+        return $this->printScore($regional, null, $suretyBond);
+    }
+
+    public function printScore(Branch $regional, ?Branch $branch, SuretyBond $suretyBond){
         $product = $suretyBond;
         $selected = $product->scorings->pluck('scoring_detail_id')->toArray();
         $subTotals = [];

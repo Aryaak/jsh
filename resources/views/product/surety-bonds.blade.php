@@ -577,7 +577,6 @@
             @slot('footer')
                 <div class="d-flex justify-content-between w-100">
                     <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
-                    <x-button id="edit-status-save" face="success" icon="bx bxs-save">Simpan</x-button>
                 </div>
             @endslot
         </x-modal>
@@ -1138,6 +1137,7 @@
                 })
             })
             function updateStatus(type,params,modal){
+                loading()
                 ajaxPost("{{ route('branch.products.surety-bonds.update-status', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id),params,modal,function(){
                     table.ajax.reload()
                 })

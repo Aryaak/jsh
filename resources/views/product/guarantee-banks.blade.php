@@ -551,8 +551,16 @@
                     <div class="mb-4">
                         <div class="text-center">
                             <label class="form-label mb-2 d-block">Status Proses</label>
+                            <small class="d-block">Saat ini: <span id="edit-process-status" style="text-transform: capitalize"></span></small>
                             @foreach ($statuses->process as $status)
-                                <x-button class="mx-2 my-2 process-status" data-status="{{ $status }}" data-color="{{ App\Models\GuaranteeBank::mappingProcessStatusColors($status) }}" face="outline-{{ App\Models\GuaranteeBank::mappingProcessStatusColors($status) }}" icon="{{ App\Models\GuaranteeBank::mappingProcessStatusIcons($status) }}">{{ App\Models\GuaranteeBank::mappingProcessStatusNames($status) }}</x-button>
+                                <x-button class="mx-2 my-2 process-status"
+                                    data-status="{{ $status }}"
+                                    data-color="{{ App\Models\GuaranteeBank::mappingProcessStatusColors($status) }}"
+                                    data-icon="{{ App\Models\GuaranteeBank::mappingProcessStatusIcons($status) }}"
+                                    face="outline-{{ App\Models\GuaranteeBank::mappingProcessStatusColors($status) }}"
+                                    icon="{{ App\Models\GuaranteeBank::mappingProcessStatusIcons($status) }}">
+                                    {{ App\Models\GuaranteeBank::mappingProcessStatusNames($status) }}
+                                </x-button>
                             @endforeach
                         </div>
                     </div>
@@ -561,8 +569,16 @@
                     <div>
                         <div class="text-center">
                             <label class="form-label mb-2 d-block">Status Jaminan</label>
+                            <small class="d-block">Saat ini: <span id="edit-insurance-status" style="text-transform: capitalize"></span></small>
                             @foreach ($statuses->insurance as $status)
-                                <x-button class="mx-2 my-2 insurance-status" data-status="{{ $status }}" data-color="{{ App\Models\GuaranteeBank::mappingInsuranceStatusColors($status) }}" face="outline-{{ App\Models\GuaranteeBank::mappingInsuranceStatusColors($status) }}" icon="{{ App\Models\GuaranteeBank::mappingInsuranceStatusIcons($status) }}">{{ App\Models\GuaranteeBank::mappingInsuranceStatusNames($status) }}</x-button>
+                                <x-button class="mx-2 my-2 insurance-status"
+                                    data-status="{{ $status }}"
+                                    data-color="{{ App\Models\GuaranteeBank::mappingInsuranceStatusColors($status) }}"
+                                    data-icon="{{ App\Models\GuaranteeBank::mappingInsuranceStatusIcons($status) }}"
+                                    face="outline-{{ App\Models\GuaranteeBank::mappingInsuranceStatusColors($status) }}"
+                                    icon="{{ App\Models\GuaranteeBank::mappingInsuranceStatusIcons($status) }}">
+                                    {{ App\Models\GuaranteeBank::mappingInsuranceStatusNames($status) }}
+                                </x-button>
                             @endforeach
                         </div>
                     </div>
@@ -1056,9 +1072,10 @@
                     $(element).removeClass('d-none')
                     $(element).prop('disabled', false)
                     if ($(element).data('status') == guaranteeBank.insurance_status.status.name) {
-                        $(element).addClass('btn-' + $(element).data('color'))
-                        $(element).prop('disabled', true)
-                        $(element).removeClass('d-none')
+                        $('#edit-insurance-status').html('<i class="' + $(element).data('icon') + ' me-1"></i>' + guaranteeBank.insurance_status.status.name)
+                        $('#edit-insurance-status').prop("class", '')
+                        $('#edit-insurance-status').addClass('badge bg-label-' + $(element).data('color'))
+                        $(element).addClass('d-none')
                     }
                     else {
                         $(element).addClass('btn-outline-' + $(element).data('color'))
@@ -1087,9 +1104,10 @@
                         $(element).addClass('d-none')
                     }
                     if ($(element).data('status') == guaranteeBank.process_status.status.name) {
-                        $(element).addClass('btn-' + $(element).data('color'))
-                        $(element).prop('disabled', true)
-                        $(element).removeClass('d-none')
+                        $('#edit-process-status').html('<i class="' + $(element).data('icon') + ' me-1"></i>' + guaranteeBank.process_status.status.name)
+                        $('#edit-process-status').prop("class", '')
+                        $('#edit-process-status').addClass('badge bg-label-' + $(element).data('color'))
+                        $(element).addClass('d-none')
                     }
                     else {
                         $(element).addClass('btn-outline-' + $(element).data('color'))

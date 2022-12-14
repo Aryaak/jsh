@@ -59,4 +59,7 @@ class SuretyBondReportController extends Controller
         }
         return view('report.surety-bond.product');
     }
+    public function productPrint(Request $request){
+
+    }
 }

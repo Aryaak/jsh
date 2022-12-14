@@ -91,6 +91,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
     Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
     Route::post('/pdf/download-template/', [PDFDownloadController::class, 'pdfTemplate'])->name('pdf.print');
+    Route::post('/pdf/download-laporan-surety-bonds/', [PDFDownloadController::class, 'pdfSB'])->name('pdf.print.sb');
 
     // Master Data (bisa diakses di semua role)
 

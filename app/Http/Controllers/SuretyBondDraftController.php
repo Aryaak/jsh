@@ -20,12 +20,14 @@ class SuretyBondDraftController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
 
-            $data = SuretyBondDraft::orderBy('created_at','desc')->get();
+            $data = SuretyBondDraft::with('insurance_status','insurance_status.status','principal')->orderBy('created_at','desc')->get();
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
             ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
+            ->editColumn('insurance_status.status.name', 'datatables.status-guarantee-bank')
             ->editColumn('action', $action)
+            ->rawColumns(['insurance_status.status.name', 'action'])
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();

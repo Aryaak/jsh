@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             BankRateSeeder::class,
             SuretyBondSeeder::class,
             GuaranteeBankSeeder::class,
+            TemplateSeeder::class,
         ]);
     }
 }

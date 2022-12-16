@@ -384,6 +384,7 @@ function dataTableInit(id,title,ajax,column,properties = {},translate = null,but
       columns: columns,
       language: translate ?? datatablesTranslate(title),
       drawCallback: function(e) {
+        $(".tooltip").remove()
         $('[data-bs-toggle="tooltip"]').tooltip()
       }
     }

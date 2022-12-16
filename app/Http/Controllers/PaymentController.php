@@ -8,7 +8,6 @@ use DB;
 use Exception;
 use App\Models\Payment;
 use App\Models\Payable;
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -25,7 +24,6 @@ class PaymentController extends Controller
 
     public function calculate(Request $request){
         try {
-            Debugbar::info($request);
             $payment = Payment::fetch((object)$request->all());
             $totalBill = $payment->payment['total_bill'] ?? 0;
             $response = $this->response('OK',true,[

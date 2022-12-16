@@ -90,7 +90,7 @@
 
                             foreach ($titles as $key => $title) {
                                 $title = Str::title(str_replace('-', ' ', $title));
-                                if ($key != count($titles) - 1) {
+                                if ($key != count($titles) - 1 && !is_numeric($title)) {
                                     $real_titles[] = $title;
                                 }
                                 else {

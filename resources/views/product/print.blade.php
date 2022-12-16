@@ -6,7 +6,6 @@
 
 @section('contents')
     <x-card header="Cetak Surety Bond">
-        <div class="h6" id="name">-</div>
         <x-form method="post" submit="Cetak" submitIcon="bx bxs-printer" action="{{ route('pdf.print') }}">
             <x-form-select label="Pilih Template" name="template" id="template" class="mb-3" class-input="select2" />
             <x-form-textarea label="Pratinjau" name="preview" id="preview" tinymce/>

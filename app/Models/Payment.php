@@ -74,11 +74,11 @@ class Payment extends Model
         $type = $args->type;
         $details = [];
         if($type == 'regional_to_insurance'){
-            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->exists()){
+            if(self::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('insurance_id',$args->insuranceId)->exists()){
                 throw new Exception("Pembayaran pada periode ini sudah dilakukan",422);
             }
             $details = array_merge(
-                array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
+                array_values(SuretyBond::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
                     $lastInsuranceStatus = $item->insurance_status->status->name;
                     $nominal = 0;
                     if($lastInsuranceStatus == 'terbit'){
@@ -92,7 +92,7 @@ class Payment extends Model
                         'nominal' => $nominal
                     ];
                 })->all()),
-                array_values(GuaranteeBank::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('branch_id',$args->branchId)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
+                array_values(GuaranteeBank::whereYear('created_at',$year)->whereMonth('created_at',$month)->where('insurance_id',$args->insuranceId)->get()->map(function ($item){
                     $lastInsuranceStatus = $item->insurance_status->status->name;
                     $nominal = 0;
                     if($lastInsuranceStatus == 'terbit'){

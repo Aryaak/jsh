@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use DB;
 use Str;
 use App\Models\Branch;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class BranchSeeder extends Seeder
@@ -25,7 +26,14 @@ class BranchSeeder extends Seeder
                 'name' => $param['name'],
                 'username' => $param['slug'],
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', //password
+                'role' => $data->is_regional ? 'regional' : 'branch'
             ]);
         }
+        User::create([
+            'name' => 'Root',
+            'username' => 'root',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', //password
+            'role' => 'main',
+        ]);
     }
 }

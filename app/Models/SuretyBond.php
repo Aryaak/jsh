@@ -69,6 +69,7 @@ class SuretyBond extends Model
         'insurance_stamp_cost_converted',
         'insurance_polish_cost_converted',
         'insurance_net_converted',
+        'insurance_value_converted',
         'insurance_net_total_converted',
         'office_stamp_cost_converted',
         'office_polish_cost_converted',
@@ -196,8 +197,8 @@ class SuretyBond extends Model
             ];
         },array_keys($args->scoring),array_values($args->scoring));
         $totalScore = array_sum(array_column($scoring, 'value'));
-        $insuranceNet = ((int)$args->insuranceValue * $insuranceRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
-        $officeNet = ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
+        $insuranceNet = ((int)$args->insuranceValue * ($insuranceRate->rate_value * 0.01) / (((int)$args->dayCount > 90) ? 90 : 1));
+        $officeNet = ((int)$args->insuranceValue * ($agentRate->rate_value * 0.01) / (((int)$args->dayCount > 90) ? 90 : 1));
 
         $insuranceNet = $insuranceNet >= $insuranceRate->min_value ? $insuranceNet : $insuranceRate->min_value;
         $officeNet = $officeNet >= $agentRate->min_value ? $officeNet : $agentRate->min_value;

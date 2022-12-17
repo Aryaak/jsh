@@ -204,8 +204,8 @@ class GuaranteeBank extends Model
             ];
         },array_keys($args->scoring),array_values($args->scoring));
         $totalScore = array_sum(array_column($scoring, 'value'));
-        $bankNet = ((int)$args->insuranceValue * $bankRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
-        $officeNet = ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
+        $bankNet = ((int)$args->insuranceValue * ($bankRate->rate_value * 0.01) / (((int)$args->dayCount > 90) ? 90 : 1));
+        $officeNet = ((int)$args->insuranceValue * ($agentRate->rate_value * 0.01) / (((int)$args->dayCount > 90) ? 90 : 1));
 
         $bankNet = $bankNet >= $bankRate->min_value ? $bankNet : $bankRate->min_value;
         $officeNet = $officeNet >= $agentRate->min_value ? $officeNet : $agentRate->min_value;

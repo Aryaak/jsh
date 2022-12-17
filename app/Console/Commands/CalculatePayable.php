@@ -49,9 +49,10 @@ class CalculatePayable extends Command
                         'payable_total' => $payableTotal,
                         'paid_total' => 0,
                         'unpaid_total' => $payableTotal,
-                        'is_paid_off' => false,
+                        'is_paid_off' => $payableTotal > 0 ? false : true,
                         'branch_id' => $branch->id,
                         'branch_name' => $branch->name,
+                        'regional_id' => $branch->regional_id
                     ],
                     'details' => $details
                 ];

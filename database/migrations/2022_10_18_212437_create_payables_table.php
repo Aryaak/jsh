@@ -17,7 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('unpaid_total');
             $table->boolean('is_paid_off')->default(false);
             $table->foreignId('branch_id')->constrained();
+            $table->unsignedBigInteger('regional_id');
+
             $table->timestamps();
+            $table->foreign('regional_id')->references('id')->on('branches');
         });
     }
     public function down()

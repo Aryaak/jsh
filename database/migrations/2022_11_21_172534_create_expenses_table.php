@@ -14,6 +14,9 @@ return new class extends Migration
             $table->string('description');
             $table->decimal('nominal',20,2);
             $table->date('transaction_date');
+
+            $table->unsignedBigInteger('regional_id')->nullable();
+            $table->foreign('regional_id')->references('id')->on('branches');
             $table->timestamps();
         });
     }

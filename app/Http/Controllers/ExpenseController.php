@@ -27,11 +27,14 @@ class ExpenseController extends Controller
     {
     }
 
-    public function store(ExpensesRequest $request)
+    public function store(Branch $regional, ExpensesRequest $request)
     {
         try {
             DB::beginTransaction();
-            Expense::buat($request->validated());
+            $params = $request->validated();
+            $params['nominal'] = str_replace('.','',$params['nominal']);
+            $params['regional_id'] = $regional->id;
+            Expense::buat($params);
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();
@@ -53,7 +56,7 @@ class ExpenseController extends Controller
     {
     }
 
-    public function update(Branch $regional, Request $request, Expense $pengeluaran)
+    public function update(Request $request, Expense $pengeluaran)
     {
         try {
             DB::beginTransaction();

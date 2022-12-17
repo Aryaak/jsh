@@ -15,6 +15,7 @@ class Expense extends Model
         'description',
         'nominal',
         'transaction_date',
+        'regional_id',
     ];
 
     private static function fetch(object $args): array{
@@ -23,6 +24,7 @@ class Expense extends Model
             'description' => $args->description,
             'nominal' => $args->nominal,
             'transaction_date' => $args->transaction_date,
+            'regional_id' => $args->regional_id,
         ];
     }
 
@@ -32,6 +34,7 @@ class Expense extends Model
             'description' => $params['description'],
             'nominal' => $params['nominal'],
             'transaction_date' => $params['transaction_date'],
+            'regional_id' => $params['regional_id'],
         );
         return self::create(self::fetch((object)$agent));
     }
@@ -41,6 +44,7 @@ class Expense extends Model
             'description' => $params['description'],
             'nominal' => $params['nominal'],
             'transaction_date' => $params['transaction_date'],
+            'regional_id' => $params['regional_id'],
         );
         return $this->update(self::fetch((object)$agent));
     }

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignId('insurance_id')->nullable()->constrained();
             $table->foreignId('principal_id')->nullable()->constrained();
             $table->foreignId('branch_id')->nullable()->constrained();
+            $table->unsignedBigInteger('regional_id')->nullable();
+            $table->foreign('regional_id')->references('id')->on('branches');
             $table->timestamps();
         });
     }

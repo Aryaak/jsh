@@ -26,15 +26,9 @@ class PaymentController extends Controller
         try {
             $payment = Payment::fetch((object)$request->all());
             $totalBill = $payment->payment['total_bill'] ?? 0;
-            $payable = Payment::calculatePayable(['branchId' => $request->branchId]) ?? 0;
-            $totalPayment = $totalBill + $payable;
             $response = $this->response('OK',true,[
                 'total_bill' => $totalBill,
                 'total_bill_converted' => Sirius::toRupiah($totalBill, 2),
-                'payable' => $payable,
-                'payable_converted' => Sirius::toRupiah($payable, 2),
-                'total_payment' => $totalPayment,
-                'total_payment_converted' => Sirius::toRupiah($totalPayment, 2),
             ]);
             $http_code = 200;
         } catch (Exception $e) {
@@ -61,8 +55,6 @@ class PaymentController extends Controller
         ->addIndexColumn()
         ->editColumn('paid_at', fn($payment) => Sirius::toLongDate($payment->paid_at))
         ->editColumn('total_bill', fn($payment) => Sirius::toRupiah($payment->total_bill, 2))
-        ->editColumn('paid_bill', fn($payment) => Sirius::toRupiah($payment->paid_bill, 2))
-        ->editColumn('unpaid_bill', fn($payment) => Sirius::toRupiah($payment->unpaid_bill, 2))
         ->editColumn('action', 'datatables.actions-show-delete')
         ->toJson();
     }

@@ -251,19 +251,19 @@ class SuretyBond extends Model
         if($type == 'process'){
             if($status == 'input'){
                 $params = [
-                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'finance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id],
-                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status],
+                    ['type' => 'finance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','finance'],['name','belum lunas']])->firstOrFail()->id,'name' => 'belum lunas'],
+                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name','belum terbit']])->firstOrFail()->id,'name' => 'belum terbit']
                 ];
             }else if($status == 'terbit'){
                 $params = [
-                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id],
-                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id],
-                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name','analisa asuransi']])->firstOrFail()->id,'name' => 'analisa asuransi'],
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status],
+                    ['type' => 'insurance','surety_bond_id' => $this->id,'status_id' => Status::where([['type','insurance'],['name',$status]])->firstOrFail()->id,'name' => $status]
                 ];
             }else{
                 $params = [
-                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id]
+                    ['type' => $type,'surety_bond_id' => $this->id,'status_id' => Status::where([['type',$type],['name',$status]])->firstOrFail()->id,'name' => $status]
                 ];
             }
         }else if($type == 'insurance' || $type == 'finance'){
@@ -297,21 +297,24 @@ class SuretyBond extends Model
     public function ubahStatus(array $params): bool{
         $request = $this->fetchStatus((object)$params);
         foreach ($request as $param) {
+            unset($param['name']);
             SuretyBondStatus::updateOrCreate([
                 'surety_bond_id' => $param['surety_bond_id'],
                 'status_id' => $param['status_id'],
             ],$param);
         }
         if(!collect($request)->where('name','lunas')->isEmpty()){
-            Payment::buat([
-                'type' => 'principal_to_branch',
-                'year' => date('Y'),
-                'month' => date('m'),
-                'datetime' => now(),
-                'branchId' => $this->branch_id,
-                'principalId' => $this->principal_id,
-                'suretyBondId' => $this->id,
-            ]);
+            $this->bayar();
+        }
+        if(!collect($request)->where('type','insurance')->where('name','<>','terbit')->isEmpty()){
+            $suretyBondId = $this->id;
+            $payment = Payment::whereHas('details',function($query) use ($suretyBondId){
+                $query->where('surety_bond_id',$suretyBondId);
+            })->first();
+            if(!empty($payment)){
+                $payment->hapus();
+                $this->bayar();
+            }
         }
         return true;
     }
@@ -324,8 +327,16 @@ class SuretyBond extends Model
             throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
         }
     }
-    public function cetakSkor(){
-
+    private function bayar(){
+        Payment::buat([
+            'type' => 'principal_to_branch',
+            'year' => date('Y'),
+            'month' => date('m'),
+            'datetime' => now(),
+            'branchId' => $this->branch_id,
+            'principalId' => $this->principal_id,
+            'suretyBondId' => $this->id,
+        ]);
     }
     private static function fetchQuery(object $args): object{
         $columns = [
@@ -340,12 +351,14 @@ class SuretyBond extends Model
         if(isset($args->request_for)) unset($args->request_for);
         foreach ($args as $key => $param) {
             if(!in_array($key,['startDate','endDate'])){
-                if(isset($columns[$param['name']])){
-                    $params[] = (object)[
-                        'column' => $columns[$param['name']],
-                        'operator' => $param['operator'],
-                        'value' => $param['value']
-                    ];
+                if(isset($param['name'])){
+                    if(isset($columns[$param['name']])){
+                        $params[] = (object)[
+                            'column' => $columns[$param['name']],
+                            'operator' => $param['operator'],
+                            'value' => $param['value']
+                        ];
+                    }
                 }
             }else{
                 $operator = '';
@@ -387,9 +400,13 @@ class SuretyBond extends Model
         }else if($type == 'expense'){
             return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.insurance_total_net as nominal');
         }else if($type == 'product'){
+<<<<<<< HEAD
             return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_net_total as nominal', 'p.name', 'sb.insurance_value', 'sb.start_date','sb.end_date','sb.day_count','sb.start_date','it.code','sb.insurance_net','sb.insurance_polish_cost','sb.insurance_stamp_cost','sb.insurance_net_total','sb.admin_charge','sb.service_charge','sb.total_charge');
+=======
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_net_total as nominal');
+>>>>>>> 6fe9a42a0d9e8a6beb9fa736cdf457445042cbf9
         }else if($type == 'finance'){
-            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_total_net as nominal');
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_net_total as nominal');
         }
     }
     public static function chart(string $type,array $params){
@@ -399,9 +416,9 @@ class SuretyBond extends Model
         }else if($type == 'expense'){
             $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.insurance_total_net) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'product'){
-            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_total_net) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_net_total) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'finance'){
-            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_total_net) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_net_total) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
         }
         return [
             'labels' => array_map(function($val){ return Sirius::toShortDate($val); },array_keys($data)),

@@ -22,7 +22,7 @@ class GuaranteeBankController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
-            $data = GuaranteeBank::with('insurance_status','insurance_status.status')->select('guarantee_banks.*')->orderBy('created_at','desc');
+            $data = GuaranteeBank::with('insurance_status','insurance_status.status','principal')->select('guarantee_banks.*')->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
@@ -170,7 +170,13 @@ class GuaranteeBankController extends Controller
 
         return response()->json($response, $http_code);
     }
-    public function printScore(Branch $regional, Branch $branch, GuaranteeBank $bankGaransi){
+
+    public function printScoreRegional(Branch $regional, GuaranteeBank $bankGaransi)
+    {
+        return $this->printScore($regional, null, $bankGaransi);
+    }
+
+    public function printScore(Branch $regional, ?Branch $branch, GuaranteeBank $bankGaransi){
         $product = $bankGaransi;
         $selected = $product->scorings->pluck('scoring_detail_id')->toArray();
         $subTotals = [];
@@ -201,6 +207,6 @@ class GuaranteeBankController extends Controller
 
         $id = $bankGaransi->bank->id;
         $now = 'bank';
-        return view('product.pdf.product-print',compact('id','now','bankGaransi'));
+        return view('product.print',compact('id','now','bankGaransi'));
     }
 }

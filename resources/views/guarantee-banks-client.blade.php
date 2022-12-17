@@ -17,7 +17,7 @@
                 <div class="d-flex flex-column flex-lg-row flex-wrap gap-2">
                     <div style="flex: 25%;">
                         <div class="w-100 mb-2">
-                            <x-card header="1. Data" smallHeader>
+                            <x-card header="Data" smallHeader>
                                 <x-form-input label="No. Kwitansi" id="create-receipt-number" name="receiptNumber" class="mb-3" required />
                                 <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
@@ -30,7 +30,7 @@
                     </div>
                     <div style="flex: 25%;">
                         <div class="w-100 mb-2">
-                            <x-card header="2. Principal" smallHeader>
+                            <x-card header="Principal" smallHeader>
                                 <x-form-select label="Nama" id="create-principal-id" :options="[]" name="principalId" class="mb-3" required/>
                                 <div class="mb-3">
                                     <x-form-label>Alamat</x-form-label>
@@ -49,7 +49,7 @@
                     </div>
                     <div style="flex: 25%;">
                         <div class="w-100 mb-2">
-                            <x-card header="3. Jaminan" smallHeader>
+                            <x-card header="Jaminan" smallHeader>
                                 <x-form-input label="Nilai Kontrak" id="create-contract-value" name="contractValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Nilai Jaminan" id="create-insurance-value" name="insuranceValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <div class="row">
@@ -82,7 +82,7 @@
                     </div>
                     <div style="flex: 25%;">
                         <div class="w-100 mb-2">
-                            <x-card header="4. Obligee" smallHeader>
+                            <x-card header="Obligee" smallHeader>
                                 <x-form-select label="Nama" id="create-obligee-id" :options="[]" name="obligeeId" class="mb-3" required/>
                                 <div>
                                     <x-form-label>Alamat</x-form-label>
@@ -93,7 +93,7 @@
                     </div>
                     <div style="flex: 25%;">
                         <div class="w-100 mb-3">
-                            <x-card header="5. Tambahan" smallHeader>
+                            <x-card header="Tambahan" smallHeader>
                                 <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <div>

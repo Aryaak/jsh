@@ -9,7 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PDFDownloadController extends Controller
 {
-    public function pdf($id, $text)
+    public function pdf($id, $text = '')
     {
         $template = Template::find($id);
         $data = ['content' => $template->text,];

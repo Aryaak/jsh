@@ -14,9 +14,11 @@
                     <th>No. Kwitansi</th>
                     <th>No. Bond</th>
                     <th>No. Polis</th>
-                    <th>Status BG</th>
+                    <th>Nama Principal</th>
+                    <th>Status Jaminan</th>
+                    <th>Nilai Jaminan</th>
                     <th>Tanggal</th>
-                    <th width="105px">Tindakan</th>
+                    <th width="125px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>
@@ -33,7 +35,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="w-100 mb-4">
-                    <x-card header="1. Data" smallHeader>
+                    <x-card header="Data" smallHeader>
                         <div class="mb-3">
                             <x-form-label>No. Kwitansi</x-form-label>
                             <div id="show-receipt-number">-</div>
@@ -65,7 +67,7 @@
                     </x-card>
                 </div>
                 <div class="w-100 mb-4">
-                    <x-card header="4. Obligee" smallHeader>
+                    <x-card header="Obligee" smallHeader>
                         <div class="mb-3">
                             <x-form-label>Nama</x-form-label>
                             <div id="show-obligee-name">-</div>
@@ -79,7 +81,7 @@
             </div>
             <div class="col-md-4">
                 <div class="w-100 mb-4">
-                    <x-card header="2. Principal" smallHeader>
+                    <x-card header="Principal" smallHeader>
                         <div class="mb-3">
                             <x-form-label>Nama</x-form-label>
                             <div id="show-principal-name">-</div>
@@ -99,7 +101,7 @@
                     </x-card>
                 </div>
                 <div class="w-100 mb-3">
-                    <x-card header="5. Tambahan" smallHeader>
+                    <x-card header="Tambahan" smallHeader>
                         <div class="mb-3">
                             <x-form-label>Service Charge</x-form-label>
                             <div id="show-service-charge">Rp0,-</div>
@@ -117,7 +119,7 @@
             </div>
             <div class="col-md-4">
                 <div class="w-100 mb-4">
-                    <x-card header="3. Jaminan" smallHeader>
+                    <x-card header="Jaminan" smallHeader>
                         <div class="mb-3">
                             <x-form-label>Nilai Kontrak</x-form-label>
                             <div id="show-contract-value">-</div>
@@ -221,7 +223,9 @@
                 {data: 'receipt_number', name: 'receipt_number'},
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
-                {data: 'approved_status', name: 'approved_status'},
+                {data: 'principal.name', name: 'principal.name'},
+                {data: 'insurance_status.status.name', name: 'insurance_status.status.name',orderable:false},
+                {data: 'insurance_value', name: 'insurance_value'},
                 {data: 'start_date', name: 'start_date'},
             ])
         })

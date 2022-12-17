@@ -32,10 +32,7 @@
 
     <x-modal id="modal-edit" title="Ubah Template" size="fullscreen">
         <x-form id="form-edit" method="put">
-            <div class="mb-3">
-                <x-form-label required>Nama</x-form-label>
-                <div id="edit-name">Tes</div>
-            </div>
+            <x-form-input label="Judul" id="edit-title" name="title" class="mb-3" required />
             <x-form-textarea id="edit-text" name="text" label="Template" class="mb-3" tinymce required />
             <div class="alert alert-primary">
                 <b class="d-flex align-items-center mb-3"><i class="bx bxs-info-circle me-2"></i>Petunjuk Penggunaan</b>
@@ -120,7 +117,7 @@
 
         $(document).on('click', '.btn-edit', function () {
             let formData = new FormData(document.getElementById('form-edit'))
-            $('#edit-name').html(template.title);
+            $('#edit-title').val(template.title);
             tinymce.get("edit-text").setContent(template.text);
         })
     </script>

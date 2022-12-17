@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DB;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -64,5 +65,11 @@ class Branch extends Model
         } catch (Exception $ex) {
             throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
         }
+    }
+    public function table(){
+        return DB::table('branches as b')->join('payables as p','p.regional_id','b.id')->where([
+            ['p.regional_id',$this->id],
+            ['p.is_paid_off',0]
+        ])->select('p.*');
     }
 }

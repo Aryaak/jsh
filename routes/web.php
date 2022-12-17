@@ -44,7 +44,8 @@ Route::get('/design/pdf/{page}', [DesignController::class, 'pdf'])->name('design
 Route::get('/design/{page}', [DesignController::class, 'page'])->name('design.page');
 
 Route::get('/test', function (Request $request) {
-    dd(Jamsyar::cities('jsh','Semangat1','sura'));
+    // dd(Jamsyar::cities('jsh','Semangat1','sura'));
+    dd(\App\Models\Branch::find(1)->table()->get());
 });
 
 /**

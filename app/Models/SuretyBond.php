@@ -397,13 +397,13 @@ class SuretyBond extends Model
     }
     public static function table(string $type,array $params){
         if($type == 'income'){
-            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
+            return self::kueri($params)->join('payment_details as pd','sb.id','pd.surety_bond_id')->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
         }else if($type == 'expense'){
-            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.insurance_total_net as nominal');
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.insurance_total_net as nominal');
         }else if($type == 'product'){
             return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_net_total as nominal', 'p.name', 'sb.insurance_value', 'sb.start_date','sb.end_date','sb.day_count','sb.start_date','it.code','sb.insurance_net','sb.insurance_polish_cost','sb.insurance_stamp_cost','sb.insurance_net_total','sb.admin_charge','sb.service_charge','sb.total_charge');
         }else if($type == 'finance'){
-            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_net_total as nominal');
+            return self::kueri($params)->join('payment_details as pd','sb.id','pd.surety_bond_id')->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_net_total as nominal');
         }
     }
     public static function chart(string $type,array $params){

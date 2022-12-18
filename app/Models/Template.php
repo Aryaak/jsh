@@ -29,6 +29,7 @@ class Template extends Model
     public function bank_rates(){
         return $this->hasMany(BankRate::class);
     }
+
     public static function buat(array $params, $id): self{
         $data = Template::first();
         for($i = 0; $i < count($params['title']); $i++){
@@ -42,6 +43,15 @@ class Template extends Model
             }
         }
         return $data;
+    }
+
+    public static function buatTemplate(array $params, $id): self{
+        $template = array(
+            'title' => $params['title'],
+            'text' => $params['text'],
+            'bank_id' => $id
+        );
+        return self::create(self::fetch((object)$template));
     }
 
     public function ubah_bank(array $params, $id_bank, $id): bool{

@@ -6,6 +6,10 @@
 
 @section('contents')
     <x-card header="Daftar Template">
+        @slot('headerAction')
+            <x-button data-bs-toggle="modal" id="tambah-template" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Template</x-button>
+        @endslot
+
         <x-table id="table">
             @slot('thead')
                 <tr>
@@ -30,10 +34,59 @@
         @endslot
     </x-modal>
 
+    <x-modal id="modal-create" title="Tambah Template" size="fullscreen">
+        <x-form id="form-create" method="post">
+            <div id="create-template-container">
+                {{-- Tempat Tambah Template --}}
+            </div>
+            <div class="alert alert-primary">
+                <b class="d-flex align-items-center mb-3"><i class="bx bxs-info-circle me-2"></i>Petunjuk Penggunaan</b>
+                <p>Berikut beberapa parameter <i>placeholder</i> yang dapat Anda gunakan di template Anda:</p>
+                <x-template-placeholder>[[NoKwitansi]]</x-template-placeholder>
+                <x-template-placeholder>[[NoBond]]</x-template-placeholder>
+                <x-template-placeholder>[[NoPolis]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaAgen]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaAsuransi]]</x-template-placeholder>
+                <x-template-placeholder>[[JenisJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[AlamatPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaPICPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[JabatanPICPrincipal]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiKontrak]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[JangkaAwal]]</x-template-placeholder>
+                <x-template-placeholder>[[JangkaAkhir]]</x-template-placeholder>
+                <x-template-placeholder>[[BatasToleransiJatuhTempo]]</x-template-placeholder>
+                <x-template-placeholder>[[JumlahHari]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaProyek]]</x-template-placeholder>
+                <x-template-placeholder>[[DokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[NoDokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[TanggalBerakhirDokumenPendukung]]</x-template-placeholder>
+                <x-template-placeholder>[[NamaObligee]]</x-template-placeholder>
+                <x-template-placeholder>[[AlamatObligee]]</x-template-placeholder>
+                <x-template-placeholder>[[ServiceCharge]]</x-template-placeholder>
+                <x-template-placeholder>[[BiayaAdmin]]</x-template-placeholder>
+                <x-template-placeholder>[[PremiBayar]]</x-template-placeholder>
+                <x-template-placeholder>[[TotalNilai]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusProses]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[StatusPembayaran]]</x-template-placeholder>
+            </div>
+        </x-form>
+
+        @slot('footer')
+            <div class="d-flex justify-content-between w-100">
+                <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
+                <x-button id="create-save" face="success" icon="bx bxs-save">Simpan</x-button>
+            </div>
+        @endslot
+    </x-modal>
+
     <x-modal id="modal-edit" title="Ubah Template" size="fullscreen">
         <x-form id="form-edit" method="put">
-            <x-form-input label="Judul" id="edit-title" name="title" class="mb-3" required />
-            <x-form-textarea id="edit-text" name="text" label="Template" class="mb-3" tinymce required />
+            <div id="edit-template-container">
+                {{-- Tempat Tambah Template --}}
+            </div>
             <div class="alert alert-primary">
                 <b class="d-flex align-items-center mb-3"><i class="bx bxs-info-circle me-2"></i>Petunjuk Penggunaan</b>
                 <p>Berikut beberapa parameter <i>placeholder</i> yang dapat Anda gunakan di template Anda:</p>
@@ -106,6 +159,22 @@
             })
         })
 
+        $(document).on('click', '#tambah-template', function () {
+            $('#create-template-container').html('');
+            $('#edit-template-container').html('');
+            addNewTemplate('create')
+        })
+
+        $(document).on('click', '#create-save', function () {
+            loading()
+            tinymce.triggerSave();
+            let formData = new FormData(document.getElementById('form-create'))
+            ajaxPost("{{ route('master.templates.store') }}",formData,'#modal-create',function(){
+                table.ajax.reload()
+                clearForm('#form-create')
+            })
+        })
+
         $("#edit-save").click(function () {
             loading()
             tinymce.triggerSave();
@@ -116,9 +185,52 @@
         })
 
         $(document).on('click', '.btn-edit', function () {
-            let formData = new FormData(document.getElementById('form-edit'))
-            $('#edit-title').val(template.title);
-            tinymce.get("edit-text").setContent(template.text);
+            $('#create-template-container').html('');
+            $('#edit-template-container').html('');
+            addNewTemplate('edit',template.text)
+            $('#title').val(template.title);
         })
+
+        $(document).on('click', '.btn-delete', function () {
+            // Delete
+            NegativeConfirm.fire({
+                title: "Yakin ingin menghapus Template?",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    loading()
+                    let formData = new FormData()
+                    formData.append('_method','delete')
+                    ajaxPost("{{ route('master.templates.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){
+                        table.ajax.reload()
+                    })
+                }
+            })
+        })
+
+        function addNewTemplate(createOrEdit, valueTemplate = '',id = '') {
+            var counter = 0;
+            var inputId = '';
+
+            $("#" + createOrEdit + "-template-container").append(`
+                <div id="` + createOrEdit + `-template-` + counter + `" class="border rounded p-3 mt-3">
+                    ` + inputId + `
+                    <x-form-input label="Judul" id="title" name="title" class="mb-3" required />
+                    <x-form-textarea label="Template" id="text" name="text" class="mb-3" required />
+                </div>
+            `);
+
+            $("#text").tinymce({
+                language: 'id',
+                plugins: 'image table lists fullscreen code',
+                menubar: 'file edit insert view table format table tools help',
+                toolbar: 'undo redo | styles | bold italic underline | numlist bullist | image | alignleft aligncenter alignright alignjustify | code fullscreen',
+                images_upload_handler: tinyMCEImageUploadHandler("{{ route('uploader.tinymce') }}", "{{ csrf_token() }}"),
+                setup: function (editor) {
+                    editor.on('init', function (e) {
+                        editor.setContent(valueTemplate);
+                    });
+                }
+            });
+        }
     </script>
 @endpush

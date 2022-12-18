@@ -16,7 +16,7 @@ class TemplateController extends Controller
             $data = Template::orderBy('created_at','desc')->get();
             return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('action', 'datatables.actions-show')
+            ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }
         return view('master.templates');
@@ -24,6 +24,19 @@ class TemplateController extends Controller
 
     public function store(Request $request)
     {
+        try {
+            DB::beginTransaction();
+            Template::buatTemplate($request->all(), null);
+            $http_code = 200;
+            $response = $this->storeResponse();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
     }
 
     public function show(Template $template)
@@ -50,5 +63,18 @@ class TemplateController extends Controller
 
     public function destroy(Template $template)
     {
+        try {
+            DB::beginTransaction();
+            $template->hapus();
+            DB::commit();
+            $http_code = 200;
+            $response = $this->destroyResponse();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
     }
 }

@@ -37,7 +37,7 @@ class DashboardController extends Controller
         $data_sb = SuretyBond::
                 select(DB::raw('SUM(profit) as total_profit, MONTH(document_expired_at) as month, YEAR(document_expired_at) as tahun'))
                 ->groupBy(DB::raw('MONTH(document_expired_at), YEAR(document_expired_at)'))
-                // ->orderBy('document_expired_at', 'ASC')
+                // ->orderBy('created_at', 'ASC')
                 ->limit(12)
                 ->get();
         $data_sb_final = [];
@@ -56,7 +56,7 @@ class DashboardController extends Controller
         $data_bg = GuaranteeBank::
                 select(DB::raw('SUM(profit) as total_profit, MONTH(document_expired_at) as month, YEAR(document_expired_at) as tahun'))
                 ->groupBy(DB::raw('MONTH(document_expired_at), YEAR(document_expired_at)'))
-                // ->orderBy('document_expired_at', 'ASC')
+                // ->orderBy('created_at', 'ASC')
                 ->limit(12)
                 ->get();
         $data_bg_final = [];

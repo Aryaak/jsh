@@ -96,7 +96,6 @@
         $(document).on('click', '#create-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-create'))
-            formData.append('is_regional',0)
             ajaxPost("{{ route('regional.expenses.store', ['regional' => $global->regional->slug]) }}",formData,'#modal-create',function(){
                 table.ajax.reload()
                 clearForm('#form-create')
@@ -105,7 +104,6 @@
         $(document).on('click', '#edit-save', function () {
             loading()
             let formData = new FormData(document.getElementById('form-edit'))
-            formData.append('is_regional',0)
             ajaxPost("{{ route('regional.expenses.update', ['regional' => $global->regional->slug, 'pengeluaran' => '-id-']) }}".replace('-id-',expense.id),formData,'#modal-edit',function(){
                 table.ajax.reload()
             })

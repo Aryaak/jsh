@@ -12,7 +12,7 @@ class Payable extends Model
 {
     use HasFactory;
 
-    public $fillable = ['month','year','payable_total','paid_total','unpaid_total','is_paid_off','branch_id'];
+    public $fillable = ['month','year','payable_total','paid_total','unpaid_total','is_paid_off','branch_id','regional_id'];
     protected $appends = ['payable_total_converted', 'paid_total_converted','unpaid_total_converted'];
     public function instalments(){
         return $this->belongsToMany(Instalment::class)->withPivot('nominal')->withTimestamps();

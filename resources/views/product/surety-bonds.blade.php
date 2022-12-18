@@ -10,7 +10,7 @@
         @slot('headerAction')
             @if ($global->currently_on == 'branch')
                 <div>
-                    <x-button link="{{ route('branch.products.draft.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug]) }}" size="sm" icon="bx bx-search" face="info">Lihat Draft<x-badge face="danger" class="ms-2">{{ $count_draft }}</x-badge></x-button>
+                    <x-button link="{{ route('branch.products.draft.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug]) }}" size="sm" icon="bx bx-search" face="info">Lihat Draft @if ($count_draft > 0) <x-badge face="danger" class="ms-1">{{ $count_draft }}</x-badge> @endif</x-button>
                     <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Surety Bond</x-button>
                 </div>
             @endif
@@ -23,6 +23,7 @@
                     <th>No. Kwitansi</th>
                     <th>No. Bond</th>
                     <th>No. Polis</th>
+                    <th>Nama Principal</th>
                     <th>Status Jaminan</th>
                     <th>Nilai Jaminan</th>
                     <th>Tanggal</th>
@@ -45,7 +46,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="w-100 mb-4">
-                            <x-card header="1. Data" smallHeader>
+                            <x-card header="Data" smallHeader>
                                 <x-form-input label="No. Kwitansi" id="create-receipt-number" name="receiptNumber" class="mb-3" required />
                                 <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
@@ -55,7 +56,7 @@
                             </x-card>
                         </div>
                         <div class="w-100 mb-4">
-                            <x-card header="4. Obligee" smallHeader>
+                            <x-card header="Obligee" smallHeader>
                                 <x-form-select label="Nama" id="create-obligee-id" name="obligeeId" class="mb-3" required/>
                                 <div>
                                     <x-form-label>Alamat</x-form-label>
@@ -66,7 +67,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="w-100 mb-4">
-                            <x-card header="2. Principal" smallHeader>
+                            <x-card header="Principal" smallHeader>
                                 <x-form-select label="Nama" id="create-principal-id" name="principalId" class="mb-3" required/>
                                 <div class="mb-3">
                                     <x-form-label>Alamat</x-form-label>
@@ -83,7 +84,7 @@
                             </x-card>
                         </div>
                         <div class="w-100 mb-3">
-                            <x-card header="5. Tambahan" smallHeader>
+                            <x-card header="Tambahan" smallHeader>
                                 <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <div>
@@ -95,7 +96,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="w-100 mb-4">
-                            <x-card header="3. Jaminan" smallHeader>
+                            <x-card header="Jaminan" smallHeader>
                                 <x-form-input label="Nilai Kontrak" id="create-contract-value" name="contractValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Nilai Jaminan" id="create-insurance-value" name="insuranceValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <div class="row">
@@ -188,13 +189,41 @@
         <x-modal id="modal-show" title="Detail Surety Bond" size="fullscreen" darkBody>
             <div class="row mb-4">
                 <div class="col-12 text-center">
+                    <div class="h5 fw-bold border-bottom mb-3 pb-2">Status Surety Bond</div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <x-card header="Status Jaminan" smallHeader>
+                        <div id="show-insurance-status">
+
+                        </div>
+                    </x-card>
+                </div>
+                <div class="col-md-4">
+                    <x-card header="Status Proses" smallHeader>
+                        <div id="show-process-status">
+
+                        </div>
+                    </x-card>
+                </div>
+                <div class="col-md-4">
+                    <x-card header="Status Keuangan" smallHeader>
+                        <div id="show-finance-status">
+
+                        </div>
+                    </x-card>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-12 text-center">
                     <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Surety Bond</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="w-100 mb-4">
-                        <x-card header="1. Data" smallHeader>
+                        <x-card header="Data" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>No. Kwitansi</x-form-label>
                                 <div id="show-receipt-number">-</div>
@@ -222,7 +251,7 @@
                         </x-card>
                     </div>
                     <div class="w-100 mb-4">
-                        <x-card header="4. Obligee" smallHeader>
+                        <x-card header="Obligee" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Nama</x-form-label>
                                 <div id="show-obligee-name">-</div>
@@ -236,7 +265,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="w-100 mb-4">
-                        <x-card header="2. Principal" smallHeader>
+                        <x-card header="Principal" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Nama</x-form-label>
                                 <div id="show-principal-name">-</div>
@@ -256,7 +285,7 @@
                         </x-card>
                     </div>
                     <div class="w-100 mb-4">
-                        <x-card header="5. Tambahan" smallHeader>
+                        <x-card header="Tambahan" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Service Charge</x-form-label>
                                 <div id="show-service-charge">Rp0,-</div>
@@ -274,7 +303,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="w-100 mb-4">
-                        <x-card header="3. Jaminan" smallHeader>
+                        <x-card header="Jaminan" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Nilai Kontrak</x-form-label>
                                 <div id="show-contract-value">-</div>
@@ -392,7 +421,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="w-100 mb-4">
-                            <x-card header="1. Data" smallHeader>
+                            <x-card header="Data" smallHeader>
                                 <x-form-input label="No. Kwitansi" id="edit-receipt-number" name="receiptNumber" class="mb-3" required />
                                 <x-form-input label="No. Bond" id="edit-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="edit-polish-number" name="polishNumber" class="mb-3" />
@@ -402,7 +431,7 @@
                             </x-card>
                         </div>
                         <div class="w-100 mb-4">
-                            <x-card header="4. Obligee" smallHeader>
+                            <x-card header="Obligee" smallHeader>
                                 <x-form-select label="Nama" id="edit-obligee-id" name="obligeeId" class="mb-3" required/>
                                 <div>
                                     <x-form-label>Alamat</x-form-label>
@@ -413,7 +442,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="w-100 mb-4">
-                            <x-card header="2. Principal" smallHeader>
+                            <x-card header="Principal" smallHeader>
                                 <x-form-select label="Nama" id="edit-principal-id" name="principalId" class="mb-3" required/>
                                 <div class="mb-3">
                                     <x-form-label>Alamat</x-form-label>
@@ -430,7 +459,7 @@
                             </x-card>
                         </div>
                         <div class="w-100 mb-4">
-                            <x-card header="5. Tambahan" smallHeader>
+                            <x-card header="Tambahan" smallHeader>
                                 <x-form-input label="Service Charge" id="edit-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Biaya Admin" id="edit-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <div>
@@ -442,7 +471,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="w-100 mb-4">
-                            <x-card header="3. Jaminan" smallHeader>
+                            <x-card header="Jaminan" smallHeader>
                                 <x-form-input label="Nilai Kontrak" id="edit-contract-value" name="contractValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Nilai Jaminan" id="edit-insurance-value" name="insuranceValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <div class="row">
@@ -590,7 +619,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="w-100 mb-4">
-                        <x-card header="1. Data" smallHeader>
+                        <x-card header="Data" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>No. Kwitansi</x-form-label>
                                 <div id="show-receipt-number">-</div>
@@ -618,7 +647,7 @@
                         </x-card>
                     </div>
                     <div class="w-100 mb-4">
-                        <x-card header="4. Obligee" smallHeader>
+                        <x-card header="Obligee" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Nama</x-form-label>
                                 <div id="show-obligee-name">-</div>
@@ -630,7 +659,7 @@
                         </x-card>
                     </div>
                     <div class="w-100 mb-3">
-                        <x-card header="7. Laba" smallHeader>
+                        <x-card header="Laba" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Laba</x-form-label>
                                 <div id="show-profit">-</div>
@@ -640,7 +669,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="w-100 mb-4">
-                        <x-card header="2. Principal" smallHeader>
+                        <x-card header="Principal" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Nama</x-form-label>
                                 <div id="show-principal-name">-</div>
@@ -660,7 +689,7 @@
                         </x-card>
                     </div>
                     <div class="w-100 mb-3">
-                        <x-card header="5. Asuransi" smallHeader>
+                        <x-card header="Asuransi" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Rate Asuransi</x-form-label>
                                 <div id="show-insurance-rate">-</div>
@@ -684,7 +713,7 @@
                         </x-card>
                     </div>
                     <div class="w-100 mb-4">
-                        <x-card header="5. Tambahan" smallHeader>
+                        <x-card header="Tambahan" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Service Charge</x-form-label>
                                 <div id="show-service-charge">Rp0,-</div>
@@ -702,7 +731,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="w-100 mb-4">
-                        <x-card header="3. Jaminan" smallHeader>
+                        <x-card header="Jaminan" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Nilai Kontrak</x-form-label>
                                 <div id="show-contract-value">-</div>
@@ -752,7 +781,7 @@
                         </x-card>
                     </div>
                     <div class="w-100 mb-3">
-                        <x-card header="6. Kantor" smallHeader>
+                        <x-card header="Kantor" smallHeader>
                             <div class="mb-3">
                                 <x-form-label>Rate Kantor</x-form-label>
                                 <div id="show-office-rate">-</div>
@@ -881,6 +910,7 @@
                 {data: 'receipt_number', name: 'receipt_number'},
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
+                {data: 'principal.name', name: 'principal.name'},
                 {data: 'insurance_status.status.name', name: 'insurance_status.status.name',orderable:false},
                 {data: 'insurance_value', name: 'insurance_value'},
                 {data: 'start_date', name: 'start_date'},
@@ -945,6 +975,9 @@
             ajaxGet("{{ route($global->currently_on.'.products.surety-bonds.show', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     suretyBond = response.data
+
+                    statuses = {};
+
                     $('#show-receipt-number').html(suretyBond.receipt_number)
                     $('#show-bond-number').html(suretyBond.bond_number)
                     $('#show-polish-number').html(suretyBond.polish_number)
@@ -1000,7 +1033,29 @@
                     suretyBond.statuses.forEach(e => {
                         const html = `<x-history-item icon="` + suretyBond.status_style[e.type][e.status.name].icon + `" face="` + suretyBond.status_style[e.type][e.status.name].color + `" time="`+e.created_at+`">`+e.status.name+`</x-history-item>`
                         $('#'+e.type+'-status-histories').append(html)
+                        statuses[e.type + 'Name'] = e.status.name
+                        statuses[e.type + 'Icon'] = suretyBond.status_style[e.type][e.status.name].icon
+                        statuses[e.type + 'Color'] = suretyBond.status_style[e.type][e.status.name].color
                     });
+
+                    $("#show-insurance-status").html(`
+                        <span class='d-flex align-items-center badge bg-label-` + statuses['insuranceColor'] + `'>
+                            <i class='` + statuses['insuranceIcon'] + ` mx-2 py-2'></i>` + statuses['insuranceName'] + `
+                        </span>
+                    `)
+
+                    $("#show-process-status").html(`
+                        <span class='d-flex align-items-center badge bg-label-` + statuses['processColor'] + `'>
+                            <i class='` + statuses['processIcon'] + ` mx-2 py-2'></i>` + statuses['processName'] + `
+                        </span>
+                    `)
+
+                    $("#show-finance-status").html(`
+                        <span class='d-flex align-items-center badge bg-label-` + statuses['financeColor'] + `'>
+                            <i class='` + statuses['financeIcon'] + ` mx-2 py-2'></i>` + statuses['financeName'] + `
+                        </span>
+                    `)
+
                     if(suretyBond.finance_status.status.name == 'lunas'){
                         $('#btn-paid-off-payment').hide()
                     }else{
@@ -1009,6 +1064,7 @@
                 }
             })
         })
+
         $(document).on('click', '#print-score', function () {
             window.open("{{ route($global->currently_on.'.products.surety-bonds.print-score', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id));
         })

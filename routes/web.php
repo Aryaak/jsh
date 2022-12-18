@@ -44,7 +44,8 @@ Route::get('/design/pdf/{page}', [DesignController::class, 'pdf'])->name('design
 Route::get('/design/{page}', [DesignController::class, 'page'])->name('design.page');
 
 Route::get('/test', function (Request $request) {
-    dd(Jamsyar::cities('jsh','Semangat1','sura'));
+    // dd(Jamsyar::cities('jsh','Semangat1','sura'));
+    dd(\App\Models\Branch::find(1)->table()->get());
 });
 
 /**
@@ -91,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/uploader/tinymce', [UploaderController::class, 'tinyMCE'])->name('uploader.tinymce'); // tolong disesuaikan ya
     Route::get('/pdf/download/{id}', [PDFDownloadController::class, 'pdf']);
     Route::post('/pdf/download-template/', [PDFDownloadController::class, 'pdfTemplate'])->name('pdf.print');
+    Route::post('/pdf/download-laporan-surety-bonds/', [PDFDownloadController::class, 'pdfSB'])->name('pdf.print.sb');
 
     // Master Data (bisa diakses di semua role)
 

@@ -72,6 +72,12 @@
             @endslot
         </x-table>
     </x-card>
+
+    <x-form method="post" id="form-download" submit="Cetak" submitIcon="bx bxs-printer" action="{{ route('pdf.print.sb') }}">
+        <div id="params-container">
+            {{-- Tempat Tambah Template --}}
+        </div>
+    </x-form>
 @endsection
 
 @push('js')
@@ -113,11 +119,38 @@
                 {data: 'polish_number',name: 'polish_number'},
                 {data: 'nominal', name: 'insurance_total_net'}
             ],{},null,false,false)
-            drawChart()
+            // drawChart()
+
+            const filter = $("#filter-form").serializeArray();
+            var params = {}
+            $.each(filter, function(key, val) {
+                $("#params-container").append(`<x-form-input id="params" name="`+val.name+`" class="mb-3" value="`+val.value+`" required hidden/>`)
+                $("#params-container").append(`<x-form-input id="params" name="name[]" class="mb-3" value="`+val.name+`" required hidden/>`)
+            });
+            $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="`+start.val()+`" required hidden/>`)
+            $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="`+end.val()+`" required hidden/>`)
+            @if (request()->has('start') && request()->has('end'))
+                $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="{{ request()->start }}" required hidden/>`)
+                $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="{{ request()->end }}" required hidden/>`)
+            @endif
         })
         function filter(){
             table.ajax.reload()
             drawChart()
+
+            const filter = $("#filter-form").serializeArray();
+            var params = {}
+            $("#params-container").html('')
+            $.each(filter, function(key, val) {
+                $("#params-container").append(`<x-form-input id="params" name="`+val.name+`" class="mb-3" value="`+val.value+`" required hidden/>`)
+                $("#params-container").append(`<x-form-input id="params" name="name[]" class="mb-3" value="`+val.name+`" required hidden/>`)
+            });
+            $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="`+start.val()+`" required hidden/>`)
+            $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="`+end.val()+`" required hidden/>`)
+            @if (request()->has('start') && request()->has('end'))
+                $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="{{ request()->start }}" required hidden/>`)
+                $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="{{ request()->end }}" required hidden/>`)
+            @endif
         }
         function drawChart(){
             let formData = new FormData(document.getElementById('filter-form'))

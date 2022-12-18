@@ -32,6 +32,7 @@ use App\Models\GuaranteeBankDraft;
 use App\Models\SuretyBondDraft;
 use Illuminate\Support\Facades\Route;
 use App\Helpers\Jamsyar;
+use App\Http\Controllers\OtherReportController;
 use Illuminate\Support\Facades\Request;
 
 /**
@@ -143,8 +144,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'product'])->name('product');
             Route::match(['get', 'post'], '/keuangan', [SuretyBondReportController::class, 'finance'])->name('finance');
+            Route::match(['get', 'post'], '/sisa-agen', [SuretyBondReportController::class, 'remain'])->name('remain');
             Route::match(['get', 'post'], '/pemasukan', [SuretyBondReportController::class, 'income'])->name('income');
             Route::match(['get', 'post'], '/pengeluaran', [SuretyBondReportController::class, 'expense'])->name('expense');
+            Route::match(['get', 'post'], '/laba', [SuretyBondReportController::class, 'profit'])->name('profit');
 
             // Route untuk laporan surety bond ....
         });
@@ -153,10 +156,20 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'product'])->name('product');
             Route::match(['get', 'post'], '/keuangan', [GuaranteeBankReportController::class, 'finance'])->name('finance');
+            Route::match(['get', 'post'], '/sisa-agen', [GuaranteeBankReportController::class, 'remain'])->name('remain');
             Route::match(['get', 'post'], '/pemasukan', [GuaranteeBankReportController::class, 'income'])->name('income');
             Route::match(['get', 'post'], '/pengeluaran', [GuaranteeBankReportController::class, 'expense'])->name('expense');
+            Route::match(['get', 'post'], '/laba', [GuaranteeBankReportController::class, 'profit'])->name('profit');
 
             // Route untuk laporan bank garansi ....
+        });
+
+        Route::group(['prefix' => '/laporan-lainnya', 'as' => 'other-reports.'], function () {
+            Route::get('/', fn() => redirect(route('dashboard')));
+            Route::match(['get', 'post'], '/laba', [OtherReportController::class, 'profit'])->name('profit');
+            Route::match(['get', 'post'], '/cicil-cabang', [OtherReportController::class, 'installment'])->name('installment');
+
+            // Route untuk laporan lainnya ....
         });
     });
 
@@ -202,8 +215,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'product'])->name('product');
             Route::match(['get', 'post'], '/keuangan', [SuretyBondReportController::class, 'finance'])->name('finance');
+            Route::match(['get', 'post'], '/sisa-agen', [SuretyBondReportController::class, 'remain'])->name('remain');
             Route::match(['get', 'post'], '/pemasukan', [SuretyBondReportController::class, 'income'])->name('income');
             Route::match(['get', 'post'], '/pengeluaran', [SuretyBondReportController::class, 'expense'])->name('expense');
+            Route::match(['get', 'post'], '/laba', [SuretyBondReportController::class, 'profit'])->name('profit');
 
             // Route untuk laporan surety bond ....
         });
@@ -212,10 +227,20 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'product'])->name('product');
             Route::match(['get', 'post'], '/keuangan', [GuaranteeBankReportController::class, 'finance'])->name('finance');
+            Route::match(['get', 'post'], '/sisa-agen', [GuaranteeBankReportController::class, 'remain'])->name('remain');
             Route::match(['get', 'post'], '/pemasukan', [GuaranteeBankReportController::class, 'income'])->name('income');
             Route::match(['get', 'post'], '/pengeluaran', [GuaranteeBankReportController::class, 'expense'])->name('expense');
+            Route::match(['get', 'post'], '/laba', [GuaranteeBankReportController::class, 'profit'])->name('profit');
 
             // Route untuk laporan bank garansi ....
+        });
+
+        Route::group(['prefix' => '/laporan-lainnya', 'as' => 'other-reports.'], function () {
+            Route::get('/', fn() => redirect(route('dashboard')));
+            Route::match(['get', 'post'], '/laba', [OtherReportController::class, 'profit'])->name('profit');
+            Route::match(['get', 'post'], '/cicil-cabang', [OtherReportController::class, 'installment'])->name('installment');
+
+            // Route untuk laporan lainnya ....
         });
     });
 
@@ -273,12 +298,21 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'product'])->name('product');
             Route::match(['get', 'post'], '/keuangan', [SuretyBondReportController::class, 'finance'])->name('finance');
+            Route::match(['get', 'post'], '/sisa-agen', [SuretyBondReportController::class, 'remain'])->name('remain');
         });
 
         Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'product'])->name('product');
             Route::match(['get', 'post'], '/keuangan', [GuaranteeBankReportController::class, 'finance'])->name('finance');
+            Route::match(['get', 'post'], '/sisa-agen', [GuaranteeBankReportController::class, 'remain'])->name('remain');
+        });
+
+        Route::group(['prefix' => '/laporan-lainnya', 'as' => 'other-reports.'], function () {
+            Route::get('/', fn() => redirect(route('dashboard')));
+            Route::match(['get', 'post'], '/cicil-cabang', [OtherReportController::class, 'installment'])->name('installment');
+
+            // Route untuk laporan lainnya ....
         });
     });
 });

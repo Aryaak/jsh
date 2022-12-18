@@ -105,7 +105,13 @@
                 <x-submenu route="regional.bg-reports.finance" :route-params="['regional' => $global->regional->slug]">Keuangan</x-submenu>
                 <x-submenu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]">Sisa Agen</x-submenu>
                 <x-submenu route="regional.bg-reports.income" :route-params="['regional' => $global->regional->slug]">Pemasukan</x-submenu>
-                <x-submenu route="regional.bg-reports.expense" :route-params="['regional' => $global->regional->slug]">Pengeluaran</x-submenu>
+            @endslot
+        </x-menu>
+
+        <x-menu route="regional.reports.*" icon="bx bxs-file">
+            Laporan Lainnya
+            @slot('submenus')
+                <x-submenu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]">Pengeluaran</x-submenu>
                 <x-submenu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]">Laba</x-submenu>
             @endslot
         </x-menu>

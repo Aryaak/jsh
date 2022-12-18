@@ -27,10 +27,10 @@
             @slot('submenus')
                 <x-submenu route="main.sb-reports.product">Produksi</x-submenu>
                 <x-submenu route="main.sb-reports.finance">Keuangan</x-submenu>
-                <x-submenu route="main.dashboard">Sisa Agen</x-submenu>
+                <x-submenu route="main.sb-reports.remain">Sisa Agen</x-submenu>
                 <x-submenu route="main.sb-reports.income">Pemasukan</x-submenu>
                 <x-submenu route="main.sb-reports.expense">Pengeluaran</x-submenu>
-                <x-submenu route="main.dashboard">Laba</x-submenu>
+                <x-submenu route="main.sb-reports.profit">Laba</x-submenu>
             @endslot
         </x-menu>
 
@@ -39,10 +39,18 @@
             @slot('submenus')
                 <x-submenu route="main.bg-reports.product">Produksi</x-submenu>
                 <x-submenu route="main.bg-reports.finance">Keuangan</x-submenu>
-                <x-submenu route="main.dashboard">Sisa Agen</x-submenu>
+                <x-submenu route="main.bg-reports.remain">Sisa Agen</x-submenu>
                 <x-submenu route="main.bg-reports.income">Pemasukan</x-submenu>
                 <x-submenu route="main.bg-reports.expense">Pengeluaran</x-submenu>
-                <x-submenu route="main.dashboard">Laba</x-submenu>
+                <x-submenu route="main.bg-reports.profit">Laba</x-submenu>
+            @endslot
+        </x-menu>
+
+        <x-menu route="main.other-reports.*" icon="bx bxs-file">
+            Laporan Lainnya
+            @slot('submenus')
+                <x-submenu route="main.other-reports.profit">Laba</x-submenu>
+                <x-submenu route="main.other-reports.installment">Cicil Cabang</x-submenu>
             @endslot
         </x-menu>
     @endif
@@ -91,10 +99,10 @@
             @slot('submenus')
                 <x-submenu route="regional.sb-reports.product" :route-params="['regional' => $global->regional->slug]">Produksi</x-submenu>
                 <x-submenu route="regional.sb-reports.finance" :route-params="['regional' => $global->regional->slug]">Keuangan</x-submenu>
-                <x-submenu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]">Sisa Agen</x-submenu>
+                <x-submenu route="regional.sb-reports.remain" :route-params="['regional' => $global->regional->slug]">Sisa Agen</x-submenu>
                 <x-submenu route="regional.sb-reports.income" :route-params="['regional' => $global->regional->slug]">Pemasukan</x-submenu>
                 <x-submenu route="regional.sb-reports.expense" :route-params="['regional' => $global->regional->slug]">Pengeluaran</x-submenu>
-                <x-submenu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]">Laba</x-submenu>
+                <x-submenu route="regional.sb-reports.profit" :route-params="['regional' => $global->regional->slug]">Laba</x-submenu>
             @endslot
         </x-menu>
 
@@ -103,16 +111,18 @@
             @slot('submenus')
                 <x-submenu route="regional.bg-reports.product" :route-params="['regional' => $global->regional->slug]">Produksi</x-submenu>
                 <x-submenu route="regional.bg-reports.finance" :route-params="['regional' => $global->regional->slug]">Keuangan</x-submenu>
-                <x-submenu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]">Sisa Agen</x-submenu>
+                <x-submenu route="regional.bg-reports.remain" :route-params="['regional' => $global->regional->slug]">Sisa Agen</x-submenu>
                 <x-submenu route="regional.bg-reports.income" :route-params="['regional' => $global->regional->slug]">Pemasukan</x-submenu>
+                <x-submenu route="regional.bg-reports.expense" :route-params="['regional' => $global->regional->slug]">Pengeluaran</x-submenu>
+                <x-submenu route="regional.bg-reports.profit" :route-params="['regional' => $global->regional->slug]">Laba</x-submenu>
             @endslot
         </x-menu>
 
-        <x-menu route="regional.reports.*" icon="bx bxs-file">
+        <x-menu route="regional.other-reports.*" icon="bx bxs-file">
             Laporan Lainnya
             @slot('submenus')
-                <x-submenu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]">Pengeluaran</x-submenu>
-                <x-submenu route="regional.dashboard" :route-params="['regional' => $global->regional->slug]">Laba</x-submenu>
+                <x-submenu route="regional.other-reports.profit" :route-params="['regional' => $global->regional->slug]">Laba</x-submenu>
+                <x-submenu route="regional.other-reports.installment" :route-params="['regional' => $global->regional->slug]">Cicil Cabang</x-submenu>
             @endslot
         </x-menu>
 
@@ -172,6 +182,13 @@
             @slot('submenus')
                 <x-submenu route="branch.bg-reports.product" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Produksi</x-submenu>
                 <x-submenu route="branch.bg-reports.finance" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Keuangan</x-submenu>
+            @endslot
+        </x-menu>
+
+        <x-menu route="branch.other-reports.*" icon="bx bxs-file">
+            Laporan Lainnya
+            @slot('submenus')
+                <x-submenu route="branch.other-reports.installment" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Cicil Cabang</x-submenu>
             @endslot
         </x-menu>
 

@@ -22,7 +22,9 @@ class SuretyBondController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
-            $data = SuretyBond::with('insurance_status','insurance_status.status','principal')->select('surety_bonds.*')->orderBy('created_at','desc');
+            $data = SuretyBond::with('insurance_status','insurance_status.status','principal')->select('surety_bonds.*')->when(auth()->user()->is_regional == 0,function($query){
+                $query->where('branch_id',auth()->user()->branch_id);
+            })->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))

@@ -46,7 +46,8 @@ Route::get('/design/{page}', [DesignController::class, 'page'])->name('design.pa
 
 Route::get('/test', function (Request $request) {
     // dd(Jamsyar::cities('jsh','Semangat1','sura'));
-    dd(\App\Models\Branch::find(1)->table()->get());
+    // dd(\App\Models\Branch::find(1)->table()->get());
+    dd(\App\Models\GuaranteeBank::table('remain',[])->get());
 });
 
 /**

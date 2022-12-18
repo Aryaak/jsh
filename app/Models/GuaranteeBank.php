@@ -419,6 +419,19 @@ class GuaranteeBank extends Model
             return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_net_total as nominal');
         }else if($type == 'finance'){
             return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_net_total as nominal');
+        }else if($type == 'remain'){
+            return self::kueri($params)->select(
+                'gb.receipt_number','gb.bond_number','p.name as principal_name','gb.insurance_value','gb.start_date','gb.end_date',
+                'gb.day_count','gb.due_day_tolerance','it.code','gb.office_net','gb.admin_charge','gb.service_charge','gb.total_charge','a.name as agent_name',
+                DB::raw("(
+                    SELECT sts.name FROM statuses AS sts INNER JOIN guarantee_bank_statuses AS gbs ON sts.id = gbs.status_id WHERE gbs.type = 'insurance' AND gbs.guarantee_bank_id = gb.id ORDER BY gbs.id DESC limit 1
+                ) as status"),
+                DB::raw("(
+                    SELECT IFNULL(pm.id,0) AS payment
+                    from payments as pm inner join payment_details as pmd on pm.id=pmd.payment_id
+                    where pmd.guarantee_bank_id = gb.id AND pm.agent_id = gb.agent_id ORDER BY pm.id DESC LIMIT 1
+                ) as payment")
+            );
         }
     }
     public static function chart(string $type,array $params){

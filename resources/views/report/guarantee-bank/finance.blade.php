@@ -50,50 +50,6 @@
         <x-button type="submit" onclick="filter()" class="w-100" icon='bx bxs-filter-alt'>Filter</x-button>
     </x-card>
 
-    {{-- Summary --}}
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-danger">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-expense">Rp10.000.000,-</span><br>
-                        <small class="h6">Total Pengeluaran</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-primary">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-income">Rp30.000.000,-</span><br>
-                        <small class="h6">Total Pemasukan</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-        <div class="col-md-4 mb-4">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-success">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-profit">Rp20.000.000,-</span><br>
-                        <small class="h6">Total Profit</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-    </div>
-
     {{-- Chart --}}
     <x-card class="mb-4">
         <div class="chart-container-11">
@@ -106,13 +62,35 @@
         <x-table id="table">
             @slot('thead')
                 <tr>
-                    <th>No.</th>
-                    <th>Tanggal Transaksi</th>
-                    <th>No. Kwitansi</th>
-                    <th>No. Bond</th>
-                    <th>No. Polis</th>
-                    <th>Nominal</th>
+                    <th rowspan="2" class="text-center">No.</th>
+                    <th rowspan="2" class="text-center">Tgl Bayar</th>
+                    <th rowspan="2" class="text-center">No. Kwitansi</th>
+                    <th rowspan="2" class="text-center">No. Bond</th>
+                    <th rowspan="2" class="text-center">Nama Prinicipal</th>
+                    <th rowspan="2" class="text-center">Nilai Bond</th>
+                    <th colspan="2" class="text-center">Jangka Waktu</th>
+                    <th rowspan="2" class="text-center">Jml Hari</th>
+                    <th rowspan="2" class="text-center">ASS</th>
+                    <th colspan="3" class="text-center">Setor Kantor</th>
+                    <th colspan="3" class="text-center">Kwitansi</th>
+                    <th rowspan="2" class="text-center">Sisa</th>
+                    <th rowspan="2" class="text-center">Ket</th>
+                    <th rowspan="2" class="text-center">Status</th>
+                    <th rowspan="2" class="text-center">Payment</th>
                 </tr>
+                <tr>
+                    <th class="text-center">Awal</th>
+                    <th class="text-center">Akhir</th>
+                    <th class="text-center">Total Nett Kantor</th>
+                    <th class="text-center">Biaya Admin</th>
+                    <th class="text-center">Total Kantor</th>
+                    <th class="text-center">Service Charge</th>
+                    <th class="text-center">Biaya Admin</th>
+                    <th class="text-center">Premi Bayar</th>
+                </tr>
+            @endslot
+            @slot('tfoot')
+                <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
             @endslot
         </x-table>
     </x-card>
@@ -147,12 +125,55 @@
                     data.request_for = 'datatable'
                 }
             },[
-                {data: 'date',name: 'created_at'},
-                {data: 'receipt_number',name: 'receipt_number'},
-                {data: 'bond_number',name: 'bond_number'},
-                {data: 'polish_number',name: 'polish_number'},
-                {data: 'nominal', name: 'insurance_total_net'}
-            ],{},null,false,false)
+                {data: 'paid_at', name: 'pm.paid_at'},
+                {data: 'receipt_number', name: 'gb.receipt_number'},
+                {data: 'bond_number', name: 'gb.bond_number'},
+                {data: 'principal_name', name: 'p.name'},
+                {data: 'insurance_value', name: 'gb.insurance_value'},
+                {data: 'start_date', name: 'gb.start_date'},
+                {data: 'end_date', name: 'gb.end_date'},
+                {data: 'day_count', name: 'gb.day_count',render: function(row, type, data) {
+                    if(data.due_day_tolerance > 0){
+                        return (row - data.due_day_tolerance)+' + ('+data.due_day_tolerance+')'
+                    }else{
+                        return row
+                    }
+                }},
+                {data: 'code', name: 'it.code'},
+                {data: 'office_net', name: 'gb.office_net'},
+                {data: 'admin_charge', name: 'gb.admin_charge'},
+                {data: 'office_total', name: 'office_total', searchable:false},
+                {data: 'service_charge', name: 'gb.service_charge'},
+                {data: 'admin_charge', name: 'gb.admin_charge'},
+                {data: 'receipt_total', name: 'receipt_total', searchable:false},
+                {data: 'total_charge', name: 'total_charge', searchable:false},
+                {data: 'agent_name', name: 'a.name'},
+                {data: 'status',searchable:false,orderable:false},
+                {data: 'payment',searchable:false,orderable:false,render: function(row) {
+                    return row >0 ? 'Lunas' : 'Piutang';
+                }},
+            ],{
+                footerCallback: function (row, data, start, end, display) {
+                    var api = this.api();
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                    };
+                    let calculateCol = function(col){
+                        return api.column(col, { page: 'current' }).data().reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    }
+                    $(api.column(3).footer()).html(calculateCol(3));
+                    $(api.column(10).footer()).html(calculateCol(10));
+                    $(api.column(11).footer()).html(calculateCol(11));
+                    $(api.column(12).footer()).html(calculateCol(12));
+                    $(api.column(13).footer()).html(calculateCol(13));
+                    $(api.column(14).footer()).html(calculateCol(14));
+                    $(api.column(15).footer()).html(calculateCol(15));
+                    $(api.column(16).footer()).html(calculateCol(16));
+                }
+            },null,false,false)
             drawChart()
         })
         function filter(){

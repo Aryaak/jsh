@@ -414,11 +414,28 @@ class GuaranteeBank extends Model
         if($type == 'income'){
             return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.total_charge as nominal');
         }else if($type == 'expense'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.insurance_total_net as nominal');
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.insurance_net_total as nominal');
         }else if($type == 'product'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_net_total as nominal');
+            return self::kueri($params)->select(
+                'gb.receipt_number','gb.bond_number','p.name as principal_name','gb.insurance_value','gb.start_date','gb.end_date',
+                'gb.day_count','gb.due_day_tolerance','it.code','gb.office_net','gb.admin_charge', DB::raw('(gb.office_net + gb.admin_charge) as office_total'),'gb.service_charge', DB::raw('(gb.service_charge + gb.admin_charge) as receipt_total'), DB::raw('((gb.service_charge + gb.admin_charge) - (gb.office_net + gb.admin_charge)) as total_charge'),'a.name as agent_name',
+                DB::raw("(
+                    SELECT sts.name FROM statuses AS sts INNER JOIN guarantee_bank_statuses AS gbs ON sts.id = gbs.status_id WHERE gbs.type = 'insurance' AND gbs.guarantee_bank_id = gb.id ORDER BY gbs.id DESC limit 1
+                ) as status")
+            );
         }else if($type == 'finance'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.office_net_total as nominal');
+            return self::kueri($params)->join('payment_details as pmd','gb.id','pmd.guarantee_bank_id')->join('payments as pm','pm.id','pmd.payment_id')->select(
+                'pm.paid_at','gb.receipt_number','gb.bond_number','p.name as principal_name','gb.insurance_value','gb.start_date','gb.end_date',
+                'gb.day_count','gb.due_day_tolerance','it.code','gb.office_net','gb.admin_charge', DB::raw('(gb.office_net + gb.admin_charge) as office_total'),'gb.service_charge', DB::raw('(gb.service_charge + gb.admin_charge) as receipt_total'), DB::raw('((gb.service_charge + gb.admin_charge) - (gb.office_net + gb.admin_charge)) as total_charge'),'a.name as agent_name',
+                DB::raw("(
+                    SELECT sts.name FROM statuses AS sts INNER JOIN guarantee_bank_statuses AS gbs ON sts.id = gbs.status_id WHERE gbs.type = 'insurance' AND gbs.guarantee_bank_id = gb.id ORDER BY gbs.id DESC limit 1
+                ) as status"),
+                DB::raw("(
+                    SELECT IFNULL(pm.id,0) AS payment
+                    from payments as pm inner join payment_details as pmd on pm.id=pmd.payment_id
+                    where pmd.guarantee_bank_id = gb.id AND pm.agent_id = gb.agent_id ORDER BY pm.id DESC LIMIT 1
+                ) as payment")
+            );
         }else if($type == 'remain'){
             return self::kueri($params)->select(
                 'gb.receipt_number','gb.bond_number','p.name as principal_name','gb.insurance_value','gb.start_date','gb.end_date',
@@ -439,7 +456,7 @@ class GuaranteeBank extends Model
         if($type == 'income'){
             $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.total_charge) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'expense'){
-            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.insurance_total_net) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.insurance_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'product'){
             $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'finance'){

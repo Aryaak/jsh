@@ -62,12 +62,28 @@
         <x-table id="table">
             @slot('thead')
                 <tr>
-                    <th>No.</th>
-                    <th>Tanggal Transaksi</th>
-                    <th>No. Kwitansi</th>
-                    <th>No. Bond</th>
-                    <th>No. Polis</th>
-                    <th>Nominal</th>
+                    <th rowspan="2" class="text-center">No.</th>
+                    <th rowspan="2" class="text-center">Bond</th>
+                    <th rowspan="2" class="text-center">Nama Prinicipal</th>
+                    <th rowspan="2" class="text-center">Nilai Bond</th>
+                    <th colspan="2" class="text-center">Jangka Waktu</th>
+                    <th rowspan="2" class="text-center">Jml Hari</th>
+                    <th rowspan="2" class="text-center">ASS</th>
+                    <th colspan="3" class="text-center">Setor Kantor</th>
+                    <th colspan="3" class="text-center">Kwitansi</th>
+                    <th rowspan="2" class="text-center">Sisa</th>
+                    <th rowspan="2" class="text-center">Ket</th>
+                    <th rowspan="2" class="text-center">Status</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Awal</th>
+                    <th class="text-center">Akhir</th>
+                    <th class="text-center">Total Nett Kantor</th>
+                    <th class="text-center">Biaya Admin</th>
+                    <th class="text-center">Total Kantor</th>
+                    <th class="text-center">Service Charge</th>
+                    <th class="text-center">Biaya Admin</th>
+                    <th class="text-center">Premi Bayar</th>
                 </tr>
             @endslot
         </x-table>
@@ -107,11 +123,28 @@
                     data.request_for = 'datatable'
                 }
             },[
-                {data: 'date',name: 'created_at'},
-                {data: 'receipt_number',name: 'receipt_number'},
-                {data: 'bond_number',name: 'bond_number'},
-                {data: 'polish_number',name: 'polish_number'},
-                {data: 'nominal', name: 'insurance_total_net'}
+                {data: 'bond_number', name: 'sb.bond_number'},
+                {data: 'principal_name', name: 'p.name'},
+                {data: 'insurance_value', name: 'sb.insurance_value'},
+                {data: 'start_date', name: 'sb.start_date'},
+                {data: 'end_date', name: 'sb.end_date'},
+                {data: 'day_count', name: 'sb.day_count',render: function(row, type, data) {
+                    if(data.due_day_tolerance > 0){
+                        return (row - data.due_day_tolerance)+' + ('+data.due_day_tolerance+')'
+                    }else{
+                        return row
+                    }
+                }},
+                {data: 'code', name: 'it.code'},
+                {data: 'office_net', name: 'sb.office_net'},
+                {data: 'admin_charge', name: 'sb.admin_charge'},
+                {data: 'office_total', name: 'office_total', searchable:false},
+                {data: 'service_charge', name: 'sb.service_charge'},
+                {data: 'admin_charge', name: 'sb.admin_charge'},
+                {data: 'receipt_total', name: 'receipt_total', searchable:false},
+                {data: 'total_charge', name: 'total_charge', searchable:false},
+                {data: 'agent_name', name: 'a.name'},
+                {data: 'status',searchable:false,orderable:false},
             ],{},null,false,false)
             drawChart()
         })

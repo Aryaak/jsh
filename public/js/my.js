@@ -341,9 +341,9 @@ function datatablesTranslate(attr = 'Data', verb = 'ditambahkan') {
 }
 function dataTableInit(id,title,ajax,column,properties = {},translate = null,button = false,action = true){
     let buttons = []
-    let dom = "<'row'<'col'l><'col'f>>rt<'row'<'col'i><'col mt-1'p>>"
+    let dom = "'<'row'<'col'l><'col'f>>r<'table-responsive't><'row'<'col'i><'col mt-1'p>>"
     if(button){
-      dom = "<'row'<'col'l><'col'f><'col-1 text-center'B>>rt<'row'<'col'i><'col mt-1'p>>"
+      dom = "'<'row'<'col'l><'col'f><'col-1 text-center'B>>r<'table-responsive't><'row'<'col'i><'col mt-1'p>>"
       buttons = [
         {
           extend: 'excelHtml5',

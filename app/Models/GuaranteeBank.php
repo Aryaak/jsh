@@ -361,7 +361,7 @@ class GuaranteeBank extends Model
             'endDate' => 'gb.created_at',
             1 => 'gb.receipt_number',
             2 => 'gb.bond_number',
-            3 => 'gb.polish_number',
+            3 => 'p.name',
             4 => 'gb.insurance_value',
         ];
         $params = [];
@@ -373,7 +373,7 @@ class GuaranteeBank extends Model
                         $params[] = (object)[
                             'column' => $columns[$param['name']],
                             'operator' => $param['operator'],
-                            'value' => $param['value']
+                            'value' => $param['operator'] == 'like' ? ("%" . ($param['value'] ?? '') . "%") : $param['value'],
                         ];
                     }
                 }
@@ -387,7 +387,7 @@ class GuaranteeBank extends Model
                 $params[] = (object)[
                     'column' => $columns[$key],
                     'operator' => $operator,
-                    'value' => $param
+                    'value' => $param ?? ''
                 ];
             }
         }
@@ -422,7 +422,7 @@ class GuaranteeBank extends Model
         }else if($type == 'remain'){
             return self::kueri($params)->select(
                 'gb.receipt_number','gb.bond_number','p.name as principal_name','gb.insurance_value','gb.start_date','gb.end_date',
-                'gb.day_count','gb.due_day_tolerance','it.code','gb.office_net','gb.admin_charge','gb.service_charge','gb.total_charge','a.name as agent_name',
+                'gb.day_count','gb.due_day_tolerance','it.code','gb.office_net','gb.admin_charge', DB::raw('(gb.office_net + gb.admin_charge) as office_total'),'gb.service_charge', DB::raw('(gb.service_charge + gb.admin_charge) as receipt_total'), DB::raw('((gb.service_charge + gb.admin_charge) - (gb.office_net + gb.admin_charge)) as total_charge'),'a.name as agent_name',
                 DB::raw("(
                     SELECT sts.name FROM statuses AS sts INNER JOIN guarantee_bank_statuses AS gbs ON sts.id = gbs.status_id WHERE gbs.type = 'insurance' AND gbs.guarantee_bank_id = gb.id ORDER BY gbs.id DESC limit 1
                 ) as status"),

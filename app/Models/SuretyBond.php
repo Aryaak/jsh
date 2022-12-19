@@ -345,7 +345,7 @@ class SuretyBond extends Model
             'endDate' => 'sb.created_at',
             1 => 'sb.receipt_number',
             2 => 'sb.bond_number',
-            3 => 'sb.polish_number',
+            3 => 'p.name',
             4 => 'sb.insurance_value',
         ];
         $params = [];
@@ -357,7 +357,7 @@ class SuretyBond extends Model
                         $params[] = (object)[
                             'column' => $columns[$param['name']],
                             'operator' => $param['operator'],
-                            'value' => $param['value']
+                            'value' => $param['operator'] == 'like' ? ("%" . ($param['value'] ?? '') . "%") : $param['value'],
                         ];
                     }
                 }
@@ -371,7 +371,7 @@ class SuretyBond extends Model
                 $params[] = (object)[
                     'column' => $columns[$key],
                     'operator' => $operator,
-                    'value' => $param
+                    'value' => $param ?? ''
                 ];
             }
         }
@@ -407,7 +407,7 @@ class SuretyBond extends Model
         }else if($type == 'remain'){
             return self::kueri($params)->select(
                 'sb.receipt_number','sb.bond_number','p.name as principal_name','sb.insurance_value','sb.start_date','sb.end_date',
-                'sb.day_count','sb.due_day_tolerance','it.code','sb.office_net','sb.admin_charge','sb.service_charge','sb.total_charge','a.name as agent_name',
+                'sb.day_count','sb.due_day_tolerance','it.code','sb.office_net','sb.admin_charge', DB::raw('(sb.office_net + sb.admin_charge) as office_total'),'sb.service_charge', DB::raw('(sb.service_charge + sb.admin_charge) as receipt_total'), DB::raw('((sb.service_charge + sb.admin_charge) - (sb.office_net + sb.admin_charge)) as total_charge'),'a.name as agent_name',
                 DB::raw("(
                     SELECT sts.name FROM statuses AS sts INNER JOIN surety_bond_statuses AS sbs ON sts.id = sbs.status_id WHERE sbs.type = 'insurance' AND sbs.surety_bond_id = sb.id ORDER BY sbs.id DESC limit 1
                 ) as status"),
@@ -492,7 +492,7 @@ class SuretyBond extends Model
     public static function mappingFinanceStatusColors($status)
     {
         return match ($status) {
-            'belum lunas' => 'danger',
+            'piutang', 'belum lunas' => 'danger',
             'lunas' => 'success',
             null => ''
         };
@@ -500,7 +500,7 @@ class SuretyBond extends Model
     public static function mappingFinanceStatusIcons($status)
     {
         return match ($status) {
-            'belum lunas' => 'bx bx-x',
+            'piutang', 'belum lunas' => 'bx bx-x',
             'lunas' => 'bx bx-check',
             null => ''
         };

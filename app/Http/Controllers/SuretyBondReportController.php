@@ -60,6 +60,10 @@ class SuretyBondReportController extends Controller
         return view('report.surety-bond.product');
     }
     public function remain(Request $request){
+        if (isset($request->print)) {
+            $data = SuretyBond::table('remain',$request->params);
+            return $data;
+        }
         if($request->ajax()){
             $data = SuretyBond::table('remain',$request->params);
             return datatables()->of($data)

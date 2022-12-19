@@ -60,6 +60,10 @@ class GuaranteeBankReportController extends Controller
         return view('report.guarantee-bank.product');
     }
     public function remain(Request $request){
+        if (isset($request->print)) {
+            $data = GuaranteeBank::table('remain',$request->params);
+            return $data;
+        }
         if($request->ajax()){
             $data = GuaranteeBank::table('remain',$request->params);
             return datatables()->of($data)

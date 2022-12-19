@@ -399,7 +399,7 @@ class SuretyBond extends Model
         if($type == 'income'){
             return self::kueri($params)->join('payment_details as pd','sb.id','pd.surety_bond_id')->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
         }else if($type == 'expense'){
-            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.insurance_total_net as nominal');
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.insurance_net_total as nominal');
         }else if($type == 'product'){
             return self::kueri($params)->select(
                 'sb.receipt_number','sb.bond_number','p.name as principal_name','sb.insurance_value','sb.start_date','sb.end_date',
@@ -436,7 +436,7 @@ class SuretyBond extends Model
         if($type == 'income'){
             $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.total_charge) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'expense'){
-            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.insurance_total_net) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.insurance_net_total) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'product'){
             $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_net_total) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'finance'){

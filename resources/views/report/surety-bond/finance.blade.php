@@ -133,6 +133,9 @@
                 <th class="text-center">Premi Bayar</th>
             </tr>
         @endslot
+        @slot('tfoot')
+            <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+        @endslot
         </x-table>
     </x-card>
 @endsection
@@ -193,7 +196,28 @@
                 {data: 'payment',searchable:false,orderable:false,render: function(row) {
                     return row >0 ? 'Lunas' : 'Piutang';
                 }},
-            ],{},null,false,false)
+            ],{
+                footerCallback: function (row, data, start, end, display) {
+                    var api = this.api();
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                    };
+                    let calculateCol = function(col){
+                        return api.column(col, { page: 'current' }).data().reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    }
+                    $(api.column(3).footer()).html(calculateCol(3));
+                    $(api.column(10).footer()).html(calculateCol(10));
+                    $(api.column(11).footer()).html(calculateCol(11));
+                    $(api.column(12).footer()).html(calculateCol(12));
+                    $(api.column(13).footer()).html(calculateCol(13));
+                    $(api.column(14).footer()).html(calculateCol(14));
+                    $(api.column(15).footer()).html(calculateCol(15));
+                    $(api.column(16).footer()).html(calculateCol(16));
+                }
+            },null,false,false)
             drawChart()
         })
         function filter(){

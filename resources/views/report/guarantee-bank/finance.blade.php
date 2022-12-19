@@ -50,50 +50,6 @@
         <x-button type="submit" onclick="filter()" class="w-100" icon='bx bxs-filter-alt'>Filter</x-button>
     </x-card>
 
-    {{-- Summary --}}
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-danger">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-expense">Rp10.000.000,-</span><br>
-                        <small class="h6">Total Pengeluaran</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-primary">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-income">Rp30.000.000,-</span><br>
-                        <small class="h6">Total Pemasukan</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-        <div class="col-md-4 mb-4">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-success">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-profit">Rp20.000.000,-</span><br>
-                        <small class="h6">Total Profit</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-    </div>
-
     {{-- Chart --}}
     <x-card class="mb-4">
         <div class="chart-container-11">
@@ -132,6 +88,9 @@
                     <th class="text-center">Biaya Admin</th>
                     <th class="text-center">Premi Bayar</th>
                 </tr>
+            @endslot
+            @slot('tfoot')
+                <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
             @endslot
         </x-table>
     </x-card>
@@ -193,7 +152,28 @@
                 {data: 'payment',searchable:false,orderable:false,render: function(row) {
                     return row >0 ? 'Lunas' : 'Piutang';
                 }},
-            ],{},null,false,false)
+            ],{
+                footerCallback: function (row, data, start, end, display) {
+                    var api = this.api();
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function (i) {
+                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                    };
+                    let calculateCol = function(col){
+                        return api.column(col, { page: 'current' }).data().reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                    }
+                    $(api.column(3).footer()).html(calculateCol(3));
+                    $(api.column(10).footer()).html(calculateCol(10));
+                    $(api.column(11).footer()).html(calculateCol(11));
+                    $(api.column(12).footer()).html(calculateCol(12));
+                    $(api.column(13).footer()).html(calculateCol(13));
+                    $(api.column(14).footer()).html(calculateCol(14));
+                    $(api.column(15).footer()).html(calculateCol(15));
+                    $(api.column(16).footer()).html(calculateCol(16));
+                }
+            },null,false,false)
             drawChart()
         })
         function filter(){

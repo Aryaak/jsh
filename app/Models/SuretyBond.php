@@ -404,6 +404,19 @@ class SuretyBond extends Model
             return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_net_total as nominal', 'p.name', 'sb.insurance_value', 'sb.start_date','sb.end_date','sb.day_count','sb.start_date','it.code','sb.insurance_net','sb.insurance_polish_cost','sb.insurance_stamp_cost','sb.insurance_net_total','sb.admin_charge','sb.service_charge','sb.total_charge');
         }else if($type == 'finance'){
             return self::kueri($params)->join('payment_details as pd','sb.id','pd.surety_bond_id')->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.office_net_total as nominal');
+        }else if($type == 'remain'){
+            return self::kueri($params)->select(
+                'sb.receipt_number','sb.bond_number','p.name as principal_name','sb.insurance_value','sb.start_date','sb.end_date',
+                'sb.day_count','sb.due_day_tolerance','it.code','sb.office_net','sb.admin_charge','sb.service_charge','sb.total_charge','a.name as agent_name',
+                DB::raw("(
+                    SELECT sts.name FROM statuses AS sts INNER JOIN surety_bond_statuses AS sbs ON sts.id = sbs.status_id WHERE sbs.type = 'insurance' AND sbs.surety_bond_id = sb.id ORDER BY sbs.id DESC limit 1
+                ) as status"),
+                DB::raw("(
+                    SELECT IFNULL(pm.id,0) AS payment
+                    from payments as pm inner join payment_details as pmd on pm.id=pmd.payment_id
+                    where pmd.surety_bond_id = sb.id AND pm.agent_id = sb.agent_id ORDER BY pm.id DESC LIMIT 1
+                ) as payment")
+            );
         }
     }
     public static function chart(string $type,array $params){

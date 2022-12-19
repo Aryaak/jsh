@@ -22,7 +22,9 @@ class GuaranteeBankController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
-            $data = GuaranteeBank::with('insurance_status','insurance_status.status','principal')->select('guarantee_banks.*')->orderBy('created_at','desc');
+            $data = GuaranteeBank::with('insurance_status','insurance_status.status','principal')->select('guarantee_banks.*')->when(auth()->user()->is_regional == 0,function($query){
+                $query->where('branch_id',auth()->user()->branch_id);
+            })->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))

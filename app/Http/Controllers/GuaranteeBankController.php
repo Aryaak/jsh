@@ -27,8 +27,8 @@ class GuaranteeBankController extends Controller
             })->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
-            ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
+            ->editColumn('insurance_value', fn($bg) => Sirius::toRupiah($bg->insurance_value))
+            ->editColumn('start_date', fn($bg) => Sirius::toLongDate($bg->start_date))
             ->editColumn('insurance_status.status.name', 'datatables.status-guarantee-bank')
             ->editColumn('action', $action)
             ->rawColumns(['insurance_status.status.name', 'action'])

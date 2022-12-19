@@ -23,8 +23,8 @@
                 $columns = [
                     1 => "No. Kwitansi",
                     2 => "No. Bond",
-                    3 => "No. Polis",
-                    4 => "Nilai Jaminan",
+                    3 => "Nama Principal",
+                    4 => "Nilai Bond",
                 ];
 
                 $operators = [
@@ -43,6 +43,7 @@
         </div>
 
         <x-button type="button" id="add-new-filter" class="mb-3" icon="bx bx-plus" face="secondary">Tambah Filter</x-button>
+        <x-button type="button" id="delete-new-filter" class="mb-3 d-none" icon="bx bx-x" face="danger">Hapus Filter</x-button>
 
         <form id="filter-form"></form>
 
@@ -105,25 +106,30 @@
         <x-table id="table">
             @slot('thead')
                 <tr>
-                    <th>No.</th>
-                    <th>Kwitansi</th>
-                    <th>Bond</th>
-                    <th>Prinicipal</th>
-                    <th>Nilai Bond</th>
-                    <th>Awal</th>
-                    <th>Akhir</th>
-                    <th>Jml Hari</th>
-                    <th>Ass</th>
-                    <th>Total Net Kantor</th>
-                    <th>Admin</th>
-                    {{-- <th>Total Kantor</th> --}}
-                    <th>Service Charge</th>
-                    <th>Admin</th>
-                    {{-- <th>Premi Bayar</th> --}}
-                    {{-- <th>Sisa</th> --}}
-                    <th>Ket</th>
-                    <th>Status</th>
-                    <th>Payment</th>
+                    <th rowspan="2" class="text-center">No.</th>
+                    <th rowspan="2" class="text-center">No. Kwitansi</th>
+                    <th rowspan="2" class="text-center">No. Bond</th>
+                    <th rowspan="2" class="text-center">Nama Prinicipal</th>
+                    <th rowspan="2" class="text-center">Nilai Bond</th>
+                    <th colspan="2" class="text-center">Jangka Waktu</th>
+                    <th rowspan="2" class="text-center">Jml Hari</th>
+                    <th rowspan="2" class="text-center">ASS</th>
+                    <th colspan="3" class="text-center">Setor Kantor</th>
+                    <th colspan="3" class="text-center">Kwitansi</th>
+                    <th rowspan="2" class="text-center">Sisa</th>
+                    <th rowspan="2" class="text-center">Ket</th>
+                    <th rowspan="2" class="text-center">Status</th>
+                    <th rowspan="2" class="text-center">Payment</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Awal</th>
+                    <th class="text-center">Akhir</th>
+                    <th class="text-center">Total Nett Kantor</th>
+                    <th class="text-center">Biaya Admin</th>
+                    <th class="text-center">Total Kantor</th>
+                    <th class="text-center">Service Charge</th>
+                    <th class="text-center">Biaya Admin</th>
+                    <th class="text-center">Premi Bayar</th>
                 </tr>
             @endslot
         </x-table>
@@ -161,15 +167,13 @@
                     data.request_for = 'datatable'
                 }
             },[
-                {data: 'receipt_number', name: 'bg.receipt_number'},
-                {data: 'bond_number', name: 'bg.bond_number'},
+                {data: 'receipt_number', name: 'gb.receipt_number'},
+                {data: 'bond_number', name: 'gb.bond_number'},
                 {data: 'principal_name', name: 'p.name'},
-                {data: 'insurance_value', name: 'bg.insurance_value',render: function(row){
-                    return numberFormat(row)
-                }},
-                {data: 'start_date', name: 'bg.start_date'},
-                {data: 'end_date', name: 'bg.end_date'},
-                {data: 'day_count', name: 'bg.day_count',render: function(row, type, data) {
+                {data: 'insurance_value', name: 'gb.insurance_value'},
+                {data: 'start_date', name: 'gb.start_date'},
+                {data: 'end_date', name: 'gb.end_date'},
+                {data: 'day_count', name: 'gb.day_count',render: function(row, type, data) {
                     if(data.due_day_tolerance > 0){
                         return (row - data.due_day_tolerance)+' + ('+data.due_day_tolerance+')'
                     }else{
@@ -177,23 +181,17 @@
                     }
                 }},
                 {data: 'code', name: 'it.code'},
-                {data: 'office_net', name: 'bg.office_net',render: function(row){
-                    return numberFormat(row)
-                }},
-                {data: 'admin_charge', name: 'bg.admin_charge',render: function(row){
-                    return numberFormat(row)
-                }},
-                {data: 'service_charge', name: 'bg.service_charge',render: function(row){
-                    return numberFormat(row)
-                }},
-                {data: 'admin_charge', name: 'bg.admin_charge',render: function(row){
-                    return numberFormat(row)
-                }},
-                // {data: 'total_charge', name: 'bg.total_charge'},
+                {data: 'office_net', name: 'gb.office_net'},
+                {data: 'admin_charge', name: 'gb.admin_charge'},
+                {data: 'office_total', name: 'office_total', searchable:false},
+                {data: 'service_charge', name: 'gb.service_charge'},
+                {data: 'admin_charge', name: 'gb.admin_charge'},
+                {data: 'receipt_total', name: 'receipt_total', searchable:false},
+                {data: 'total_charge', name: 'total_charge', searchable:false},
                 {data: 'agent_name', name: 'a.name'},
                 {data: 'status',searchable:false,orderable:false},
                 {data: 'payment',searchable:false,orderable:false,render: function(row) {
-                    return row >0 ? 'lunas' : 'piutang';
+                    return row >0 ? 'Lunas' : 'Piutang';
                 }},
             ],{},null,false,false)
         })
@@ -245,18 +243,30 @@
             addNewFilter()
         })
 
+        $("#delete-new-filter").click(function() {
+            $('.filters').remove()
+            $(this).addClass('d-none')
+        })
+
         function addNewFilter() {
+            $("#delete-new-filter").removeClass('d-none')
+
             filterCount++
 
             $("#filter-form").append(`
-                <div class="row">
-                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" /></div>
-                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]" /></div>
+                <div class="row filters">
+                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" value='1' /></div>
+                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]" value='like' /></div>
                     <div class="col-md-4 mb-2"><x-form-input label="Isi Filter" id="value-` + filterCount + `" name="columns[` + filterCount + `][value]" type="search"/></div>
                 </div>
             `)
 
             $("#column-" + filterCount + ", #operator-" + filterCount + "").select2()
         }
+
+        $("#filter-form").submit(function (e){
+            e.preventDefault()
+            filter()
+        })
     </script>
 @endpush

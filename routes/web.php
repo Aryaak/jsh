@@ -32,7 +32,10 @@ use App\Models\GuaranteeBankDraft;
 use App\Models\SuretyBondDraft;
 use Illuminate\Support\Facades\Route;
 use App\Helpers\Jamsyar;
+use App\Http\Controllers\GuaranteeBankReportPrintController;
 use App\Http\Controllers\OtherReportController;
+use App\Http\Controllers\OtherReportPrintController;
+use App\Http\Controllers\SuretyBondReportPrintController;
 use Illuminate\Support\Facades\Request;
 
 /**
@@ -150,6 +153,15 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/pengeluaran', [SuretyBondReportController::class, 'expense'])->name('expense');
             Route::match(['get', 'post'], '/laba', [SuretyBondReportController::class, 'profit'])->name('profit');
 
+            Route::group(['as' => 'print.'], function () {
+                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'product'])->name('product');
+                Route::get('/keuangan/{print}', [SuretyBondReportPrintController::class, 'finance'])->name('finance');
+                Route::get('/sisa-agen/{print}', [SuretyBondReportPrintController::class, 'remain'])->name('remain');
+                Route::get('/pemasukan/{print}', [SuretyBondReportPrintController::class, 'income'])->name('income');
+                Route::get('/pengeluaran/{print}', [SuretyBondReportPrintController::class, 'expense'])->name('expense');
+                Route::get('/laba/{print}', [SuretyBondReportPrintController::class, 'profit'])->name('profit');
+            });
+
             // Route untuk laporan surety bond ....
         });
 
@@ -162,6 +174,15 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/pengeluaran', [GuaranteeBankReportController::class, 'expense'])->name('expense');
             Route::match(['get', 'post'], '/laba', [GuaranteeBankReportController::class, 'profit'])->name('profit');
 
+            Route::group(['as' => 'print.'], function () {
+                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'product'])->name('product');
+                Route::get('/keuangan/{print}', [GuaranteeBankReportPrintController::class, 'finance'])->name('finance');
+                Route::get('/sisa-agen/{print}', [GuaranteeBankReportPrintController::class, 'remain'])->name('remain');
+                Route::get('/pemasukan/{print}', [GuaranteeBankReportPrintController::class, 'income'])->name('income');
+                Route::get('/pengeluaran/{print}', [GuaranteeBankReportPrintController::class, 'expense'])->name('expense');
+                Route::get('/laba/{print}', [GuaranteeBankReportPrintController::class, 'profit'])->name('profit');
+            });
+
             // Route untuk laporan bank garansi ....
         });
 
@@ -169,6 +190,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::match(['get', 'post'], '/laba', [OtherReportController::class, 'profit'])->name('profit');
             Route::match(['get', 'post'], '/cicil-cabang', [OtherReportController::class, 'installment'])->name('installment');
+
+            Route::group(['as' => 'print.'], function () {
+                Route::get('/laba/{print}', [OtherReportPrintController::class, 'profit'])->name('profit');
+                Route::get('/cicil-cabang/{print}', [OtherReportPrintController::class, 'installment'])->name('installment');
+            });
 
             // Route untuk laporan lainnya ....
         });
@@ -221,6 +247,15 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/pengeluaran', [SuretyBondReportController::class, 'expense'])->name('expense');
             Route::match(['get', 'post'], '/laba', [SuretyBondReportController::class, 'profit'])->name('profit');
 
+            Route::group(['as' => 'print.'], function () {
+                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'product'])->name('product');
+                Route::get('/keuangan/{print}', [SuretyBondReportPrintController::class, 'finance'])->name('finance');
+                Route::get('/sisa-agen/{print}', [SuretyBondReportPrintController::class, 'remain'])->name('remain');
+                Route::get('/pemasukan/{print}', [SuretyBondReportPrintController::class, 'income'])->name('income');
+                Route::get('/pengeluaran/{print}', [SuretyBondReportPrintController::class, 'expense'])->name('expense');
+                Route::get('/laba/{print}', [SuretyBondReportPrintController::class, 'profit'])->name('profit');
+            });
+
             // Route untuk laporan surety bond ....
         });
 
@@ -233,6 +268,15 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/pengeluaran', [GuaranteeBankReportController::class, 'expense'])->name('expense');
             Route::match(['get', 'post'], '/laba', [GuaranteeBankReportController::class, 'profit'])->name('profit');
 
+            Route::group(['as' => 'print.'], function () {
+                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'product'])->name('product');
+                Route::get('/keuangan/{print}', [GuaranteeBankReportPrintController::class, 'finance'])->name('finance');
+                Route::get('/sisa-agen/{print}', [GuaranteeBankReportPrintController::class, 'remain'])->name('remain');
+                Route::get('/pemasukan/{print}', [GuaranteeBankReportPrintController::class, 'income'])->name('income');
+                Route::get('/pengeluaran/{print}', [GuaranteeBankReportPrintController::class, 'expense'])->name('expense');
+                Route::get('/laba/{print}', [GuaranteeBankReportPrintController::class, 'profit'])->name('profit');
+            });
+
             // Route untuk laporan bank garansi ....
         });
 
@@ -241,6 +285,10 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/laba', [OtherReportController::class, 'profit'])->name('profit');
             Route::match(['get', 'post'], '/cicil-cabang', [OtherReportController::class, 'installment'])->name('installment');
 
+            Route::group(['as' => 'print.'], function () {
+                Route::get('/laba/{print}', [OtherReportPrintController::class, 'profit'])->name('profit');
+                Route::get('/cicil-cabang/{print}', [OtherReportPrintController::class, 'installment'])->name('installment');
+            });
             // Route untuk laporan lainnya ....
         });
     });
@@ -300,6 +348,14 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'product'])->name('product');
             Route::match(['get', 'post'], '/keuangan', [SuretyBondReportController::class, 'finance'])->name('finance');
             Route::match(['get', 'post'], '/sisa-agen', [SuretyBondReportController::class, 'remain'])->name('remain');
+
+            Route::group(['as' => 'print.'], function () {
+                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'product'])->name('product');
+                Route::get('/keuangan/{print}', [SuretyBondReportPrintController::class, 'finance'])->name('finance');
+                Route::get('/sisa-agen/{print}', [SuretyBondReportPrintController::class, 'remain'])->name('remain');
+            });
+
+            // Route untuk laporan surety bond ...
         });
 
         Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
@@ -307,11 +363,20 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'product'])->name('product');
             Route::match(['get', 'post'], '/keuangan', [GuaranteeBankReportController::class, 'finance'])->name('finance');
             Route::match(['get', 'post'], '/sisa-agen', [GuaranteeBankReportController::class, 'remain'])->name('remain');
+
+            Route::group(['as' => 'print.'], function () {
+                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'product'])->name('product');
+                Route::get('/keuangan/{print}', [GuaranteeBankReportPrintController::class, 'finance'])->name('finance');
+                Route::get('/sisa-agen/{print}', [GuaranteeBankReportPrintController::class, 'remain'])->name('remain');
+            });
+
+            // Route untuk laporan bank garansi ...
         });
 
         Route::group(['prefix' => '/laporan-lainnya', 'as' => 'other-reports.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
             Route::match(['get', 'post'], '/cicil-cabang', [OtherReportController::class, 'installment'])->name('installment');
+            Route::get('/cicil-cabang/{print}', [OtherReportPrintController::class, 'installment'])->name('print.installment');
 
             // Route untuk laporan lainnya ....
         });

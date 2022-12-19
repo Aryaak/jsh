@@ -48,6 +48,15 @@
         <form id="filter-form"></form>
 
         <x-button type="submit" onclick="filter()" class="w-100" icon='bx bxs-filter-alt'>Filter</x-button>
+
+        <div class="row">
+            <div class="col-6 mt-3">
+                <x-button id="print-pdf" class="w-100" icon='bx bxs-printer' face="danger">Cetak PDF</x-button>
+            </div>
+            <div class="col-6 mt-3">
+                <x-button id="print-excel" class="w-100" icon='bx bxs-printer' face="success">Cetak Excel</x-button>
+            </div>
+        </div>
     </x-card>
 
     {{-- Summary --}}
@@ -221,20 +230,7 @@
         })
         function filter(){
             table.ajax.reload()
-
             const filter = $("#filter-form").serializeArray();
-            var params = {}
-            $("#params-container").html('')
-            $.each(filter, function(key, val) {
-                $("#params-container").append(`<x-form-input id="params" name="`+val.name+`" class="mb-3" value="`+val.value+`" required hidden/>`)
-                $("#params-container").append(`<x-form-input id="params" name="name[]" class="mb-3" value="`+val.name+`" required hidden/>`)
-            });
-            $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="`+start.val()+`" required hidden/>`)
-            $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="`+end.val()+`" required hidden/>`)
-            @if (request()->has('start') && request()->has('end'))
-                $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="{{ request()->start }}" required hidden/>`)
-                $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="{{ request()->end }}" required hidden/>`)
-            @endif
         }
         select.change(function() {
             const val = $(this).val()
@@ -291,6 +287,32 @@
         $("#filter-form").submit(function (e){
             e.preventDefault()
             filter()
+        })
+
+        function printParams(){
+            const filters = $("#filter-form").serializeArray();
+            console.log(filters);
+
+            var params = '';
+            @if ($global->currently_on == 'branch')
+                params = '?';
+            @endif
+
+            params += "&params[startDate]=" + $("#startDate").val()
+            params += "&params[endDate]=" + $("#endDate").val()
+            $.each(filters, function(index, filter) {
+                params += "&params[" + filter.name + "]=" + filter.value;
+            })
+
+            return params
+        }
+
+        $("#print-pdf").click(function () {
+            window.open('{{ route($global->currently_on.'.bg-reports.print.remain', ['print' => 'pdf', 'regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}' + printParams());
+        })
+
+        $("#print-excel").click(function () {
+            window.open('{{ route($global->currently_on.'.bg-reports.print.remain', ['print' => 'excel', 'regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}' + printParams());
         })
     </script>
 @endpush

@@ -1,4 +1,4 @@
-@extends('layouts.main', ['title' => 'Laporan'])
+@extends('layouts.main', ['title' => 'Laporan Sisa Agen'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />

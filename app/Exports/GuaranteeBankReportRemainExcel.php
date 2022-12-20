@@ -2,33 +2,19 @@
 
 namespace App\Exports;
 
-use App\Http\Controllers\SuretyBondReportController;
-use Illuminate\Contracts\View\View;
+use App\Http\Controllers\GuaranteeBankReportController;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use App\Traits\ExcelFormatter\FormatterRemainReport;
 
-class GuaranteeBankReportRemainExcel implements FromView, ShouldAutoSize, WithColumnWidths
+class GuaranteeBankReportRemainExcel implements FromView, ShouldAutoSize, WithColumnFormatting, WithStyles
 {
-    private $main;
+    use FormatterRemainReport;
 
     public function __construct()
     {
-        $this->main = new SuretyBondReportController;
-    }
-
-    public function view(): View
-    {
-        $request = request()->merge(['print', true]);
-        $data = $this->main->remain($request)->get();
-
-        return view('pdf.remain', compact('data'));
-    }
-
-    public function columnWidths(): array
-    {
-        return [
-            'A' => 5,
-        ];
+        $this->main = new GuaranteeBankReportController;
     }
 }

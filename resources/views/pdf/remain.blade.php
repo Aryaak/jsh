@@ -29,7 +29,13 @@
     </style>
 </head>
 <body>
-    <h4>Laporan Sisa Cabang</h4>
+    <div class="center">
+        <h5>Laporan Sisa Agen</h5>
+        @if ($name !== '')
+            <h5>{{ $name }}</h5>
+        @endif
+        <h6>Periode: {{ $start }} - {{ $end }}</h6>
+    </div>
     <table>
         <thead>
             <tr>
@@ -63,7 +69,7 @@
             @php
                 $sum_insurance_value = $sum_office_net = $sum_admin_charge = $sum_office_total = $sum_service_charge = $sum_receipt_total = $sum_total_charge = 0;
             @endphp
-            @foreach ($data as $d)
+            @forelse ($data as $d)
                 <tr>
                     <td class="center">{{ $loop->iteration }}.</td>
                     <td>{{ $d->receipt_number }}</td>
@@ -100,7 +106,11 @@
                     $sum_receipt_total += $d->receipt_total;
                     $sum_total_charge += $d->total_charge;
                 @endphp
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="19" class="center">Tidak ada data.</td>
+                </tr>
+            @endforelse
             <tr>
                 <td colspan="4"></td>
                 <td class="right"><b>{{ number_format($sum_insurance_value, 2, ',', '.') }}</b></td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GuaranteeBankReportRemainExcel;
+use App\Models\Branch;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -16,18 +17,21 @@ class GuaranteeBankReportPrintController
         $this->main = new GuaranteeBankReportController;
     }
 
-    public function remain(Request $request, $print)
+    public function remain(Request $request)
     {
         $fileName = date("Ymd").time();
 
-        if ($print == 'pdf') {
+        if ($request->print == 'pdf') {
             $request->merge(['print', true]);
+            $name = ($request->branch) ? Branch::where('slug', $request->branch)->first()->name : (($request->regional) ? Branch::where('slug', $request->regional)->first()->name : '');
+            $start = date('d/m/Y', strtotime($request->params['startDate']));
+            $end = date('d/m/Y', strtotime($request->params['endDate']));
             $data = $this->main->remain($request)->get();
-            $pdf = Pdf::loadView('pdf.remain', compact('data'));
+            $pdf = Pdf::loadView('pdf.remain', compact('name', 'start', 'end', 'data'));
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
             return $pdf->download($fileName . '.' . 'pdf');
         }
-        else if ($print == 'excel') {
+        else if ($request->print == 'excel') {
             return Excel::download(new GuaranteeBankReportRemainExcel, $fileName . '.' . 'xlsx');
         }
 

@@ -56,14 +56,13 @@
             @slot('thead')
                 <tr>
                     <th>No.</th>
-                    <th>Judul</th>
-                    <th>Tanggal Transaksi</th>
+                    <th>Kwitansi</th>
                     <th>Debit</th>
                     <th>Kredit</th>
                 </tr>
             @endslot
             @slot('tfoot')
-                <tr><th></th><th></th><th></th><th></th><th></th></tr>
+                <tr><th></th><th></th><th></th><th></th></tr>
             @endslot
         </x-table>
     </x-card>
@@ -86,7 +85,7 @@
         $(document).ready(function() {
             select.select2()
             table = dataTableInit('table','Pemasukan',{
-                url : '{{ route($global->currently_on.'.other-reports.profit', ['regional' => $global->regional ?? '']) }}',
+                url : '{{ route($global->currently_on.'.bg-reports.profit', ['regional' => $global->regional ?? '']) }}',
                 data: function(data){
                     data.params = {}
                     data.params.startDate = start.val()
@@ -94,8 +93,7 @@
                     data.request_for = 'datatable'
                 }
             },[
-                {data: 'title'},
-                {data: 'paid_at'},
+                {data: 'receipt_number'},
                 {data: 'debit'},
                 {data: 'credit'},
             ],{
@@ -110,14 +108,11 @@
                             return parseFloat(intVal(a)) + parseFloat(intVal(b));
                         }, 0);
                     }
+                    $(api.column(2).footer()).html(calculateCol(2));
                     $(api.column(3).footer()).html(calculateCol(3));
-                    $(api.column(4).footer()).html(calculateCol(4));
                 },
             },null,false,false)
         })
-        function filter(){
-            table.ajax.reload()
-        }
         select.change(function() {
             const val = $(this).val()
             if (val == 1 || val == 7 || val == 31 || val == 93 || val == 186 || val == 365 ) end.val("{{ date('Y-m-d', strtotime('now')) }}")
@@ -129,7 +124,9 @@
             if (val == 365) start.val(moment().subtract(1, 'year').format("YYYY-MM-DD"))
             end.prop('min', start.val())
         })
-
+        function filter(){
+            table.ajax.reload()
+        }
         start.change(function() {
             end.prop('min', start.val())
             select.val("0")

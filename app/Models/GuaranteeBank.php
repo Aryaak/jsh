@@ -449,6 +449,8 @@ class GuaranteeBank extends Model
                     where pmd.guarantee_bank_id = gb.id AND pm.agent_id = gb.agent_id ORDER BY pm.id DESC LIMIT 1
                 ) as payment")
             );
+        }else if($type == 'profit'){
+            return self::kueri($params)->select('gb.receipt_number','gb.total_charge as debit','gb.insurance_net_total as credit');
         }
     }
     public static function chart(string $type,array $params){

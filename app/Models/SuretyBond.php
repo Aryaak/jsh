@@ -429,6 +429,8 @@ class SuretyBond extends Model
                     where pmd.surety_bond_id = sb.id AND pm.agent_id = sb.agent_id ORDER BY pm.id DESC LIMIT 1
                 ) as payment")
             );
+        }else if($type == 'profit'){
+            return self::kueri($params)->select('sb.receipt_number','sb.total_charge as debit','sb.insurance_net_total as credit');
         }
     }
     public static function chart(string $type,array $params){

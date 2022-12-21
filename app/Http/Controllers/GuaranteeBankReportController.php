@@ -135,10 +135,16 @@ class GuaranteeBankReportController extends Controller
         return view('report.guarantee-bank.remain');
     }
     public function profit(Request $request){
+        if (isset($request->print)) {
+            $data = GuaranteeBank::table('profit',$request->params);
+            return $data;
+        }
         if($request->ajax()){
             $data = GuaranteeBank::table('profit',$request->params);
             return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('debit', fn($d) => number_format($d->debit, thousands_separator: '.'))
+            ->editColumn('credit', fn($d) => number_format($d->credit, thousands_separator: '.'))
             ->toJson();
         }
         return view('report.guarantee-bank.profit');

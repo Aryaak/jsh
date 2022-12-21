@@ -413,8 +413,11 @@ class SuretyBond extends Model
             );
         }else if($type == 'finance'){
             return self::kueri($params)->join('payment_details as pmd','sb.id','pmd.surety_bond_id')->join('payments as pm','pm.id','pmd.payment_id')->select(
-                'pm.paid_at','sb.receipt_number','sb.bond_number','p.name as principal_name','sb.insurance_value','sb.start_date','sb.end_date',
-                'sb.day_count','sb.due_day_tolerance','it.code','sb.office_net','sb.admin_charge', DB::raw('(sb.office_net + sb.admin_charge) as office_total'),'sb.service_charge', DB::raw('(sb.service_charge + sb.admin_charge) as receipt_total'), DB::raw('((sb.service_charge + sb.admin_charge) - (sb.office_net + sb.admin_charge)) as total_charge'),'a.name as agent_name',
+                'pm.paid_at','sb.receipt_number','sb.bond_number','p.name as principal_name','sb.insurance_value','sb.start_date','sb.end_date','sb.day_count','sb.due_day_tolerance','it.code',
+                'sb.insurance_net', 'sb.insurance_polish_cost', 'sb.insurance_stamp_cost', DB::raw("(sb.insurance_net + sb.insurance_polish_cost + sb.insurance_stamp_cost) as insurance_nett_total"),
+                'sb.office_net', 'sb.admin_charge', DB::raw("(sb.office_net + sb.admin_charge) as office_total"),
+                DB::raw("((sb.office_net + sb.admin_charge) - (sb.insurance_net + sb.insurance_polish_cost + sb.insurance_stamp_cost)) as profit"),
+                'a.name as agent_name',
                 DB::raw("(
                     SELECT sts.name FROM statuses AS sts INNER JOIN surety_bond_statuses AS sbs ON sts.id = sbs.status_id WHERE sbs.type = 'insurance' AND sbs.surety_bond_id = sb.id ORDER BY sbs.id DESC limit 1
                 ) as status")
@@ -445,12 +448,28 @@ class SuretyBond extends Model
         }else if($type == 'production'){
             $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_net_total) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'finance'){
-            $data = self::kueri($params)->selectRaw("date(sb.created_at) as date, sum(sb.office_net_total) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->join('payment_details as pmd','sb.id','pmd.surety_bond_id')->join('payments as pm','pm.id','pmd.payment_id')->selectRaw("date(sb.created_at) as date, sum(sb.office_net_total) as nominal")->groupBy(DB::raw("date(sb.created_at)"))->pluck('nominal','date')->toArray();
         }
         return [
             'labels' => array_map(function($val){ return Sirius::toShortDate($val); },array_keys($data)),
             'datasets' => array_values($data),
         ];
+    }
+    public static function summary(string $type, array $params)
+    {
+        if ($type == 'finance') {
+            $data = self::kueri($params)->join('payment_details as pmd','sb.id','pmd.surety_bond_id')->join('payments as pm','pm.id','pmd.payment_id')->select(
+                DB::raw("SUM(sb.insurance_net + sb.insurance_polish_cost + sb.insurance_stamp_cost) as insurance_nett_total"),
+                DB::raw("SUM(sb.office_net + sb.admin_charge) as office_total"),
+                DB::raw("SUM((sb.office_net + sb.admin_charge) - (sb.insurance_net + sb.insurance_polish_cost + sb.insurance_stamp_cost)) as profit"),
+            )->first();
+
+            return [
+                'income' => Sirius::toRupiah($data->office_total ?? 0),
+                'expense' => Sirius::toRupiah($data->insurance_nett_total ?? 0),
+                'profit' => Sirius::toRupiah($data->profit ?? 0)
+            ];
+        }
     }
 
     // Status

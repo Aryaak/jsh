@@ -34,14 +34,34 @@ class SuretyBondReportController extends Controller
         return view('report.surety-bond.expense');
     }
     public function finance(Request $request){
+        if (isset($request->print)) {
+            $data = SuretyBond::table('finance',$request->params);
+            return $data;
+        }
         if($request->ajax()){
             if($request->request_for == 'datatable'){
                 $data = SuretyBond::table('finance',$request->params);
                 return datatables()->of($data)
                 ->addIndexColumn()
+                ->editColumn('paid_date', fn($d) => date('d/m/y', strtotime($d->paid_date)))
+                ->editColumn('insurance_value', fn($d) => number_format($d->insurance_value, thousands_separator: '.'))
+                ->editColumn('start_date', fn($d) => date('d/m/y', strtotime($d->start_date)))
+                ->editColumn('end_date', fn($d) => date('d/m/y', strtotime($d->end_date)))
+                ->editColumn('insurance_net', fn($d) => number_format($d->insurance_net, thousands_separator: '.'))
+                ->editColumn('insurance_polish_cost', fn($d) => number_format($d->insurance_polish_cost, thousands_separator: '.'))
+                ->editColumn('insurance_stamp_cost', fn($d) => number_format($d->insurance_stamp_cost, thousands_separator: '.'))
+                ->editColumn('insurance_nett_total', fn($d) => number_format($d->insurance_nett_total, thousands_separator: '.'))
+                ->editColumn('office_net', fn($d) => number_format($d->office_net, thousands_separator: '.'))
+                ->editColumn('admin_charge', fn($d) => number_format($d->admin_charge, thousands_separator: '.'))
+                ->editColumn('office_total', fn($d) => number_format($d->office_total, thousands_separator: '.'))
+                ->editColumn('profit', fn($d) => number_format($d->profit, thousands_separator: '.'))
+                ->editColumn('status', 'datatables.status-surety-bond')
+                ->rawColumns(['status'])
                 ->toJson();
             }else if($request->request_for == 'chart'){
                 return response()->json($this->showResponse(SuretyBond::chart('finance',$request->all())));
+            }else if($request->request_for == 'summary'){
+                return response()->json($this->showResponse(SuretyBond::summary('finance',$request->all())));
             }
         }
         return view('report.surety-bond.finance');

@@ -58,6 +58,14 @@
         </div>
     </x-card>
 
+    {{-- Chart --}}
+    <x-card class="mb-4">
+        <div class="chart-container-11">
+            <canvas id="chart"></canvas>
+        </div>
+    </x-card>
+
+
     {{-- Table --}}
     <x-card>
         <x-table id="table">
@@ -174,7 +182,8 @@
                     $(api.column(15).footer()).html(numberFormat(calculateCol(15)));
                 },
             },null,false,false)
-            // drawChart()
+
+            drawChart()
 
             const filter = $("#filter-form").serializeArray();
             var params = {}

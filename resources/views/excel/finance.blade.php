@@ -8,7 +8,6 @@
     <title>Laporan Keuangan</title>
 </head>
 <body>
-
     <table>
         <tr>
             <th colspan="19"><b>Laporan Keuangan</b></th>

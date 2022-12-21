@@ -99,7 +99,7 @@
 
         $(document).ready(function() {
             select.select2()
-            table = dataTableInit('table','Pemasukan',{
+            table = dataTableInit('table','Pengeluaran',{
                 url : '{{ route($global->currently_on.'.sb-reports.expense', ['regional' => $global->regional ?? '']) }}',
                 data: function(data){
                     const formData = $("#filter-form").serializeArray();
@@ -220,7 +220,6 @@
 
         function printParams(){
             const filters = $("#filter-form").serializeArray();
-            console.log(filters);
 
             var params = '';
             @if ($global->currently_on == 'branch')

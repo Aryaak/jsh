@@ -962,7 +962,7 @@
                 const serviceCharge = parseInt($('#'+creadit+'-service-charge').val() ? $('#'+creadit+'-service-charge').val().replaceAll('.','') : 0)
                 const adminCharge = parseInt($('#'+creadit+'-admin-charge').val() ? $('#'+creadit+'-admin-charge').val().replaceAll('.','') : 0)
                 const totalCharge =  serviceCharge + adminCharge
-                // console.log(serviceCharge,' + ',adminCharge,' = ',totalCharge);
+
                 if (isNaN(totalCharge)) totalCharge = 0
                 $('#'+creadit+'-premi-charge').html(ToRupiah.format(totalCharge).replaceAll('\u00A0', '')+",-")
             })

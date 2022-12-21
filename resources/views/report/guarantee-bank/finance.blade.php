@@ -163,7 +163,7 @@
 
         $(document).ready(function() {
             select.select2()
-            table = dataTableInit('table','Produksi',{
+            table = dataTableInit('table','Keuangan',{
                 url : '{{ route($global->currently_on.'.bg-reports.finance', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',
                 data: function(data){
                     const formData = $("#filter-form").serializeArray();
@@ -213,7 +213,7 @@
                     };
                     let calculateCol = function(col){
                         return api.column(col, { page: 'current' }).data().reduce(function (a, b) {
-                            return parseFloat(intVal(a)) + parseFloat(intVal(b));
+                            return intVal(a) + intVal(b);
                         }, 0);
                     }
                     $(api.column(4).footer()).html(numberFormat(calculateCol(3)));
@@ -352,7 +352,6 @@
 
         function printParams(){
             const filters = $("#filter-form").serializeArray();
-            console.log(filters);
 
             var params = '';
             @if ($global->currently_on == 'branch')

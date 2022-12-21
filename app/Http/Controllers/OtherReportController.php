@@ -36,19 +36,19 @@ class OtherReportController
     public function installment(Request $request){
         $payables = DB::table('payables as p')->join('payable_details as pd','p.id','pd.payable_id')
         ->selectRaw("month,year,sum(payable_total) as jumlah_tagihan,(count(pd.surety_bond_id) + count(pd.guarantee_bank_id)) as jumlah_polis")
-        ->when(auth()->user()->branch->is_regional == true && auth()->user()->username != 'root',function($query){
+        ->when(auth()->user()->branch?->is_regional == true && auth()->user()->username != 'root',function($query){
             $query->where('p.regional_id',auth()->id());
         })
-        ->when(auth()->user()->branch->is_regional == false && auth()->user()->username != 'root',function($query){
+        ->when(auth()->user()->branch?->is_regional == false && auth()->user()->username != 'root',function($query){
             $query->where('p.branch_id',auth()->id());
         })
         ->groupBy('month','year')->where('year',date('Y'))
         ->get();
         $instalments = DB::table('instalments')
-        ->when(auth()->user()->branch->is_regional == true && auth()->user()->username != 'root',function($query){
+        ->when(auth()->user()->branch?->is_regional == true && auth()->user()->username != 'root',function($query){
             $query->where('regional_id',auth()->id());
         })
-        ->when(auth()->user()->branch->is_regional == false && auth()->user()->username != 'root',function($query){
+        ->when(auth()->user()->branch?->is_regional == false && auth()->user()->username != 'root',function($query){
             $query->where('branch_id',auth()->id());
         })->whereYear('paid_at',date('Y'))->get();
 
@@ -65,6 +65,9 @@ class OtherReportController
                 'jumlah_titipan' => isset($instalments[$i]) ? Sirius::toRupiah($instalments[$i]->nominal) : '',
                 'keterangan' => isset($instalments[$i]) ? $instalments[$i]->desc : '',
             ];
+        }
+        if (isset($request->print)) {
+            return $rows;
         }
         return view('report.other.instalment',compact('rows'));
     }

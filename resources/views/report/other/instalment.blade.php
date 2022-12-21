@@ -6,6 +6,17 @@
 @endpush
 
 @section('contents')
+    <x-card class="mb-4">
+        <div class="row">
+            <div class="col-6">
+                <x-button id="print-pdf" class="w-100" icon='bx bxs-printer' face="danger">Cetak PDF</x-button>
+            </div>
+            <div class="col-6 mt-s-3">
+                <x-button id="print-excel" class="w-100" icon='bx bxs-printer' face="success">Cetak Excel</x-button>
+            </div>
+        </div>
+    </x-card>
+
     {{-- Table --}}
     <x-card>
         <x-table id="table">
@@ -19,17 +30,54 @@
                     <th>KETERANGAN</th>
                 </tr>
             @endslot
-            @foreach ($rows as $row)
-                <tr class="text-center">
-                    <td>{{ $row->tgl_setor }}</td>
-                    <td>{{ $row->jumlah_polis }}</td>
-                    <td>{{ $row->jumlah_tagihan }}</td>
-                    <td>{{ $row->tgl_titipan }}</td>
-                    <td>{{ $row->jumlah_titipan }}</td>
+            @php
+                $sum_tagihan = $sum_titipan = 0;
+            @endphp
+            @forelse ($rows as $row)
+                @php
+                    $sum_tagihan += $row->jumlah_tagihan;
+                    $sum_titipan += $row->jumlah_titipan;
+                @endphp
+                <tr>
+                    <td class="text-center">{{ Sirius::toLongDate($row->tgl_setor) }}</td>
+                    <td class="text-right">{{ Sirius::toRupiah($row->jumlah_polis) }}</td>
+                    <td class="text-right">{{ Sirius::toRupiah($row->jumlah_tagihan) }}</td>
+                    <td class="text-center">{{ Sirius::toLongDate($row->tgl_titipan) }}</td>
+                    <td class="text-right">{{ Sirius::toRupiah($row->jumlah_titipan) }}</td>
                     <td>{{ $row->keterangan }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr class="text-center">
+                    <td colspan="6">Tidak ada data.</td>
+                </tr>
+            @endforelse
         </x-table>
+        @php
+            $kekurangan = $sum_tagihan - $sum_titipan;
+        @endphp
+        <br>
+        <div class="d-flex" style="flex-grow: 1fr">
+            <div class="w-100"></div>
+            <div class="w-100">
+                <div>Tagihan</div>
+                <div>Titipan</div>
+                <hr>
+                <div class="fw-bold">Kekurangan</div>
+            </div>
+            <div class="text-right w-100">
+                <div>:</div>
+                <div>:</div>
+                <hr>
+                <div class="fw-bold">:</div>
+            </div>
+            <div class="text-right w-100">
+                <div>{{ Sirius::toRupiah($sum_tagihan) }}</div>
+                <div>{{ Sirius::toRupiah($sum_titipan) }}</div>
+                <hr>
+                <div class="fw-bold">{{ Sirius::toRupiah($kekurangan) }}</div>
+            </div>
+            <div class="w-100"></div>
+        </div>
     </x-card>
 @endsection
 
@@ -39,6 +87,12 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        $("#print-pdf").click(function () {
+            window.open('{{ route($global->currently_on.'.other-reports.print.installment', ['print' => 'pdf', 'regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}');
+        })
 
+        $("#print-excel").click(function () {
+            window.open('{{ route($global->currently_on.'.other-reports.print.installment', ['print' => 'excel', 'regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}');
+        })
     </script>
 @endpush

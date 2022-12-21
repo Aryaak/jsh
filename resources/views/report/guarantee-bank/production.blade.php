@@ -163,12 +163,11 @@
                     var api = this.api();
                     // Remove the formatting to get integer data for summation
                     var intVal = function (i) {
-                        return typeof i === 'string' ? i.replace(/[\$.]/g, '') * 1 : typeof i === 'number' ? i : 0;
-                        // return parseInt(String(i).replaceAll('.', ''));
+                        return parseInt(String(i).replaceAll('.', ''));
                     };
                     let calculateCol = function(col){
                         return api.column(col, { page: 'current' }).data().reduce(function (a, b) {
-                            return parseFloat(intVal(a)) + parseFloat(intVal(b));
+                            return intVal(a) + intVal(b);
                         }, 0);
                     }
                     $(api.column(3).footer()).html(numberFormat(calculateCol(3)));
@@ -283,7 +282,6 @@
 
         function printParams(){
             const filters = $("#filter-form").serializeArray();
-            console.log(filters);
 
             var params = '';
             @if ($global->currently_on == 'branch')

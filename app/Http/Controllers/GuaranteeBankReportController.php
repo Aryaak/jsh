@@ -71,9 +71,9 @@ class GuaranteeBankReportController extends Controller
                 ->rawColumns(['status'])
                 ->toJson();
             }
-            // else if($request->request_for == 'chart'){
-            //     return response()->json($this->showResponse(GuaranteeBank::chart('product',$request->all())));
-            // }
+            else if($request->request_for == 'chart'){
+                return response()->json($this->showResponse(GuaranteeBank::chart('product',$request->all())));
+            }
         }
         return view('report.guarantee-bank.production');
     }

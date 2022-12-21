@@ -71,9 +71,9 @@ class SuretyBondReportController extends Controller
                 ->rawColumns(['status'])
                 ->toJson();
             }
-            // else if($request->request_for == 'chart'){
-            //     return response()->json($this->showResponse(SuretyBond::chart('product',$request->all())));
-            // }
+            else if($request->request_for == 'chart'){
+                return response()->json($this->showResponse(SuretyBond::chart('production',$request->all())));
+            }
         }
         return view('report.surety-bond.production');
     }

@@ -23,7 +23,7 @@
                 $columns = [
                     'receipt_number' => "No. Kwitansi",
                     'bond_number' => "No. Bond",
-                    'polish_number' => "No. Polish",
+                    'polish_number' => "No. Polis",
                     'insurance_value' => "Nominal",
                 ];
 

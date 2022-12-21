@@ -43,11 +43,20 @@
         </div>
 
         <x-button type="button" id="add-new-filter" class="mb-3" icon="bx bx-plus" face="secondary">Tambah Filter</x-button>
+        <x-button type="button" id="delete-new-filter" class="mb-3 d-none" icon="bx bx-x" face="danger">Hapus Filter</x-button>
 
-        <div id="filter-container">
-        </div>
+        <form id="filter-form"></form>
 
         <x-button type="submit" onclick="filter()" class="w-100" icon='bx bxs-filter-alt'>Filter</x-button>
+
+        <div class="row">
+            <div class="col-6 mt-3">
+                <x-button id="print-pdf" class="w-100" icon='bx bxs-printer' face="danger">Cetak PDF</x-button>
+            </div>
+            <div class="col-6 mt-3">
+                <x-button id="print-excel" class="w-100" icon='bx bxs-printer' face="success">Cetak Excel</x-button>
+            </div>
+        </div>
     </x-card>
 
     {{-- Summary --}}
@@ -163,18 +172,56 @@
             addNewFilter()
         })
 
+        $("#delete-new-filter").click(function() {
+            $('.filters').remove()
+            $(this).addClass('d-none')
+        })
+
         function addNewFilter() {
+            $("#delete-new-filter").removeClass('d-none')
+
             filterCount++
 
-            $("#filter-container").append(`
-                <div class="row">
-                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" /></div>
-                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]" /></div>
+            $("#filter-form").append(`
+                <div class="row filters">
+                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" value='receipt_number' /></div>
+                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]"  value='like' /></div>
                     <div class="col-md-4 mb-2"><x-form-input label="Isi Filter" id="value-` + filterCount + `" name="columns[` + filterCount + `][value]" type="search"/></div>
                 </div>
             `)
 
             $("#column-" + filterCount + ", #operator-" + filterCount + "").select2()
         }
+
+        $("#filter-form").submit(function (e){
+            e.preventDefault()
+            filter()
+        })
+
+        function printParams(){
+            const filters = $("#filter-form").serializeArray();
+            console.log(filters);
+
+            var params = '';
+            @if ($global->currently_on == 'branch')
+                params = '?';
+            @endif
+
+            params += "&params[startDate]=" + $("#startDate").val()
+            params += "&params[endDate]=" + $("#endDate").val()
+            $.each(filters, function(index, filter) {
+                params += "&params[" + filter.name + "]=" + filter.value;
+            })
+
+            return params
+        }
+
+        $("#print-pdf").click(function () {
+            window.open('' + printParams());
+        })
+
+        $("#print-excel").click(function () {
+            window.open('' + printParams());
+        })
     </script>
 @endpush

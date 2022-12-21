@@ -1,4 +1,4 @@
-@extends('layouts.main', ['title' => 'Laporan'])
+@extends('layouts.main', ['title' => 'Laporan Pengeluran'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
@@ -21,10 +21,10 @@
                 ];
 
                 $columns = [
-                    1 => "No. Kwitansi",
-                    2 => "No. Bond",
-                    3 => "No. Polis",
-                    4 => "Nilai Jaminan",
+                    'receipt_number' => "No. Kwitansi",
+                    'bond_number' => "No. Bond",
+                    'polish_number' => "No. Polis",
+                    'insurance_value' => "Nominal",
                 ];
 
                 $operators = [
@@ -43,11 +43,20 @@
         </div>
 
         <x-button type="button" id="add-new-filter" class="mb-3" icon="bx bx-plus" face="secondary">Tambah Filter</x-button>
+        <x-button type="button" id="delete-new-filter" class="mb-3 d-none" icon="bx bx-x" face="danger">Hapus Filter</x-button>
 
-        <form id="filter-form">
-        </form>
+        <form id="filter-form"></form>
 
         <x-button type="submit" onclick="filter()" class="w-100" icon='bx bxs-filter-alt'>Filter</x-button>
+
+        <div class="row">
+            <div class="col-6 mt-3">
+                <x-button id="print-pdf" class="w-100" icon='bx bxs-printer' face="danger">Cetak PDF</x-button>
+            </div>
+            <div class="col-6 mt-3">
+                <x-button id="print-excel" class="w-100" icon='bx bxs-printer' face="success">Cetak Excel</x-button>
+            </div>
+        </div>
     </x-card>
 
     {{-- Chart --}}
@@ -107,14 +116,17 @@
                 {data: 'receipt_number',name: 'receipt_number'},
                 {data: 'bond_number',name: 'bond_number'},
                 {data: 'polish_number',name: 'polish_number'},
-                {data: 'nominal', name: 'insurance_total_net'}
+                {data: 'nominal', name: 'insurance_net_total'}
             ],{},null,false,false)
+
             drawChart()
         })
+
         function filter(){
             table.ajax.reload()
             drawChart()
         }
+
         function drawChart(){
             let formData = new FormData(document.getElementById('filter-form'))
             formData.append('startDate',start.val())
@@ -122,15 +134,15 @@
             formData.append('request_for','chart')
 
             ajaxPost('{{ route($global->currently_on.'.bg-reports.expense', ['regional' => $global->regional ?? '']) }}',formData, null, function (result) {
-                const income = result.data
+                const expense = result.data
                 if(chart) chart.destroy()
                 chart = new Chart(document.getElementById('chart').getContext('2d'), {
                     type: 'line',
                     data: {
-                        labels: income.labels,
+                        labels: expense.labels,
                         datasets: [{
                             label: "Total",
-                            data: income.datasets,
+                            data: expense.datasets,
                             backgroundColor: '#8CC152FF',
                             backgroundColor: '#8CC152AA',
                             borderWidth: 1,
@@ -152,6 +164,7 @@
                 })
             }, false)
         }
+
         select.change(function() {
             const val = $(this).val()
             if (val == 1 || val == 7 || val == 31 || val == 93 || val == 186 || val == 365 ) end.val("{{ date('Y-m-d', strtotime('now')) }}")
@@ -175,23 +188,60 @@
             select.trigger("change")
         })
 
-
         $("#add-new-filter").click(function () {
             addNewFilter()
         })
 
+        $("#delete-new-filter").click(function() {
+            $('.filters').remove()
+            $(this).addClass('d-none')
+        })
+
         function addNewFilter() {
+            $("#delete-new-filter").removeClass('d-none')
+
             filterCount++
 
             $("#filter-form").append(`
-                <div class="row">
-                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" /></div>
-                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]" /></div>
+                <div class="row filters">
+                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" value='receipt_number' /></div>
+                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]"  value='like' /></div>
                     <div class="col-md-4 mb-2"><x-form-input label="Isi Filter" id="value-` + filterCount + `" name="columns[` + filterCount + `][value]" type="search"/></div>
                 </div>
             `)
 
             $("#column-" + filterCount + ", #operator-" + filterCount + "").select2()
         }
+
+        $("#filter-form").submit(function (e){
+            e.preventDefault()
+            filter()
+        })
+
+        function printParams(){
+            const filters = $("#filter-form").serializeArray();
+            console.log(filters);
+
+            var params = '';
+            @if ($global->currently_on == 'branch')
+                params = '?';
+            @endif
+
+            params += "&params[startDate]=" + $("#startDate").val()
+            params += "&params[endDate]=" + $("#endDate").val()
+            $.each(filters, function(index, filter) {
+                params += "&params[" + filter.name + "]=" + filter.value;
+            })
+
+            return params
+        }
+
+        $("#print-pdf").click(function () {
+            window.open('{{ route($global->currently_on.'.bg-reports.print.expense', ['print' => 'pdf', 'regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}' + printParams());
+        })
+
+        $("#print-excel").click(function () {
+            window.open('{{ route($global->currently_on.'.bg-reports.print.expense', ['print' => 'excel', 'regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}' + printParams());
+        })
     </script>
 @endpush

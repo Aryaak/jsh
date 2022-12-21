@@ -352,7 +352,6 @@
 
         function printParams(){
             const filters = $("#filter-form").serializeArray();
-            console.log(filters);
 
             var params = '';
             @if ($global->currently_on == 'branch')

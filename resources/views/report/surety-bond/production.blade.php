@@ -167,7 +167,7 @@
                     };
                     let calculateCol = function(col){
                         return api.column(col, { page: 'current' }).data().reduce(function (a, b) {
-                            return parseFloat(intVal(a)) + parseFloat(intVal(b));
+                            return intVal(a) + intVal(b);
                         }, 0);
                     }
                     $(api.column(3).footer()).html(numberFormat(calculateCol(3)));

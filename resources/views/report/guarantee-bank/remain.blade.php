@@ -1,4 +1,4 @@
-@extends('layouts.main', ['title' => 'Laporan'])
+@extends('layouts.main', ['title' => 'Laporan Sisa Agen'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
@@ -21,10 +21,10 @@
                 ];
 
                 $columns = [
-                    1 => "No. Kwitansi",
-                    2 => "No. Bond",
-                    3 => "Nama Principal",
-                    4 => "Nilai Bond",
+                    'receipt_number' => "No. Kwitansi",
+                    'bond_number' => "No. Bond",
+                    'principal_name' => "Nama Principal",
+                    'insurance_value' => "Nilai Bond",
                 ];
 
                 $operators = [
@@ -210,21 +210,21 @@
                     var api = this.api();
                     // Remove the formatting to get integer data for summation
                     var intVal = function (i) {
-                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                        return parseInt(String(i).replaceAll('.', ''));
                     };
                     let calculateCol = function(col){
                         return api.column(col, { page: 'current' }).data().reduce(function (a, b) {
                             return parseFloat(intVal(a)) + parseFloat(intVal(b));
                         }, 0);
                     }
-                    $(api.column(4).footer()).html(calculateCol(4));
-                    $(api.column(9).footer()).html(calculateCol(9));
-                    $(api.column(10).footer()).html(calculateCol(10));
-                    $(api.column(11).footer()).html(calculateCol(11));
-                    $(api.column(12).footer()).html(calculateCol(12));
-                    $(api.column(13).footer()).html(calculateCol(13));
-                    $(api.column(14).footer()).html(calculateCol(14));
-                    $(api.column(15).footer()).html(calculateCol(15));
+                    $(api.column(4).footer()).html(numberFormat(calculateCol(4)));
+                    $(api.column(9).footer()).html(numberFormat(calculateCol(9)));
+                    $(api.column(10).footer()).html(numberFormat(calculateCol(10)));
+                    $(api.column(11).footer()).html(numberFormat(calculateCol(11)));
+                    $(api.column(12).footer()).html(numberFormat(calculateCol(12)));
+                    $(api.column(13).footer()).html(numberFormat(calculateCol(13)));
+                    $(api.column(14).footer()).html(numberFormat(calculateCol(14)));
+                    $(api.column(15).footer()).html(numberFormat(calculateCol(15)));
                 },
             },null,false,false)
         })
@@ -275,7 +275,7 @@
 
             $("#filter-form").append(`
                 <div class="row filters">
-                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" value='1' /></div>
+                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" value='receipt_number' /></div>
                     <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]" value='like' /></div>
                     <div class="col-md-4 mb-2"><x-form-input label="Isi Filter" id="value-` + filterCount + `" name="columns[` + filterCount + `][value]" type="search"/></div>
                 </div>

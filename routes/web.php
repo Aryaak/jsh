@@ -146,7 +146,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
-            Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'product'])->name('product');
+            Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'production'])->name('production');
             Route::match(['get', 'post'], '/keuangan', [SuretyBondReportController::class, 'finance'])->name('finance');
             Route::match(['get', 'post'], '/sisa-agen', [SuretyBondReportController::class, 'remain'])->name('remain');
             Route::match(['get', 'post'], '/pemasukan', [SuretyBondReportController::class, 'income'])->name('income');
@@ -154,7 +154,7 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/laba', [SuretyBondReportController::class, 'profit'])->name('profit');
 
             Route::group(['as' => 'print.'], function () {
-                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'product'])->name('product');
+                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'production'])->name('production');
                 Route::get('/keuangan/{print}', [SuretyBondReportPrintController::class, 'finance'])->name('finance');
                 Route::get('/sisa-agen/{print}', [SuretyBondReportPrintController::class, 'remain'])->name('remain');
                 Route::get('/pemasukan/{print}', [SuretyBondReportPrintController::class, 'income'])->name('income');
@@ -167,7 +167,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
-            Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'product'])->name('product');
+            Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'production'])->name('production');
             Route::match(['get', 'post'], '/keuangan', [GuaranteeBankReportController::class, 'finance'])->name('finance');
             Route::match(['get', 'post'], '/sisa-agen', [GuaranteeBankReportController::class, 'remain'])->name('remain');
             Route::match(['get', 'post'], '/pemasukan', [GuaranteeBankReportController::class, 'income'])->name('income');
@@ -175,7 +175,7 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/laba', [GuaranteeBankReportController::class, 'profit'])->name('profit');
 
             Route::group(['as' => 'print.'], function () {
-                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'product'])->name('product');
+                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'production'])->name('production');
                 Route::get('/keuangan/{print}', [GuaranteeBankReportPrintController::class, 'finance'])->name('finance');
                 Route::get('/sisa-agen/{print}', [GuaranteeBankReportPrintController::class, 'remain'])->name('remain');
                 Route::get('/pemasukan/{print}', [GuaranteeBankReportPrintController::class, 'income'])->name('income');
@@ -240,7 +240,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
-            Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'product'])->name('product');
+            Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'production'])->name('production');
             Route::match(['get', 'post'], '/keuangan', [SuretyBondReportController::class, 'finance'])->name('finance');
             Route::match(['get', 'post'], '/sisa-agen', [SuretyBondReportController::class, 'remain'])->name('remain');
             Route::match(['get', 'post'], '/pemasukan', [SuretyBondReportController::class, 'income'])->name('income');
@@ -248,7 +248,7 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/laba', [SuretyBondReportController::class, 'profit'])->name('profit');
 
             Route::group(['as' => 'print.'], function () {
-                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'product'])->name('product');
+                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'production'])->name('production');
                 Route::get('/keuangan/{print}', [SuretyBondReportPrintController::class, 'finance'])->name('finance');
                 Route::get('/sisa-agen/{print}', [SuretyBondReportPrintController::class, 'remain'])->name('remain');
                 Route::get('/pemasukan/{print}', [SuretyBondReportPrintController::class, 'income'])->name('income');
@@ -261,7 +261,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
-            Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'product'])->name('product');
+            Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'production'])->name('production');
             Route::match(['get', 'post'], '/keuangan', [GuaranteeBankReportController::class, 'finance'])->name('finance');
             Route::match(['get', 'post'], '/sisa-agen', [GuaranteeBankReportController::class, 'remain'])->name('remain');
             Route::match(['get', 'post'], '/pemasukan', [GuaranteeBankReportController::class, 'income'])->name('income');
@@ -269,7 +269,7 @@ Route::middleware(['auth'])->group(function () {
             Route::match(['get', 'post'], '/laba', [GuaranteeBankReportController::class, 'profit'])->name('profit');
 
             Route::group(['as' => 'print.'], function () {
-                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'product'])->name('product');
+                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'production'])->name('production');
                 Route::get('/keuangan/{print}', [GuaranteeBankReportPrintController::class, 'finance'])->name('finance');
                 Route::get('/sisa-agen/{print}', [GuaranteeBankReportPrintController::class, 'remain'])->name('remain');
                 Route::get('/pemasukan/{print}', [GuaranteeBankReportPrintController::class, 'income'])->name('income');
@@ -345,12 +345,12 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => '/laporan-surety-bond', 'as' => 'sb-reports.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
-            Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'product'])->name('product');
+            Route::match(['get', 'post'], '/produksi', [SuretyBondReportController::class, 'production'])->name('production');
             Route::match(['get', 'post'], '/keuangan', [SuretyBondReportController::class, 'finance'])->name('finance');
             Route::match(['get', 'post'], '/sisa-agen', [SuretyBondReportController::class, 'remain'])->name('remain');
 
             Route::group(['as' => 'print.'], function () {
-                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'product'])->name('product');
+                Route::get('/produksi/{print}', [SuretyBondReportPrintController::class, 'production'])->name('production');
                 Route::get('/keuangan/{print}', [SuretyBondReportPrintController::class, 'finance'])->name('finance');
                 Route::get('/sisa-agen/{print}', [SuretyBondReportPrintController::class, 'remain'])->name('remain');
             });
@@ -360,12 +360,12 @@ Route::middleware(['auth'])->group(function () {
 
         Route::group(['prefix' => '/laporan-bank-garansi', 'as' => 'bg-reports.'], function () {
             Route::get('/', fn() => redirect(route('dashboard')));
-            Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'product'])->name('product');
+            Route::match(['get', 'post'], '/produksi', [GuaranteeBankReportController::class, 'production'])->name('production');
             Route::match(['get', 'post'], '/keuangan', [GuaranteeBankReportController::class, 'finance'])->name('finance');
             Route::match(['get', 'post'], '/sisa-agen', [GuaranteeBankReportController::class, 'remain'])->name('remain');
 
             Route::group(['as' => 'print.'], function () {
-                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'product'])->name('product');
+                Route::get('/produksi/{print}', [GuaranteeBankReportPrintController::class, 'production'])->name('production');
                 Route::get('/keuangan/{print}', [GuaranteeBankReportPrintController::class, 'finance'])->name('finance');
                 Route::get('/sisa-agen/{print}', [GuaranteeBankReportPrintController::class, 'remain'])->name('remain');
             });

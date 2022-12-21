@@ -3,15 +3,15 @@
 namespace App\Exports;
 
 use App\Http\Controllers\GuaranteeBankReportController;
+use App\Traits\ExcelFormatter\FormatterProductionReport;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use App\Traits\ExcelFormatter\FormatterRemainReport;
 
-class GuaranteeBankReportRemainExcel implements FromView, ShouldAutoSize, WithColumnFormatting, WithStyles
+class GuaranteeBankReportProductionExcel implements FromView, ShouldAutoSize, WithColumnFormatting, WithStyles
 {
-    use FormatterRemainReport;
+    use FormatterProductionReport;
 
     public function __construct()
     {

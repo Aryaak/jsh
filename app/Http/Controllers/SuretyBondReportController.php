@@ -46,18 +46,36 @@ class SuretyBondReportController extends Controller
         }
         return view('report.surety-bond.finance');
     }
-    public function product(Request $request){
+    public function production(Request $request){
+        if (isset($request->print)) {
+            $data = SuretyBond::table('production',$request->params);
+            return $data;
+        }
         if($request->ajax()){
             if($request->request_for == 'datatable'){
-                $data = SuretyBond::table('product',$request->params);
+                $data = SuretyBond::table('production',$request->params);
                 return datatables()->of($data)
                 ->addIndexColumn()
+                ->editColumn('insurance_value', fn($d) => number_format($d->insurance_value, thousands_separator: '.'))
+                ->editColumn('start_date', fn($d) => date('d/m/y', strtotime($d->start_date)))
+                ->editColumn('end_date', fn($d) => date('d/m/y', strtotime($d->end_date)))
+                ->editColumn('insurance_net', fn($d) => number_format($d->insurance_net, thousands_separator: '.'))
+                ->editColumn('insurance_polish_cost', fn($d) => number_format($d->insurance_polish_cost, thousands_separator: '.'))
+                ->editColumn('insurance_stamp_cost', fn($d) => number_format($d->insurance_stamp_cost, thousands_separator: '.'))
+                ->editColumn('insurance_nett_total', fn($d) => number_format($d->insurance_nett_total, thousands_separator: '.'))
+                ->editColumn('office_net', fn($d) => number_format($d->office_net, thousands_separator: '.'))
+                ->editColumn('admin_charge', fn($d) => number_format($d->admin_charge, thousands_separator: '.'))
+                ->editColumn('office_total', fn($d) => number_format($d->office_total, thousands_separator: '.'))
+                ->editColumn('profit', fn($d) => number_format($d->profit, thousands_separator: '.'))
+                ->editColumn('status', 'datatables.status-surety-bond')
+                ->rawColumns(['status'])
                 ->toJson();
-            }else if($request->request_for == 'chart'){
-                return response()->json($this->showResponse(SuretyBond::chart('product',$request->all())));
+            }
+            else if($request->request_for == 'chart'){
+                return response()->json($this->showResponse(SuretyBond::chart('production',$request->all())));
             }
         }
-        return view('report.surety-bond.product');
+        return view('report.surety-bond.production');
     }
     public function remain(Request $request){
         if (isset($request->print)) {
@@ -68,15 +86,15 @@ class SuretyBondReportController extends Controller
             $data = SuretyBond::table('remain',$request->params);
             return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('insurance_value', fn($d) => number_format($d->insurance_value, 2, ',', '.'))
+            ->editColumn('insurance_value', fn($d) => number_format($d->insurance_value, thousands_separator: '.'))
             ->editColumn('start_date', fn($d) => date('d/m/y', strtotime($d->start_date)))
             ->editColumn('end_date', fn($d) => date('d/m/y', strtotime($d->end_date)))
-            ->editColumn('office_net', fn($d) => number_format($d->office_net, 2, ',', '.'))
-            ->editColumn('admin_charge', fn($d) => number_format($d->admin_charge, 2, ',', '.'))
-            ->editColumn('office_total', fn($d) => number_format($d->office_total, 2, ',', '.'))
-            ->editColumn('service_charge', fn($d) => number_format($d->service_charge, 2, ',', '.'))
-            ->editColumn('receipt_total', fn($d) => number_format($d->receipt_total, 2, ',', '.'))
-            ->editColumn('total_charge', fn($d) => number_format($d->total_charge, 2, ',', '.'))
+            ->editColumn('office_net', fn($d) => number_format($d->office_net, thousands_separator: '.'))
+            ->editColumn('admin_charge', fn($d) => number_format($d->admin_charge, thousands_separator: '.'))
+            ->editColumn('office_total', fn($d) => number_format($d->office_total, thousands_separator: '.'))
+            ->editColumn('service_charge', fn($d) => number_format($d->service_charge, thousands_separator: '.'))
+            ->editColumn('receipt_total', fn($d) => number_format($d->receipt_total, thousands_separator: '.'))
+            ->editColumn('total_charge', fn($d) => number_format($d->total_charge, thousands_separator: '.'))
             ->editColumn('status', 'datatables.status-surety-bond')
             ->rawColumns(['status'])
             ->toJson();

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Laporan Produksi</title>
+    <title>Laporan Keuangan</title>
     <style>
         table {
             border-collapse: collapse;
@@ -30,7 +30,7 @@
 </head>
 <body>
     <div class="center">
-        <h5>Laporan Produksi</h5>
+        <h5>Laporan Keuangan</h5>
         @if ($name !== '')
             <h5>{{ $name }}</h5>
         @endif
@@ -40,6 +40,7 @@
         <thead>
             <tr>
                 <th rowspan="2">No.</th>
+                <th rowspan="2">Tgl. Bayar</th>
                 <th rowspan="2">No. Bond</th>
                 <th rowspan="2">Nama Principals</th>
                 <th rowspan="2">Nilai Bond</th>
@@ -71,6 +72,7 @@
             @forelse ($data as $d)
                 <tr>
                     <td class="center">{{ $loop->iteration }}.</td>
+                    <td class="center">{{ date('d/m/y', strtotime($d->paid_at)) }}</td>
                     <td>{{ $d->bond_number }}</td>
                     <td>{{ $d->principal_name }}</td>
                     <td class="right">{{ number_format($d->insurance_value, 2, ',', '.') }}</td>
@@ -108,11 +110,11 @@
                 @endphp
             @empty
                 <tr>
-                    <td colspan="18" class="center">Tidak ada data.</td>
+                    <td colspan="19" class="center">Tidak ada data.</td>
                 </tr>
             @endforelse
             <tr>
-                <td colspan="3"></td>
+                <td colspan="4"></td>
                 <td class="right"><b>{{ number_format($sum_insurance_value, 2, ',', '.') }}</b></td>
                 <td colspan="4"></td>
                 <td class="right"><b>{{ number_format($sum_insurance_net, 2, ',', '.') }}</b></td>

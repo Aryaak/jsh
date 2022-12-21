@@ -135,12 +135,12 @@
                     data.request_for = 'datatable'
                 }
             },[
-                {data: 'bond_number', name: 'sb.bond_number'},
+                {data: 'bond_number', name: 'gb.bond_number'},
                 {data: 'principal_name', name: 'p.name'},
-                {data: 'insurance_value', name: 'sb.insurance_value'},
-                {data: 'start_date', name: 'sb.start_date'},
-                {data: 'end_date', name: 'sb.end_date'},
-                {data: 'day_count', name: 'sb.day_count',render: function(row, type, data) {
+                {data: 'insurance_value', name: 'gb.insurance_value'},
+                {data: 'start_date', name: 'gb.start_date'},
+                {data: 'end_date', name: 'gb.end_date'},
+                {data: 'day_count', name: 'gb.day_count',render: function(row, type, data) {
                     if(data.due_day_tolerance > 0){
                         return (row - data.due_day_tolerance)+' + ('+data.due_day_tolerance+')'
                     }else{
@@ -148,12 +148,12 @@
                     }
                 }},
                 {data: 'code', name: 'it.code'},
-                {data: 'insurance_net', name: 'sb.insurance_net'},
-                {data: 'insurance_polish_cost', name: 'sb.insurance_polish_cost'},
-                {data: 'insurance_stamp_cost', name: 'sb.insurance_stamp_cost'},
+                {data: 'insurance_net', name: 'gb.insurance_net'},
+                {data: 'insurance_polish_cost', name: 'gb.insurance_polish_cost'},
+                {data: 'insurance_stamp_cost', name: 'gb.insurance_stamp_cost'},
                 {data: 'insurance_nett_total', name: 'insurance_nett_total', searchable:false},
-                {data: 'office_net', name: 'sb.office_net'},
-                {data: 'admin_charge', name: 'sb.admin_charge'},
+                {data: 'office_net', name: 'gb.office_net'},
+                {data: 'admin_charge', name: 'gb.admin_charge'},
                 {data: 'office_total', name: 'office_total', searchable:false},
                 {data: 'profit', name: 'profit', searchable:false},
                 {data: 'agent_name', name: 'a.name'},
@@ -182,39 +182,14 @@
                     $(api.column(15).footer()).html(numberFormat(calculateCol(15)));
                 },
             },null,false,false)
-            drawChart()
 
-            const filter = $("#filter-form").serializeArray();
-            var params = {}
-            $.each(filter, function(key, val) {
-                $("#params-container").append(`<x-form-input id="params" name="`+val.name+`" class="mb-3" value="`+val.value+`" required hidden/>`)
-                $("#params-container").append(`<x-form-input id="params" name="name[]" class="mb-3" value="`+val.name+`" required hidden/>`)
-            });
-            $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="`+start.val()+`" required hidden/>`)
-            $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="`+end.val()+`" required hidden/>`)
-            @if (request()->has('start') && request()->has('end'))
-                $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="{{ request()->start }}" required hidden/>`)
-                $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="{{ request()->end }}" required hidden/>`)
-            @endif
+            drawChart()
         })
         function filter(){
             table.ajax.reload()
             drawChart()
-
-            const filter = $("#filter-form").serializeArray();
-            var params = {}
-            $("#params-container").html('')
-            $.each(filter, function(key, val) {
-                $("#params-container").append(`<x-form-input id="params" name="`+val.name+`" class="mb-3" value="`+val.value+`" required hidden/>`)
-                $("#params-container").append(`<x-form-input id="params" name="name[]" class="mb-3" value="`+val.name+`" required hidden/>`)
-            });
-            $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="`+start.val()+`" required hidden/>`)
-            $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="`+end.val()+`" required hidden/>`)
-            @if (request()->has('start') && request()->has('end'))
-                $("#params-container").append(`<x-form-input id="params" name="startDate" class="mb-3" value="{{ request()->start }}" required hidden/>`)
-                $("#params-container").append(`<x-form-input id="params" name="endDate" class="mb-3" value="{{ request()->end }}" required hidden/>`)
-            @endif
         }
+
         function drawChart(){
             let formData = new FormData(document.getElementById('filter-form'))
             formData.append('startDate',start.val())
@@ -252,6 +227,7 @@
                 })
             }, false)
         }
+
         select.change(function() {
             const val = $(this).val()
             if (val == 1 || val == 7 || val == 31 || val == 93 || val == 186 || val == 365 ) end.val("{{ date('Y-m-d', strtotime('now')) }}")
@@ -274,7 +250,6 @@
             select.val("0")
             select.trigger("change")
         })
-
 
         $("#add-new-filter").click(function () {
             addNewFilter()

@@ -428,16 +428,14 @@ class GuaranteeBank extends Model
             );
         }else if($type == 'finance'){
             return self::kueri($params)->join('payment_details as pmd','gb.id','pmd.guarantee_bank_id')->join('payments as pm','pm.id','pmd.payment_id')->select(
-                'pm.paid_at','gb.receipt_number','gb.bond_number','p.name as principal_name','gb.insurance_value','gb.start_date','gb.end_date',
-                'gb.day_count','gb.due_day_tolerance','it.code','gb.office_net','gb.admin_charge', DB::raw('(gb.office_net + gb.admin_charge) as office_total'),'gb.service_charge', DB::raw('(gb.service_charge + gb.admin_charge) as receipt_total'), DB::raw('((gb.service_charge + gb.admin_charge) - (gb.office_net + gb.admin_charge)) as total_charge'),'a.name as agent_name',
+                'pm.paid_at','gb.receipt_number','gb.bond_number','p.name as principal_name','gb.insurance_value','gb.start_date','gb.end_date','gb.day_count','gb.due_day_tolerance','it.code',
+                'gb.insurance_net', 'gb.insurance_polish_cost', 'gb.insurance_stamp_cost', DB::raw("(gb.insurance_net + gb.insurance_polish_cost + gb.insurance_stamp_cost) as insurance_nett_total"),
+                'gb.office_net', 'gb.admin_charge', DB::raw("(gb.office_net + gb.admin_charge) as office_total"),
+                DB::raw("((gb.office_net + gb.admin_charge) - (gb.insurance_net + gb.insurance_polish_cost + gb.insurance_stamp_cost)) as profit"),
+                'a.name as agent_name',
                 DB::raw("(
                     SELECT sts.name FROM statuses AS sts INNER JOIN guarantee_bank_statuses AS gbs ON sts.id = gbs.status_id WHERE gbs.type = 'insurance' AND gbs.guarantee_bank_id = gb.id ORDER BY gbs.id DESC limit 1
                 ) as status"),
-                DB::raw("(
-                    SELECT IFNULL(pm.id,0) AS payment
-                    from payments as pm inner join payment_details as pmd on pm.id=pmd.payment_id
-                    where pmd.guarantee_bank_id = gb.id AND pm.agent_id = gb.agent_id ORDER BY pm.id DESC LIMIT 1
-                ) as payment")
             );
         }else if($type == 'remain'){
             return self::kueri($params)->select(
@@ -465,12 +463,28 @@ class GuaranteeBank extends Model
         }else if($type == 'production'){
             $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }else if($type == 'finance'){
-            $data = self::kueri($params)->selectRaw("date(gb.created_at) as date, sum(gb.office_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
+            $data = self::kueri($params)->join('payment_details as pmd','gb.id','pmd.surety_bond_id')->join('payments as pm','pm.id','pmd.payment_id')->selectRaw("date(gb.created_at) as date, sum(gb.office_net_total) as nominal")->groupBy(DB::raw("date(gb.created_at)"))->pluck('nominal','date')->toArray();
         }
         return [
             'labels' => array_map(function($val){ return Sirius::toShortDate($val); },array_keys($data)),
             'datasets' => array_values($data),
         ];
+    }
+    public static function summary(string $type, array $params)
+    {
+        if ($type == 'finance') {
+            $data = self::kueri($params)->join('payment_details as pmd','gb.id','pmd.surety_bond_id')->join('payments as pm','pm.id','pmd.payment_id')->select(
+                DB::raw("SUM(gb.insurance_net + gb.insurance_polish_cost + gb.insurance_stamp_cost) as insurance_nett_total"),
+                DB::raw("SUM(gb.office_net + gb.admin_charge) as office_total"),
+                DB::raw("SUM((gb.office_net + gb.admin_charge) - (gb.insurance_net + gb.insurance_polish_cost + gb.insurance_stamp_cost)) as profit"),
+            )->first();
+
+            return [
+                'income' => Sirius::toRupiah($data->office_total ?? 0),
+                'expense' => Sirius::toRupiah($data->insurance_nett_total ?? 0),
+                'profit' => Sirius::toRupiah($data->profit ?? 0)
+            ];
+        }
     }
     // Status
     public static function mappingProcessStatusNames($status)

@@ -15,8 +15,8 @@
 
         table tr th, table tr td {
             border: 1px solid black;
-            padding: 2px;
-            font-size: .43em;
+            padding: 3px;
+            font-size: .6em;
         }
 
         .center {

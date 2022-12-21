@@ -345,6 +345,7 @@ class SuretyBond extends Model
             'endDate' => 'sb.created_at',
             'receipt_number' => 'sb.receipt_number',
             'bond_number' => 'sb.bond_number',
+            'polish_number' => 'sb.polish_number',
             'principal_name' => 'p.name',
             'insurance_value' => 'sb.insurance_value',
         ];
@@ -397,7 +398,7 @@ class SuretyBond extends Model
     }
     public static function table(string $type,array $params){
         if($type == 'income'){
-            return self::kueri($params)->join('payment_details as pd','sb.id','pd.surety_bond_id')->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
         }else if($type == 'expense'){
             return self::kueri($params)->select('sb.id','sb.created_at as date','sb.insurance_net_total as nominal');
         }else if($type == 'production'){

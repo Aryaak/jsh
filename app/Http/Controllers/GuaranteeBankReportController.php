@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Sirius;
 use Illuminate\Http\Request;
 use App\Models\GuaranteeBank;
 
 class GuaranteeBankReportController extends Controller
 {
     public function income(Request $request){
+        if (isset($request->print)) {
+            $data = GuaranteeBank::table('income',$request->params);
+            return $data;
+        }
         if($request->ajax()){
             if($request->request_for == 'datatable'){
                 $data = GuaranteeBank::table('income',$request->params);
                 return datatables()->of($data)
                 ->addIndexColumn()
+                ->editColumn('date', fn($d) => Sirius::toLongDateTime($d->date))
+                ->editColumn('nominal', fn($d) => Sirius::toRupiah($d->nominal))
                 ->toJson();
             }else if($request->request_for == 'chart'){
                 return response()->json($this->showResponse(GuaranteeBank::chart('income',$request->all())));

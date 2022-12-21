@@ -361,6 +361,7 @@ class GuaranteeBank extends Model
             'endDate' => 'gb.created_at',
             'receipt_number' => 'gb.receipt_number',
             'bond_number' => 'gb.bond_number',
+            'polish_number' => 'sb.polish_number',
             'principal_name' => 'p.name',
             'insurance_value' => 'gb.insurance_value',
         ];

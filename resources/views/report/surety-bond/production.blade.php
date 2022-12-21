@@ -1,4 +1,4 @@
-@extends('layouts.main', ['title' => 'Laporan'])
+@extends('layouts.main', ['title' => 'Laporan Produksi'])
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
@@ -21,10 +21,9 @@
                 ];
 
                 $columns = [
-                    1 => "No. Kwitansi",
-                    2 => "No. Bond",
-                    3 => "No. Polis",
-                    4 => "Nilai Jaminan",
+                    'bond_number' => "No. Bond",
+                    'principal_name' => "Nama Principal",
+                    'insurance_value' => "Nilai Bond",
                 ];
 
                 $operators = [
@@ -43,17 +42,19 @@
         </div>
 
         <x-button type="button" id="add-new-filter" class="mb-3" icon="bx bx-plus" face="secondary">Tambah Filter</x-button>
+        <x-button type="button" id="delete-new-filter" class="mb-3 d-none" icon="bx bx-x" face="danger">Hapus Filter</x-button>
 
-        <form id="filter-form">
-        </form>
+        <form id="filter-form"></form>
 
         <x-button type="submit" onclick="filter()" class="w-100" icon='bx bxs-filter-alt'>Filter</x-button>
-    </x-card>
 
-    {{-- Chart --}}
-    <x-card class="mb-4">
-        <div class="chart-container-11">
-            <canvas id="chart"></canvas>
+        <div class="row">
+            <div class="col-6 mt-3">
+                <x-button id="print-pdf" class="w-100" icon='bx bxs-printer' face="danger">Cetak PDF</x-button>
+            </div>
+            <div class="col-6 mt-3">
+                <x-button id="print-excel" class="w-100" icon='bx bxs-printer' face="success">Cetak Excel</x-button>
+            </div>
         </div>
     </x-card>
 
@@ -63,40 +64,35 @@
             @slot('thead')
                 <tr>
                     <th rowspan="2" class="text-center">No.</th>
-                    <th rowspan="2" class="text-center">Bond</th>
+                    <th rowspan="2" class="text-center">No. Bond</th>
                     <th rowspan="2" class="text-center">Nama Prinicipal</th>
                     <th rowspan="2" class="text-center">Nilai Bond</th>
                     <th colspan="2" class="text-center">Jangka Waktu</th>
                     <th rowspan="2" class="text-center">Jml Hari</th>
                     <th rowspan="2" class="text-center">ASS</th>
+                    <th colspan="4" class="text-center">Setor Asuransi</th>
                     <th colspan="3" class="text-center">Setor Kantor</th>
-                    <th colspan="3" class="text-center">Kwitansi</th>
-                    <th rowspan="2" class="text-center">Sisa</th>
+                    <th rowspan="2" class="text-center">Laba</th>
                     <th rowspan="2" class="text-center">Ket</th>
                     <th rowspan="2" class="text-center">Status</th>
                 </tr>
                 <tr>
                     <th class="text-center">Awal</th>
                     <th class="text-center">Akhir</th>
+                    <th class="text-center">Nett Premi</th>
+                    <th class="text-center">Biaya Polis</th>
+                    <th class="text-center">Materai</th>
+                    <th class="text-center">Total Nett Premi</th>
                     <th class="text-center">Total Nett Kantor</th>
                     <th class="text-center">Biaya Admin</th>
                     <th class="text-center">Total Kantor</th>
-                    <th class="text-center">Service Charge</th>
-                    <th class="text-center">Biaya Admin</th>
-                    <th class="text-center">Premi Bayar</th>
                 </tr>
             @endslot
             @slot('tfoot')
-                <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+                <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
             @endslot
         </x-table>
     </x-card>
-
-    <x-form method="post" id="form-download" submit="Cetak" submitIcon="bx bxs-printer" action="{{ route('pdf.print.sb') }}">
-        <div id="params-container">
-            {{-- Tempat Tambah Template --}}
-        </div>
-    </x-form>
 @endsection
 
 @push('js')
@@ -115,8 +111,8 @@
 
         $(document).ready(function() {
             select.select2()
-            table = dataTableInit('table','Pemasukan',{
-                url : '{{ route($global->currently_on.'.sb-reports.product', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',
+            table = dataTableInit('table','Produksi',{
+                url : '{{ route($global->currently_on.'.sb-reports.production', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',
                 data: function(data){
                     const formData = $("#filter-form").serializeArray();
                     data.params = {}
@@ -145,13 +141,14 @@
                     }
                 }},
                 {data: 'code', name: 'it.code'},
+                {data: 'insurance_net', name: 'sb.insurance_net'},
+                {data: 'insurance_polish_cost', name: 'sb.insurance_polish_cost'},
+                {data: 'insurance_stamp_cost', name: 'sb.insurance_stamp_cost'},
+                {data: 'insurance_nett_total', name: 'insurance_nett_total', searchable:false},
                 {data: 'office_net', name: 'sb.office_net'},
                 {data: 'admin_charge', name: 'sb.admin_charge'},
                 {data: 'office_total', name: 'office_total', searchable:false},
-                {data: 'service_charge', name: 'sb.service_charge'},
-                {data: 'admin_charge', name: 'sb.admin_charge'},
-                {data: 'receipt_total', name: 'receipt_total', searchable:false},
-                {data: 'total_charge', name: 'total_charge', searchable:false},
+                {data: 'profit', name: 'profit', searchable:false},
                 {data: 'agent_name', name: 'a.name'},
                 {data: 'status',searchable:false,orderable:false},
             ],{
@@ -159,21 +156,22 @@
                     var api = this.api();
                     // Remove the formatting to get integer data for summation
                     var intVal = function (i) {
-                        return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                        return parseInt(String(i).replaceAll('.', ''));
                     };
                     let calculateCol = function(col){
                         return api.column(col, { page: 'current' }).data().reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
                     }
-                    $(api.column(3).footer()).html(calculateCol(3));
-                    $(api.column(8).footer()).html(calculateCol(8));
-                    $(api.column(9).footer()).html(calculateCol(9));
-                    $(api.column(10).footer()).html(calculateCol(10));
-                    $(api.column(11).footer()).html(calculateCol(11));
-                    $(api.column(12).footer()).html(calculateCol(12));
-                    $(api.column(13).footer()).html(calculateCol(13));
-                    $(api.column(14).footer()).html(calculateCol(14));
+                    $(api.column(3).footer()).html(numberFormat(calculateCol(3)));
+                    $(api.column(8).footer()).html(numberFormat(calculateCol(8)));
+                    $(api.column(9).footer()).html(numberFormat(calculateCol(9)));
+                    $(api.column(10).footer()).html(numberFormat(calculateCol(10)));
+                    $(api.column(11).footer()).html(numberFormat(calculateCol(11)));
+                    $(api.column(12).footer()).html(numberFormat(calculateCol(12)));
+                    $(api.column(13).footer()).html(numberFormat(calculateCol(13)));
+                    $(api.column(14).footer()).html(numberFormat(calculateCol(14)));
+                    $(api.column(15).footer()).html(numberFormat(calculateCol(15)));
                 },
             },null,false,false)
             // drawChart()
@@ -215,7 +213,7 @@
             formData.append('endDate',end.val())
             formData.append('request_for','chart')
 
-            ajaxPost('{{ route($global->currently_on.'.sb-reports.product', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',formData, null, function (result) {
+            ajaxPost('{{ route($global->currently_on.'.sb-reports.production', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',formData, null, function (result) {
                 const income = result.data
                 if(chart) chart.destroy()
                 chart = new Chart(document.getElementById('chart').getContext('2d'), {
@@ -274,18 +272,56 @@
             addNewFilter()
         })
 
+        $("#delete-new-filter").click(function() {
+            $('.filters').remove()
+            $(this).addClass('d-none')
+        })
+
         function addNewFilter() {
+            $("#delete-new-filter").removeClass('d-none')
+
             filterCount++
 
             $("#filter-form").append(`
-                <div class="row">
-                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" /></div>
-                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]" /></div>
+                <div class="row filters">
+                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" value='bond_number' /></div>
+                    <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]"  value='like' /></div>
                     <div class="col-md-4 mb-2"><x-form-input label="Isi Filter" id="value-` + filterCount + `" name="columns[` + filterCount + `][value]" type="search"/></div>
                 </div>
             `)
 
             $("#column-" + filterCount + ", #operator-" + filterCount + "").select2()
         }
+
+        $("#filter-form").submit(function (e){
+            e.preventDefault()
+            filter()
+        })
+
+        function printParams(){
+            const filters = $("#filter-form").serializeArray();
+            console.log(filters);
+
+            var params = '';
+            @if ($global->currently_on == 'branch')
+                params = '?';
+            @endif
+
+            params += "&params[startDate]=" + $("#startDate").val()
+            params += "&params[endDate]=" + $("#endDate").val()
+            $.each(filters, function(index, filter) {
+                params += "&params[" + filter.name + "]=" + filter.value;
+            })
+
+            return params
+        }
+
+        $("#print-pdf").click(function () {
+            window.open('{{ route($global->currently_on.'.sb-reports.print.production', ['print' => 'pdf', 'regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}' + printParams());
+        })
+
+        $("#print-excel").click(function () {
+            window.open('{{ route($global->currently_on.'.sb-reports.print.production', ['print' => 'excel', 'regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}' + printParams());
+        })
     </script>
 @endpush

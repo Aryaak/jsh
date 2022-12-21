@@ -21,10 +21,10 @@
                 ];
 
                 $columns = [
-                    1 => "No. Kwitansi",
-                    2 => "No. Bond",
-                    3 => "Nama Principal",
-                    4 => "Nilai Bond",
+                    'receipt_number' => "No. Kwitansi",
+                    'bond_number' => "No. Bond",
+                    'principal_name' => "Nama Principal",
+                    'insurance_value' => "Nilai Bond",
                 ];
 
                 $operators = [
@@ -275,7 +275,7 @@
 
             $("#filter-form").append(`
                 <div class="row filters">
-                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" value='1' /></div>
+                    <div class="col-md-4 mb-2"><x-form-select label="Kolom" id="column-` + filterCount + `" :options="$columns" name="columns[` + filterCount + `][name]" value='receipt_number' /></div>
                     <div class="col-md-4 mb-2"><x-form-select label="Operator" id="operator-` + filterCount + `" :options="$operators" name="columns[` + filterCount + `][operator]"  value='like' /></div>
                     <div class="col-md-4 mb-2"><x-form-input label="Isi Filter" id="value-` + filterCount + `" name="columns[` + filterCount + `][value]" type="search"/></div>
                 </div>

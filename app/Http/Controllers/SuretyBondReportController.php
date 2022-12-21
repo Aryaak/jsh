@@ -101,4 +101,13 @@ class SuretyBondReportController extends Controller
         }
         return view('report.surety-bond.remain');
     }
+    public function profit(Request $request){
+        if($request->ajax()){
+            $data = SuretyBond::table('profit',$request->params);
+            return datatables()->of($data)
+            ->addIndexColumn()
+            ->toJson();
+        }
+        return view('report.surety-bond.profit');
+    }
 }

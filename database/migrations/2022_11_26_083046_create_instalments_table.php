@@ -14,7 +14,9 @@ return new class extends Migration
             $table->dateTime('paid_at');
             $table->text('desc')->nullable();
             $table->foreignId('branch_id')->constrained();
+            $table->unsignedBigInteger('regional_id')->nullable();
             $table->timestamps();
+            $table->foreign('regional_id')->references('id')->on('branches');
         });
     }
 };

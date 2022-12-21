@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Branch;
 
 class Instalment extends Model
 {
     use HasFactory;
-    public $fillable = ['nominal','paid_at','desc','branch_id'];
+    public $fillable = ['nominal','paid_at','desc','branch_id','regional_id'];
     public $guarded = [];
     public function payables(){
         return $this->belongsToMany(Payable::class)->withPivot('nominal')->withTimestamps();
@@ -39,7 +40,8 @@ class Instalment extends Model
                 'nominal' => $args->nominal,
                 'paid_at' => $args->datetime,
                 'desc' => $args->desc,
-                'branch_id' => $args->branchId
+                'branch_id' => $args->branchId,
+                'regional_id' => Branch::whereId($args->branchId)->firstOrFail()->regional_id
             ],
             'payables' => $payablePaid,
             'instalment_payable' => $instalmentPayment

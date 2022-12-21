@@ -186,13 +186,13 @@
                 var end = tahun+'-'+bulan+'-31'
 
                 @if ($global->currently_on == 'main')
-                    var url = "{{ route('main.sb-reports.product', ['start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('main.sb-reports.production', ['start' => '-start-', 'end' => '-end-']) }}"
                 @endif
                 @if ($global->currently_on == 'regional')
-                    var url = "{{ route('regional.sb-reports.product', ['regional' => $global->regional, 'start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('regional.sb-reports.production', ['regional' => $global->regional, 'start' => '-start-', 'end' => '-end-']) }}"
                 @endif
                 @if ($global->currently_on == 'branch')
-                    var url = "{{ route('branch.sb-reports.product', ['regional' => $global->regional, 'branch' => $global->branch, 'start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('branch.sb-reports.production', ['regional' => $global->regional, 'branch' => $global->branch, 'start' => '-start-', 'end' => '-end-']) }}"
                 @endif
 
                 var url2 = url.replace('-start-',start)
@@ -294,13 +294,13 @@
                 var end = tahun+'-'+bulan+'-31'
 
                 @if ($global->currently_on == 'main')
-                    var url = "{{ route('main.bg-reports.product', ['start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('main.bg-reports.production', ['start' => '-start-', 'end' => '-end-']) }}"
                 @endif
                 @if ($global->currently_on == 'regional')
-                    var url = "{{ route('regional.bg-reports.product', ['regional' => $global->regional ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('regional.bg-reports.production', ['regional' => $global->regional ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
                 @endif
                 @if ($global->currently_on == 'branch')
-                    var url = "{{ route('branch.bg-reports.product', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('branch.bg-reports.production', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
                 @endif
 
                 var url2 = url.replace('-start-',start)

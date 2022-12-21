@@ -400,7 +400,7 @@ class SuretyBond extends Model
         if($type == 'income'){
             return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
         }else if($type == 'expense'){
-            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.insurance_net_total as nominal');
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.insurance_net_total as nominal');
         }else if($type == 'production'){
             return self::kueri($params)->select(
                 'sb.receipt_number','sb.bond_number','p.name as principal_name','sb.insurance_value','sb.start_date','sb.end_date','sb.day_count','sb.due_day_tolerance','it.code',

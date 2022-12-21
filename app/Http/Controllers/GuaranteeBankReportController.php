@@ -28,11 +28,17 @@ class GuaranteeBankReportController extends Controller
         return view('report.guarantee-bank.income');
     }
     public function expense(Request $request){
+        if (isset($request->print)) {
+            $data = GuaranteeBank::table('expense',$request->params);
+            return $data;
+        }
         if($request->ajax()){
             if($request->request_for == 'datatable'){
                 $data = GuaranteeBank::table('expense',$request->params);
                 return datatables()->of($data)
                 ->addIndexColumn()
+                ->editColumn('date', fn($d) => Sirius::toLongDateTime($d->date))
+                ->editColumn('nominal', fn($d) => Sirius::toRupiah($d->nominal))
                 ->toJson();
             }else if($request->request_for == 'chart'){
                 return response()->json($this->showResponse(GuaranteeBank::chart('expense',$request->all())));

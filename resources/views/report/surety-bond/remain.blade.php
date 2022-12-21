@@ -59,57 +59,6 @@
         </div>
     </x-card>
 
-    {{-- Summary --}}
-    {{-- <div class="row">
-        <div class="col-md-4 mb-3">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-danger">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-expense">Rp10.000.000,-</span><br>
-                        <small class="h6">Total Pengeluaran</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-primary">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-income">Rp30.000.000,-</span><br>
-                        <small class="h6">Total Pemasukan</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-        <div class="col-md-4 mb-4">
-            <x-card>
-                <div class="d-flex display-5 align-items-center">
-                    <div class="p-0 m-0 text-success">
-                        <i class="bx bx-money"></i>
-                    </div>
-                    <div class="border-start ps-3 ms-3">
-                        <span id="total-profit">Rp20.000.000,-</span><br>
-                        <small class="h6">Total Profit</small>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-    </div> --}}
-
-    {{-- Chart --}}
-    {{-- <x-card class="mb-4">
-        <div class="chart-container-11">
-            <canvas id="chart"></canvas>
-        </div>
-    </x-card> --}}
-
     {{-- Table --}}
     <x-card>
         <x-table id="table">

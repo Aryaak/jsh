@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\SuretyBondReportFinanceExcel;
+use App\Exports\SuretyBondReportIncomeExcel;
 use App\Exports\SuretyBondReportProductionExcel;
 use App\Exports\SuretyBondReportRemainExcel;
 use App\Models\Branch;
@@ -80,6 +81,28 @@ class SuretyBondReportPrintController
         }
         else if ($request->print == 'excel') {
             return Excel::download(new SuretyBondReportRemainExcel, $fileName . '.' . 'xlsx');
+        }
+
+        return abort(404);
+    }
+
+    public function income(Request $request)
+    {
+        $fileName = date("Ymd").time();
+
+        if ($request->print == 'pdf') {
+            $request->merge(['print', true]);
+            $name = ($request->branch) ? Branch::where('slug', $request->branch)->first()->name : (($request->regional) ? Branch::where('slug', $request->regional)->first()->name : '');
+            $start = date('d/m/Y', strtotime($request->params['startDate']));
+            $end = date('d/m/Y', strtotime($request->params['endDate']));
+            $data = $this->main->income($request)->get();
+            $pdf = Pdf::loadView('pdf.income', compact('name', 'start', 'end', 'data'));
+            $pdf->setPaper('A4', 'landscape');
+            $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
+            return $pdf->download($fileName . '.' . 'pdf');
+        }
+        else if ($request->print == 'excel') {
+            return Excel::download(new SuretyBondReportIncomeExcel, $fileName . '.' . 'xlsx');
         }
 
         return abort(404);

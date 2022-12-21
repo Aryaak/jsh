@@ -25,7 +25,7 @@
         <x-menu route="main.sb-reports.*" icon="bx bxs-file">
             Laporan Surety Bond
             @slot('submenus')
-                <x-submenu route="main.sb-reports.product">Produksi</x-submenu>
+                <x-submenu route="main.sb-reports.production">Produksi</x-submenu>
                 <x-submenu route="main.sb-reports.finance">Keuangan</x-submenu>
                 <x-submenu route="main.sb-reports.remain">Sisa Agen</x-submenu>
                 <x-submenu route="main.sb-reports.income">Pemasukan</x-submenu>
@@ -37,7 +37,7 @@
         <x-menu route="main.bg-reports.*" icon="bx bxs-file">
             Laporan Bank Garansi
             @slot('submenus')
-                <x-submenu route="main.bg-reports.product">Produksi</x-submenu>
+                <x-submenu route="main.bg-reports.production">Produksi</x-submenu>
                 <x-submenu route="main.bg-reports.finance">Keuangan</x-submenu>
                 <x-submenu route="main.bg-reports.remain">Sisa Agen</x-submenu>
                 <x-submenu route="main.bg-reports.income">Pemasukan</x-submenu>
@@ -97,7 +97,7 @@
         <x-menu route="regional.sb-reports.*" icon="bx bxs-file">
             Laporan Surety Bond
             @slot('submenus')
-                <x-submenu route="regional.sb-reports.product" :route-params="['regional' => $global->regional->slug]">Produksi</x-submenu>
+                <x-submenu route="regional.sb-reports.production" :route-params="['regional' => $global->regional->slug]">Produksi</x-submenu>
                 <x-submenu route="regional.sb-reports.finance" :route-params="['regional' => $global->regional->slug]">Keuangan</x-submenu>
                 <x-submenu route="regional.sb-reports.remain" :route-params="['regional' => $global->regional->slug]">Sisa Agen</x-submenu>
                 <x-submenu route="regional.sb-reports.income" :route-params="['regional' => $global->regional->slug]">Pemasukan</x-submenu>
@@ -109,7 +109,7 @@
         <x-menu route="regional.bg-reports.*" icon="bx bxs-file">
             Laporan Bank Garansi
             @slot('submenus')
-                <x-submenu route="regional.bg-reports.product" :route-params="['regional' => $global->regional->slug]">Produksi</x-submenu>
+                <x-submenu route="regional.bg-reports.production" :route-params="['regional' => $global->regional->slug]">Produksi</x-submenu>
                 <x-submenu route="regional.bg-reports.finance" :route-params="['regional' => $global->regional->slug]">Keuangan</x-submenu>
                 <x-submenu route="regional.bg-reports.remain" :route-params="['regional' => $global->regional->slug]">Sisa Agen</x-submenu>
                 <x-submenu route="regional.bg-reports.income" :route-params="['regional' => $global->regional->slug]">Pemasukan</x-submenu>
@@ -172,7 +172,7 @@
         <x-menu route="branch.sb-reports.*" icon="bx bxs-file">
             Laporan Surety Bond
             @slot('submenus')
-                <x-submenu route="branch.sb-reports.product" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Produksi</x-submenu>
+                <x-submenu route="branch.sb-reports.production" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Produksi</x-submenu>
                 <x-submenu route="branch.sb-reports.finance" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Keuangan</x-submenu>
             @endslot
         </x-menu>
@@ -180,7 +180,7 @@
         <x-menu route="branch.bg-reports.*" icon="bx bxs-file">
             Laporan Bank Garansi
             @slot('submenus')
-                <x-submenu route="branch.bg-reports.product" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Produksi</x-submenu>
+                <x-submenu route="branch.bg-reports.production" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Produksi</x-submenu>
                 <x-submenu route="branch.bg-reports.finance" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Keuangan</x-submenu>
             @endslot
         </x-menu>

@@ -109,7 +109,7 @@
         let table = null
         let bankRate = null
         $(document).ready(function () {
-            table = dataTableInit('table','Rate Bank',{url : '{{ route($global->currently_on.'.master.bank-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
+            table = dataTableInit('table','Rate bank',{url : '{{ route($global->currently_on.'.master.bank-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'bank.name', name: 'bank.name'},
                 {data: 'insurance_type.name', name: 'insurance_type.name'},
                 {data: 'min_value', name: 'min_value'},
@@ -167,7 +167,7 @@
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Rate Agen?",
+                title: "Yakin ingin menghapus rate bank ini?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()

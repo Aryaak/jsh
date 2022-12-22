@@ -220,7 +220,7 @@
 
         $(document).on('click', '.btn-delete', function () {
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Bank?",
+                title: "Yakin ingin menghapus bank " + $(this).data('name') + "?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()

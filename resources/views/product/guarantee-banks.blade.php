@@ -1183,7 +1183,7 @@
             $(document).on('click', '.btn-delete', function () {
                 // Delete
                 NegativeConfirm.fire({
-                    title: "Yakin ingin menghapus Bank Garansi?",
+                    title: "Yakin ingin menghapus bank garansi ini?",
                 }).then((result) => {
                     if (result.isConfirmed) {
                         loading()

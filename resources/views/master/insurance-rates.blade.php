@@ -103,13 +103,7 @@
         let table = null
         let insuranceRate = null
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance Rate',{url : '{{ route($global->currently_on.'.master.insurance-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
-                // {data: 'name', name: 'name'},
-                // {data: 'insurance_type_name', name: 'insurance_type_name'},
-                // {data: 'min_value', name: 'min_value'},
-                // {data: 'rate_value', name: 'rate_value'},
-                // {data: 'polish_cost', name: 'polish_cost'},
-                // {data: 'stamp_cost', name: 'stamp_cost'},
+            table = dataTableInit('table','Rate asuransi',{url : '{{ route($global->currently_on.'.master.insurance-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'insurance.name', name: 'insurance.name'},
                 {data: 'insurance_type.name', name: 'insurance_type.name'},
                 {data: 'min_value', name: 'min_value'},
@@ -162,7 +156,7 @@
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Rate Asuransi?",
+                title: "Yakin ingin menghapus rate asuransi ini?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()

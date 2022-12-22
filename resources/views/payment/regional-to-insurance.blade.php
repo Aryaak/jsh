@@ -140,7 +140,7 @@
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Pembayaran?",
+                title: "Yakin ingin menghapus pembayaran ini?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     ajaxPost("{{ route('payments.payment.destroy','-id-') }}".replace('-id-',$(this).data('id')),{_method:'delete'},'',function(){

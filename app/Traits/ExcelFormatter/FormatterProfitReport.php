@@ -23,7 +23,7 @@ trait FormatterProfitReport
         $data = $this->main->profit($request)->get();
 
         $this->startRows = ($request->branch || $request->regional) ? 5 : 4;
-        $this->totalRows = $data->count() + $this->startRows;
+        $this->totalRows = $data->count() + 1 + $this->startRows;
         if ($data->count() == 0) $this->totalRows++;
 
         return view('excel.profit', compact('name', 'start', 'end', 'data'));

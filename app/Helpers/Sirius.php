@@ -308,7 +308,7 @@ class Sirius
      **/
     public static function toRupiah(float $nominal, int $decimal = 0): string
     {
-        $number = number_format(abs(round($nominal)), intval($decimal), ',', '.').(($decimal == 0) ? ',-' : '');
+        $number = number_format(abs($nominal), intval($decimal), ',', '.').(($decimal == 0) ? ',-' : '');
         if ($nominal >= 0) {
             return "Rp$number";
         } else {

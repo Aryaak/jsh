@@ -31,7 +31,14 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                $sum_debit = $sum_credit = 0;
+            @endphp
             @forelse ($data as $d)
+                @php
+                    $sum_debit += $d->debit;
+                    $sum_credit += $d->credit;
+                @endphp
                 <tr>
                     <td>{{ $loop->iteration }}.</td>
                     <td>{{ $d->receipt_number }}</td>
@@ -43,6 +50,11 @@
                     <td colspan="4">Tidak ada data.</td>
                 </tr>
             @endforelse
+            <tr>
+                <td colspan="2"></td>
+                <td><b>{{ $sum_debit }}</b></td>
+                <td><b>{{ $sum_credit }}</b></td>
+            </tr>
         </tbody>
     </table>
 </body>

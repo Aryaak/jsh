@@ -64,6 +64,7 @@ Route::get('request-bank-garansi', [GuaranteeBankDraftController::class, 'indexC
 Route::post('request-bank-garansi', [GuaranteeBankDraftController::class, 'storeClient']);
 Route::get('principal-client/{principal}', [PrincipalController::class, 'show'])->name('client.principal');
 Route::get('obligee-client/{obligee}', [ObligeeController::class, 'show'])->name('client.obligee');
+Route::get('serviceworker.js', fn() => redirect()->route('main.dashboard')); // Entah kenapa beberapa kali login malah masuk ke sini
 
 /**
  * -------------------------------------------------------------------------

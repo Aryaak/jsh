@@ -35,7 +35,7 @@ class GuaranteeBankReportPrintController
             $pdf = Pdf::loadView('pdf.production', compact('name', 'start', 'end', 'data'));
             $pdf->setPaper('A4', 'landscape');
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
-            return $pdf->stream($fileName . '.' . 'pdf');
+            return $pdf->download($fileName . '.' . 'pdf');
         }
         else if ($request->print == 'excel') {
             return Excel::download(new GuaranteeBankReportProductionExcel, $fileName . '.' . 'xlsx');
@@ -57,7 +57,7 @@ class GuaranteeBankReportPrintController
             $pdf = Pdf::loadView('pdf.finance', compact('name', 'start', 'end', 'data'));
             $pdf->setPaper('A4', 'landscape');
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
-            return $pdf->stream($fileName . '.' . 'pdf');
+            return $pdf->download($fileName . '.' . 'pdf');
         }
         else if ($request->print == 'excel') {
             return Excel::download(new GuaranteeBankReportFinanceExcel, $fileName . '.' . 'xlsx');

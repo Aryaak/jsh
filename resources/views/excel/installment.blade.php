@@ -36,18 +36,18 @@
             @php
                 $sum_tagihan = $sum_titipan = 0;
             @endphp
-            @forelse ($rows as $row)
+            @forelse ($data as $d)
                 @php
-                    $sum_tagihan += $row->jumlah_tagihan;
-                    $sum_titipan += $row->jumlah_titipan;
+                    $sum_tagihan += $d->jumlah_tagihan;
+                    $sum_titipan += $d->jumlah_titipan;
                 @endphp
                 <tr>
-                    <td>{{ \PhpOffice\PhpSpreadsheet\Shared\Date::dateTimeToExcel(\Carbon\Carbon::make($row->tgl_setor)) }}</td>
-                    <td>{{ $row->jumlah_polis }}</td>
-                    <td>{{ $row->jumlah_tagihan }}</td>
-                    <td>{{ \PhpOffice\PhpSpreadsheet\Shared\Date::dateTimeToExcel(\Carbon\Carbon::make($row->tgl_titipan)) }}</td>
-                    <td>{{ $row->jumlah_titipan }}</td>
-                    <td>{{ $row->keterangan }}</td>
+                    <td>{{ \PhpOffice\PhpSpreadsheet\Shared\Date::dateTimeToExcel(\Carbon\Carbon::make($d->tgl_setor)) }}</td>
+                    <td>{{ $d->jumlah_polis }}</td>
+                    <td>{{ $d->jumlah_tagihan }}</td>
+                    <td>{{ \PhpOffice\PhpSpreadsheet\Shared\Date::dateTimeToExcel(\Carbon\Carbon::make($d->tgl_titipan)) }}</td>
+                    <td>{{ $d->jumlah_titipan }}</td>
+                    <td>{{ $d->keterangan }}</td>
                 </tr>
             @empty
                 <tr>

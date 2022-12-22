@@ -40,7 +40,8 @@
         <thead>
             <tr>
                 <th>No.</th>
-                <th>No. Kwitansi</th>
+                <th>Judul</th>
+                <th>Tgl. Transaksi</th>
                 <th>Debit</th>
                 <th>Kredit</th>
             </tr>
@@ -56,17 +57,18 @@
                 @endphp
                 <tr>
                     <td class="center">{{ $loop->iteration }}.</td>
-                    <td class="center">{{ $d->receipt_number }}</td>
+                    <td class="center">{{ $d->title }}</td>
+                    <td class="center">{{ Sirius::toLongDateTime($d->paid_at) }}</td>
                     <td class="right">{{ Sirius::toRupiah($d->debit, 2) }}</td>
                     <td class="right">{{ Sirius::toRupiah($d->credit, 2) }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="center">Tidak ada data.</td>
+                    <td colspan="5" class="center">Tidak ada data.</td>
                 </tr>
             @endforelse
             <tr>
-                <td colspan="2"></td>
+                <td colspan="3"></td>
                 <td class="right"><b>{{ Sirius::toRupiah($sum_debit, 2) }}</b></td>
                 <td class="right"><b>{{ Sirius::toRupiah($sum_credit, 2) }}</b></td>
             </tr>

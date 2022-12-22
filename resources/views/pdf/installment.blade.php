@@ -59,18 +59,18 @@
             @php
                 $sum_tagihan = $sum_titipan = 0;
             @endphp
-            @forelse ($rows as $row)
+            @forelse ($data as $d)
                 @php
-                    $sum_tagihan += $row->jumlah_tagihan;
-                    $sum_titipan += $row->jumlah_titipan;
+                    $sum_tagihan += $d->jumlah_tagihan;
+                    $sum_titipan += $d->jumlah_titipan;
                 @endphp
                 <tr>
-                    <td class="center">{{ Sirius::toLongDate($row->tgl_setor) }}</td>
-                    <td class="right">{{ Sirius::toRupiah($row->jumlah_polis) }}</td>
-                    <td class="right">{{ Sirius::toRupiah($row->jumlah_tagihan) }}</td>
-                    <td class="center">{{ Sirius::toLongDate($row->tgl_titipan) }}</td>
-                    <td class="right">{{ Sirius::toRupiah($row->jumlah_titipan) }}</td>
-                    <td>{{ $row->keterangan }}</td>
+                    <td class="center">{{ Sirius::toLongDate($d->tgl_setor) }}</td>
+                    <td class="right">{{ Sirius::toRupiah($d->jumlah_polis) }}</td>
+                    <td class="right">{{ Sirius::toRupiah($d->jumlah_tagihan) }}</td>
+                    <td class="center">{{ Sirius::toLongDate($d->tgl_titipan) }}</td>
+                    <td class="right">{{ Sirius::toRupiah($d->jumlah_titipan) }}</td>
+                    <td>{{ $d->keterangan }}</td>
                 </tr>
             @empty
                 <tr class="center">

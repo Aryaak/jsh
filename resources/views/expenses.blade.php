@@ -113,8 +113,8 @@
                 if(response.success){
                     expense = response.data
                     $('#show-title').html(expense.title)
-                    $('#show-nominal').html(expense.nominal)
-                    $('#show-date').html(expense.transaction_date)
+                    $('#show-nominal').html(expense.nominal_converted)
+                    $('#show-date').html(expense.transaction_date_converted)
                     $('#show-desc').html(expense.description)
                 }
             })
@@ -122,7 +122,7 @@
 
         $(document).on('click', '.btn-edit', function () {
             $('#edit-title').val(expense.title)
-            $('#edit-nominal').val(expense.nominal);
+            $('#edit-nominal').val(numberFormat(expense.nominal).replace(',', ''));
             $('#edit-date').val(expense.transaction_date)
             $('#edit-desc').val(expense.description)
         })
@@ -130,7 +130,7 @@
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Pengeluaran?",
+                title: "Yakin ingin menghapus pengeluaran ini?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()

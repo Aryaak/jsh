@@ -215,7 +215,7 @@
         let tableSB = null
         let tableBG = null
         $(document).ready(function () {
-            tableSB = dataTableInit('table-sb','Rate Agen',{
+            tableSB = dataTableInit('table-sb','Rate agen',{
                     url : '{{ route($global->currently_on.'.master.agent-rates.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}',
                     data : { is_bg : 0 }
                 },[
@@ -297,7 +297,7 @@
         $(document).on('click', '.btn-delete-sb', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Rate Agen?",
+                title: "Yakin ingin menghapus rate agen ini?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()
@@ -351,7 +351,7 @@
         $(document).on('click', '.btn-delete-bg', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Rate Agen?",
+                title: "Yakin ingin menghapus rate agen ini?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()

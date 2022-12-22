@@ -92,7 +92,7 @@
         let table = null
         let insurance = {}
         $(document).ready(function () {
-            table = dataTableInit('table','Insurance Type',{url : '{{ route($global->currently_on.'.master.insurances.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
+            table = dataTableInit('table','Asuransi',{url : '{{ route($global->currently_on.'.master.insurances.index', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '']) }}'},[
                 {data: 'name', name: 'name'},
                 {data: 'alias', name: 'alias'},
                 {data: 'address', name: 'address'},
@@ -141,7 +141,7 @@
 
         $(document).on('click', '.btn-delete', function () {
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Asuransi?",
+                title: "Yakin ingin menghapus asuransi " + $(this).data('name') + "?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()

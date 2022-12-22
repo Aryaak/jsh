@@ -181,7 +181,7 @@
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Obligee?",
+                title: "Yakin ingin menghapus obligee " + $(this).data('name') + "?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()

@@ -19,7 +19,6 @@
                     <th>Alamat</th>
                     <th>No. HP/Telp</th>
                     <th>Skor</th>
-                    {{-- <th>Status Sinkronisasi</th> --}}
                     <th width="105px">Tindakan</th>
                 </tr>
             @endslot
@@ -303,7 +302,6 @@
                 {data: 'address', name: 'address'},
                 {data: 'phone', name: 'phone'},
                 {data: 'score', name: 'score'},
-                // {data: 'phone', name: 'phone'},
             ])
 
             select2Init("#create-info-province-id, #edit-info-province-id",'{{ route('select2.province') }}',0,$('#modal-create'))
@@ -426,7 +424,7 @@
         $(document).on('click', '.btn-delete', function () {
             // Delete
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Principal?",
+                title: "Yakin ingin menghapus principal " + $(this).data('name') + "?",
             }).then((result) => {
                 if (result.isConfirmed) {
                     loading()

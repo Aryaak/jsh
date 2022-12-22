@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Sirius;
 use DB;
 use Exception;
 use App\Models\Expense;
@@ -17,6 +18,8 @@ class ExpenseController extends Controller
             $data = Expense::all();
             return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('transaction_date', fn($d) => Sirius::toLongDate($d->transaction_date))
+            ->editColumn('nominal', fn($d) => Sirius::toRupiah($d->nominal))
             ->editColumn('action', 'datatables.actions-show-delete')
             ->toJson();
         }
@@ -49,6 +52,8 @@ class ExpenseController extends Controller
 
     public function show(Branch $regional, Expense $pengeluaran)
     {
+        $pengeluaran->transaction_date_converted = Sirius::toLongDate($pengeluaran->transaction_date);
+        $pengeluaran->nominal_converted = Sirius::toRupiah($pengeluaran->nominal);
         return response()->json($this->showResponse($pengeluaran->toArray()));
     }
 

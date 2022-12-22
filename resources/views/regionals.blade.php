@@ -117,9 +117,10 @@
 
         $(document).on('click', '.btn-delete', function () {
             NegativeConfirm.fire({
-                title: "Yakin ingin menghapus Regional?",
+                title: "Yakin ingin menghapus regional " + $(this).data('name') + "?",
             }).then((result) => {
                 if (result.isConfirmed) {
+                    loading()
                     let formData = new FormData()
                     formData.append('_method','delete')
                     ajaxPost("{{ route('main.regionals.destroy','-id-') }}".replace('-id-',$(this).data('id')),formData,'',function(){

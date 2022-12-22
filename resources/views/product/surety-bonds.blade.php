@@ -1162,7 +1162,7 @@
             $(document).on('click', '.btn-delete', function () {
                 // Delete
                 NegativeConfirm.fire({
-                    title: "Yakin ingin menghapus Surety Bond?",
+                    title: "Yakin ingin menghapus surety bond ini?",
                 }).then((result) => {
                     if (result.isConfirmed) {
                         loading()

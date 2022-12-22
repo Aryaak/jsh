@@ -12,7 +12,7 @@ use App\Helpers\Sirius;
 class OtherReportController
 {
     public function profit(Request $request){
-        if($request->ajax()){
+        if (isset($request->print) || $request->ajax()) {
             $toInsurance = DB::table('payments as pm')->join('insurances AS i','i.id','pm.insurance_id')
             ->where('pm.type','regional_to_insurance')->where('pm.regional_id',auth()->id())->selectRaw("
                 CONCAT('Setoran ke ',i.name) AS title,pm.paid_at,0 AS debit,pm.total_bill AS credit
@@ -26,6 +26,11 @@ class OtherReportController
             ->unionAll($toInsurance)
             ->unionAll($customExpense)
             ->get();
+        }
+        if (isset($request->print)) {
+            return $profits;
+        }
+        if($request->ajax()){
             return datatables()->of($profits)
             ->addIndexColumn()
             ->toJson();

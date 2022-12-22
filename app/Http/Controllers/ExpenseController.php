@@ -61,11 +61,14 @@ class ExpenseController extends Controller
     {
     }
 
-    public function update(Request $request, Expense $pengeluaran)
+    public function update(Branch $regional, Expense $pengeluaran, Request $request)
     {
         try {
             DB::beginTransaction();
-            $pengeluaran->ubah($request->all());
+            $params = $request;
+            $params['nominal'] = str_replace('.','',$params['nominal']);
+            $params['regional_id'] = $regional->id;
+            $pengeluaran->ubah($params->all());
             $http_code = 200;
             $response = $this->storeResponse();
             DB::commit();

@@ -15,7 +15,6 @@ class DashboardController extends Controller
     public function __invoke()
     {
         $labels = [
-            'Desember',
             'Januari',
             'Februari',
             'Maret',
@@ -27,6 +26,7 @@ class DashboardController extends Controller
             'September',
             'Oktober',
             'November',
+            'Desember',
         ];
 
 
@@ -44,14 +44,14 @@ class DashboardController extends Controller
         for($i = 0; $i < (12-count($data_sb)); $i++){
             $month_idx = $i+count($data_sb);
             $bulan = $labels[$month_idx].' 2022';
-            array_push($data_sb_final, ['total_profit'=>0,'month'=>$month_idx, 'bulan'=>$bulan]);
+            array_push($data_sb_final, ['total_profit'=>0,'month'=>$month_idx+1, 'bulan'=>$bulan]);
         }
         for($i = 0; $i < count($data_sb); $i++){
             $month_idx = $i;
             $bulan = $labels[$month_idx].' '.$data_sb[$i]->tahun;
             array_push($data_sb_final, ['total_profit'=>$data_sb[$i]->total_profit,'month'=>$data_sb[$i]->month, 'bulan'=>$bulan]);
         }
-
+        // dd($data_sb_final);
         // Bank Garansi
         $data_bg = GuaranteeBank::
                 select(DB::raw('SUM(profit) as total_profit, MONTH(document_expired_at) as month, YEAR(document_expired_at) as tahun'))

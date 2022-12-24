@@ -101,6 +101,34 @@
             @json($data_bgs[10]['bulan']),
             @json($data_bgs[11]['bulan']),
         ];
+        const labels_RI = [
+            @json($data_RI[0]['bulan']),
+            @json($data_RI[1]['bulan']),
+            @json($data_RI[2]['bulan']),
+            @json($data_RI[3]['bulan']),
+            @json($data_RI[4]['bulan']),
+            @json($data_RI[5]['bulan']),
+            @json($data_RI[6]['bulan']),
+            @json($data_RI[7]['bulan']),
+            @json($data_RI[8]['bulan']),
+            @json($data_RI[9]['bulan']),
+            @json($data_RI[10]['bulan']),
+            @json($data_RI[11]['bulan']),
+        ];
+        const labels_BR = [
+            @json($data_BR[0]['bulan']),
+            @json($data_BR[1]['bulan']),
+            @json($data_BR[2]['bulan']),
+            @json($data_BR[3]['bulan']),
+            @json($data_BR[4]['bulan']),
+            @json($data_BR[5]['bulan']),
+            @json($data_BR[6]['bulan']),
+            @json($data_BR[7]['bulan']),
+            @json($data_BR[8]['bulan']),
+            @json($data_BR[9]['bulan']),
+            @json($data_BR[10]['bulan']),
+            @json($data_BR[11]['bulan']),
+        ];
         const labels = [
             'Januari',
             'Februari',
@@ -186,13 +214,13 @@
                 var end = tahun+'-'+bulan+'-31'
 
                 @if ($global->currently_on == 'main')
-                    var url = "{{ route('main.sb-reports.production', ['start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('main.sb-reports.production', ['startDate' => '-start-', 'endDate' => '-end-']) }}"
                 @endif
                 @if ($global->currently_on == 'regional')
-                    var url = "{{ route('regional.sb-reports.production', ['regional' => $global->regional, 'start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('regional.sb-reports.production', ['regional' => $global->regional, 'startDate' => '-start-', 'endDate' => '-end-']) }}"
                 @endif
                 @if ($global->currently_on == 'branch')
-                    var url = "{{ route('branch.sb-reports.production', ['regional' => $global->regional, 'branch' => $global->branch, 'start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('branch.sb-reports.production', ['regional' => $global->regional, 'branch' => $global->branch, 'startDate' => '-start-', 'endDate' => '-end-']) }}"
                 @endif
 
                 var url2 = url.replace('-start-',start)
@@ -294,13 +322,13 @@
                 var end = tahun+'-'+bulan+'-31'
 
                 @if ($global->currently_on == 'main')
-                    var url = "{{ route('main.bg-reports.production', ['start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('main.bg-reports.production', ['startDate' => '-start-', 'endDate' => '-end-']) }}"
                 @endif
                 @if ($global->currently_on == 'regional')
-                    var url = "{{ route('regional.bg-reports.production', ['regional' => $global->regional ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('regional.bg-reports.production', ['regional' => $global->regional ?? '', 'startDate' => '-start-', 'endDate' => '-end-']) }}"
                 @endif
                 @if ($global->currently_on == 'branch')
-                    var url = "{{ route('branch.bg-reports.production', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '', 'start' => '-start-', 'end' => '-end-']) }}"
+                    var url = "{{ route('branch.bg-reports.production', ['regional' => $global->regional ?? '', 'branch' => $global->branch ?? '', 'startDate' => '-start-', 'endDate' => '-end-']) }}"
                 @endif
 
                 var url2 = url.replace('-start-',start)
@@ -333,7 +361,7 @@
         // Pengeluaran (Instalment)
         var canvas_BR = document.getElementById('chart_BR');
         var data_BR = {
-            labels: labels,
+            labels: labels_BR,
             datasets: [
                 {
                     label: "Pengeluaran",
@@ -406,7 +434,7 @@
         // Pemasukan (Payment)
         var canvas_RI = document.getElementById('chart_RI');
         var data_RI = {
-            labels: labels,
+            labels: labels_RI,
             datasets: [
                 {
                     label: "Pemasukan",

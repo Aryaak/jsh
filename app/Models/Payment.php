@@ -180,6 +180,9 @@ class Payment extends Model
     }
     public static function buat(array $params): self{
         $request = self::fetch((object)$params);
+        if($request->payment['total_bill'] == 0){
+            throw new Exception("Total pembayaran adalah 0", 422);
+        }
         $payment = self::create($request->payment);
         $payment->details()->createMany($request->details);
         return $payment;

@@ -22,8 +22,11 @@ class SuretyBondController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
-            $data = SuretyBond::with('insurance_status','insurance_status.status','principal')->select('surety_bonds.*')->when(auth()->user()->is_regional == 0,function($query){
+            $data = SuretyBond::with('insurance_status','insurance_status.status','principal')->select('surety_bonds.*')
+            ->when(auth()->user()->role == 'branch',function($query){
                 $query->where('branch_id',auth()->user()->branch_id);
+            })->when(auth()->user()->role == 'regional',function($query){
+                $query->whereIn('branch_id',Branch::where('regional_id',auth()->id())->pluck('id')->toArray());
             })->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()

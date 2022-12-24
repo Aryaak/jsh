@@ -45,7 +45,7 @@ class RegionalController extends Controller
         return response()->json($this->showResponse($regional->toArray()));
     }
 
-    public function update(Request $request, $regional)
+    public function update(Request $request,Branch $regional)
     {
         try {
             DB::beginTransaction();

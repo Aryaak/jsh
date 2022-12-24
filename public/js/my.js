@@ -200,7 +200,7 @@ function ajaxErrorResponse(request, status, error) {
                 validation_error_msg += "- "+request.responseJSON.errors[key]+"<br>"
             });
         }else{
-            title = "Tidak bisa menghapus data"
+            title = "Kesalahan validasi!"
             validation_error_msg = request.responseJSON.message
         }
         msg = validation_error_msg

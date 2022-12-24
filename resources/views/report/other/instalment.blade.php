@@ -35,15 +35,15 @@
             @endphp
             @forelse ($rows as $row)
                 @php
-                    $sum_tagihan += $row->jumlah_tagihan;
-                    $sum_titipan += $row->jumlah_titipan;
+                    $sum_tagihan += (float)$row->jumlah_tagihan;
+                    $sum_titipan += (float)$row->jumlah_titipan;
                 @endphp
                 <tr>
-                    <td class="text-center">{{ Sirius::toLongDate($row->tgl_setor) }}</td>
-                    <td class="text-right">{{ Sirius::toRupiah($row->jumlah_polis) }}</td>
-                    <td class="text-right">{{ Sirius::toRupiah($row->jumlah_tagihan) }}</td>
-                    <td class="text-center">{{ Sirius::toLongDate($row->tgl_titipan) }}</td>
-                    <td class="text-right">{{ Sirius::toRupiah($row->jumlah_titipan) }}</td>
+                    <td class="text-center">{{ $row->tgl_setor }}</td>
+                    <td class="text-right">{{ Sirius::toRupiah((float)$row->jumlah_polis) }}</td>
+                    <td class="text-right">{{ Sirius::toRupiah((float)$row->jumlah_tagihan) }}</td>
+                    <td class="text-center">{{ $row->tgl_titipan }}</td>
+                    <td class="text-right">{{ Sirius::toRupiah((float)$row->jumlah_titipan) }}</td>
                     <td>{{ $row->keterangan }}</td>
                 </tr>
             @empty

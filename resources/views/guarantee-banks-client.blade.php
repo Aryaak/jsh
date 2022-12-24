@@ -9,15 +9,16 @@
     <x-card header="Request Bank Garansi">
         <div class="border rounded p-2" style="background-color: #EEE">
             <x-form id="form-create" method="post">
-                <div class="row mb-2">
+                <div class="row mb-4">
                     <div class="col-12 text-center">
                         <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Bank Garansi</div>
                     </div>
                 </div>
-                <div class="d-flex flex-column flex-lg-row flex-wrap gap-2">
-                    <div style="flex: 25%;">
-                        <div class="w-100 mb-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="w-100 mb-4">
                             <x-card header="Data" smallHeader>
+                                <x-form-select label="Cabang" id="create-branch-id" name="branchId" class="mb-3" required/>
                                 <x-form-input label="No. Kwitansi" id="create-receipt-number" name="receiptNumber" class="mb-3" required />
                                 <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
@@ -28,8 +29,8 @@
                             </x-card>
                         </div>
                     </div>
-                    <div style="flex: 25%;">
-                        <div class="w-100 mb-2">
+                    <div class="col-md-4">
+                        <div class="w-100 mb-4">
                             <x-card header="Principal" smallHeader>
                                 <x-form-select label="Nama" id="create-principal-id" :options="[]" name="principalId" class="mb-3" required/>
                                 <div class="mb-3">
@@ -46,9 +47,18 @@
                                 </div>
                             </x-card>
                         </div>
+                        <div class="w-100 mb-4">
+                            <x-card header="Obligee" smallHeader>
+                                <x-form-select label="Nama" id="create-obligee-id" :options="[]" name="obligeeId" class="mb-3" required/>
+                                <div>
+                                    <x-form-label>Alamat</x-form-label>
+                                    <div id="create-obligee-address">-</div>
+                                </div>
+                            </x-card>
+                        </div>
                     </div>
-                    <div style="flex: 25%;">
-                        <div class="w-100 mb-2">
+                    <div class="col-md-4">
+                        <div class="w-100 mb-4">
                             <x-card header="Jaminan" smallHeader>
                                 <x-form-input label="Nilai Kontrak" id="create-contract-value" name="contractValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Nilai Jaminan" id="create-insurance-value" name="insuranceValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
@@ -80,57 +90,6 @@
                             </x-card>
                         </div>
                     </div>
-                    <div style="flex: 25%;">
-                        <div class="w-100 mb-2">
-                            <x-card header="Obligee" smallHeader>
-                                <x-form-select label="Nama" id="create-obligee-id" :options="[]" name="obligeeId" class="mb-3" required/>
-                                <div>
-                                    <x-form-label>Alamat</x-form-label>
-                                    <div id="create-obligee-address">-</div>
-                                </div>
-                            </x-card>
-                        </div>
-                    </div>
-                    <div style="flex: 25%;">
-                        <div class="w-100 mb-3">
-                            <x-card header="Tambahan" smallHeader>
-                                <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                                <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                                <div>
-                                    <x-form-label>Premi Bayar</x-form-label>
-                                    <div id="create-premi-charge">Rp0,-</div>
-                                </div>
-                            </x-card>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-2">
-                    <div class="col-12 text-center">
-                        <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Bank Garansi</div>
-                    </div>
-                </div>
-                <div class="row mx-1">
-                    <x-card class="p-1">
-                        <div class="d-flex flex-column flex-lg-row">
-                            @foreach ($scorings->groupBy('category') as $grouped)
-                            <div class="border p-0" style="position: relative; flex: 100%;">
-                                {{-- <div class="border-bottom p-1 text-center">30</div> --}}
-                                <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
-                                <div class="px-3 pt-3 pb-5">
-                                    @foreach ($grouped as $score)
-                                    <div class="mb-3">
-                                        <div class="fw-bold">{{ $score->title }}</div>
-                                        @foreach ($score->details as $detail)
-                                            <x-form-check type="radio" id="show-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}">{{ $detail->text }}</x-form-check>
-                                        @endforeach
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </x-card>
                 </div>
             </x-form>
         </div>
@@ -149,6 +108,7 @@
         let table = null
         let guaranteeBank = null
         $(document).ready(function () {
+            select2Init("#create-branch-id",'{{ route('select2.branch') }}',0)
             select2Init("#create-agent-id",'{{ route('select2.agent') }}',0)
             select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0)
             select2Init("#create-principal-id",'{{ route('select2.principal') }}',0)

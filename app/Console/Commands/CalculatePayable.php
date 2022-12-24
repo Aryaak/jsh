@@ -18,8 +18,8 @@ class CalculatePayable extends Command
     public function handle()
     {
         try {
-            $lastMonth = date('m',strtotime('-1 month'));
-            // $lastMonth = date('m');
+            // $lastMonth = date('m',strtotime('-1 month'));
+            $lastMonth = date('m');
             $params = [];
             Log::info("Proses perhitungan payable periode ".$lastMonth.' - '.date('Y')." dimulai...");
             foreach (Branch::where('is_regional',false)->get() as $branch) {

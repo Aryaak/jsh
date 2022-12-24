@@ -65,9 +65,9 @@ class OtherReportController
             $rows[] = (object)[
                 'tgl_setor' => isset($payables[$i]) ? Sirius::longMonth($payables[$i]->month) : '',
                 'jumlah_polis' => isset($payables[$i]) ? $payables[$i]->jumlah_polis : '',
-                'jumlah_tagihan' => isset($payables[$i]) ? Sirius::toRupiah($payables[$i]->jumlah_tagihan) : '',
+                'jumlah_tagihan' => isset($payables[$i]) ? $payables[$i]->jumlah_tagihan : '',
                 'tgl_titipan' => isset($instalments[$i]) ? Sirius::toShortDate($instalments[$i]->paid_at) : '',
-                'jumlah_titipan' => isset($instalments[$i]) ? Sirius::toRupiah($instalments[$i]->nominal) : '',
+                'jumlah_titipan' => isset($instalments[$i]) ? $instalments[$i]->nominal : '',
                 'keterangan' => isset($instalments[$i]) ? $instalments[$i]->desc : '',
             ];
         }

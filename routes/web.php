@@ -121,6 +121,7 @@ Route::middleware(['auth'])->group(function () {
         Route::apiResource('asuransi', InsuranceController::class)->names('insurances')->except('index');
         Route::apiResource('agen', AgentController::class)->names('agents')->except('index');
         Route::put('principal/{principal}/sync', [PrincipalController::class, 'sync'])->name('principals.sync');
+        Route::get('principal/sync-with-jamsyar', [PrincipalController::class, 'jamsyar'])->name('principals.jamsyar');
         Route::apiResource('principal', PrincipalController::class)->names('principals')->except('index');
         Route::apiResource('rate-agen', AgentRateController::class)->names('agent-rates')->except('index');
         Route::apiResource('jenis-jaminan', InsuranceTypeController::class)->names('insurance-types')->except('index');
@@ -128,6 +129,7 @@ Route::middleware(['auth'])->group(function () {
         Route::apiResource('rate-bank', BankRateController::class)->names('bank-rates')->except('index');
         Route::apiResource('bank', BankController::class)->names('banks')->except('index');
         Route::put('obligee/{obligee}/sync', [ObligeeController::class, 'sync'])->name('obligees.sync');
+        Route::get('obligee/sync-with-jamsyar', [ObligeeController::class, 'jamsyar'])->name('obligees.jamsyar');
         Route::apiResource('obligee', ObligeeController::class)->names('obligees')->except('index');
         Route::apiResource('template', TemplateController::class)->names('templates')->except('index');
     });

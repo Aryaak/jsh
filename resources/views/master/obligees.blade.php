@@ -8,6 +8,7 @@
 @section('contents')
     <x-card header="Daftar Obligee">
         @slot('headerAction')
+            <x-button size="sm" id="btn-sync-with-jamsyar" icon="bx bx-refresh">Sync ke Jamsyar</x-button>
             <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Obligee</x-button>
         @endslot
 
@@ -201,6 +202,13 @@
                 }
             })
         })
-
+        $(document).on('click', '#btn-sync-with-jamsyar', function () {
+            loading()
+            ajaxGet("{{ route('master.obligees.jamsyar') }}",null,function(response){
+                if(response.success){
+                    table.ajax.reload()
+                }
+            })
+        })
     </script>
 @endpush

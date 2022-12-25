@@ -103,4 +103,21 @@ class ObligeeController extends Controller
 
         return response()->json($response, $http_code);
     }
+
+    public function jamsyar()
+    {
+        try {
+            DB::beginTransaction();
+            Obligee::jamsyar();
+            $http_code = 200;
+            $response = $this->response("Sinkron dengan Jamsyar berhasil!");
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
+    }
 }

@@ -50,7 +50,7 @@ class PrincipalController extends Controller
 
     public function show(Principal $principal)
     {
-        $principal->city->province;
+        if(isset($principal->city->province)) $principal->city->province;
         $principal->scorings;
         $principal->certificates;
         $principal->score = Str::replace('.', ',', $principal->score);

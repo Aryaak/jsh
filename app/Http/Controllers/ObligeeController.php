@@ -46,7 +46,7 @@ class ObligeeController extends Controller
 
     public function show(Obligee $obligee)
     {
-        $obligee->city->province;
+        if(isset($obligee->city->province)) $obligee->city->province;
         return response()->json($this->showResponse($obligee->toArray()));
     }
 

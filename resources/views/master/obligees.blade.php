@@ -160,8 +160,8 @@
                     $('#show-name').html(obligee.name)
                     $('#show-address').html(obligee.address)
                     $('#show-type').html(obligee.type_name)
-                    $('#show-province').html(obligee.city.province.name)
-                    $('#show-city').html(obligee.city.name)
+                    $('#show-province').html(obligee.city ? obligee.city.province.name : null)
+                    $('#show-city').html(obligee.city ? obligee.city.name : null)
                     $('#show-jamsyar-id').html(obligee.jamsyar_id)
                     $('#show-jamsyar-code').html(obligee.jamsyar_code)
                 }
@@ -172,8 +172,10 @@
             $('#edit-name').val(obligee.name)
             $('#edit-address').val(obligee.address)
             $('#edit-type').val(obligee.type)
-            select2SetVal('edit-province-id',obligee.city.province.id,obligee.city.province.name)
-            select2SetVal('edit-city-id',obligee.city.id,obligee.city.name)
+            if(obligee.city){
+                select2SetVal('edit-province-id',obligee.city.province.id,obligee.city.province.name)
+                select2SetVal('edit-city-id',obligee.city.id,obligee.city.name)
+            }
             $('#edit-jamsyar-id').val(obligee.address)
             $('#edit-jamsyar-code').val(obligee.address)
         })

@@ -50,12 +50,12 @@ class Principal extends Model
 
     public function npwpExpiredAtConverted(): Attribute
     {
-        return Attribute::make(get: fn() => Sirius::toLongDate($this->npwp_expired_at));
+        return Attribute::make(get: fn() => $this->npwp_expired_at ? Sirius::toLongDate($this->npwp_expired_at) : null);
     }
 
     public function nibExpiredAtConverted(): Attribute
     {
-        return Attribute::make(get: fn() => Sirius::toLongDate($this->nib_expired_at));
+        return Attribute::make(get: fn() => $this->nib_expired_at ? Sirius::toLongDate($this->nib_expired_at) : null);
     }
 
     // Relations

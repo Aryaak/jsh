@@ -357,8 +357,8 @@
                     $('#show-email').html(principal.email)
                     $('#show-phone').html(principal.phone)
                     $('#show-domisile').html(principal.domicile)
-                    $('#show-province').html(principal.city.province.name)
-                    $('#show-city').html(principal.city.name)
+                    $('#show-province').html(principal.city ? principal.city.province.name : null)
+                    $('#show-city').html(principal.city ? principal.city.name : null)
                     $('#show-address').html(principal.address)
                     $('#show-jamsyar-id').html(principal.jamsyar_id)
                     $('#show-pic-name').html(principal.pic_name)
@@ -391,8 +391,10 @@
             $('#edit-info-email').val(principal.email)
             $('#edit-info-phone').val(principal.phone)
             $('#edit-info-domicile').val(principal.domicile)
-            select2SetVal('edit-info-province-id',principal.city.province.id,principal.city.province.name)
-            select2SetVal('edit-info-city-id',principal.city.id,principal.city.name)
+            if(principal.city){
+                select2SetVal('edit-info-province-id',principal.city.province.id,principal.city.province.name)
+                select2SetVal('edit-info-city-id',principal.city.id,principal.city.name)
+            }
             $('#edit-info-pic-name').val(principal.pic_name)
             $('#edit-info-pic-position').val(principal.pic_position)
             $('#edit-info-npwp-number').val(principal.npwp_number)

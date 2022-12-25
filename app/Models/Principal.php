@@ -66,6 +66,9 @@ class Principal extends Model
     public function certificates(){
         return $this->hasMany(Certificate::class);
     }
+    public function certificate(){
+        return $this->hasOne(Certificate::class)->latestOfMany();
+    }
     public function scorings(){
         return $this->belongsToMany(Scoring::class)->withTimestamps();
     }

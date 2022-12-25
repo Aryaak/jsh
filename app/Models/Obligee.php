@@ -26,7 +26,7 @@ class Obligee extends Model
     protected $appends = ['type_name'];
     public function typeName(): Attribute
     {
-        return Attribute::make(get: fn () => self::types()[$this->type]);
+        return Attribute::make(get: fn () => $this->type ? self::types()[$this->type] : null);
     }
     public function city(){
         return $this->belongsTo(City::class);

@@ -11,10 +11,10 @@ class InsuranceTypeSeeder extends Seeder
     public function run()
     {
         $params = [
-            ['code' => 'PB','name' => 'Pelaksanaan'],
-            ['code' => 'MB','name' => 'Pemeliharaan'],
-            ['code' => 'BB','name' => 'Penawaran'],
-            ['code' => 'APB','name' => 'Uang Muka']
+            ['code' => 'PB','name' => 'Jaminan Pelaksanaan'],
+            ['code' => 'MB','name' => 'Jaminan Pemeliharaan'],
+            ['code' => 'BB','name' => 'Jaminan Penawaran'],
+            ['code' => 'APB','name' => 'Jaminan Uang Muka']
         ];
         InsuranceType::insert($params);
         DB::table('insurance_types')->update(['created_at' => now(),'updated_at' => now()]);

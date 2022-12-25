@@ -436,7 +436,14 @@
                 }
             })
         })
-
+        $(document).on('click', '.btn-sync', function () {
+            loading()
+            ajaxPost("{{ route('master.principals.sync','-principal-') }}".replace('-principal-',$(this).data('id')),{_method: 'put'},null,function(response){
+                if(response.success){
+                    table.ajax.reload()
+                }
+            })
+        })
         $("#create-new-certificate").click(function () {
             addNewCertificate('create')
         })

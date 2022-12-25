@@ -107,6 +107,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', fn() => redirect(route('dashboard')));
         Route::apiResource('asuransi', InsuranceController::class)->names('insurances')->except('index');
         Route::apiResource('agen', AgentController::class)->names('agents')->except('index');
+        Route::put('principal/{principal}/sync', [PrincipalController::class, 'sync'])->name('principals.sync');
         Route::apiResource('principal', PrincipalController::class)->names('principals')->except('index');
         Route::apiResource('rate-agen', AgentRateController::class)->names('agent-rates')->except('index');
         Route::apiResource('jenis-jaminan', InsuranceTypeController::class)->names('insurance-types')->except('index');

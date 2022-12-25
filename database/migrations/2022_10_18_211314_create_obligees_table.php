@@ -10,14 +10,13 @@ return new class extends Migration
     {
         Schema::create('obligees', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->mediumText('name');
             $table->text('address');
-            $table->string('type');
-            $table->string('jamsyar_id');
-            $table->string('jamsyar_code');
-            $table->string('status');
-
-            $table->foreignId('city_id')->constrained();
+            $table->string('type')->nullable();
+            $table->string('jamsyar_id')->nullable();
+            $table->string('jamsyar_code')->nullable();
+            $table->string('status')->nullable();
+            $table->foreignId('city_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

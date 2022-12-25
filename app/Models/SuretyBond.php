@@ -8,6 +8,7 @@ use App\Models\Status;
 use App\Helpers\Sirius;
 use App\Models\Scoring;
 use App\Models\Payment;
+use App\Helpers\Jamsyar;
 use App\Models\AgentRate;
 use Illuminate\Support\Str;
 use App\Models\InsuranceRate;
@@ -149,6 +150,9 @@ class SuretyBond extends Model
     }
 
     // Relations
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
     public function principal(){
         return $this->belongsTo(Principal::class);
     }
@@ -338,6 +342,92 @@ class SuretyBond extends Model
             'principalId' => $this->principal_id,
             'suretyBondId' => $this->id,
         ]);
+    }
+
+    public static function sectors(){
+        //disesuaikan dengan dokumentasi jamshar v1.1.0, 12-20-2022 by Imoh
+        return [
+            258 => 'Konstruksi',
+            563 => 'Non Konstruksi'
+        ];
+    }
+
+    public static function basts(){
+        //disesuaikan dengan dokumentasi jamshar v1.1.0, 12-20-2022 by Imoh
+        return [
+            1 => 'Ada',
+            2 => 'Tidak Ada',
+        ];
+    }
+
+    public static function jamsyarInsuranceType(int $returnType = 0){
+        //disesuaikan dengan dokumentasi jamshar v1.1.0, 12-20-2022 by Imoh
+        if($returnType === 0){
+            return [
+                7 => 'Jaminan Pelaksanaan',
+                8 => 'Jaminan Pemeliharaan',
+                5 => 'Jaminan Penawaran',
+                6 => 'Jaminan Uang Muka'
+            ];
+        }else if($returnType == 1){
+            return [
+                'Jaminan Pelaksanaan' => 7,
+                'Jaminan Pemeliharaan' => 8,
+                'Jaminan Penawaran' => 5,
+                'Jaminan Uang Muka' => 6,
+            ];
+        }
+    }
+
+    public function fetchSync(): array{
+        // dd($this);
+        $principal = (object)[
+            'kodeUnik' => $this->principal->jamsyar_code ?? throw new Exception("Principal ini belum terdaftar di Jamsyar", 422),
+            'noSurat' => $this->principal->certificate->number,
+            'tglSurat' => $this->principal->certificate->expired_at,
+            'kategori' => 'Belum diterapkan',
+
+        ];
+        $kodeUnikObligee = $this->obligee->jamsyar_code ?? throw new Exception("Obligee ini belum terdaftar di Jamsyar", 422);
+        return [
+            "jenis_penjaminan" => ($attemp = self::jamsyarInsuranceType(1)[$this->insurance_type->name] ?? null) ? $attemp : throw new Exception("Jenis Jaminan ini tidak dikenali Jamsyar", 422),
+            "sektor" => $this->sector ?? 'Belum diterapkan',
+            "principal" => $principal->kodeUnik,
+            "kategori_principal" => $principal->kategori,
+            "obligee" => $kodeUnikObligee,
+            "no_surat" => $principal->noSurat,
+            "tanggal_surat" => $principal->tglSurat,
+            "no_kontrak" => $this->document_number,
+            "tanggal_kontrak" => $this->document_expired_at,
+            "bast" => 2,
+            "propinsi" => $this->principal->city->province_id,
+            "kota" => $this->principal->city->id,
+            "nama_proyek" => $this->project_name,
+            "nilai_proyek" => $this->contract_value,
+            "nilai_bond" => $this->insurance_value,
+            "tanggal_awal" => $this->start_date,
+            "tanggal_akhir" => $this->end_date,
+            "penambahan_jangka_waktu" => $this->due_day_tolerance,
+            "biaya_administrasi" => $this->admin_charge,
+            "biaya_materai" => $this->insurance_stamp_cost,
+            "subagen" => null,
+        ];
+    }
+
+    public function sync(){
+        $url = config('app.env') == 'local' ? 'http://devmicroservice.jamkrindosyariah.co.id/Api/permohonan_sbd' : 'http://192.168.190.168:8002/Api/permohonan_sbd';
+        $params = $this->fetchSync();
+        $response = Http::asJson()->acceptJson()->withToken(Jamsyar::login())
+        ->post($url, $this->fetchSync());
+        if($response->successful()){
+            $data = $response->json()['data'];
+            return $this->update([
+                'jamsyar_code' => $data['kode_unik_obligee'],
+                'status' => 'Sinkron',
+            ]);
+        }else{
+            throw new Exception($response->json()['keterangan'], $response->json()['status']);
+        }
     }
     private static function fetchQuery(object $args): object{
         $columns = [

@@ -19,7 +19,7 @@ class PrincipalController extends Controller
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('score', 'datatables.score-principal')
-            ->editColumn('action', 'datatables.actions-show-delete')
+            ->editColumn('action', 'datatables.actions-sync-show-delete')
             ->rawColumns(['score', 'action'])
             ->toJson();
         }
@@ -50,7 +50,7 @@ class PrincipalController extends Controller
 
     public function show(Principal $principal)
     {
-        $principal->city->province;
+        if(isset($principal->city->province)) $principal->city->province;
         $principal->scorings;
         $principal->certificates;
         $principal->score = Str::replace('.', ',', $principal->score);
@@ -85,6 +85,22 @@ class PrincipalController extends Controller
             $principal->hapus();
             $http_code = 200;
             $response = $this->destroyResponse();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
+    }
+    public function sync(Principal $principal)
+    {
+        try {
+            DB::beginTransaction();
+            $principal->sync();
+            $http_code = 200;
+            $response = $this->response("Sinkron principal berhasil!");
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

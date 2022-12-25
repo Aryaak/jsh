@@ -16,7 +16,7 @@ class GuaranteeBankSeeder extends Seeder
 {
     public function run()
     {
-        for ($i=1; $i < 150; $i++) {
+        for ($i=1; $i < 5; $i++) {
             GuaranteeBank::buat([
                 "receiptNumber" => "111".$i,
                 "bondNumber" => "112".$i,

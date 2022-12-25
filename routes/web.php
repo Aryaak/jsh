@@ -50,8 +50,22 @@ Route::get('/design/{page}', [DesignController::class, 'page'])->name('design.pa
 Route::get('/test', function (Request $request) {
     // dd(Jamsyar::cities('jsh','Semangat1','sura'));
     // dd(\App\Models\Branch::find(1)->table()->get());
-    dd(\App\Models\GuaranteeBank::table('remain',[])->get());
+    // dd(\App\Models\GuaranteeBank::table('remain',[])->get());
+    // dd(\App\Models\Obligee::find(1)->sync());
+    dd(\App\Models\SuretyBond::find(1)->fetchSync());
 });
+Route::get('/subagent', function (Request $request) {
+    $url = config('app.env') == 'local' ? 'http://devmicroservice.jamkrindosyariah.co.id/Api/get_subagen' : 'http://192.168.190.168:8002/Api/get_subagen';
+    $response = \Illuminate\Support\Facades\Http::asJson()->acceptJson()->withToken(Jamsyar::login())
+    ->post($url, [
+        "kode_subagen" => "",
+        "nama_subagen" => "",
+        "limit" => 20,
+        "offset" => 0
+    ]);
+    dd($response);
+});
+
 
 /**
  * -------------------------------------------------------------------------
@@ -106,12 +120,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', fn() => redirect(route('dashboard')));
         Route::apiResource('asuransi', InsuranceController::class)->names('insurances')->except('index');
         Route::apiResource('agen', AgentController::class)->names('agents')->except('index');
+        Route::put('principal/{principal}/sync', [PrincipalController::class, 'sync'])->name('principals.sync');
         Route::apiResource('principal', PrincipalController::class)->names('principals')->except('index');
         Route::apiResource('rate-agen', AgentRateController::class)->names('agent-rates')->except('index');
         Route::apiResource('jenis-jaminan', InsuranceTypeController::class)->names('insurance-types')->except('index');
         Route::apiResource('rate-asuransi', InsuranceRateController::class)->names('insurance-rates')->except('index');
         Route::apiResource('rate-bank', BankRateController::class)->names('bank-rates')->except('index');
         Route::apiResource('bank', BankController::class)->names('banks')->except('index');
+        Route::put('obligee/{obligee}/sync', [ObligeeController::class, 'sync'])->name('obligees.sync');
         Route::apiResource('obligee', ObligeeController::class)->names('obligees')->except('index');
         Route::apiResource('template', TemplateController::class)->names('templates')->except('index');
     });

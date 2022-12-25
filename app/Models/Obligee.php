@@ -8,6 +8,7 @@ use Exception;
 use App\Helpers\Jamsyar;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Obligee extends Model
 {
@@ -22,18 +23,31 @@ class Obligee extends Model
         'jamsyar_id',
         'jamsyar_code'
     ];
-
+    protected $appends = ['type_name'];
+    public function typeName(): Attribute
+    {
+        return Attribute::make(get: fn () => self::types()[$this->type]);
+    }
     public function city(){
         return $this->belongsTo(City::class);
     }
-
+    public static function types(){
+        //disesuaikan dengan dokumentasi jamshar v1.1.0, 12-20-2022 by Imoh
+        return [
+            '1' => 'SWASTA',
+            '2' => 'PEMERINTAH SUMBER DANA APBN APBD',
+            '3' => 'BUMN',
+            '4' => 'ANAK BUMN',
+            '5' => 'BUMD'
+        ];
+    }
     private static function fetch(object $args): array{
         return [
             'name' => $args->name,
             'address' => $args->address,
             'type' => $args->type,
             'city_id' => $args->city_id,
-            'status' => 'Sinkron',
+            'status' => 'Belum Sinkron',
             'jamsyar_id' => $args->jamsyar_id,
             'jamsyar_code' => $args->jamsyar_code
         ];
@@ -56,15 +70,18 @@ class Obligee extends Model
         ->post($url, [
             "nama_obligee" => $this->name,
             "alamat_obligee" => $this->address,
-            "propinsi" => 17,
-            "kota" => 15,
+            "propinsi" => $this->city->province_id ?? 17,
+            "kota" => $this->city->id ?? 15,
             "jenis_obligee" => 1
         ]);
-        dd($response->json());
         if($response->successful()){
-            return $response->json();
+            $data = $response->json()['data'];
+            return $this->update([
+                'jamsyar_code' => $data['kode_unik_obligee'],
+                'status' => 'Sinkron',
+            ]);
         }else{
-            // throw new Exception($response->json()['keterangan'], $response->json()['status']);
+            throw new Exception($response->json()['keterangan'], $response->json()['status']);
         }
     }
 }

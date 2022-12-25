@@ -53,4 +53,15 @@ class Jamsyar
             throw new Exception($response->json()['keterangan'], $response->json()['status']);
         }
     }
+    public static function obligees($params = [],$username = 'jsh',$password = 'Semangat1'){
+        $url = config('app.env') == 'local' ? 'http://devmicroservice.jamkrindosyariah.co.id/Api/get_obligee' : 'http://192.168.190.168:8002/Api/get_obligee';
+        if(empty($params)) $params = ['nama_obligee' => '','kode_unik_obligee' => '','limit' => 20,'offset' => 0];
+
+        $response = Http::asJson()->acceptJson()->withToken(self::login($username,$password))->post($url, $params);
+        if($response->successful()){
+            return $response->json();
+        }else{
+            throw new Exception($response->json()['keterangan'], $response->json()['status']);
+        }
+    }
 }

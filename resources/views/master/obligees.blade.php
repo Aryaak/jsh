@@ -31,7 +31,7 @@
             <x-form-input label="Nama" id="create-name" name="name" class="mb-3" required />
             <x-form-select label="Provinsi" id="create-province-id" name="province_id" class="mb-3" required/>
             <x-form-select label="Kota" id="create-city-id" name="city_id" class="mb-3" />
-            <x-form-input label="Jenis" id="create-type" name="type" class="mb-3" required />
+            <x-form-select label="Jenis" id="create-type" name="type" class="mb-3" required :options="$types"/>
             <x-form-input label="JamsyarID" id="create-jamsyar-id" name="jamsyar_id" class="mb-3" required />
             <x-form-input label="JamsyarCode" id="create-jamsyar-code" name="jamsyar_code" class="mb-3" required />
             <x-form-textarea label="Alamat" id="create-address" name="address" />
@@ -85,7 +85,7 @@
             <x-form-input label="Nama" id="edit-name" name="name" class="mb-3" required />
             <x-form-select label="Provinsi" id="edit-province-id" name="province_id" class="mb-3" required/>
             <x-form-select label="Kota" id="edit-city-id" name="city_id" class="mb-3" />
-            <x-form-input label="Jenis" id="edit-type" name="type" class="mb-3" required />
+            <x-form-select label="Jenis" id="edit-type" name="type" class="mb-3" required :options="$types"/>
             <x-form-input label="JamsyarID" id="edit-jamsyar-id" name="jamsyar_id" class="mb-3" required />
             <x-form-input label="JamsyarCode" id="edit-jamsyar-code" name="jamsyar_code" class="mb-3" required />
             <x-form-textarea label="Alamat" id="edit-address" name="address" />
@@ -159,7 +159,7 @@
                     obligee = response.data
                     $('#show-name').html(obligee.name)
                     $('#show-address').html(obligee.address)
-                    $('#show-type').html(obligee.type)
+                    $('#show-type').html(obligee.type_name)
                     $('#show-province').html(obligee.city.province.name)
                     $('#show-city').html(obligee.city.name)
                     $('#show-jamsyar-id').html(obligee.jamsyar_id)
@@ -170,8 +170,8 @@
 
         $(document).on('click', '.btn-edit', function () {
             $('#edit-name').val(obligee.name)
-            $('#edit-address').val(obligee.name)
-            $('#edit-type').val(obligee.name)
+            $('#edit-address').val(obligee.address)
+            $('#edit-type').val(obligee.type)
             select2SetVal('edit-province-id',obligee.city.province.id,obligee.city.province.name)
             select2SetVal('edit-city-id',obligee.city.id,obligee.city.name)
             $('#edit-jamsyar-id').val(obligee.address)
@@ -191,5 +191,14 @@
                 }
             })
         })
+        $(document).on('click', '.btn-sync', function () {
+            loading()
+            ajaxPost("{{ route('master.obligees.sync','-obligee-') }}".replace('-obligee-',$(this).data('id')),{_method: 'put'},null,function(response){
+                if(response.success){
+                    table.ajax.reload()
+                }
+            })
+        })
+
     </script>
 @endpush

@@ -50,7 +50,8 @@ Route::get('/design/{page}', [DesignController::class, 'page'])->name('design.pa
 Route::get('/test', function (Request $request) {
     // dd(Jamsyar::cities('jsh','Semangat1','sura'));
     // dd(\App\Models\Branch::find(1)->table()->get());
-    dd(\App\Models\GuaranteeBank::table('remain',[])->get());
+    // dd(\App\Models\GuaranteeBank::table('remain',[])->get());
+    // dd(\App\Models\Obligee::find(1)->sync());
 });
 
 /**
@@ -112,6 +113,7 @@ Route::middleware(['auth'])->group(function () {
         Route::apiResource('rate-asuransi', InsuranceRateController::class)->names('insurance-rates')->except('index');
         Route::apiResource('rate-bank', BankRateController::class)->names('bank-rates')->except('index');
         Route::apiResource('bank', BankController::class)->names('banks')->except('index');
+        Route::put('obligee/{obligee}/sync', [ObligeeController::class, 'sync'])->name('obligees.sync');
         Route::apiResource('obligee', ObligeeController::class)->names('obligees')->except('index');
         Route::apiResource('template', TemplateController::class)->names('templates')->except('index');
     });

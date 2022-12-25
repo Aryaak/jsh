@@ -16,14 +16,15 @@ class GuaranteeBankSeeder extends Seeder
 {
     public function run()
     {
-        for ($i=1; $i < 5; $i++) {
+        for ($i=1; $i < 50; $i++) {
+            $agent = Agent::inRandomOrder()->first();
             GuaranteeBank::buat([
                 "receiptNumber" => "111".$i,
                 "bondNumber" => "112".$i,
                 "polishNumber" => "113".$i,
                 "bankId" => Bank::inRandomOrder()->first()->id,
-                "agentId" => Agent::inRandomOrder()->first()->id,
-                "branchId" => Branch::inRandomOrder()->first()->id,
+                "agentId" => $agent->id,
+                "branchId" => $agent->branch_id,
                 "insuranceId" => Insurance::inRandomOrder()->first()->id,
                 "insuranceTypeId" => InsuranceType::inRandomOrder()->first()->id,
                 "obligeeId" => Obligee::inRandomOrder()->first()->id,

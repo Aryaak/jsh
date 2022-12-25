@@ -58,7 +58,7 @@ class ObligeeSeeder extends Seeder
             DB::table('obligees')->update(['created_at' => now(),'updated_at' => now()]);
 
             if(config('app.env') == 'local'){
-                if($dataCount >= 1000){
+                if($dataCount >= 50){
                     $nextOffset = false;
                 }else{
                     $dataCount += 20;

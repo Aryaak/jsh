@@ -16,18 +16,15 @@ use App\Models\GuaranteeBankDraft;
 
 class GuaranteeBankController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request,?Branch $regional = null, ?Branch $branch = null)
     {
         if($request->ajax()){
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
             $data = GuaranteeBank::with('insurance_status','insurance_status.status','principal')->select('guarantee_banks.*')
-            ->when(auth()->user()->role == 'branch',function($query){
-                $query->where('branch_id',auth()->user()->branch_id);
-            })->when(auth()->user()->role == 'regional',function($query){
-                $query->whereIn('branch_id',Branch::where('regional_id',auth()->id())->pluck('id')->toArray());
-            })->orderBy('created_at','desc');
+            ->whereIn('branch_id',($branch ? [$branch->id] : Branch::where('regional_id',$regional->id)->pluck('id')->toArray()))
+            ->orderBy('created_at','desc');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($bg) => Sirius::toRupiah($bg->insurance_value))

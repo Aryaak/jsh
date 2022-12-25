@@ -8,6 +8,7 @@
 @section('contents')
     <x-card header="Daftar Principal">
         @slot('headerAction')
+            <x-button size="sm" id="btn-sync-with-jamsyar" icon="bx bx-refresh">Sync ke Jamsyar</x-button>
             <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Principal</x-button>
         @endslot
 
@@ -441,6 +442,14 @@
         $(document).on('click', '.btn-sync', function () {
             loading()
             ajaxPost("{{ route('master.principals.sync','-principal-') }}".replace('-principal-',$(this).data('id')),{_method: 'put'},null,function(response){
+                if(response.success){
+                    table.ajax.reload()
+                }
+            })
+        })
+        $(document).on('click', '#btn-sync-with-jamsyar', function () {
+            loading()
+            ajaxGet("{{ route('master.principals.jamsyar') }}",null,function(response){
                 if(response.success){
                     table.ajax.reload()
                 }

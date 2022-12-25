@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use DB;
 use Exception;
 use App\Models\Scoring;
 use App\Helpers\Sirius;
@@ -150,6 +151,46 @@ class Principal extends Model
             return $response->json();
         }else{
             // throw new Exception($response->json()['keterangan'], $response->json()['status']);
+        }
+    }
+    public static function jamsyar(){
+        $nextOffset = true;
+        $offset = 0;
+        $dataCount = 0;
+        while($nextOffset) {
+            $response = Jamsyar::principals([
+                "nama_principal"=> "",
+                "kode_unik_principal"=> "",
+                "limit" => 20,
+                "offset" => $offset
+            ]);
+            self::upsert(array_filter(array_map(function($principal){
+                \Log::info($principal['nama_principal'].' '.$principal['alamat_principal'].' '.$principal['kode_unik_principal']);
+                if($principal['nama_principal'] && $principal['alamat_principal'] && $principal['kode_unik_principal']){
+                    return [
+                        'name' => $principal['nama_principal'],
+                        'address' => $principal['alamat_principal'],
+                        'jamsyar_code' => $principal['kode_unik_principal'],
+                    ];
+                }
+            },$response['data'])),['jamsyar_code'],['name','address']);
+            DB::table('principals')->update(['created_at' => now(),'updated_at' => now()]);
+
+            if(config('app.env') == 'local'){
+                if($dataCount >= 50){
+                    $nextOffset = false;
+                }else{
+                    $dataCount += 20;
+                    $offset += 20;
+                }
+            }else if(config('app.env') == 'production'){
+                if($response['total_record'] < 20){
+                    $nextOffset = false;
+                }else{
+                    $dataCount += 20;
+                    $offset += 20;
+                }
+            }
         }
     }
 }

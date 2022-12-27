@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Models\InsuranceRate;
 use App\Models\ScoringDetail;
 use App\Models\SuretyBondStatus;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -56,7 +57,8 @@ class SuretyBond extends Model
         'insurance_id',
         'insurance_type_id',
         'revision_from_id',
-        'score'
+        'score',
+        'request_number'
     ];
 
     protected $appends = [
@@ -380,37 +382,38 @@ class SuretyBond extends Model
     }
 
     public function fetchSync(): array{
-        // dd($this);
         $principal = (object)[
             'kodeUnik' => $this->principal->jamsyar_code ?? throw new Exception("Principal ini belum terdaftar di Jamsyar", 422),
-            'noSurat' => $this->principal->certificate->number,
-            'tglSurat' => $this->principal->certificate->expired_at,
+            'noSurat' => $this->principal->certificate->number ?? throw new Exception("Principal ini belum memiliki akta pendirian", 422),
+            'tglSurat' => date('Ymd',strtotime($this->principal->certificate->expired_at)) ?? throw new Exception("Principal ini belum memiliki akta pendirian", 422),
             'kategori' => 'Belum diterapkan',
 
         ];
         $kodeUnikObligee = $this->obligee->jamsyar_code ?? throw new Exception("Obligee ini belum terdaftar di Jamsyar", 422);
         return [
             "jenis_penjaminan" => ($attemp = self::jamsyarInsuranceType(1)[$this->insurance_type->name] ?? null) ? $attemp : throw new Exception("Jenis Jaminan ini tidak dikenali Jamsyar", 422),
-            "sektor" => $this->sector ?? 'Belum diterapkan',
+            "jenis_persyaratan" => 0,
+            "skema_penalty" => 0,
+            "sektor" => 258,
             "principal" => $principal->kodeUnik,
             "kategori_principal" => $principal->kategori,
             "obligee" => $kodeUnikObligee,
             "no_surat" => $principal->noSurat,
             "tanggal_surat" => $principal->tglSurat,
-            "no_kontrak" => $this->document_number,
-            "tanggal_kontrak" => $this->document_expired_at,
+            "no_kontrak" => $this->document_number ? $this->document_number : throw new Exception("Dokumen pendukung diperlukan untuk sinkron ke Jamsyar", 422),
+            "tanggal_kontrak" => $this->document_expired_at ? date('Ymd',strtotime($this->document_expired_at)) : throw new Exception("Dokumen pendukung diperlukan untuk sinkron ke Jamsyar", 422),
             "bast" => 2,
             "propinsi" => $this->principal->city->province_id,
             "kota" => $this->principal->city->id,
             "nama_proyek" => $this->project_name,
             "nilai_proyek" => $this->contract_value,
             "nilai_bond" => $this->insurance_value,
-            "tanggal_awal" => $this->start_date,
-            "tanggal_akhir" => $this->end_date,
+            "tanggal_awal" => date('Ymd',strtotime($this->start_date)),
+            "tanggal_akhir" => date('Ymd',strtotime($this->end_date)),
             "penambahan_jangka_waktu" => $this->due_day_tolerance,
             "biaya_administrasi" => $this->admin_charge,
             "biaya_materai" => $this->insurance_stamp_cost,
-            "subagen" => null,
+            "subagen" => 34,
         ];
     }
 
@@ -419,12 +422,13 @@ class SuretyBond extends Model
         $params = $this->fetchSync();
         $response = Http::asJson()->acceptJson()->withToken(Jamsyar::login())
         ->post($url, $this->fetchSync());
+        // dd($response);
         if($response->successful()){
-            $data = $response->json()['data'];
-            return $this->update([
-                'jamsyar_code' => $data['kode_unik_obligee'],
-                'status' => 'Sinkron',
-            ]);
+            // $data = $response->json()['data'];
+            dd($response->json());
+            // return $this->update([
+            //     'request_number' => $data['no_permohonan'],
+            // ]);
         }else{
             throw new Exception($response->json()['keterangan'], $response->json()['status']);
         }

@@ -31,6 +31,7 @@ class Principal extends Model
         'pic_position',
         'jamsyar_id',
         'jamsyar_code',
+        'status',
         'city_id',
     ];
 
@@ -98,6 +99,7 @@ class Principal extends Model
                 'province_id' => $args->info['provinceId'],
                 'jamsyar_id' => $args->info['jamsyarId'],
                 'jamsyar_code' => $args->info['jamsyarCode'],
+                'status' => 'Belum Sinkron',
                 'score' => 0
             ],
             'scoring' => array_values(collect($args->scoring)->map(function($item,$key){return $key;})->all()),
@@ -143,14 +145,21 @@ class Principal extends Model
             "npwp_principal" => $this->npwp_number,
             "email_principal" => $this->email,
             "jenis_obligee" => 1,
+            "kategori" => 0,
             "nama_penanggung_jawab" => $this->pic_name,
-            "jabatan_penanggung_jawab" => $this->pic_position
+            "jabatan_penanggung_jawab" => $this->pic_position,
+            "ktp_penanggung_jawab" => "",
+            "npwp_penanggung_jawab" => ""
         ]);
-        dd($response->json());
         if($response->successful()){
-            return $response->json();
+            $data = $response->json()['data'];
+            return $this->update([
+                'jamsyar_id' => $data['kode_principal'],
+                'jamsyar_code' => $data['kode_unik_principal'],
+                'status' => 'Sinkron'
+            ]);
         }else{
-            // throw new Exception($response->json()['keterangan'], $response->json()['status']);
+            throw new Exception($response->json()['keterangan'], $response->json()['status']);
         }
     }
     public static function jamsyar(){
@@ -171,6 +180,7 @@ class Principal extends Model
                         'name' => $principal['nama_principal'],
                         'address' => $principal['alamat_principal'],
                         'jamsyar_code' => $principal['kode_unik_principal'],
+                        'status' => 'Sinkron'
                     ];
                 }
             },$response['data'])),['jamsyar_code'],['name','address']);

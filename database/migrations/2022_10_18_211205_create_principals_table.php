@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('pic_position')->nullable();
             $table->string('jamsyar_id')->nullable();
             $table->string('jamsyar_code')->nullable();
+            $table->string('status')->nullable();
             $table->foreignId('city_id')->nullable()->constrained();
             $table->timestamps();
         });

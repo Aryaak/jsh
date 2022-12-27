@@ -52,7 +52,8 @@ Route::get('/test', function (Request $request) {
     // dd(\App\Models\Branch::find(1)->table()->get());
     // dd(\App\Models\GuaranteeBank::table('remain',[])->get());
     // dd(\App\Models\Obligee::find(1)->sync());
-    dd(\App\Models\SuretyBond::find(1)->fetchSync());
+    // dd(\App\Models\Principal::find(1)->sync());
+    dd(\App\Models\SuretyBond::find(1)->sync());
 });
 Route::get('/subagent', function (Request $request) {
     $url = config('app.env') == 'local' ? 'http://devmicroservice.jamkrindosyariah.co.id/Api/get_subagen' : 'http://192.168.190.168:8002/Api/get_subagen';

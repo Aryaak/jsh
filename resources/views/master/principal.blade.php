@@ -20,6 +20,7 @@
                     <th>Alamat</th>
                     <th>No. HP/Telp</th>
                     <th>Skor</th>
+                    <th>Status Sinkronisasi</th>
                     <th width="105px">Tindakan</th>
                 </tr>
             @endslot
@@ -303,6 +304,7 @@
                 {data: 'address', name: 'address'},
                 {data: 'phone', name: 'phone'},
                 {data: 'score', name: 'score'},
+                {data: 'status', name: 'status'},
             ])
 
             select2Init("#create-info-province-id, #edit-info-province-id",'{{ route('select2.province') }}',0,$('#modal-create'))

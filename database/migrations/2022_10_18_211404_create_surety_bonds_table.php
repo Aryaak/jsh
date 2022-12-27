@@ -45,6 +45,7 @@ return new class extends Migration
             $table->foreignId('insurance_type_id')->constrained();
             $table->unsignedBigInteger('revision_from_id')->nullable();
             $table->float('score');
+            $table->string('request_number')->nullable();
             $table->timestamps();
             $table->foreign('revision_from_id')->references('id')->on('surety_bonds');
         });

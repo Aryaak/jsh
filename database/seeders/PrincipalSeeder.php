@@ -26,6 +26,7 @@ class PrincipalSeeder extends Seeder
                 'pic_position' => 'Direktur',
                 'jamsyar_id' => '855.163',
                 'jamsyar_code' => 'kode',
+                'status' => 'Belum Sinkron',
                 'city_id' => 1,
             ]
         ];

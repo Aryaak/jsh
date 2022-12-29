@@ -33,9 +33,6 @@ class GuaranteeBankDraft extends Model
         'document_expired_at',
         'contract_value',
         'insurance_value',
-        'service_charge',
-        'admin_charge',
-        'total_charge',
         'profit',
         'insurance_polish_cost',
         'insurance_stamp_cost',
@@ -47,6 +44,7 @@ class GuaranteeBankDraft extends Model
         'office_rate',
         'office_net',
         'office_net_total',
+        'branch_id',
         'bank_id',
         'principal_id',
         'agent_id',
@@ -83,15 +81,27 @@ class GuaranteeBankDraft extends Model
 
     public function serviceChargeConverted(): Attribute
     {
-        return Attribute::make(get: fn () => Sirius::toRupiah($this->service_charge));
+        if($this->service_charge != null){
+            return Attribute::make(get: fn () => Sirius::toRupiah($this->service_charge));
+        }else{
+            return Attribute::make(get: fn () => Sirius::toRupiah(0));
+        }
     }
     public function adminChargeConverted(): Attribute
     {
-        return Attribute::make(get: fn () => Sirius::toRupiah($this->admin_charge));
+        if($this->admin_charge != null){
+            return Attribute::make(get: fn () => Sirius::toRupiah($this->admin_charge));
+        }else{
+            return Attribute::make(get: fn () => Sirius::toRupiah(0));
+        }
     }
     public function totalChargeConverted(): Attribute
     {
-        return Attribute::make(get: fn () => Sirius::toRupiah($this->total_charge));
+        if($this->total_charge != null){
+            return Attribute::make(get: fn () => Sirius::toRupiah($this->total_charge));
+        }else{
+            return Attribute::make(get: fn () => Sirius::toRupiah(0));
+        }
     }
     public function contractValueConverted(): Attribute
     {
@@ -151,6 +161,9 @@ class GuaranteeBankDraft extends Model
     }
 
     // Relations
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
     public function bank(){
         return $this->belongsTo(Bank::class);
     }
@@ -179,15 +192,7 @@ class GuaranteeBankDraft extends Model
     private static function fetch(object $args): object{
         $bankRate = BankRate::where([['bank_id',$args->bankId],['insurance_type_id',$args->insuranceTypeId],['insurance_id',$args->insuranceId]])->firstOrFail();
         $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',$args->bankId]])->firstOrFail();
-        $scoring = array_map(function($key,$value){
-            return [
-                'scoring_id' => $key,
-                'scoring_detail_id' => $value,
-                'category' => Scoring::findOrFail($key)->category,
-                'value' => ScoringDetail::findOrFail($value)->value
-            ];
-        },array_keys($args->scoring),array_values($args->scoring));
-        $totalScore = array_sum(array_column($scoring, 'value'));
+
         $bankNet = ((int)$args->insuranceValue * $bankRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
         $officeNet = ((int)$args->insuranceValue * $agentRate->rate_value / (((int)$args->dayCount > 90) ? 90 : 1));
 
@@ -211,9 +216,6 @@ class GuaranteeBankDraft extends Model
                 'document_expired_at' => $args->documentExpiredAt,
                 'contract_value' => $args->contractValue,
                 'insurance_value' => $args->insuranceValue,
-                'service_charge' => $args->serviceCharge,
-                'admin_charge' => $args->adminCharge,
-                'total_charge' => $args->serviceCharge + $args->adminCharge,
                 'profit' => $officeNetTotal - $bankNetTotal,
                 'insurance_polish_cost' => $bankRate->polish_cost,
                 'insurance_stamp_cost' =>  $bankRate->stamp_cost,
@@ -225,31 +227,26 @@ class GuaranteeBankDraft extends Model
                 'office_rate' => $agentRate->rate_value,
                 'office_net' => $officeNet,
                 'office_net_total' => $officeNetTotal,
+                'branch_id' => $args->branchId,
                 'principal_id' => $args->principalId,
                 'bank_id' => $args->bankId,
                 'agent_id' => $args->agentId,
                 'obligee_id' => $args->obligeeId,
                 'insurance_id' => $args->insuranceId,
                 'insurance_type_id' => $args->insuranceTypeId,
-                'score' => $totalScore,
                 'approved_status' => 'Belum Disetujui'
             ],
-            'scoring' => $scoring
         ];
     }
 
     public static function buat(array $params): self{
         $request = self::fetch((object)$params);
         $guaranteeBank = self::create($request->guaranteeBank);
-        $guaranteeBank->scorings()->createMany($request->scoring);
         return $guaranteeBank;
     }
 
     public function ubah(array $params): bool{
         $request = (object)$params;
-        foreach ($request->scoring as $score) {
-            $this->scorings()->where('scoring_id',$score['scoring_id'])->update($score);
-        }
         return $this->update($request->guaranteeBank);
     }
 

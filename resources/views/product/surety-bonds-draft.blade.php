@@ -37,6 +37,10 @@
                 <div class="w-100 mb-4">
                     <x-card header="Data" smallHeader>
                         <div class="mb-3">
+                            <x-form-label>Nama Cabang</x-form-label>
+                            <div id="show-branch-name">-</div>
+                        </div>
+                        <div class="mb-3">
                             <x-form-label>No. Kwitansi</x-form-label>
                             <div id="show-receipt-number">-</div>
                         </div>
@@ -62,18 +66,6 @@
                         </div>
                     </x-card>
                 </div>
-                <div class="w-100 mb-4">
-                    <x-card header="Obligee" smallHeader>
-                        <div class="mb-3">
-                            <x-form-label>Nama</x-form-label>
-                            <div id="show-obligee-name">-</div>
-                        </div>
-                        <div>
-                            <x-form-label>Alamat</x-form-label>
-                            <div id="show-obligee-address">-</div>
-                        </div>
-                    </x-card>
-                </div>
             </div>
             <div class="col-md-4">
                 <div class="w-100 mb-4">
@@ -96,19 +88,15 @@
                         </div>
                     </x-card>
                 </div>
-                <div class="w-100 mb-3">
-                    <x-card header="Tambahan" smallHeader>
+                <div class="w-100 mb-4">
+                    <x-card header="Obligee" smallHeader>
                         <div class="mb-3">
-                            <x-form-label>Service Charge</x-form-label>
-                            <div id="show-service-charge">Rp0,-</div>
-                        </div>
-                        <div class="mb-3">
-                            <x-form-label>Biaya Admin</x-form-label>
-                            <div id="show-admin-charge">Rp0,-</div>
+                            <x-form-label>Nama</x-form-label>
+                            <div id="show-obligee-name">-</div>
                         </div>
                         <div>
-                            <x-form-label>Premi Bayar</x-form-label>
-                            <div id="show-premi-charge">Rp0,-</div>
+                            <x-form-label>Alamat</x-form-label>
+                            <div id="show-obligee-address">-</div>
                         </div>
                     </x-card>
                 </div>
@@ -167,43 +155,6 @@
             </div>
         </div>
 
-        <div class="row mb-2">
-            <div class="col-12 text-center">
-                <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Surety Bond</div>
-            </div>
-        </div>
-        <div class="row mx-1">
-            <x-card>
-                <div class="row">
-                    @foreach ($scorings->groupBy('category') as $grouped)
-                        <div class="col border p-0" style="position: relative">
-                            {{-- <div class="border-bottom p-1 text-center">30</div> --}}
-                            <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
-                            <div class="px-3 pt-3 pb-5">
-                                @foreach ($grouped as $score)
-                                <div class="mb-3">
-                                    <div class="fw-bold">{{ $score->title }}</div>
-                                    @foreach ($score->details as $detail)
-                                        <x-form-check type="radio" id="show-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}" disabled>{{ $detail->text }}</x-form-check>
-                                    @endforeach
-                                </div>
-                                @endforeach
-                            </div>
-                            <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>Sub Total Nilai {{ $grouped->first()->category }}:</div>
-                                    <div><b id="show-sub-total-{{ $grouped->first()->category }}">-</b></div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                    {{-- <div class="col-12 mt-3">
-                        Total Nilai: <b>69</b>
-                    </div> --}}
-                </div>
-            </x-card>
-        </div>
-
         @slot('footer')
             <x-button class="btn-decline" face="danger" icon="bx bx-x">Tolak</x-button>
             <x-button class="btn-approve" face="success" icon="bx bx-check">Setuju</x-button>
@@ -223,7 +174,7 @@
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
                 {data: 'principal.name', name: 'principal.name'},
-                {data: 'insurance_status.status.name', name: 'insurance_status.status.name',orderable:false},
+                {data: 'approved_status', name: 'approved_status'},
                 {data: 'insurance_value', name: 'insurance_value'},
                 {data: 'start_date', name: 'start_date'},
             ])
@@ -233,6 +184,7 @@
             ajaxGet("{{ route($global->currently_on.'.products.draft.show', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond_draft' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     suretyBond = response.data
+                    $('#show-branch-name').html(suretyBond.branch.regional.name+' - '+suretyBond.branch.name)
                     $('#show-receipt-number').html(suretyBond.receipt_number)
                     $('#show-bond-number').html(suretyBond.bond_number)
                     $('#show-polish-number').html(suretyBond.polish_number)
@@ -245,9 +197,6 @@
                     $('#show-principal-address').html(suretyBond.principal.address)
                     $('#show-pic-name').html(suretyBond.principal.pic_name)
                     $('#show-pic-position').html(suretyBond.principal.pic_position)
-                    $('#show-service-charge').html(suretyBond.service_charge_converted)
-                    $('#show-admin-charge').html(suretyBond.admin_charge_converted)
-                    $('#show-premi-charge').html(suretyBond.total_charge_converted)
                     $('#show-contract-value').html(suretyBond.contract_value_converted)
                     $('#show-insurance-value').html(suretyBond.insurance_value_converted)
                     $('#show-start-date').html(suretyBond.start_date_converted)
@@ -258,28 +207,6 @@
                     $('#show-document-title').html(suretyBond.document_title)
                     $('#show-document-number').html(suretyBond.document_number)
                     $('#show-document-expired-at').html(suretyBond.document_expired_at_converted)
-                    $('#show-insurance-rate').html(suretyBond.insurance_rate)
-                    $('#show-insurance-polish-cost').html(suretyBond.insurance_polish_cost_converted)
-                    $('#show-insurance-stamp').html(suretyBond.insurance_stamp_cost_converted)
-                    $('#show-premi-nett').html(suretyBond.insurance_net_converted)
-                    $('#show-premi-nett-total').html(suretyBond.insurance_net_total_converted)
-                    $('#show-office-rate').html(suretyBond.office_rate)
-                    $('#show-office-nett').html(suretyBond.office_net_converted)
-                    $('#show-office-nett-total').html(suretyBond.office_net_total_converted)
-                    $('#show-office-polish-cost').html(suretyBond.office_polish_cost_converted)
-                    $('#show-office-stamp-cost').html(suretyBond.office_stamp_cost_converted)
-                    $('#show-profit').html(suretyBond.profit_converted)
-                    $('input[type="radio"]:checked').prop('checked',false)
-                    const groupByCategory = scoringGroupBy(suretyBond.scorings)
-                    Object.keys(groupByCategory).forEach(key => {
-                        $('#show-scoring-category').html(key)
-                        let subtotal = 0
-                        groupByCategory[key].forEach(e => {
-                            $('#show-scoring-score-'+e.scoring_id+'-'+e.scoring_detail_id).prop('checked',true)
-                            subtotal += e.value
-                        });
-                        $('#show-sub-total-'+key).html(subtotal)
-                    });
                 }
             })
         })

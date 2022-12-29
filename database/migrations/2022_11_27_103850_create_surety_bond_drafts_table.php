@@ -24,9 +24,9 @@ return new class extends Migration
             $table->date('document_expired_at');
             $table->unsignedBigInteger('contract_value');
             $table->unsignedBigInteger('insurance_value');
-            $table->unsignedInteger('service_charge');
-            $table->unsignedInteger('admin_charge');
-            $table->unsignedBigInteger('total_charge');
+            $table->unsignedInteger('service_charge')->nullable();
+            $table->unsignedInteger('admin_charge')->nullable();
+            $table->unsignedBigInteger('total_charge')->nullable();
             $table->decimal('profit',20,5);
             $table->unsignedInteger('insurance_polish_cost');
             $table->unsignedInteger('insurance_stamp_cost');
@@ -38,13 +38,14 @@ return new class extends Migration
             $table->unsignedDecimal('office_rate');
             $table->unsignedDecimal('office_net',10,2);
             $table->unsignedDecimal('office_net_total',10,2);
+            $table->foreignId('branch_id')->constrained();
             $table->foreignId('principal_id')->constrained();
             $table->foreignId('agent_id')->constrained();
             $table->foreignId('obligee_id')->constrained();
             $table->foreignId('insurance_id')->constrained();
             $table->foreignId('insurance_type_id')->constrained();
             $table->unsignedBigInteger('revision_from_id')->nullable();
-            $table->float('score');
+            $table->float('score')->nullable();
             $table->timestamps();
             $table->foreign('revision_from_id')->references('id')->on('surety_bond_drafts');
         });

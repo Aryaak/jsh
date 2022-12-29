@@ -25,6 +25,14 @@ class Select2
             ];
         })->all());
     }
+    private static function fetch_client($data): array{
+        return array_values($data->map(function ($item, $key) {
+            return [
+                'id' => $item->id,
+                'text' => $item->regional->name.' - '.$item->name ?? $item->title,
+            ];
+        })->all());
+    }
     public static function regional(?string $keyword = null){
         return self::fetch(Branch::where('is_regional',true)->when($keyword != '', function ($query) use ($keyword){
             return $query->where('name', 'like', "%$keyword%");
@@ -33,6 +41,12 @@ class Select2
 
     public static function branch(?string $keyword = null){
         return self::fetch(Branch::where('is_regional',false)->when($keyword != '', function ($query) use ($keyword){
+            return $query->where('name', 'like', "%$keyword%");
+        })->get());
+    }
+
+    public static function branch_client(?string $keyword = null){
+        return self::fetch_client(Branch::where('is_regional',false)->when($keyword != '', function ($query) use ($keyword){
             return $query->where('name', 'like', "%$keyword%");
         })->get());
     }

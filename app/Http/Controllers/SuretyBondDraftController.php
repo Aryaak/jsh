@@ -6,6 +6,7 @@ use App\Models\SuretyBondDraft;
 use Illuminate\Http\Request;
 use App\Models\Scoring;
 use App\Helpers\Sirius;
+use App\Http\Requests\SuretyBondDraftRequest;
 use App\Models\Branch;
 use DB;
 use Exception;
@@ -20,14 +21,12 @@ class SuretyBondDraftController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
 
-            $data = SuretyBondDraft::with('insurance_status','insurance_status.status','principal')->orderBy('created_at','desc')->get();
+            $data = SuretyBondDraft::with('principal')->orderBy('created_at','desc')->get();
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
             ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
-            ->editColumn('insurance_status.status.name', 'datatables.status-guarantee-bank')
             ->editColumn('action', $action)
-            ->rawColumns(['insurance_status.status.name', 'action'])
             ->toJson();
         }
         $scorings = Scoring::whereNotNull('category')->with('details')->get();
@@ -58,7 +57,7 @@ class SuretyBondDraftController extends Controller
         return view('surety-bonds-client',compact('scorings'));
     }
 
-    public function storeClient(SuretyBondRequest $request)
+    public function storeClient(SuretyBondDraftRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -83,6 +82,7 @@ class SuretyBondDraftController extends Controller
 
     public function show(Branch $regional, ?Branch $branch, SuretyBondDraft $surety_bond_draft)
     {
+        $surety_bond_draft->branch->regional;
         $surety_bond_draft->principal;
         $surety_bond_draft->obligee;
         $surety_bond_draft->agent;
@@ -94,15 +94,15 @@ class SuretyBondDraftController extends Controller
 
     public function approve(Branch $regional, ?Branch $branch, SuretyBondDraft $surety_bond_draft)
     {
-        $scoring = [];
-        foreach($surety_bond_draft->scorings as $value){
-            array_push($scoring, [
-                'scoring_id' => $value->scoring_id,
-                'scoring_detail_id' => $value->scoring_detail_id,
-                'category' => $value->category,
-                'value' => $value->value,
-            ]);
-        }
+        // $scoring = [];
+        // foreach($surety_bond_draft->scorings as $value){
+        //     array_push($scoring, [
+        //         'scoring_id' => $value->scoring_id,
+        //         'scoring_detail_id' => $value->scoring_detail_id,
+        //         'category' => $value->category,
+        //         'value' => $value->value,
+        //     ]);
+        // }
         $data = [
             'suretyBond' => [
                 'receipt_number' => $surety_bond_draft->receipt_number,
@@ -118,9 +118,9 @@ class SuretyBondDraftController extends Controller
                 'document_expired_at' => $surety_bond_draft->document_expired_at,
                 'contract_value' => $surety_bond_draft->contract_value,
                 'insurance_value' => $surety_bond_draft->insurance_value,
-                'service_charge' => $surety_bond_draft->service_charge,
-                'admin_charge' => $surety_bond_draft->admin_charge,
-                'total_charge' => $surety_bond_draft->total_charge,
+                // 'service_charge' => $surety_bond_draft->service_charge,
+                // 'admin_charge' => $surety_bond_draft->admin_charge,
+                // 'total_charge' => $surety_bond_draft->total_charge,
                 'profit' => $surety_bond_draft->profit,
                 'insurance_polish_cost' => $surety_bond_draft->insurance_polish_cost,
                 'insurance_stamp_cost' =>  $surety_bond_draft->insurance_stamp_cost,
@@ -132,15 +132,15 @@ class SuretyBondDraftController extends Controller
                 'office_rate' => $surety_bond_draft->office_rate,
                 'office_net' => $surety_bond_draft->office_net,
                 'office_net_total' => $surety_bond_draft->office_net_total,
-                'branch_id' => $branch->id,
+                'branch_id' => $surety_bond_draft->branch_id,
                 'principal_id' => $surety_bond_draft->principal_id,
                 'agent_id' => $surety_bond_draft->agent_id,
                 'obligee_id' => $surety_bond_draft->obligee_id,
                 'insurance_id' => $surety_bond_draft->insurance_id,
                 'insurance_type_id' => $surety_bond_draft->insurance_type_id,
-                'score' => $surety_bond_draft->score
+                // 'score' => $surety_bond_draft->score
             ],
-            'scoring' => $scoring
+            // 'scoring' => $scoring
         ];
 
         try {
@@ -162,15 +162,15 @@ class SuretyBondDraftController extends Controller
 
     public function decline(Branch $regional, ?Branch $branch, SuretyBondDraft $surety_bond_draft)
     {
-        $scoring = [];
-        foreach($surety_bond_draft->scorings as $value){
-            array_push($scoring, [
-                'scoring_id' => $value->scoring_id,
-                'scoring_detail_id' => $value->scoring_detail_id,
-                'category' => $value->category,
-                'value' => $value->value,
-            ]);
-        }
+        // $scoring = [];
+        // foreach($surety_bond_draft->scorings as $value){
+        //     array_push($scoring, [
+        //         'scoring_id' => $value->scoring_id,
+        //         'scoring_detail_id' => $value->scoring_detail_id,
+        //         'category' => $value->category,
+        //         'value' => $value->value,
+        //     ]);
+        // }
         $data = [
             'suretyBond' => [
                 'receipt_number' => $surety_bond_draft->receipt_number,
@@ -186,9 +186,9 @@ class SuretyBondDraftController extends Controller
                 'document_expired_at' => $surety_bond_draft->document_expired_at,
                 'contract_value' => $surety_bond_draft->contract_value,
                 'insurance_value' => $surety_bond_draft->insurance_value,
-                'service_charge' => $surety_bond_draft->service_charge,
-                'admin_charge' => $surety_bond_draft->admin_charge,
-                'total_charge' => $surety_bond_draft->total_charge,
+                // 'service_charge' => $surety_bond_draft->service_charge,
+                // 'admin_charge' => $surety_bond_draft->admin_charge,
+                // 'total_charge' => $surety_bond_draft->total_charge,
                 'profit' => $surety_bond_draft->profit,
                 'insurance_polish_cost' => $surety_bond_draft->insurance_polish_cost,
                 'insurance_stamp_cost' =>  $surety_bond_draft->insurance_stamp_cost,
@@ -200,15 +200,16 @@ class SuretyBondDraftController extends Controller
                 'office_rate' => $surety_bond_draft->office_rate,
                 'office_net' => $surety_bond_draft->office_net,
                 'office_net_total' => $surety_bond_draft->office_net_total,
+                'branch_id' => $surety_bond_draft->branch_id,
                 'principal_id' => $surety_bond_draft->principal_id,
                 'agent_id' => $surety_bond_draft->agent_id,
                 'obligee_id' => $surety_bond_draft->obligee_id,
                 'insurance_id' => $surety_bond_draft->insurance_id,
                 'insurance_type_id' => $surety_bond_draft->insurance_type_id,
-                'score' => $surety_bond_draft->score,
+                // 'score' => $surety_bond_draft->score,
                 'approved_status' => 'Ditolak',
             ],
-            'scoring' => $scoring
+            // 'scoring' => $scoring
         ];
 
         try {

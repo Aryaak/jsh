@@ -90,6 +90,7 @@ Route::get('serviceworker.js', fn() => redirect()->route('main.dashboard')); // 
 Route::group(['prefix' => '/select2', 'as' => 'select2.'], function () {
     Route::get('regional',[Select2Controller::class,'regional'])->name('regional');
     Route::get('branch',[Select2Controller::class,'branch'])->name('branch');
+    Route::get('branch-client',[Select2Controller::class,'branch_client'])->name('branchClient');
     Route::get('bank',[Select2Controller::class,'bank'])->name('bank');
     Route::get('province',[Select2Controller::class,'province'])->name('province');
     Route::get('city',[Select2Controller::class,'city'])->name('city');

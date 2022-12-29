@@ -36,9 +36,8 @@ class DashboardController extends Controller
 
         // Surety Bonds
         $data_sb = SuretyBond::
-                select(DB::raw('SUM(profit) as total_profit, MONTH(document_expired_at) as month, YEAR(document_expired_at) as tahun'))
-                ->groupBy(DB::raw('MONTH(document_expired_at), YEAR(document_expired_at)'))
-                // ->orderBy('created_at', 'ASC')
+                select(DB::raw('SUM(profit) as total_profit, MONTH(created_at) as month, YEAR(created_at) as tahun'))
+                ->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))
                 ->limit(12)
                 ->get();
         $data_sb_final = [];
@@ -72,9 +71,8 @@ class DashboardController extends Controller
         }
         // Bank Garansi
         $data_bg = GuaranteeBank::
-                select(DB::raw('SUM(profit) as total_profit, MONTH(document_expired_at) as month, YEAR(document_expired_at) as tahun'))
-                ->groupBy(DB::raw('MONTH(document_expired_at), YEAR(document_expired_at)'))
-                // ->orderBy('created_at', 'ASC')
+                select(DB::raw('SUM(profit) as total_profit, MONTH(created_at) as month, YEAR(created_at) as tahun'))
+                ->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))
                 ->limit(12)
                 ->get();
         $data_bg_final = [];
@@ -108,9 +106,8 @@ class DashboardController extends Controller
         }
         // Cabang -> Regional
         $data_BR = Instalment::
-                select(DB::raw('SUM(nominal) as pengeluaran, MONTH(paid_at) as month, YEAR(paid_at) as tahun'))
-                ->groupBy(DB::raw('MONTH(paid_at), YEAR(paid_at)'))
-                // ->orderBy('paid_at', 'ASC')
+                select(DB::raw('SUM(nominal) as pengeluaran, MONTH(created_at) as month, YEAR(created_at) as tahun'))
+                ->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))
                 ->limit(12)
                 ->get();
         $data_BR_final = [];
@@ -144,10 +141,9 @@ class DashboardController extends Controller
         }
         // Principal -> Cabang
         $data_RI = Payment::
-                select(DB::raw('SUM(total_bill) as pemasukan, MONTH(paid_at) as month, YEAR(paid_at) as tahun'))
+                select(DB::raw('SUM(total_bill) as pemasukan, MONTH(created_at) as month, YEAR(created_at) as tahun'))
                 ->where('type', 'principal_to_branch')
-                ->groupBy(DB::raw('MONTH(paid_at), YEAR(paid_at)'))
-                // ->orderBy('paid_at', 'ASC')
+                ->groupBy(DB::raw('MONTH(created_at), YEAR(created_at)'))
                 ->limit(12)
                 ->get();
         $data_RI_final = [];

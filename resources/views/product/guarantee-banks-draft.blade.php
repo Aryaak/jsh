@@ -37,6 +37,10 @@
                 <div class="w-100 mb-4">
                     <x-card header="Data" smallHeader>
                         <div class="mb-3">
+                            <x-form-label>Nama Cabang</x-form-label>
+                            <div id="show-branch-name">-</div>
+                        </div>
+                        <div class="mb-3">
                             <x-form-label>No. Kwitansi</x-form-label>
                             <div id="show-receipt-number">-</div>
                         </div>
@@ -66,18 +70,6 @@
                         </div>
                     </x-card>
                 </div>
-                <div class="w-100 mb-4">
-                    <x-card header="Obligee" smallHeader>
-                        <div class="mb-3">
-                            <x-form-label>Nama</x-form-label>
-                            <div id="show-obligee-name">-</div>
-                        </div>
-                        <div>
-                            <x-form-label>Alamat</x-form-label>
-                            <div id="show-obligee-address">-</div>
-                        </div>
-                    </x-card>
-                </div>
             </div>
             <div class="col-md-4">
                 <div class="w-100 mb-4">
@@ -100,19 +92,15 @@
                         </div>
                     </x-card>
                 </div>
-                <div class="w-100 mb-3">
-                    <x-card header="Tambahan" smallHeader>
+                <div class="w-100 mb-4">
+                    <x-card header="Obligee" smallHeader>
                         <div class="mb-3">
-                            <x-form-label>Service Charge</x-form-label>
-                            <div id="show-service-charge">Rp0,-</div>
-                        </div>
-                        <div class="mb-3">
-                            <x-form-label>Biaya Admin</x-form-label>
-                            <div id="show-admin-charge">Rp0,-</div>
+                            <x-form-label>Nama</x-form-label>
+                            <div id="show-obligee-name">-</div>
                         </div>
                         <div>
-                            <x-form-label>Premi Bayar</x-form-label>
-                            <div id="show-premi-charge">Rp0,-</div>
+                            <x-form-label>Alamat</x-form-label>
+                            <div id="show-obligee-address">-</div>
                         </div>
                     </x-card>
                 </div>
@@ -171,40 +159,6 @@
             </div>
         </div>
 
-        <div class="row mb-2">
-            <div class="col-12 text-center">
-                <div class="h5 fw-bold border-bottom mb-3 pb-2">Scoring Bank Garansi</div>
-            </div>
-        </div>
-        <div class="row mx-1">
-            <x-card class="p-1">
-                <div class="d-flex flex-column flex-lg-row">
-                    @foreach ($scorings->groupBy('category') as $grouped)
-                    <div class="border p-0" style="position: relative; flex: 100%;">
-                        {{-- <div class="border-bottom p-1 text-center">30</div> --}}
-                        <div class="border-bottom p-1 text-center" id="show-scoring-category">{{ $grouped->first()->category }}</div>
-                        <div class="px-3 pt-3 pb-5">
-                            @foreach ($grouped as $score)
-                            <div class="mb-3">
-                                <div class="fw-bold">{{ $score->title }}</div>
-                                @foreach ($score->details as $detail)
-                                    <x-form-check type="radio" id="show-scoring-score-{{ $score->id }}-{{ $detail->id }}" name="scoring[{{ $score->id }}]" value="{{ $detail->id }}" disabled>{{ $detail->text }}</x-form-check>
-                                @endforeach
-                            </div>
-                            @endforeach
-                        </div>
-                        <div class="border-top py-1 px-3" style="position: absolute; bottom: 0; right: 0; left: 0;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>Sub Total Nilai {{ $grouped->first()->category }}:</div>
-                                <div><b id="show-sub-total-{{ $grouped->first()->category }}">-</b></div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            </x-card>
-        </div>
-
         @slot('footer')
             <x-button class="btn-decline" face="danger" icon="bx bx-x">Tolak</x-button>
             <x-button class="btn-approve" face="success" icon="bx bx-check">Setuju</x-button>
@@ -224,7 +178,7 @@
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
                 {data: 'principal.name', name: 'principal.name'},
-                {data: 'insurance_status.status.name', name: 'insurance_status.status.name',orderable:false},
+                {data: 'approved_status', name: 'approved_status'},
                 {data: 'insurance_value', name: 'insurance_value'},
                 {data: 'start_date', name: 'start_date'},
             ])
@@ -234,6 +188,7 @@
             ajaxGet("{{ route($global->currently_on.'.products.draft.bg.show', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'bank_garansi_draft' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     guaranteeBank = response.data
+                    $('#show-branch-name').html(guaranteeBank.branch.regional.name+' - '+guaranteeBank.branch.name)
                     $('#show-receipt-number').html(guaranteeBank.receipt_number)
                     $('#show-bond-number').html(guaranteeBank.bond_number)
                     $('#show-polish-number').html(guaranteeBank.polish_number)
@@ -247,9 +202,6 @@
                     $('#show-principal-address').html(guaranteeBank.principal.address)
                     $('#show-pic-name').html(guaranteeBank.principal.pic_name)
                     $('#show-pic-position').html(guaranteeBank.principal.pic_position)
-                    $('#show-service-charge').html(guaranteeBank.service_charge_converted)
-                    $('#show-admin-charge').html(guaranteeBank.admin_charge_converted)
-                    $('#show-premi-charge').html(guaranteeBank.total_charge_converted)
                     $('#show-contract-value').html(guaranteeBank.contract_value_converted)
                     $('#show-insurance-value').html(guaranteeBank.insurance_value_converted)
                     $('#show-start-date').html(guaranteeBank.start_date_converted)
@@ -260,28 +212,6 @@
                     $('#show-document-title').html(guaranteeBank.document_title)
                     $('#show-document-number').html(guaranteeBank.document_number)
                     $('#show-document-expired-at').html(guaranteeBank.document_expired_at_converted)
-                    $('#show-insurance-rate').html(guaranteeBank.insurance_rate)
-                    $('#show-insurance-polish-cost').html(guaranteeBank.insurance_polish_cost_converted)
-                    $('#show-insurance-stamp').html(guaranteeBank.insurance_stamp_cost_converted)
-                    $('#show-premi-nett').html(guaranteeBank.insurance_net_converted)
-                    $('#show-premi-nett-total').html(guaranteeBank.insurance_net_total_converted)
-                    $('#show-office-rate').html(guaranteeBank.office_rate)
-                    $('#show-office-nett').html(guaranteeBank.office_net_converted)
-                    $('#show-office-nett-total').html(guaranteeBank.office_net_total_converted)
-                    $('#show-office-polish-cost').html(guaranteeBank.office_polish_cost_converted)
-                    $('#show-office-stamp-cost').html(guaranteeBank.office_stamp_cost_converted)
-                    $('#show-profit').html(guaranteeBank.profit_converted)
-                    $('input[type="radio"]:checked').prop('checked',false)
-                    const groupByCategory = scoringGroupBy(guaranteeBank.scorings)
-                    Object.keys(groupByCategory).forEach(key => {
-                        $('#show-scoring-category').html(key)
-                        let subtotal = 0
-                        groupByCategory[key].forEach(e => {
-                            $('#show-scoring-score-'+e.scoring_id+'-'+e.scoring_detail_id).prop('checked',true)
-                            subtotal += e.value
-                        });
-                        $('#show-sub-total-'+key).html(subtotal)
-                    });
                 }
             })
         })

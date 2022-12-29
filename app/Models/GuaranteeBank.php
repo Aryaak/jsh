@@ -85,15 +85,27 @@ class GuaranteeBank extends Model
 
     public function serviceChargeConverted(): Attribute
     {
-        return Attribute::make(get: fn () => Sirius::toRupiah($this->service_charge));
+        if($this->service_charge != null){
+            return Attribute::make(get: fn () => Sirius::toRupiah($this->service_charge));
+        }else{
+            return Attribute::make(get: fn () => Sirius::toRupiah(0));
+        }
     }
     public function adminChargeConverted(): Attribute
     {
-        return Attribute::make(get: fn () => Sirius::toRupiah($this->admin_charge));
+        if($this->admin_charge != null){
+            return Attribute::make(get: fn () => Sirius::toRupiah($this->admin_charge));
+        }else{
+            return Attribute::make(get: fn () => Sirius::toRupiah(0));
+        }
     }
     public function totalChargeConverted(): Attribute
     {
-        return Attribute::make(get: fn () => Sirius::toRupiah($this->total_charge));
+        if($this->total_charge != null){
+            return Attribute::make(get: fn () => Sirius::toRupiah($this->total_charge));
+        }else{
+            return Attribute::make(get: fn () => Sirius::toRupiah(0));
+        }
     }
     public function contractValueConverted(): Attribute
     {
@@ -300,7 +312,6 @@ class GuaranteeBank extends Model
         $request = (object)$params;
         $guaranteeBank = self::create($request->guaranteeBank);
         $guaranteeBank->ubahStatus(['type' => 'process','status' => 'input']);
-        $guaranteeBank->scorings()->createMany($request->scoring);
         return $guaranteeBank;
     }
     public function ubah(array $params): bool{

@@ -108,7 +108,7 @@
         let table = null
         let guaranteeBank = null
         $(document).ready(function () {
-            select2Init("#create-branch-id",'{{ route('select2.branch') }}',0)
+            select2Init("#create-branch-id",'{{ route('select2.branchClient') }}',0)
             select2Init("#create-agent-id",'{{ route('select2.agent') }}',0)
             select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0)
             select2Init("#create-principal-id",'{{ route('select2.principal') }}',0)

@@ -16,6 +16,10 @@ class Select2Controller extends Controller
         return response()->json(Select2::branch($request->search));
     }
 
+    public function branch_client(Request $request){
+        return response()->json(Select2::branch_client($request->search));
+    }
+
     public function bank(Request $request){
         return response()->json(Select2::bank($request->search));
     }

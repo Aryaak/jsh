@@ -204,6 +204,12 @@ class GuaranteeBank extends Model
     public function insurance_status(){
         return $this->hasOne(GuaranteeBankStatus::class)->ofMany(['id' => 'max'], function($query){$query->where('type','insurance'); });
     }
+    public static function requestReceiptNumber(array $params): array{
+        $nextNumber = (self::where('branch_id',$params['branchId'])->max('receipt_number') ?? 0) + 1;
+        return [
+            'receiptNumber' => Sirius::fetchReceiptNumber($nextNumber)
+        ];
+    }
     private static function fetch(object $args): object{
         $bankRate = BankRate::where([['bank_id',$args->bankId],['insurance_type_id',$args->insuranceTypeId],['insurance_id',$args->insuranceId]])->firstOrFail();
         $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',$args->bankId]])->firstOrFail();

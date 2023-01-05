@@ -11,7 +11,7 @@
             @if ($global->currently_on == 'branch')
                 <div>
                     <x-button link="{{ route('branch.products.draft.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug]) }}" size="sm" icon="bx bx-search" face="info">Lihat Draft @if ($count_draft > 0) <x-badge face="danger" class="ms-1">{{ $count_draft }}</x-badge> @endif</x-button>
-                    <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Surety Bond</x-button>
+                    <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus" onclick="requestReceiptNumber()">Tambah Surety Bond</x-button>
                 </div>
             @endif
         @endslot
@@ -47,7 +47,7 @@
                     <div class="col-md-4">
                         <div class="w-100 mb-4">
                             <x-card header="Data" smallHeader>
-                                <x-form-input label="No. Kwitansi" id="create-receipt-number" name="receiptNumber" class="mb-3" required />
+                                <x-form-input label="No. Kwitansi" id="create-receipt-number" name="receiptNumber" class="mb-3" required readonly/>
                                 <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
                                 <x-form-select label="Nama Agen" id="create-agent-id" name="agentId" class="mb-3" required/>
@@ -422,7 +422,7 @@
                     <div class="col-md-4">
                         <div class="w-100 mb-4">
                             <x-card header="Data" smallHeader>
-                                <x-form-input label="No. Kwitansi" id="edit-receipt-number" name="receiptNumber" class="mb-3" required />
+                                <x-form-input label="No. Kwitansi" id="edit-receipt-number" name="receiptNumber" class="mb-3" required readonly/>
                                 <x-form-input label="No. Bond" id="edit-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="edit-polish-number" name="polishNumber" class="mb-3" />
                                 <x-form-select label="Nama Agen" id="edit-agent-id" name="agentId" class="mb-3" required/>
@@ -1204,6 +1204,13 @@
                 ajaxPost("{{ route('branch.products.surety-bonds.update-status', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',suretyBond.id),params,modal,function(){
                     table.ajax.reload()
                 })
+            }
+            function requestReceiptNumber(){
+                ajaxGet("{{ route($global->currently_on.'.products.surety-bonds.request-receipt-number', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}",null,function(response){
+                    if(response.success){
+                        $('#create-receipt-number').val(response.data.receiptNumber)
+                    }
+                },null)
             }
         @endif
     </script>

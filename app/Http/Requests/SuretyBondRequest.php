@@ -32,7 +32,7 @@ class SuretyBondRequest extends FormRequest
             'documentTitle' => 'required',
             'documentNumber' => 'required',
             'documentExpiredAt' => 'required|date',
-            'scoring' => 'required|array',
+            'scoring' => 'nullable|array',
         ];
     }
     public function attributes()

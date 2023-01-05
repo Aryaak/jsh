@@ -1125,4 +1125,28 @@ class Sirius
 
         return "<span class='".implode(' ', $cls)."'>".$string.'</span>';
     }
+
+    /**
+    * JSH Exclusive, calculate net value of a product
+    *
+    * @param int Insurance value of a product
+    * @param float Rate value of an agent or insurance
+    * @param int Day count of a product
+    * @return float ex: 10000 or 13.3333,333
+    */
+    public static function calculateNetValue(int $insuranceValue,float $rateValue,int $dayCount): float{
+        return $insuranceValue * ($rateValue * 0.01) * ($dayCount > 90 ? $dayCount / 90 : 1);
+    }
+    /**
+    * JSH Exclusive, fetch receipt number of a product per branch and per product
+    *
+    * @param int Number that want to fetched
+    * @param int Max digit of fetched number
+    * @return string ex: 000001
+    */
+    public static function fetchReceiptNumber(int $number,int $maxDigit = 6): string{
+        $result = $number;
+        for ($i = 0;$i < $maxDigit - strlen($number) ; $i++) { $result = '0'.$result; }
+        return $result;
+    }
 }

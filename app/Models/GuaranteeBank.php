@@ -207,17 +207,20 @@ class GuaranteeBank extends Model
     private static function fetch(object $args): object{
         $bankRate = BankRate::where([['bank_id',$args->bankId],['insurance_type_id',$args->insuranceTypeId],['insurance_id',$args->insuranceId]])->firstOrFail();
         $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',$args->bankId]])->firstOrFail();
-        $scoring = array_map(function($key,$value){
-            return [
-                'scoring_id' => $key,
-                'scoring_detail_id' => $value,
-                'category' => Scoring::findOrFail($key)->category,
-                'value' => ScoringDetail::findOrFail($value)->value
-            ];
-        },array_keys($args->scoring),array_values($args->scoring));
+        $scoring = [];
+        if(isset($args->scoring)){
+            $scoring = array_map(function($key,$value){
+                return [
+                    'scoring_id' => $key,
+                    'scoring_detail_id' => $value,
+                    'category' => Scoring::findOrFail($key)->category,
+                    'value' => ScoringDetail::findOrFail($value)->value
+                ];
+            },array_keys($args->scoring),array_values($args->scoring));
+        }
         $totalScore = array_sum(array_column($scoring, 'value'));
-        $bankNet = ((int)$args->insuranceValue * ($bankRate->rate_value * 0.01) / (((int)$args->dayCount > 90) ? 90 : 1));
-        $officeNet = ((int)$args->insuranceValue * ($agentRate->rate_value * 0.01) / (((int)$args->dayCount > 90) ? 90 : 1));
+        $bankNet = Sirius::calculateNetValue($args->insuranceValue,$bankRate->rate_value,$args->dayCount);
+        $officeNet = Sirius::calculateNetValue($args->insuranceValue,$agentRate->rate_value,$args->dayCount);
 
         $bankNet = $bankNet >= $bankRate->min_value ? $bankNet : $bankRate->min_value;
         $officeNet = $officeNet >= $agentRate->min_value ? $officeNet : $agentRate->min_value;
@@ -305,7 +308,7 @@ class GuaranteeBank extends Model
         $request = self::fetch((object)$params);
         $guaranteeBank = self::create($request->guaranteeBank);
         $guaranteeBank->ubahStatus(['type' => 'process','status' => 'input']);
-        $guaranteeBank->scorings()->createMany($request->scoring);
+        if(isset($request->scoring)) $guaranteeBank->scorings()->createMany($request->scoring);
         return $guaranteeBank;
     }
     public static function buatDraft(array $params): self{
@@ -316,8 +319,10 @@ class GuaranteeBank extends Model
     }
     public function ubah(array $params): bool{
         $request = self::fetch((object)$params);
-        foreach ($request->scoring as $score) {
-            $this->scorings()->where('scoring_id',$score['scoring_id'])->update($score);
+        if(isset($request->scoring)){
+            foreach ($request->scoring as $score) {
+                $this->scorings()->where('scoring_id',$score['scoring_id'])->update($score);
+            }
         }
         return $this->update($request->guaranteeBank);
     }

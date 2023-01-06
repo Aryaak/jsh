@@ -9,7 +9,7 @@
     <title>{{ $title }} | JSH Dashboard</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/logos/favicon.png') }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,8 +46,8 @@
             <div class="layout-page full">
 
                 <!-- Navbar -->
-                <nav class="d-flex justify-content-center p-3">
-                    <a href="" class="app-brand-link">
+                <nav class="d-flex justify-content-center pt-5 pb-3">
+                    <a href="" class="app-brand-link" style="width:300px;">
                         <span class="app-brand-logo w-100">
                             <img src="{{ asset('assets/logos/logo.png') }}" alt="Logo JSH" class="w-100">
                         </span>

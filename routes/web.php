@@ -339,10 +339,12 @@ Route::middleware(['auth'])->group(function () {
             Route::put('surety-bond/{surety_bond}/update-status', [SuretyBondController::class, 'changeStatus'])->name('surety-bonds.update-status');
             Route::get('surety-bond/{surety_bond}/print-score', [SuretyBondController::class, 'printScore'])->name('surety-bonds.print-score');
             Route::get('surety-bond/{surety_bond}/cetak', [SuretyBondController::class, 'print'])->name('surety-bonds.print');
+            Route::get('surety-bond/request-receipt-number', [SuretyBondController::class, 'requestReceiptNumber'])->name('surety-bonds.request-receipt-number');
             Route::apiResource('surety-bond', SuretyBondController::class)->names('surety-bonds');
             Route::apiResource('surety-bond-draft', SuretyBondDraftController::class)->names('draft');
             Route::post('surety-bond-draft/{surety_bond_draft}', [SuretyBondDraftController::class, 'approve'])->name('client.approve');
             Route::put('surety-bond-draft/{surety_bond_draft}', [SuretyBondDraftController::class, 'decline'])->name('client.decline');
+            Route::get('bank-garansi/request-receipt-number', [GuaranteeBankController::class, 'requestReceiptNumber'])->name('guarantee-banks.request-receipt-number');
             Route::put('bank-garansi/{bank_garansi}/update-status', [GuaranteeBankController::class, 'changeStatus'])->name('guarantee-banks.update-status');
             Route::get('bank-garansi/{bank_garansi}/print-score', [GuaranteeBankController::class, 'printScore'])->name('guarantee-banks.print-score');
             Route::get('bank-garansi/{bank_garansi}/cetak', [GuaranteeBankController::class, 'print'])->name('guarantee-banks.print');

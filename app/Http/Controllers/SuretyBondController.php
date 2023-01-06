@@ -205,4 +205,15 @@ class SuretyBondController extends Controller
         $now = 'surety';
         return view('product.print',compact('now','suretyBond'));
     }
+    public function requestReceiptNumber(Branch $regional, Branch $branch){
+        try {
+            $response = $this->showResponse(SuretyBond::requestReceiptNumber(['branchId' => $branch->id]));
+            $http_code = 200;
+        } catch (Exception $e) {
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
+    }
 }

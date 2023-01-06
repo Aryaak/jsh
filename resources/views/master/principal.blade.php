@@ -8,7 +8,7 @@
 @section('contents')
     <x-card header="Daftar Principal">
         @slot('headerAction')
-            <x-button size="sm" id="btn-sync-with-jamsyar" icon="bx bx-refresh">Sync ke Jamsyar</x-button>
+            <x-button face="warning" size="sm" id="btn-sync-with-jamsyar" icon="bx bx-refresh">Sync ke Jamsyar</x-button>
             <x-button data-bs-toggle="modal" data-bs-target="#modal-create" size="sm" icon="bx bx-plus">Tambah Principal</x-button>
         @endslot
 
@@ -21,7 +21,7 @@
                     <th>No. HP/Telp</th>
                     <th>Skor</th>
                     <th>Status Sinkronisasi</th>
-                    <th width="105px">Tindakan</th>
+                    <th width="125px">Tindakan</th>
                 </tr>
             @endslot
         </x-table>

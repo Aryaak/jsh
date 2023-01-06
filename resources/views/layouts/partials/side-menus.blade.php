@@ -140,14 +140,6 @@
         <x-menu route="branch.master.*" icon="bx bxs-data">
             Master Data
             @slot('submenus')
-                <x-submenu route="branch.master.insurance-types.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Jenis Jaminan</x-submenu>
-                <x-submenu route="branch.master.templates.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Template</x-submenu>
-                <x-submenu route="branch.master.insurances.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Asuransi</x-submenu>
-                <x-submenu route="branch.master.insurance-rates.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Rate Asuransi</x-submenu>
-                <x-submenu route="branch.master.banks.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Bank</x-submenu>
-                <x-submenu route="branch.master.bank-rates.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Rate Bank</x-submenu>
-                <x-submenu route="branch.master.agents.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Agen</x-submenu>
-                <x-submenu route="branch.master.agent-rates.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Rate Agen</x-submenu>
                 <x-submenu route="branch.master.obligees.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Obligee</x-submenu>
                 <x-submenu route="branch.master.principals.index" :route-params="['regional' => $global->regional->slug, 'branch' => $global->branch->slug]">Principal</x-submenu>
             @endslot

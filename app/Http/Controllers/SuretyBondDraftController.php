@@ -252,4 +252,16 @@ class SuretyBondDraftController extends Controller
 
         return response()->json($response, $http_code);
     }
+
+    public function requestReceiptNumber(Branch $branch){
+        try {
+            $response = $this->showResponse(SuretyBond::requestReceiptNumber(['branchId' => $branch->id]));
+            $http_code = 200;
+        } catch (Exception $e) {
+            $http_code = $this->httpErrorCode($e->getCode());
+            $response = $this->errorResponse($e->getMessage());
+        }
+
+        return response()->json($response, $http_code);
+    }
 }

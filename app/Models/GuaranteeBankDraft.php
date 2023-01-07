@@ -159,6 +159,12 @@ class GuaranteeBankDraft extends Model
     {
         return Attribute::make(get: fn () => Sirius::toLongDate($this->document_expired_at));
     }
+    public static function requestReceiptNumber(array $params): array{
+        $nextNumber = (self::where('branch_id',$params['branchId'])->max('receipt_number') ?? 0) + 1;
+        return [
+            'receiptNumber' => Sirius::fetchReceiptNumber($nextNumber)
+        ];
+    }
 
     // Relations
     public function branch(){

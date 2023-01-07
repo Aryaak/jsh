@@ -6,8 +6,9 @@
 
 @section('contents')
     <x-card header="Cetak Surety Bond">
-        <x-form method="post" submit="Cetak" submitIcon="bx bxs-printer" action="{{ route('pdf.print') }}">
+        <x-form method="post" target="_blank" submit="Cetak" submitIcon="bx bxs-printer" action="{{ route('pdf.print') }}">
             <x-form-select label="Pilih Template" name="template" id="template" class="mb-3" class-input="select2" />
+            <input type="hidden" name="name" id="name" value="">
             <x-form-textarea label="Pratinjau" name="preview" id="preview" tinymce/>
         </x-form>
     </x-card>
@@ -38,6 +39,7 @@
         $(document).on('change', '#template', function () {
             ajaxGet('{{ route('master.templates.show','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
                 var template = (response.data.text)
+                document.getElementById("name").value = response.data.title;
                 @if ($now == 'bank')
                     template = template.replace('[[NoKwitansi]]','{{ $bankGaransi->receipt_number }}')
                     template = template.replace('[[NoBond]]','{{ $bankGaransi->bond_number }}')

@@ -175,7 +175,12 @@ class SuretyBondDraft extends Model
     {
         return Attribute::make(get: fn () => Sirius::toLongDate($this->document_expired_at));
     }
-
+    public static function requestReceiptNumber(array $params): array{
+        $nextNumber = (self::where('branch_id',$params['branchId'])->max('receipt_number') ?? 0) + 1;
+        return [
+            'receiptNumber' => Sirius::fetchReceiptNumber($nextNumber)
+        ];
+    }
     private static function fetch(object $args): object{
         $insuranceRate = InsuranceRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId]])->firstOrFail();
         $agentRate = AgentRate::where([['insurance_id',$args->insuranceId],['insurance_type_id',$args->insuranceTypeId],['agent_id',$args->agentId],['bank_id',null]])->firstOrFail();

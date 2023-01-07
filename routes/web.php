@@ -75,8 +75,10 @@ Route::get('/subagent', function (Request $request) {
  */
 Route::get('request-surety-bond', [SuretyBondDraftController::class, 'indexClient'])->name('client');
 Route::post('request-surety-bond', [SuretyBondDraftController::class, 'storeClient']);
+Route::get('request-receipt-number-sb/{branch}', [SuretyBondDraftController::class, 'requestReceiptNumber'])->name('surety-bonds-draft.request-receipt-number');
 Route::get('request-bank-garansi', [GuaranteeBankDraftController::class, 'indexClient'])->name('bgc');
 Route::post('request-bank-garansi', [GuaranteeBankDraftController::class, 'storeClient']);
+Route::get('request-receipt-number-bg/{branch}', [GuaranteeBankDraftController::class, 'requestReceiptNumber'])->name('guarantee-banks-draft.request-receipt-number');
 Route::get('principal-client/{principal}', [PrincipalController::class, 'show'])->name('client.principal');
 Route::get('obligee-client/{obligee}', [ObligeeController::class, 'show'])->name('client.obligee');
 Route::get('serviceworker.js', fn() => redirect()->route('main.dashboard')); // Entah kenapa beberapa kali login malah masuk ke sini

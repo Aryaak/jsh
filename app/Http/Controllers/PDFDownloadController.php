@@ -9,25 +9,31 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PDFDownloadController extends Controller
 {
-    public function pdf($id, $text = '')
+    public function pdf($id)
     {
         $template = Template::find($id);
         $data = ['content' => $template->text,];
         $pdf = Pdf::loadView('pdf', $data);
+        if($template->title == 'Kwitansi'){
+            $pdf->set_paper('A5', 'landscape');
+        }
         $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
         $fileName =  $template->title . '.' . 'pdf';
 
-        return $pdf->download($fileName);
+        return $pdf->stream($fileName);
     }
 
     public function pdfTemplate(Request $request)
     {
         $data = ['content' => $request->preview];
         $pdf = Pdf::loadView('pdf', $data);
+        if($request->name == 'Kwitansi'){
+            $pdf->set_paper('A5', 'landscape');
+        }
         $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
         $fileName =  date("Ymd").time() . '.' . 'pdf';
 
-        return $pdf->download($fileName);
+        return $pdf->stream($fileName);
     }
 
     public function pdfSB(Request $request)

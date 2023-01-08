@@ -12,6 +12,7 @@ use App\Models\GuaranteeBank;
 use App\Models\GuaranteeBankDraft;
 use App\Models\Scoring;
 use App\Models\GuaranteeBankDrafts;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
 
 class GuaranteeBankDraftController extends Controller
@@ -88,7 +89,7 @@ class GuaranteeBankDraftController extends Controller
         // }
         $data = [
             'guaranteeBank' => [
-                'receipt_number' => $bank_garansi_draft->receipt_number,
+                'receipt_number' => GuaranteeBank::requestReceiptNumber(['branchId' => $bank_garansi_draft->branch_id])['receiptNumber'],
                 'bond_number' => $bank_garansi_draft->bond_number,
                 'polish_number' => $bank_garansi_draft->polish_number,
                 'project_name' => $bank_garansi_draft->project_name,
@@ -126,6 +127,7 @@ class GuaranteeBankDraftController extends Controller
             ],
             // 'scoring' => $scoring
         ];
+        Debugbar::info($data);
 
         try {
             DB::beginTransaction();
@@ -157,7 +159,7 @@ class GuaranteeBankDraftController extends Controller
         // }
         $data = [
             'guaranteeBank' => [
-                'receipt_number' => $bank_garansi_draft->receipt_number,
+                'receipt_number' => GuaranteeBank::requestReceiptNumber(['branchId' => $bank_garansi_draft->branch_id])['receiptNumber'],
                 'bond_number' => $bank_garansi_draft->bond_number,
                 'polish_number' => $bank_garansi_draft->polish_number,
                 'project_name' => $bank_garansi_draft->project_name,
@@ -227,18 +229,6 @@ class GuaranteeBankDraftController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            $http_code = $this->httpErrorCode($e->getCode());
-            $response = $this->errorResponse($e->getMessage());
-        }
-
-        return response()->json($response, $http_code);
-    }
-
-    public function requestReceiptNumber(Branch $branch){
-        try {
-            $response = $this->showResponse(GuaranteeBank::requestReceiptNumber(['branchId' => $branch->id]));
-            $http_code = 200;
-        } catch (Exception $e) {
             $http_code = $this->httpErrorCode($e->getCode());
             $response = $this->errorResponse($e->getMessage());
         }

@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('guarantee_bank_drafts', function (Blueprint $table) {
             $table->id();
-            $table->string('receipt_number');
             $table->string('bond_number')->nullable();
             $table->string('polish_number')->nullable();
             $table->string('project_name')->nullable();

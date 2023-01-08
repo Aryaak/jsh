@@ -11,7 +11,6 @@
             @slot('thead')
                 <tr>
                     <th width="10px">No.</th>
-                    <th>No. Kwitansi</th>
                     <th>No. Bond</th>
                     <th>No. Polis</th>
                     <th>Nama Principal</th>
@@ -39,10 +38,6 @@
                         <div class="mb-3">
                             <x-form-label>Nama Cabang</x-form-label>
                             <div id="show-branch-name">-</div>
-                        </div>
-                        <div class="mb-3">
-                            <x-form-label>No. Kwitansi</x-form-label>
-                            <div id="show-receipt-number">-</div>
                         </div>
                         <div class="mb-3">
                             <x-form-label>No. Bond</x-form-label>
@@ -170,7 +165,6 @@
         let suretyBond = null
         $(document).ready(function () {
             table = dataTableInit('table','Draf Surety Bond',{url : '{{ route($global->currently_on.'.products.draft.index', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '']) }}'},[
-                {data: 'receipt_number', name: 'receipt_number'},
                 {data: 'bond_number', name: 'bond_number'},
                 {data: 'polish_number', name: 'polish_number'},
                 {data: 'principal.name', name: 'principal.name'},

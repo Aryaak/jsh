@@ -101,7 +101,9 @@
                 <x-template-placeholder>[[NamaPICPrincipal]]</x-template-placeholder>
                 <x-template-placeholder>[[JabatanPICPrincipal]]</x-template-placeholder>
                 <x-template-placeholder>[[NilaiKontrak]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiKontrakTerbilang]]</x-template-placeholder>
                 <x-template-placeholder>[[NilaiJaminan]]</x-template-placeholder>
+                <x-template-placeholder>[[NilaiJaminanTerbilang]]</x-template-placeholder>
                 <x-template-placeholder>[[JangkaAwal]]</x-template-placeholder>
                 <x-template-placeholder>[[JangkaAkhir]]</x-template-placeholder>
                 <x-template-placeholder>[[BatasToleransiJatuhTempo]]</x-template-placeholder>
@@ -113,8 +115,11 @@
                 <x-template-placeholder>[[NamaObligee]]</x-template-placeholder>
                 <x-template-placeholder>[[AlamatObligee]]</x-template-placeholder>
                 <x-template-placeholder>[[ServiceCharge]]</x-template-placeholder>
+                <x-template-placeholder>[[BiayaAdminTerbilang]]</x-template-placeholder>
                 <x-template-placeholder>[[BiayaAdmin]]</x-template-placeholder>
+                <x-template-placeholder>[[BiayaAdminTerbilang]]</x-template-placeholder>
                 <x-template-placeholder>[[PremiBayar]]</x-template-placeholder>
+                <x-template-placeholder>[[PremiBayarTerbilang]]</x-template-placeholder>
                 <x-template-placeholder>[[TotalNilai]]</x-template-placeholder>
                 <x-template-placeholder>[[StatusProses]]</x-template-placeholder>
                 <x-template-placeholder>[[StatusJaminan]]</x-template-placeholder>

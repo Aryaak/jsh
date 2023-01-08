@@ -13,7 +13,7 @@ class GuaranteeBankDraftRequest extends FormRequest
     {
         return [
             'branchId' => 'required',
-            'receiptNumber' => 'required',
+            'receiptNumber' => 'nullable', // Dibuat nullable karena dibuat otomatis, kalau ingin dinyalakan, harap bedakan antara Form Request untuk SB dari admin dan dari client (saat ini sama)
             'bondNumber' => 'required',
             'polishNumber' => 'required',
             'agentId' => 'required',

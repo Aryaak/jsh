@@ -19,7 +19,6 @@
                         <div class="w-100 mb-4">
                             <x-card header="Data" smallHeader>
                                 <x-form-select label="Cabang" id="create-branch-id" name="branchId" class="mb-3" required/>
-                                <x-form-input label="No. Kwitansi" id="create-receipt-number" name="receiptNumber" class="mb-3" required />
                                 <x-form-input label="No. Bond" id="create-bond-number" name="bondNumber" class="mb-3" />
                                 <x-form-input label="No. Polis" id="create-polish-number" name="polishNumber" class="mb-3" />
                                 <x-form-select label="Nama Agen" id="create-agent-id" name="agentId" class="mb-3" required/>

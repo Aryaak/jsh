@@ -12,6 +12,7 @@ use DB;
 use Exception;
 use App\Http\Requests\SuretyBondRequest;
 use App\Models\SuretyBond;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 class SuretyBondDraftController extends Controller
 {
@@ -105,7 +106,7 @@ class SuretyBondDraftController extends Controller
         // }
         $data = [
             'suretyBond' => [
-                'receipt_number' => $surety_bond_draft->receipt_number,
+                'receipt_number' => SuretyBond::requestReceiptNumber(['branchId' => $surety_bond_draft->branch_id])['receiptNumber'],
                 'bond_number' => $surety_bond_draft->bond_number,
                 'polish_number' => $surety_bond_draft->polish_number,
                 'project_name' => $surety_bond_draft->project_name,
@@ -173,7 +174,7 @@ class SuretyBondDraftController extends Controller
         // }
         $data = [
             'suretyBond' => [
-                'receipt_number' => $surety_bond_draft->receipt_number,
+                'receipt_number' => SuretyBond::requestReceiptNumber(['branchId' => $surety_bond_draft->branch_id])['receiptNumber'],
                 'bond_number' => $surety_bond_draft->bond_number,
                 'polish_number' => $surety_bond_draft->polish_number,
                 'project_name' => $surety_bond_draft->project_name,
@@ -246,18 +247,6 @@ class SuretyBondDraftController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            $http_code = $this->httpErrorCode($e->getCode());
-            $response = $this->errorResponse($e->getMessage());
-        }
-
-        return response()->json($response, $http_code);
-    }
-
-    public function requestReceiptNumber(Branch $branch){
-        try {
-            $response = $this->showResponse(SuretyBond::requestReceiptNumber(['branchId' => $branch->id]));
-            $http_code = 200;
-        } catch (Exception $e) {
             $http_code = $this->httpErrorCode($e->getCode());
             $response = $this->errorResponse($e->getMessage());
         }

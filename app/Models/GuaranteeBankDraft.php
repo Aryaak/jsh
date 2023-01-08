@@ -209,7 +209,6 @@ class GuaranteeBankDraft extends Model
         $officeNetTotal = $officeNet + $agentRate->polish_cost + $agentRate->stamp_cost;
         return (object)[
             'guaranteeBank' => [
-                'receipt_number' => $args->receiptNumber,
                 'bond_number' => $args->bondNumber,
                 'polish_number' => $args->polishNumber,
                 'project_name' => $args->projectName,

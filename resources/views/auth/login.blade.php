@@ -1,7 +1,7 @@
 @extends('layouts.auth', ['title' => 'Masuk'])
 
 @push('css')
-    <link rel="stylesheet" href="{{ asset('theme/css/pages/page-auth.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/theme/css/pages/page-auth.css') }}" />
 @endpush
 
 @section('contents')

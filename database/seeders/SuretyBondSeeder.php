@@ -31,6 +31,7 @@ class SuretyBondSeeder extends Seeder
                 "adminCharge" =>  mt_rand(15000,50000),
                 "contractValue" => mt_rand(15000000,500000000),
                 "insuranceValue" => mt_rand(15000000,50000000),
+                "createdDate" => now(),
                 "startDate" => date('Y-m-d',strtotime("+ $i days")),
                 "endDate" => date('Y-m-d',strtotime("+ ".(30+$i)." days")),
                 "dueDayTolerance" => mt_rand(0,2),

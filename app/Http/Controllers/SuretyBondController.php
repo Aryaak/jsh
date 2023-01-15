@@ -23,12 +23,11 @@ class SuretyBondController extends Controller
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
             $data = SuretyBond::with('insurance_status','insurance_status.status','principal')->select('surety_bonds.*')
-            ->whereIn('branch_id',($branch ? [$branch->id] : Branch::where('regional_id',$regional->id)->pluck('id')->toArray()))
-            ->orderBy('created_at','desc');
+            ->whereIn('branch_id',($branch ? [$branch->id] : Branch::where('regional_id',$regional->id)->pluck('id')->toArray()));
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
-            ->editColumn('start_date', fn($sb) => Sirius::toLongDate($sb->start_date))
+            ->editColumn('created_date', fn($sb) => Sirius::toLongDate($sb->created_date))
             ->editColumn('insurance_status.status.name', 'datatables.status-surety-bond')
             ->editColumn('action', $action)
             ->rawColumns(['insurance_status.status.name', 'action'])

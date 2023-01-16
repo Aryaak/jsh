@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('bond_number')->nullable();
             $table->string('polish_number')->nullable();
             $table->string('project_name')->nullable();
+            $table->date('created_date');
             $table->date('start_date');
             $table->date('end_date');
             $table->integer('day_count');

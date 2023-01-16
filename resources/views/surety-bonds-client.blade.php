@@ -84,7 +84,7 @@
                                 <x-form-input label="Nama Proyek" id="create-project-name" name="projectName" class="mb-3" required />
                                 <x-form-input label="Dokumen Pendukung" id="create-document-title" name="documentTitle" class="mb-3" />
                                 <x-form-input label="No. Dokumen Pendukung" id="create-document-number" name="documentNumber" class="mb-3" />
-                                <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
+                                <x-form-input label="Tanggal Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
                             </x-card>
                         </div>
                     </div>

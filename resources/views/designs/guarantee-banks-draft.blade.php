@@ -175,7 +175,7 @@
                             <div id="show-document-number">-</div>
                         </div>
                         <div>
-                            <x-form-label>Tanggal Berakhir Dokumen Pendukung</x-form-label>
+                            <x-form-label>Tanggal Dokumen Pendukung</x-form-label>
                             <div id="show-document-expired-at">-</div>
                         </div>
                     </x-card>

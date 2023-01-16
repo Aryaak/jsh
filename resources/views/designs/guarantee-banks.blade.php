@@ -134,7 +134,7 @@
                             <x-form-input label="Nama Proyek" id="create-project-name" name="projectName" class="mb-3" required />
                             <x-form-input label="Dokumen Pendukung" id="create-document-title" name="documentTitle" class="mb-3" />
                             <x-form-input label="No. Dokumen Pendukung" id="create-document-number" name="documentNumber" class="mb-3" />
-                            <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
+                            <x-form-input label="Tanggal Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
                         </x-card>
                     </div>
                 </div>
@@ -417,7 +417,7 @@
                             <div id="show-document-number">-</div>
                         </div>
                         <div>
-                            <x-form-label>Tanggal Berakhir Dokumen Pendukung</x-form-label>
+                            <x-form-label>Tanggal Dokumen Pendukung</x-form-label>
                             <div id="show-document-expired-at">-</div>
                         </div>
                     </x-card>
@@ -669,7 +669,7 @@
                             <x-form-input label="Nama Proyek" id="edit-project-name" name="projectName" class="mb-3" required />
                             <x-form-input label="Dokumen Pendukung" id="edit-document-title" name="documentTitle" class="mb-3" />
                             <x-form-input label="No. Dokumen Pendukung" id="edit-document-number" name="documentNumber" class="mb-3" />
-                            <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="edit-document-expired-at" name="documentExpiredAt" type="date" />
+                            <x-form-input label="Tanggal Dokumen Pendukung" id="edit-document-expired-at" name="documentExpiredAt" type="date" />
                         </x-card>
                     </div>
                 </div>

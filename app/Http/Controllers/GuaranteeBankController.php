@@ -210,15 +210,16 @@ class GuaranteeBankController extends Controller
         $bankGaransi->contract_value_in_text = strtoupper(Sirius::toRupiahInText($bankGaransi->contract_value));
         $bankGaransi->insurance_value_converted = Sirius::toRupiah($bankGaransi->insurance_value);
         $bankGaransi->insurance_value_in_text = strtoupper(Sirius::toRupiahInText($bankGaransi->insurance_value));
-        $bankGaransi->service_charge_converted = Sirius::toRupiah($bankGaransi->service_charge);
-        $bankGaransi->service_charge_in_text = strtoupper(Sirius::toRupiahInText($bankGaransi->service_charge));
-        $bankGaransi->admin_charge_converted = Sirius::toRupiah($bankGaransi->admin_charge);
-        $bankGaransi->admin_charge_in_text = strtoupper(Sirius::toRupiahInText($bankGaransi->admin_charge));
-        $bankGaransi->total_charge_converted = Sirius::toRupiah($bankGaransi->total_charge);
-        $bankGaransi->total_charge_in_text = strtoupper(Sirius::toRupiahInText($bankGaransi->total_charge));
+        $bankGaransi->service_charge_converted = Sirius::toRupiah($bankGaransi->service_charge ?? 0);
+        $bankGaransi->service_charge_in_text = strtoupper(Sirius::toRupiahInText($bankGaransi->service_charge ?? 0));
+        $bankGaransi->admin_charge_converted = Sirius::toRupiah($bankGaransi->admin_charge ?? 0);
+        $bankGaransi->admin_charge_in_text = strtoupper(Sirius::toRupiahInText($bankGaransi->admin_charge ?? 0));
+        $bankGaransi->total_charge_converted = Sirius::toRupiah($bankGaransi->total_charge ?? 0);
+        $bankGaransi->total_charge_in_text = strtoupper(Sirius::toRupiahInText($bankGaransi->total_charge ?? 0));
         $bankGaransi->start_date_dmy = date('d/m/Y', strtotime($bankGaransi->start_date));
         $bankGaransi->end_date_dmy = date('d/m/Y', strtotime($bankGaransi->end_date));
         $bankGaransi->document_expired_at_dmy = date('d/m/Y', strtotime($bankGaransi->document_expired_at));
+        $bankGaransi->today = date('d/m/Y');
 
         $id = $bankGaransi->bank->id;
         $now = 'bank';

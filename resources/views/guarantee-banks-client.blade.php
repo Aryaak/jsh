@@ -85,7 +85,7 @@
                                 <x-form-input label="Nama Proyek" id="create-project-name" name="projectName" class="mb-3" required />
                                 <x-form-input label="Dokumen Pendukung" id="create-document-title" name="documentTitle" class="mb-3" />
                                 <x-form-input label="No. Dokumen Pendukung" id="create-document-number" name="documentNumber" class="mb-3" />
-                                <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
+                                <x-form-input label="Tanggal Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
                             </x-card>
                         </div>
                     </div>
@@ -146,15 +146,6 @@
                 ajaxGet('{{ route('client.obligee','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
                     $('#'+creadit+'-obligee-address').html(response.data.address)
                 })
-            }
-        })
-        $(document).on('change', '#create-branch-id', function () {
-            if($(this).val() != ''){
-                ajaxGet("{{  route('guarantee-banks-draft.request-receipt-number', ['branch' => '-id-']) }}".replace('-id-',$(this).val()),null,function(response){
-                    if(response.success){
-                        $('#create-receipt-number').val(response.data.receiptNumber)
-                    }
-                },null)
             }
         })
         $(document).on('change', '#create-principal-id', function () {

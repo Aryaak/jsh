@@ -12,7 +12,6 @@ use DB;
 use Exception;
 use App\Http\Requests\SuretyBondRequest;
 use App\Models\SuretyBond;
-use Barryvdh\Debugbar\Facades\Debugbar;
 
 class SuretyBondDraftController extends Controller
 {
@@ -139,6 +138,7 @@ class SuretyBondDraftController extends Controller
                 'obligee_id' => $surety_bond_draft->obligee_id,
                 'insurance_id' => $surety_bond_draft->insurance_id,
                 'insurance_type_id' => $surety_bond_draft->insurance_type_id,
+                'created_date' => date('Y-m-d'),
                 // 'score' => $surety_bond_draft->score
             ],
             // 'scoring' => $scoring
@@ -174,7 +174,6 @@ class SuretyBondDraftController extends Controller
         // }
         $data = [
             'suretyBond' => [
-                'receipt_number' => SuretyBond::requestReceiptNumber(['branchId' => $surety_bond_draft->branch_id])['receiptNumber'],
                 'bond_number' => $surety_bond_draft->bond_number,
                 'polish_number' => $surety_bond_draft->polish_number,
                 'project_name' => $surety_bond_draft->project_name,

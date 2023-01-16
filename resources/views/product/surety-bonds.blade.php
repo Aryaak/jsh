@@ -85,8 +85,8 @@
                         </div>
                         <div class="w-100 mb-3">
                             <x-card header="Tambahan" smallHeader>
-                                <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                                <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+                                <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" />
+                                <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" />
                                 <div>
                                     <x-form-label>Premi Bayar</x-form-label>
                                     <div id="create-premi-charge">Rp0,-</div>

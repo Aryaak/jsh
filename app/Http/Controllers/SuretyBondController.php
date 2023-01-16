@@ -205,15 +205,16 @@ class SuretyBondController extends Controller
         $suretyBond->contract_value_in_text = strtoupper(Sirius::toRupiahInText($suretyBond->contract_value));
         $suretyBond->insurance_value_converted = Sirius::toRupiah($suretyBond->insurance_value);
         $suretyBond->insurance_value_in_text = strtoupper(Sirius::toRupiahInText($suretyBond->insurance_value));
-        $suretyBond->service_charge_converted = Sirius::toRupiah($suretyBond->service_charge);
-        $suretyBond->service_charge_in_text = strtoupper(Sirius::toRupiahInText($suretyBond->service_charge));
-        $suretyBond->admin_charge_converted = Sirius::toRupiah($suretyBond->admin_charge);
-        $suretyBond->admin_charge_in_text = strtoupper(Sirius::toRupiahInText($suretyBond->admin_charge));
-        $suretyBond->total_charge_converted = Sirius::toRupiah($suretyBond->total_charge);
-        $suretyBond->total_charge_in_text = strtoupper(Sirius::toRupiahInText($suretyBond->total_charge));
+        $suretyBond->service_charge_converted = Sirius::toRupiah($suretyBond->service_charge ?? 0);
+        $suretyBond->service_charge_in_text = strtoupper(Sirius::toRupiahInText($suretyBond->service_charge ?? 0));
+        $suretyBond->admin_charge_converted = Sirius::toRupiah($suretyBond->admin_charge ?? 0);
+        $suretyBond->admin_charge_in_text = strtoupper(Sirius::toRupiahInText($suretyBond->admin_charge ?? 0));
+        $suretyBond->total_charge_converted = Sirius::toRupiah($suretyBond->total_charge ?? 0);
+        $suretyBond->total_charge_in_text = strtoupper(Sirius::toRupiahInText($suretyBond->total_charge ?? 0));
         $suretyBond->start_date_dmy = date('d/m/Y', strtotime($suretyBond->start_date));
         $suretyBond->end_date_dmy = date('d/m/Y', strtotime($suretyBond->end_date));
         $suretyBond->document_expired_at_dmy = date('d/m/Y', strtotime($suretyBond->document_expired_at));
+        $suretyBond->today = date('d/m/Y');
 
         $now = 'surety';
         return view('product.print',compact('now','suretyBond'));

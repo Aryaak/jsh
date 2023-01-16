@@ -75,6 +75,7 @@
                     template = template.replaceAll('[[StatusProses]]','{{ $bankGaransi->process_status->status->name }}')
                     template = template.replaceAll('[[StatusJaminan]]','{{ $bankGaransi->insurance_status->status->name }}')
                     template = template.replaceAll('[[StatusPembayaran]]','{{ $bankGaransi->finance_status->status->name }}')
+                    template = template.replaceAll('[[TanggalHariIni]]','{{ $bankGaransi->today }}')
                 @else
                     template = template.replaceAll('[[NoKwitansi]]','{{ $suretyBond->receipt_number }}')
                     template = template.replaceAll('[[NoBond]]','{{ $suretyBond->bond_number }}')
@@ -110,6 +111,7 @@
                     template = template.replaceAll('[[StatusProses]]','{{ $suretyBond->process_status->status->name }}')
                     template = template.replaceAll('[[StatusJaminan]]','{{ $suretyBond->insurance_status->status->name }}')
                     template = template.replaceAll('[[StatusPembayaran]]','{{ $suretyBond->finance_status->status->name }}')
+                    template = template.replaceAll('[[TanggalHariIni]]','{{ $suretyBond->today }}')
                 @endif
                 tinymce.activeEditor.setContent(template);
             })

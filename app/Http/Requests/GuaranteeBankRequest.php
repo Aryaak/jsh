@@ -60,8 +60,8 @@ class GuaranteeBankRequest extends FormRequest
             'dayCount' => 'Jumlah Hari',
             'projectName' => 'Nama Proyek',
             'documentTitle' => 'Dokumen Pendukung',
-            'documentNumber' => 'Dokumen Pendukung',
-            'documentExpiredAt' => 'Tanggal Berakhir Dokumen',
+            'documentNumber' => 'No. Dokumen Pendukung',
+            'documentExpiredAt' => 'Tanggal Dokumen Pendukung',
             'scoring' => 'Scoring Bank Garansi',
         ];
     }

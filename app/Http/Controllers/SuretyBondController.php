@@ -214,6 +214,7 @@ class SuretyBondController extends Controller
         $suretyBond->start_date_dmy = date('d/m/Y', strtotime($suretyBond->start_date));
         $suretyBond->end_date_dmy = date('d/m/Y', strtotime($suretyBond->end_date));
         $suretyBond->document_expired_at_dmy = date('d/m/Y', strtotime($suretyBond->document_expired_at));
+        $suretyBond->today = date('d/m/Y');
 
         $now = 'surety';
         return view('product.print',compact('now','suretyBond'));

@@ -148,15 +148,6 @@
                 })
             }
         })
-        $(document).on('change', '#create-branch-id', function () {
-            if($(this).val() != ''){
-                ajaxGet("{{  route('guarantee-banks-draft.request-receipt-number', ['branch' => '-id-']) }}".replace('-id-',$(this).val()),null,function(response){
-                    if(response.success){
-                        $('#create-receipt-number').val(response.data.receiptNumber)
-                    }
-                },null)
-            }
-        })
         $(document).on('change', '#create-principal-id', function () {
             if($(this).val() != ''){
                 const creadit = $(this).attr('id').split('-')[0] //create or edit

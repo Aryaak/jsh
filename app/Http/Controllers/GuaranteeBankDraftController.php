@@ -11,7 +11,6 @@ use App\Models\Branch;
 use App\Models\GuaranteeBank;
 use App\Models\GuaranteeBankDraft;
 use App\Models\Scoring;
-use App\Models\GuaranteeBankDrafts;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
 
@@ -159,7 +158,6 @@ class GuaranteeBankDraftController extends Controller
         // }
         $data = [
             'guaranteeBank' => [
-                'receipt_number' => GuaranteeBank::requestReceiptNumber(['branchId' => $bank_garansi_draft->branch_id])['receiptNumber'],
                 'bond_number' => $bank_garansi_draft->bond_number,
                 'polish_number' => $bank_garansi_draft->polish_number,
                 'project_name' => $bank_garansi_draft->project_name,

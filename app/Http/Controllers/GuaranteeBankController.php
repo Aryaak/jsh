@@ -219,6 +219,7 @@ class GuaranteeBankController extends Controller
         $bankGaransi->start_date_dmy = date('d/m/Y', strtotime($bankGaransi->start_date));
         $bankGaransi->end_date_dmy = date('d/m/Y', strtotime($bankGaransi->end_date));
         $bankGaransi->document_expired_at_dmy = date('d/m/Y', strtotime($bankGaransi->document_expired_at));
+        $bankGaransi->today = date('d/m/Y');
 
         $id = $bankGaransi->bank->id;
         $now = 'bank';

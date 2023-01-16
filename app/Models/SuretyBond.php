@@ -238,6 +238,9 @@ class SuretyBond extends Model
 
         $insuranceNetTotal = $insuranceNet + $insuranceRate->polish_cost + $insuranceRate->rate_value;
         $officeNetTotal = $officeNet + $agentRate->polish_cost + $agentRate->stamp_cost;
+
+        $serviceCharge = $args->serviceCharge ?? 0;
+        $adminCharge = $args->adminCharge ?? 0;
         return (object)[
             'suretyBond' => [
                 'receipt_number' => $args->receiptNumber,
@@ -254,9 +257,9 @@ class SuretyBond extends Model
                 'document_expired_at' => $args->documentExpiredAt,
                 'contract_value' => $args->contractValue,
                 'insurance_value' => $args->insuranceValue,
-                'service_charge' => $args->serviceCharge,
-                'admin_charge' => $args->adminCharge,
-                'total_charge' => $args->serviceCharge + $args->adminCharge,
+                'service_charge' => $serviceCharge,
+                'admin_charge' => $adminCharge,
+                'total_charge' => $serviceCharge + $adminCharge,
                 'profit' => $officeNetTotal - $insuranceNetTotal,
                 'insurance_polish_cost' => $insuranceRate->polish_cost,
                 'insurance_stamp_cost' =>  $insuranceRate->stamp_cost,

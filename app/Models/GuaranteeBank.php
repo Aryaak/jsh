@@ -239,6 +239,9 @@ class GuaranteeBank extends Model
 
         $bankNetTotal = $bankNet + $bankRate->polish_cost + $bankRate->stamp_cost;
         $officeNetTotal = $officeNet + $agentRate->polish_cost + $agentRate->stamp_cost;
+
+        $serviceCharge = $args->serviceCharge ?? 0;
+        $adminCharge = $args->adminCharge ?? 0;
         return (object)[
             'guaranteeBank' => [
                 'receipt_number' => $args->receiptNumber,
@@ -255,9 +258,9 @@ class GuaranteeBank extends Model
                 'document_expired_at' => $args->documentExpiredAt,
                 'contract_value' => $args->contractValue,
                 'insurance_value' => $args->insuranceValue,
-                'service_charge' => $args->serviceCharge,
-                'admin_charge' => $args->adminCharge,
-                'total_charge' => $args->serviceCharge + $args->adminCharge,
+                'service_charge' => $serviceCharge,
+                'admin_charge' => $adminCharge,
+                'total_charge' => $serviceCharge + $adminCharge,
                 'profit' => $officeNetTotal - $bankNetTotal,
                 'insurance_polish_cost' => $bankRate->polish_cost,
                 'insurance_stamp_cost' =>  $bankRate->stamp_cost,

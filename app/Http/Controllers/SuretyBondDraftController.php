@@ -138,6 +138,7 @@ class SuretyBondDraftController extends Controller
                 'obligee_id' => $surety_bond_draft->obligee_id,
                 'insurance_id' => $surety_bond_draft->insurance_id,
                 'insurance_type_id' => $surety_bond_draft->insurance_type_id,
+                'created_date' => date('Y-m-d'),
                 // 'score' => $surety_bond_draft->score
             ],
             // 'scoring' => $scoring

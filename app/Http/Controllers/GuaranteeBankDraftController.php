@@ -122,6 +122,7 @@ class GuaranteeBankDraftController extends Controller
                 'obligee_id' => $bank_garansi_draft->obligee_id,
                 'insurance_id' => $bank_garansi_draft->insurance_id,
                 'insurance_type_id' => $bank_garansi_draft->insurance_type_id,
+                'created_date' => date('Y-m-d'),
                 // 'score' => $bank_garansi_draft->score
             ],
             // 'scoring' => $scoring

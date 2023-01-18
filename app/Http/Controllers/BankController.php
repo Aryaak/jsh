@@ -14,7 +14,7 @@ class BankController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Bank::with('templates')->orderBy('created_at','desc');
+            $data = Bank::with('templates')->Select('banks.*');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-show-delete')

@@ -25,6 +25,7 @@
                     'bond_number' => "No. Bond",
                     'principal_name' => "Nama Principal",
                     'insurance_value' => "Nilai Bond",
+                    'insurance_name' => "Nama Asuransi",
                 ];
 
                 $operators = [
@@ -68,6 +69,7 @@
                     <th rowspan="2" class="text-center">No. Kwitansi</th>
                     <th rowspan="2" class="text-center">No. Bond</th>
                     <th rowspan="2" class="text-center">Nama Prinicipal</th>
+                    <th rowspan="2" class="text-center">Nama Asuransi</th>
                     <th rowspan="2" class="text-center">Nilai Bond</th>
                     <th colspan="2" class="text-center">Jangka Waktu</th>
                     <th rowspan="2" class="text-center">Jml Hari</th>
@@ -91,7 +93,7 @@
                 </tr>
             @endslot
             @slot('tfoot')
-                <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+                <tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
             @endslot
         </x-table>
     </x-card>
@@ -131,6 +133,7 @@
                 {data: 'receipt_number', name: 'sb.receipt_number'},
                 {data: 'bond_number', name: 'sb.bond_number'},
                 {data: 'principal_name', name: 'p.name'},
+                {data: 'insurance_name', name: 'i.name'},
                 {data: 'insurance_value', name: 'sb.insurance_value'},
                 {data: 'start_date', name: 'sb.start_date'},
                 {data: 'end_date', name: 'sb.end_date'},
@@ -166,14 +169,14 @@
                             return parseFloat(intVal(a)) + parseFloat(intVal(b));
                         }, 0);
                     }
-                    $(api.column(4).footer()).html(numberFormat(calculateCol(4)));
-                    $(api.column(9).footer()).html(numberFormat(calculateCol(9)));
-                    $(api.column(10).footer()).html(numberFormat(calculateCol(10)));
-                    $(api.column(11).footer()).html(numberFormat(calculateCol(11)));
-                    $(api.column(12).footer()).html(numberFormat(calculateCol(12)));
-                    $(api.column(13).footer()).html(numberFormat(calculateCol(13)));
-                    $(api.column(14).footer()).html(numberFormat(calculateCol(14)));
-                    $(api.column(15).footer()).html(numberFormat(calculateCol(15)));
+                    $(api.column(5).footer()).html(numberFormat(calculateCol(4)));
+                    $(api.column(10).footer()).html(numberFormat(calculateCol(9)));
+                    $(api.column(11).footer()).html(numberFormat(calculateCol(10)));
+                    $(api.column(12).footer()).html(numberFormat(calculateCol(11)));
+                    $(api.column(13).footer()).html(numberFormat(calculateCol(12)));
+                    $(api.column(14).footer()).html(numberFormat(calculateCol(13)));
+                    $(api.column(15).footer()).html(numberFormat(calculateCol(14)));
+                    $(api.column(16).footer()).html(numberFormat(calculateCol(15)));
                 },
             },null,false,false)
         })

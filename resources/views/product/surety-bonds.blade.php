@@ -27,6 +27,9 @@
                     <th>Status Jaminan</th>
                     <th>Nilai Jaminan</th>
                     <th>Tanggal</th>
+                    @if ($global->currently_on == 'regional')
+                        <th>Cabang</th>
+                    @endif
                     <th width="125px">Tindakan</th>
                 </tr>
             @endslot
@@ -99,7 +102,6 @@
                             <x-card header="Jaminan" smallHeader>
                                 <x-form-input label="Nilai Kontrak" id="create-contract-value" name="contractValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Nilai Jaminan" id="create-insurance-value" name="insuranceValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                                <x-form-input label="Tanggal Buat" id="create-created-date" name="createdDate" type="date" class="mb-3" />
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <x-form-input label="Jangka Awal" id="create-start-date" name="startDate" type="date" class="mb-3" />
@@ -313,10 +315,6 @@
                                 <x-form-label>Nilai Jaminan</x-form-label>
                                 <div id="show-insurance-value">-</div>
                             </div>
-                            <div>
-                                <x-form-label>Tanggal Buat</x-form-label>
-                                <div id="show-created-date">-</div>
-                            </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6">
                                     <div>
@@ -479,7 +477,6 @@
                             <x-card header="Jaminan" smallHeader>
                                 <x-form-input label="Nilai Kontrak" id="edit-contract-value" name="contractValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
                                 <x-form-input label="Nilai Jaminan" id="edit-insurance-value" name="insuranceValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                                <x-form-input label="Tanggal Buat" id="edit-created-date" name="createdDate" type="date" class="mb-3" />
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <x-form-input label="Jangka Awal" id="edit-start-date" name="startDate" type="date" class="mb-3" />
@@ -919,7 +916,10 @@
                 {data: 'principal.name', name: 'principal.name'},
                 {data: 'insurance_status.status.name', name: 'insurance_status.status.name',orderable:false},
                 {data: 'insurance_value', name: 'insurance_value'},
-                {data: 'created_date', name: 'created_date'},
+                {data: 'created_at', name: 'created_at'},
+                @if ($global->currently_on == 'regional')
+                    {data: 'branch.name', name: 'branch.name'},
+                @endif
             ],{
               order: [[7,'desc']],
             })
@@ -1001,7 +1001,6 @@
                     $('#show-premi-charge').html(suretyBond.total_charge_converted)
                     $('#show-contract-value').html(suretyBond.contract_value_converted)
                     $('#show-insurance-value').html(suretyBond.insurance_value_converted)
-                    $('#show-created-date').html(suretyBond.created_date_converted)
                     $('#show-start-date').html(suretyBond.start_date_converted)
                     $('#show-end-date').html(suretyBond.end_date_converted)
                     $('#show-due-day-tolerance').html(suretyBond.due_day_tolerance)
@@ -1092,7 +1091,6 @@
                 $('#edit-admin-charge').val(numberFormat(suretyBond.admin_charge))
                 $('#edit-contract-value').val(numberFormat(suretyBond.contract_value))
                 $('#edit-insurance-value').val(numberFormat(suretyBond.insurance_value))
-                $('#edit-created-date').val(suretyBond.created_date)
                 $('#edit-start-date').val(suretyBond.start_date)
                 $('#edit-end-date').val(suretyBond.end_date)
                 $('#edit-due-day-tolerance-'+suretyBond.due_day_tolerance).prop('checked',true).trigger('input')

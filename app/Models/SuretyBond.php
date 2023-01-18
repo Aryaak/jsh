@@ -27,7 +27,6 @@ class SuretyBond extends Model
         'bond_number',
         'polish_number',
         'project_name',
-        'created_date',
         'start_date',
         'end_date',
         'day_count',
@@ -67,7 +66,6 @@ class SuretyBond extends Model
         'admin_charge_converted',
         'total_charge_converted',
         'contract_value_converted',
-        'created_date_converted',
         'start_date_converted',
         'end_date_converted',
         'document_expired_at_converted',
@@ -82,7 +80,6 @@ class SuretyBond extends Model
         'office_net_total_converted',
         'profit_converted',
     ];
-
     // Accessors
     public function serviceChargeConverted(): Attribute
     {
@@ -151,10 +148,6 @@ class SuretyBond extends Model
     public function profitConverted(): Attribute
     {
         return Attribute::make(get: fn () => Sirius::toRupiah($this->profit));
-    }
-    public function createdDateConverted(): Attribute
-    {
-        return Attribute::make(get: fn () => Sirius::toLongDate($this->created_date));
     }
     public function startDateConverted(): Attribute
     {
@@ -236,7 +229,7 @@ class SuretyBond extends Model
         $insuranceNet = $insuranceNet >= $insuranceRate->min_value ? $insuranceNet : $insuranceRate->min_value;
         $officeNet = $officeNet >= $agentRate->min_value ? $officeNet : $agentRate->min_value;
 
-        $insuranceNetTotal = $insuranceNet + $insuranceRate->polish_cost + $insuranceRate->rate_value;
+        $insuranceNetTotal = $insuranceNet + $insuranceRate->polish_cost + $insuranceRate->stamp_cost;
         $officeNetTotal = $officeNet + $agentRate->polish_cost + $agentRate->stamp_cost;
 
         $serviceCharge = $args->serviceCharge ?? 0;
@@ -247,7 +240,6 @@ class SuretyBond extends Model
                 'bond_number' => $args->bondNumber,
                 'polish_number' => $args->polishNumber,
                 'project_name' => $args->projectName,
-                'created_date' => $args->createdDate,
                 'start_date' => $args->startDate,
                 'end_date' => $args->endDate,
                 'day_count' => $args->dayCount,
@@ -474,6 +466,7 @@ class SuretyBond extends Model
             'polish_number' => 'sb.polish_number',
             'principal_name' => 'p.name',
             'insurance_value' => 'sb.insurance_value',
+            'insurance_name' => 'i.name',
         ];
         $params = [];
         if(isset($args->request_for)) unset($args->request_for);
@@ -524,9 +517,9 @@ class SuretyBond extends Model
     }
     public static function table(string $type,array $params){
         if($type == 'income'){
-            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal');
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.total_charge as nominal','i.name as insurance_name');
         }else if($type == 'expense'){
-            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.insurance_net_total as nominal');
+            return self::kueri($params)->select('sb.id','sb.created_at as date','sb.receipt_number','sb.bond_number','sb.polish_number','sb.insurance_net_total as nominal','i.name as insurance_name');
         }else if($type == 'production'){
             return self::kueri($params)->select(
                 'sb.receipt_number','sb.bond_number','p.name as principal_name','sb.insurance_value','sb.start_date','sb.end_date','sb.day_count','sb.due_day_tolerance','it.code',
@@ -536,7 +529,8 @@ class SuretyBond extends Model
                 'a.name as agent_name',
                 DB::raw("(
                     SELECT sts.name FROM statuses AS sts INNER JOIN surety_bond_statuses AS sbs ON sts.id = sbs.status_id WHERE sbs.type = 'insurance' AND sbs.surety_bond_id = sb.id ORDER BY sbs.id DESC limit 1
-                ) as status")
+                ) as status"),
+                'i.name as insurance_name'
             );
         }else if($type == 'finance'){
             return self::kueri($params)->join('payment_details as pmd','sb.id','pmd.surety_bond_id')->join('payments as pm','pm.id','pmd.payment_id')->select(
@@ -547,7 +541,8 @@ class SuretyBond extends Model
                 'a.name as agent_name',
                 DB::raw("(
                     SELECT sts.name FROM statuses AS sts INNER JOIN surety_bond_statuses AS sbs ON sts.id = sbs.status_id WHERE sbs.type = 'insurance' AND sbs.surety_bond_id = sb.id ORDER BY sbs.id DESC limit 1
-                ) as status")
+                ) as status"),
+                'i.name as insurance_name'
             );
         }else if($type == 'remain'){
             return self::kueri($params)->select(
@@ -560,10 +555,11 @@ class SuretyBond extends Model
                     SELECT IFNULL(pm.id,0) AS payment
                     from payments as pm inner join payment_details as pmd on pm.id=pmd.payment_id
                     where pmd.surety_bond_id = sb.id AND pm.agent_id = sb.agent_id ORDER BY pm.id DESC LIMIT 1
-                ) as payment")
+                ) as payment"),
+                'i.name as insurance_name'
             );
         }else if($type == 'profit'){
-            return self::kueri($params)->select('sb.receipt_number','sb.total_charge as debit','sb.insurance_net_total as credit');
+            return self::kueri($params)->select('sb.receipt_number','sb.total_charge as debit','sb.insurance_net_total as credit','i.name as insurance_name');
         }
     }
     public static function chart(string $type,array $params){

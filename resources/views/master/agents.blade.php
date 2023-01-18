@@ -149,7 +149,9 @@
                 {data: 'name', name: 'name'},
                 {data: 'phone', name: 'phone'},
                 {data: 'email', name: 'email'},
-            ])
+            ],{
+                order: [[1,'asc']],
+            })
 
             select2Init("#create-branch-id",'{{ route('select2.branch') }}',0,$('#modal-create'))
             select2Init("#edit-branch-id",'{{ route('select2.branch') }}',0,$('#modal-edit'))

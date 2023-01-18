@@ -392,6 +392,7 @@ class GuaranteeBank extends Model
             'polish_number' => 'sb.polish_number',
             'principal_name' => 'p.name',
             'insurance_value' => 'gb.insurance_value',
+            'insurance_name' => 'i.name',
         ];
         $params = [];
         if(isset($args->request_for)) unset($args->request_for);
@@ -441,9 +442,9 @@ class GuaranteeBank extends Model
     }
     public static function table(string $type,array $params){
         if($type == 'income'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.total_charge as nominal');
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.total_charge as nominal','i.name as insurance_name');
         }else if($type == 'expense'){
-            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.insurance_net_total as nominal');
+            return self::kueri($params)->select('gb.id','gb.created_at as date','gb.receipt_number','gb.bond_number','gb.polish_number','gb.insurance_net_total as nominal','i.name as insurance_name');
         }else if($type == 'production'){
             return self::kueri($params)->select(
                 'gb.receipt_number','gb.bond_number','p.name as principal_name','gb.insurance_value','gb.start_date','gb.end_date','gb.day_count','gb.due_day_tolerance','it.code',
@@ -453,7 +454,8 @@ class GuaranteeBank extends Model
                 'a.name as agent_name',
                 DB::raw("(
                     SELECT sts.name FROM statuses AS sts INNER JOIN guarantee_bank_statuses AS gbs ON sts.id = gbs.status_id WHERE gbs.type = 'insurance' AND gbs.guarantee_bank_id = gb.id ORDER BY gbs.id DESC limit 1
-                ) as status")
+                ) as status"),
+                'i.name as insurance_name'
             );
         }else if($type == 'finance'){
             return self::kueri($params)->join('payment_details as pmd','gb.id','pmd.guarantee_bank_id')->join('payments as pm','pm.id','pmd.payment_id')->select(
@@ -465,6 +467,7 @@ class GuaranteeBank extends Model
                 DB::raw("(
                     SELECT sts.name FROM statuses AS sts INNER JOIN guarantee_bank_statuses AS gbs ON sts.id = gbs.status_id WHERE gbs.type = 'insurance' AND gbs.guarantee_bank_id = gb.id ORDER BY gbs.id DESC limit 1
                 ) as status"),
+                'i.name as insurance_name'
             );
         }else if($type == 'remain'){
             return self::kueri($params)->select(
@@ -477,10 +480,11 @@ class GuaranteeBank extends Model
                     SELECT IFNULL(pm.id,0) AS payment
                     from payments as pm inner join payment_details as pmd on pm.id=pmd.payment_id
                     where pmd.guarantee_bank_id = gb.id AND pm.agent_id = gb.agent_id ORDER BY pm.id DESC LIMIT 1
-                ) as payment")
+                ) as payment"),
+                'i.name as insurance_name'
             );
         }else if($type == 'profit'){
-            return self::kueri($params)->select('gb.receipt_number','gb.total_charge as debit','gb.insurance_net_total as credit');
+            return self::kueri($params)->select('gb.receipt_number','gb.total_charge as debit','gb.insurance_net_total as credit','i.name as insurance_name');
         }
     }
     public static function chart(string $type,array $params){

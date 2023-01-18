@@ -10,15 +10,15 @@
 <body>
     <table>
         <tr>
-            <th colspan="6"><b>Laporan Pengeluaran</b></th>
+            <th colspan="7"><b>Laporan Pengeluaran</b></th>
         </tr>
         @if ($name !== '')
             <tr>
-                <th colspan="6"><b>{{ $name }}</b></th>
+                <th colspan="7"><b>{{ $name }}</b></th>
             </tr>
         @endif
         <tr>
-            <th colspan="6"><b>Periode: {{ $start }} - {{ $end }}</b></th>
+            <th colspan="7"><b>Periode: {{ $start }} - {{ $end }}</b></th>
         </tr>
     </table>
     <table>
@@ -30,6 +30,7 @@
                 <th><b>No. Bond</b></th>
                 <th><b>No. Polis</b></th>
                 <th><b>Nominal</b></th>
+                <th><b>Nama Asuransi</b></th>
             </tr>
         </thead>
         <tbody>
@@ -41,10 +42,11 @@
                     <td>{{ $d->bond_number }}</td>
                     <td>{{ $d->polish_number }}</td>
                     <td>{{ $d->nominal }}</td>
+                    <td>{{ $d->insurance_name }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6">Tidak ada data.</td>
+                    <td colspan="7">Tidak ada data.</td>
                 </tr>
             @endforelse
         </tbody>

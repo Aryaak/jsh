@@ -33,13 +33,13 @@ trait FormatterIncomeReport
     {
         return [
             'B' => '[$-21]dd mmmm yyyy h:mm:ss',
-            'F' => '"Rp"#,##0.00',
+            'F' => '"Rp"#,##0.000',
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        foreach (range('A', 'F') as $cell) {
+        foreach (range('A', 'G') as $cell) {
             $sheet->getStyle($cell)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         }
 
@@ -58,7 +58,7 @@ trait FormatterIncomeReport
             ]
         ];
 
-        $sheet->getStyle("A{$this->startRows}:F{$this->totalRows}")->applyFromArray($tableBorder);
+        $sheet->getStyle("A{$this->startRows}:G{$this->totalRows}")->applyFromArray($tableBorder);
 
         for ($row = 1; $row <= $this->totalRows; $row++) {
             $sheet->getRowDimension($row)->setRowHeight(21,'pt');

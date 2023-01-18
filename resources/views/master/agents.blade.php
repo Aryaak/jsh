@@ -32,12 +32,12 @@
             <x-form-select label="Cabang" id="create-branch-id" name="branch_id" class="mb-3" required/>
             <x-form-input label="Nama" id="create-name" name="name" class="mb-3" required />
             <x-form-input label="No. HP" id="create-phone" name="phone" class="mb-3" required />
-            <x-form-input label="Alamat Email" id="create-email" name="email" class="mb-3" type="email" />
-            <x-form-input label="Nomor Identitas" id="create-identity-number" name="identity_number" class="mb-3"/>
-            <x-form-textarea label="Alamat" id="create-address" name="address" class="mb-3" />
-            <x-form-select label="Nama Bank" id="create-bank-id" :options="[]" name="bank_id" class="mb-3"/>
-            <x-form-input label="No. Rekening" id="create-bank-number" name="number" class="mb-3" />
-            <x-form-input label="Atas Nama Rekening" id="create-bank-owner-name" name="name_bank" class="mb-3" />
+            <x-form-input label="Alamat Email" id="create-email" name="email" class="mb-3" type="email" required/>
+            <x-form-input label="Nomor Identitas" id="create-identity-number" name="identity_number" class="mb-3" required/>
+            <x-form-textarea label="Alamat" id="create-address" name="address" class="mb-3" required/>
+            <x-form-select label="Nama Bank" id="create-bank-id" :options="[]" name="bank_id" class="mb-3" required/>
+            <x-form-input label="No. Rekening" id="create-bank-number" name="number" class="mb-3" required/>
+            <x-form-input label="Atas Nama Rekening" id="create-bank-owner-name" name="name_bank" class="mb-3" required/>
             <div class="row">
                 <div class="col-sm-6 mb-3">
                     <x-form-label for="create-is-verified">Sudah Diverifikasi?</x-form-label>
@@ -110,12 +110,12 @@
             <x-form-select label="Cabang" id="edit-branch-id" :options="[]" name="branch_id" class="mb-3" required/>
             <x-form-input label="Nama" id="edit-name" name="name" class="mb-3" required />
             <x-form-input label="No. HP" id="edit-phone" name="phone" class="mb-3" required />
-            <x-form-input label="Alamat Email" id="edit-email" name="email" class="mb-3" type="email" />
-            <x-form-input label="Nomor Identitas" id="edit-identity-number" name="identity_number" class="mb-3"/>
-            <x-form-textarea label="Alamat" id="edit-address" name="address" class="mb-3" />
-            <x-form-select label="Nama Bank" id="edit-bank-id" name="bank_id" class="mb-3"/>
-            <x-form-input label="No. Rekening" id="edit-bank-number" name="number" class="mb-3" />
-            <x-form-input label="Atas Nama Rekening" id="edit-bank-owner-name" name="name_bank" class="mb-3" />
+            <x-form-input label="Alamat Email" id="edit-email" name="email" class="mb-3" type="email" required/>
+            <x-form-input label="Nomor Identitas" id="edit-identity-number" name="identity_number" class="mb-3" required/>
+            <x-form-textarea label="Alamat" id="edit-address" name="address" class="mb-3" required/>
+            <x-form-select label="Nama Bank" id="edit-bank-id" name="bank_id" class="mb-3" required/>
+            <x-form-input label="No. Rekening" id="edit-bank-number" name="number" class="mb-3" required/>
+            <x-form-input label="Atas Nama Rekening" id="edit-bank-owner-name" name="name_bank" class="mb-3" required/>
             <div class="row">
                 <div class="col-sm-6 mb-3">
                     <x-form-label for="edit-is-verified">Sudah Diverifikasi?</x-form-label>

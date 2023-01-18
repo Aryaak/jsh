@@ -36,12 +36,12 @@
                     <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Principal</div>
                 </div>
                 <div class="col-md-6">
-                    <x-form-input label="Nama Principal" id="create-info-name" name="info[name]" class="mb-3" required />
+                    <x-form-input label="Nama Principal" id="create-info-name" name="info[name]" class="mb-3" required/>
                     <x-form-input label="Email" id="create-info-email" name="info[email]" class="mb-3" type="email" />
                     <x-form-input label="No. HP/Telp" id="create-info-phone" name="info[phone]" class="mb-3" />
                     <x-form-input label="Domisili" id="create-info-domicile" name="info[domicile]" class="mb-3" />
-                    <x-form-select label="Provinsi" id="create-info-province-id" :options="[]" name="info[provinceId]" class="mb-3" required />
-                    <x-form-select label="Kota" id="create-info-city-id" :options="[]" name="info[cityId]" class="mb-3" required />
+                    <x-form-select label="Provinsi" id="create-info-province-id" :options="[]" name="info[provinceId]" class="mb-3" />
+                    <x-form-select label="Kota" id="create-info-city-id" :options="[]" name="info[cityId]" class="mb-3" />
                     <x-form-input label="Jamsyar ID" id="create-info-jamsyar-id" name="info[jamsyarId]" class="mb-3" />
                     <x-form-input label="Jamsyar Kode" id="create-info-jamsyar-code" name="info[jamsyarCode]" class="mb-3" />
                 </div>
@@ -54,7 +54,7 @@
                     <x-form-input label="Tanggal Berakhir NIB" id="create-info-nib-expired-at" name="info[nibExpiredAt]" type="date" class="mb-3" />
                 </div>
                 <div class="col-12">
-                    <x-form-textarea label="Alamat" id="create-info-address" name="info[address]" class="mb-3" required />
+                    <x-form-textarea label="Alamat" id="create-info-address" name="info[address]" class="mb-3" />
                 </div>
             </div>
 
@@ -225,12 +225,12 @@
                     <div class="h5 fw-bold border-bottom mb-3 pb-2">Informasi Principal</div>
                 </div>
                 <div class="col-md-6">
-                    <x-form-input label="Nama Principal" id="edit-info-name" name="info[name]" class="mb-3" required />
+                    <x-form-input label="Nama Principal" id="edit-info-name" name="info[name]" class="mb-3" required/>
                     <x-form-input label="Email" id="edit-info-email" name="info[email]" class="mb-3" type="email" />
                     <x-form-input label="No. HP/Telp" id="edit-info-phone" name="info[phone]" class="mb-3" />
                     <x-form-input label="Domisili" id="edit-info-domicile" name="info[domicile]" class="mb-3" />
-                    <x-form-select label="Provinsi" id="edit-info-province-id" name="info[provinceId]" class="mb-3" required />
-                    <x-form-select label="Kota" id="edit-info-city-id" name="info[cityId]" class="mb-3" required />
+                    <x-form-select label="Provinsi" id="edit-info-province-id" name="info[provinceId]" class="mb-3" />
+                    <x-form-select label="Kota" id="edit-info-city-id" name="info[cityId]" class="mb-3" />
                     <x-form-input label="Jamsyar ID" id="edit-info-jamsyar-id" name="info[jamsyarId]" class="mb-3" />
                     <x-form-input label="Jamsyar Kode" id="edit-info-jamsyar-code" name="info[jamsyarCode]" class="mb-3" />
                 </div>
@@ -243,7 +243,7 @@
                     <x-form-input label="Tanggal Berakhir NIB" id="edit-info-nib-expired-at" name="info[nibExpiredAt]" type="date" class="mb-3" />
                 </div>
                 <div class="col-12">
-                    <x-form-textarea label="Alamat" id="edit-info-address" name="info[address]" class="mb-3" required />
+                    <x-form-textarea label="Alamat" id="edit-info-address" name="info[address]" class="mb-3" />
                 </div>
             </div>
 
@@ -417,8 +417,8 @@
                     <div class="border rounded p-3">
                         <input type="hidden" id="edit-certificate-id" name="certificate[id][]" />
                         <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Sertifikat</x-button>
-                        <x-form-input label="Nomor" id="edit-certificate-number-` + counter + `" name="certificate[number][]" value="`+e.number+`" class="mb-3" required />
-                        <x-form-input label="Berlaku Hingga" id="edit-certificate-expired-at-` + counter + `" name="certificate[expiredAt][]" value="`+e.expired_at+`" class="mb-3" type="date" required />
+                        <x-form-input label="Nomor" id="edit-certificate-number-` + counter + `" name="certificate[number][]" value="`+e.number+`" class="mb-3" />
+                        <x-form-input label="Berlaku Hingga" id="edit-certificate-expired-at-` + counter + `" name="certificate[expiredAt][]" value="`+e.expired_at+`" class="mb-3" type="date" />
                     </div>
                 </div>
             `)
@@ -494,8 +494,8 @@
                     <div class="border rounded p-3">
                         ` + inputId + `
                         <x-button class="btn-delete-certificate w-100 mb-3" face='danger' icon="bx bx-trash" size='sm'>Hapus Akta Pendirian</x-button>
-                        <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number][]" class="mb-3" required />
-                        <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt][]" class="mb-3" type="date" required />
+                        <x-form-input label="Nomor" id="` + createOrEdit + `-certificate-number-` + counter + `" name="certificate[number][]" class="mb-3" />
+                        <x-form-input label="Berlaku Hingga" id="` + createOrEdit + `-certificate-expired-at-` + counter + `" name="certificate[expiredAt][]" class="mb-3" type="date" />
                     </div>
                 </div>
             `)

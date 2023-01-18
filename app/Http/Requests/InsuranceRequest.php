@@ -18,6 +18,15 @@ class InsuranceRequest extends FormRequest
             'pc_name' => 'required',
             'pc_position' => 'required',
         ];
-
+    }
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nama',
+            'alias' => 'Alias',
+            'address' => 'Alamat',
+            'pc_name' => 'Nama PIC',
+            'pc_position' => 'Jabatan PIC',
+        ];
     }
 }

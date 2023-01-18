@@ -36,7 +36,7 @@
                 <th rowspan="2">Tgl. Bayar</th>
                 <th rowspan="2">No. Kwitansi</th>
                 <th rowspan="2">No. Bond</th>
-                <th rowspan="2">Nama Principals</th>
+                <th rowspan="2">Nama Principal</th>
                 <th rowspan="2">Nilai Bond</th>
                 <th colspan="2">Jangka Waktu</th>
                 <th rowspan="2">Jml Hari</th>

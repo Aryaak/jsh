@@ -35,7 +35,7 @@ class SuretyBondReportPrintController
             $pdf = Pdf::loadView('pdf.production', compact('name', 'start', 'end', 'data'));
             $pdf->setPaper('A4', 'landscape');
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
-            return $pdf->download($fileName . '.' . 'pdf');
+            return $pdf->stream($fileName . '.' . 'pdf');
         }
         else if ($request->print == 'excel') {
             return Excel::download(new SuretyBondReportProductionExcel, $fileName . '.' . 'xlsx');
@@ -57,7 +57,7 @@ class SuretyBondReportPrintController
             $pdf = Pdf::loadView('pdf.finance', compact('name', 'start', 'end', 'data'));
             $pdf->setPaper('A4', 'landscape');
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
-            return $pdf->download($fileName . '.' . 'pdf');
+            return $pdf->stream($fileName . '.' . 'pdf');
         }
         else if ($request->print == 'excel') {
             return Excel::download(new SuretyBondReportFinanceExcel, $fileName . '.' . 'xlsx');
@@ -79,7 +79,7 @@ class SuretyBondReportPrintController
             $pdf = Pdf::loadView('pdf.remain', compact('name', 'start', 'end', 'data'));
             $pdf->setPaper('A4', 'landscape');
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
-            return $pdf->download($fileName . '.' . 'pdf');
+            return $pdf->stream($fileName . '.' . 'pdf');
         }
         else if ($request->print == 'excel') {
             return Excel::download(new SuretyBondReportRemainExcel, $fileName . '.' . 'xlsx');
@@ -101,7 +101,7 @@ class SuretyBondReportPrintController
             $pdf = Pdf::loadView('pdf.income', compact('name', 'start', 'end', 'data'));
             $pdf->setPaper('A4', 'landscape');
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
-            return $pdf->download($fileName . '.' . 'pdf');
+            return $pdf->stream($fileName . '.' . 'pdf');
         }
         else if ($request->print == 'excel') {
             return Excel::download(new SuretyBondReportIncomeExcel, $fileName . '.' . 'xlsx');
@@ -123,7 +123,7 @@ class SuretyBondReportPrintController
             $pdf = Pdf::loadView('pdf.expense', compact('name', 'start', 'end', 'data'));
             $pdf->setPaper('A4', 'landscape');
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
-            return $pdf->download($fileName . '.' . 'pdf');
+            return $pdf->stream($fileName . '.' . 'pdf');
         }
         else if ($request->print == 'excel') {
             return Excel::download(new SuretyBondReportExpenseExcel, $fileName . '.' . 'xlsx');
@@ -145,7 +145,7 @@ class SuretyBondReportPrintController
             $pdf = Pdf::loadView('pdf.profit', compact('name', 'start', 'end', 'data'));
             $pdf->setPaper('A4', 'landscape');
             $pdf->getDomPDF()->setBasePath(public_path('pdf/'));
-            return $pdf->download($fileName . '.' . 'pdf');
+            return $pdf->stream($fileName . '.' . 'pdf');
         }
         else if ($request->print == 'excel') {
             return Excel::download(new SuretyBondReportProfitExcel, $fileName . '.' . 'xlsx');

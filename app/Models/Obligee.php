@@ -63,7 +63,11 @@ class Obligee extends Model
     }
 
     public function hapus(){
-        $this->delete();
+        try {
+            return $this->delete();
+        } catch (Exception $ex) {
+            throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan di data lain!", 422);
+        }
     }
     public function sync(){
         $url = config('app.env') == 'local' ? 'http://devmicroservice.jamkrindosyariah.co.id/Api/add_obligee_sbd' : 'http://192.168.190.168:8002/Api/add_obligee_sbd';

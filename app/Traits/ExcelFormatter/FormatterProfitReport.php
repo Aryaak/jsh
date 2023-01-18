@@ -32,8 +32,8 @@ trait FormatterProfitReport
     public function columnFormats(): array
     {
         return [
-            'C' => '"Rp"#,##0.00',
-            'D' => '"Rp"#,##0.00',
+            'C' => '"Rp"#,##0.000',
+            'D' => '"Rp"#,##0.000',
         ];
     }
 

@@ -150,7 +150,7 @@ const ChartOptionToKg = {
 
 function loading() {
     Swal.fire({
-        html: "<div class='display-1'><i class='fa-solid fa-spin fa-circle-notch' style='color: #fff'></i></div>",
+        html: "<div id='loading-state' class='display-1'><i class='fa-solid fa-spin fa-circle-notch' style='color: #fff'></i></div>",
         background: 'rgba(255, 255, 255, 0)',
         allowOutsideClick: false,
         allowEscapeKey: false,

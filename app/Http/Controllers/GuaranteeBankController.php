@@ -22,12 +22,12 @@ class GuaranteeBankController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-products';
 
-            $data = GuaranteeBank::with('insurance_status','insurance_status.status','principal')->select('guarantee_banks.*')
+            $data = GuaranteeBank::with('insurance_status','insurance_status.status','principal','branch:id,name')->select('guarantee_banks.*')
             ->whereIn('branch_id',($branch ? [$branch->id] : Branch::where('regional_id',$regional->id)->pluck('id')->toArray()));
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($bg) => Sirius::toRupiah($bg->insurance_value))
-            ->editColumn('created_date', fn($bg) => Sirius::toLongDate($bg->created_date))
+            ->editColumn('created_at', fn($bg) => Sirius::toLongDateTime($bg->created_at))
             ->editColumn('insurance_status.status.name', 'datatables.status-guarantee-bank')
             ->editColumn('action', $action)
             ->rawColumns(['insurance_status.status.name', 'action'])

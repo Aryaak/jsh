@@ -26,7 +26,6 @@ class GuaranteeBank extends Model
         'bond_number',
         'polish_number',
         'project_name',
-        'created_date',
         'start_date',
         'end_date',
         'day_count',
@@ -68,7 +67,6 @@ class GuaranteeBank extends Model
         'total_charge_converted',
         'contract_value_converted',
         'insurance_value_converted',
-        'created_date_converted',
         'start_date_converted',
         'end_date_converted',
         'document_expired_at_converted',
@@ -153,10 +151,6 @@ class GuaranteeBank extends Model
     {
         return Attribute::make(get: fn () => Sirius::toRupiah($this->profit));
     }
-    public function createdDateConverted(): Attribute
-    {
-        return Attribute::make(get: fn () => Sirius::toLongDate($this->created_date));
-    }
     public function startDateConverted(): Attribute
     {
         return Attribute::make(get: fn () => Sirius::toLongDate($this->start_date));
@@ -171,6 +165,9 @@ class GuaranteeBank extends Model
     }
 
     // Relations
+    public function branch(){
+        return $this->belongsTo(Branch::class);
+    }
     public function bank(){
         return $this->belongsTo(Bank::class);
     }
@@ -248,7 +245,6 @@ class GuaranteeBank extends Model
                 'bond_number' => $args->bondNumber,
                 'polish_number' => $args->polishNumber,
                 'project_name' => $args->projectName,
-                'created_date' => $args->createdDate,
                 'start_date' => $args->startDate,
                 'end_date' => $args->endDate,
                 'day_count' => $args->dayCount,

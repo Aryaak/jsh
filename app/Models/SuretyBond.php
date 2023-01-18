@@ -27,7 +27,6 @@ class SuretyBond extends Model
         'bond_number',
         'polish_number',
         'project_name',
-        'created_date',
         'start_date',
         'end_date',
         'day_count',
@@ -67,7 +66,6 @@ class SuretyBond extends Model
         'admin_charge_converted',
         'total_charge_converted',
         'contract_value_converted',
-        'created_date_converted',
         'start_date_converted',
         'end_date_converted',
         'document_expired_at_converted',
@@ -82,7 +80,6 @@ class SuretyBond extends Model
         'office_net_total_converted',
         'profit_converted',
     ];
-
     // Accessors
     public function serviceChargeConverted(): Attribute
     {
@@ -151,10 +148,6 @@ class SuretyBond extends Model
     public function profitConverted(): Attribute
     {
         return Attribute::make(get: fn () => Sirius::toRupiah($this->profit));
-    }
-    public function createdDateConverted(): Attribute
-    {
-        return Attribute::make(get: fn () => Sirius::toLongDate($this->created_date));
     }
     public function startDateConverted(): Attribute
     {
@@ -236,7 +229,7 @@ class SuretyBond extends Model
         $insuranceNet = $insuranceNet >= $insuranceRate->min_value ? $insuranceNet : $insuranceRate->min_value;
         $officeNet = $officeNet >= $agentRate->min_value ? $officeNet : $agentRate->min_value;
 
-        $insuranceNetTotal = $insuranceNet + $insuranceRate->polish_cost + $insuranceRate->rate_value;
+        $insuranceNetTotal = $insuranceNet + $insuranceRate->polish_cost + $insuranceRate->stamp_cost;
         $officeNetTotal = $officeNet + $agentRate->polish_cost + $agentRate->stamp_cost;
 
         $serviceCharge = $args->serviceCharge ?? 0;
@@ -247,7 +240,6 @@ class SuretyBond extends Model
                 'bond_number' => $args->bondNumber,
                 'polish_number' => $args->polishNumber,
                 'project_name' => $args->projectName,
-                'created_date' => $args->createdDate,
                 'start_date' => $args->startDate,
                 'end_date' => $args->endDate,
                 'day_count' => $args->dayCount,

@@ -22,7 +22,7 @@ class GuaranteeBankDraftController extends Controller
             if (request()->routeIs('regional.*')) $action = 'datatables.actions-show';
             elseif (request()->routeIs('branch.*')) $action = 'datatables.actions-show-delete';
 
-            $data = GuaranteeBankDraft::with('principal')->orderBy('created_at','desc')->get();
+            $data = GuaranteeBankDraft::with('principal')->select('guarantee_bank_drafts');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('insurance_value', fn($sb) => Sirius::toRupiah($sb->insurance_value))
@@ -122,7 +122,7 @@ class GuaranteeBankDraftController extends Controller
                 'obligee_id' => $bank_garansi_draft->obligee_id,
                 'insurance_id' => $bank_garansi_draft->insurance_id,
                 'insurance_type_id' => $bank_garansi_draft->insurance_type_id,
-                'created_date' => date('Y-m-d'),
+                // 'created_date' => date('Y-m-d'),
                 // 'score' => $bank_garansi_draft->score
             ],
             // 'scoring' => $scoring

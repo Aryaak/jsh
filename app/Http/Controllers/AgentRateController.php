@@ -19,7 +19,7 @@ class AgentRateController extends Controller
                 return $query->has('bank');
             })->when($request->is_bg == 0, function ($query){
                 return $query->has('bank',0);
-            })->orderBy('created_at','desc');
+            });
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('min_value', fn($rate) => Sirius::toRupiah($rate->min_value))

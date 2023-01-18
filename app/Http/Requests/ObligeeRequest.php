@@ -14,10 +14,10 @@ class ObligeeRequest extends FormRequest
         return [
             'name' => 'required',
             'address' => 'required',
-            'type' => 'required',
-            'city_id' => 'required',
-            'jamsyar_id' => 'required',
-            'jamsyar_code' => 'required'
+            'type' => 'nullable',
+            'city_id' => 'nullable',
+            'jamsyar_id' => 'nullable',
+            'jamsyar_code' => 'nullable'
         ];
 
     }

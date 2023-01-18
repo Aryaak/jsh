@@ -45,6 +45,7 @@
                 <th>No. Bond</th>
                 <th>No. Polis</th>
                 <th>Nominal</th>
+                <th>Nama Asuransi</th>
             </tr>
         </thead>
         <tbody>
@@ -56,10 +57,11 @@
                     <td class="center">{{ $d->bond_number }}</td>
                     <td class="center">{{ $d->polish_number }}</td>
                     <td class="right">{{ Sirius::toRupiah($d->nominal) }}</td>
+                    <td>{{ $d->insurance_name }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="center">Tidak ada data.</td>
+                    <td colspan="7" class="center">Tidak ada data.</td>
                 </tr>
             @endforelse
         </tbody>

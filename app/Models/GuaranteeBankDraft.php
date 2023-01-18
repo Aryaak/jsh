@@ -254,7 +254,7 @@ class GuaranteeBankDraft extends Model
             $this->scorings()->delete();
             return $this->delete();
         } catch (Exception $ex) {
-            throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan data lain", 422);
+            throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan di data lain!", 422);
         }
     }
 }

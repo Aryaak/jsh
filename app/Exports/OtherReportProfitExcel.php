@@ -43,8 +43,8 @@ class OtherReportProfitExcel implements FromView, ShouldAutoSize, WithColumnForm
     public function columnFormats(): array
     {
         return [
-            'D' => '"Rp"#,##0.00',
-            'E' => '"Rp"#,##0.00',
+            'D' => '"Rp"#,##0.000',
+            'E' => '"Rp"#,##0.000',
         ];
     }
 

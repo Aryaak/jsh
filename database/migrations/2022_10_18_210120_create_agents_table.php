@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('is_active');
             $table->boolean('is_verified');
 
-            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->unsignedBigInteger('branch_id');
             $table->foreign('branch_id')->references('id')->on('branches');
             $table->timestamps();
         });

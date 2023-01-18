@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TemplateRequest;
 use DB;
 use Exception;
 use App\Models\Template;
@@ -22,7 +23,7 @@ class TemplateController extends Controller
         return view('master.templates');
     }
 
-    public function store(Request $request)
+    public function store(TemplateRequest $request)
     {
         try {
             DB::beginTransaction();
@@ -44,7 +45,7 @@ class TemplateController extends Controller
         return response()->json($this->showResponse($template->toArray()));
     }
 
-    public function update(Request $request, Template $template)
+    public function update(TemplateRequest $request, Template $template)
     {
         try {
             DB::beginTransaction();

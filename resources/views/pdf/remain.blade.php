@@ -42,7 +42,8 @@
                 <th rowspan="2">No.</th>
                 <th rowspan="2">No. Kwitansi</th>
                 <th rowspan="2">No. Bond</th>
-                <th rowspan="2">Nama Principals</th>
+                <th rowspan="2">Nama Principal</th>
+                <th rowspan="2">Nama Asuransi</th>
                 <th rowspan="2">Nilai Bond</th>
                 <th colspan="2">Jangka Waktu</th>
                 <th rowspan="2">Jml Hari</th>
@@ -75,7 +76,8 @@
                     <td>{{ $d->receipt_number }}</td>
                     <td>{{ $d->bond_number }}</td>
                     <td>{{ $d->principal_name }}</td>
-                    <td class="right">{{ number_format($d->insurance_value, 2, ',', '.') }}</td>
+                    <td>{{ $d->insurance_name }}</td>
+                    <td class="right">{{ number_format($d->insurance_value, 3, ',', '.') }}</td>
                     <td class="center">{{ date('d/m/y', strtotime($d->start_date)) }}</td>
                     <td class="center">{{ date('d/m/y', strtotime($d->end_date)) }}</td>
                     <td class="center">
@@ -86,13 +88,13 @@
                         @endif
                     </td>
                     <td class="center">{{ $d->code }}</td>
-                    <td class="right">{{ number_format($d->office_net, 2, ',', '.') }}</td>
-                    <td class="right">{{ number_format($d->admin_charge, 2, ',', '.') }}</td>
-                    <td class="right">{{ number_format($d->office_total, 2, ',', '.') }}</td>
-                    <td class="right">{{ number_format($d->service_charge, 2, ',', '.') }}</td>
-                    <td class="right">{{ number_format($d->admin_charge, 2, ',', '.') }}</td>
-                    <td class="right">{{ number_format($d->receipt_total, 2, ',', '.') }}</td>
-                    <td class="right">{{ number_format($d->total_charge, 2, ',', '.') }}</td>
+                    <td class="right">{{ number_format($d->office_net, 3, ',', '.') }}</td>
+                    <td class="right">{{ number_format($d->admin_charge, 3, ',', '.') }}</td>
+                    <td class="right">{{ number_format($d->office_total, 3, ',', '.') }}</td>
+                    <td class="right">{{ number_format($d->service_charge, 3, ',', '.') }}</td>
+                    <td class="right">{{ number_format($d->admin_charge, 3, ',', '.') }}</td>
+                    <td class="right">{{ number_format($d->receipt_total, 3, ',', '.') }}</td>
+                    <td class="right">{{ number_format($d->total_charge, 3, ',', '.') }}</td>
                     <td>{{ $d->agent_name }}</td>
                     <td class="center">{{ Str::title($d->status) }}</td>
                     <td class="center">{{ $d->payment > 0 ? "Lunas" : "Piutang" }}</td>
@@ -108,20 +110,20 @@
                 @endphp
             @empty
                 <tr>
-                    <td colspan="19" class="center">Tidak ada data.</td>
+                    <td colspan="20" class="center">Tidak ada data.</td>
                 </tr>
             @endforelse
             <tr>
+                <td colspan="5"></td>
+                <td class="right"><b>{{ number_format($sum_insurance_value, 3, ',', '.') }}</b></td>
                 <td colspan="4"></td>
-                <td class="right"><b>{{ number_format($sum_insurance_value, 2, ',', '.') }}</b></td>
-                <td colspan="4"></td>
-                <td class="right"><b>{{ number_format($sum_office_net, 2, ',', '.') }}</b></td>
-                <td class="right"><b>{{ number_format($sum_admin_charge, 2, ',', '.') }}</b></td>
-                <td class="right"><b>{{ number_format($sum_office_total, 2, ',', '.') }}</b></td>
-                <td class="right"><b>{{ number_format($sum_service_charge, 2, ',', '.') }}</b></td>
-                <td class="right"><b>{{ number_format($sum_admin_charge, 2, ',', '.') }}</b></td>
-                <td class="right"><b>{{ number_format($sum_receipt_total, 2, ',', '.') }}</b></td>
-                <td class="right"><b>{{ number_format($sum_total_charge, 2, ',', '.') }}</b></td>
+                <td class="right"><b>{{ number_format($sum_office_net, 3, ',', '.') }}</b></td>
+                <td class="right"><b>{{ number_format($sum_admin_charge, 3, ',', '.') }}</b></td>
+                <td class="right"><b>{{ number_format($sum_office_total, 3, ',', '.') }}</b></td>
+                <td class="right"><b>{{ number_format($sum_service_charge, 3, ',', '.') }}</b></td>
+                <td class="right"><b>{{ number_format($sum_admin_charge, 3, ',', '.') }}</b></td>
+                <td class="right"><b>{{ number_format($sum_receipt_total, 3, ',', '.') }}</b></td>
+                <td class="right"><b>{{ number_format($sum_total_charge, 3, ',', '.') }}</b></td>
                 <td colspan="3"></td>
             </tr>
         </tbody>

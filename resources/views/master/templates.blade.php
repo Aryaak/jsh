@@ -81,8 +81,7 @@
         </x-form>
 
         @slot('footer')
-            <div class="d-flex justify-content-between w-100">
-                <x-button data-bs-target="#modal-show" data-bs-toggle="modal" data-bs-dismiss="modal" face="dark" icon="bx bx-arrow-back">Kembali</x-button>
+            <div class="text-right">
                 <x-button id="create-save" face="success" icon="bx bxs-save">Simpan</x-button>
             </div>
         @endslot

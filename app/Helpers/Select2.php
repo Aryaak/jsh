@@ -71,9 +71,11 @@ class Select2
         })->get());
     }
 
-    public static function agent(?string $keyword = null){
+    public static function agent(?string $keyword = null,?string $branch = null){
         return self::fetch(Agent::when($keyword != '', function ($query) use ($keyword){
             return $query->where('name', 'like', "%$keyword%");
+        })->when($branch,function($query) use ($branch){
+            return $query->where('branch_id',$branch);
         })->get());
     }
 

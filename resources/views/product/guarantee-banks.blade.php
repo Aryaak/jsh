@@ -941,14 +941,24 @@
             })
 
             @if ($global->currently_on == 'branch')
-                select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,$('#modal-create'))
+                select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,$('#modal-create'),'-- Pilih --',false,function(params) {
+                    return {
+                        search: params.term ?? '',
+                        branchId: '{{ $global->branch->id }}',
+                    }
+                })
                 select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-create'))
                 select2Init("#create-principal-id",'{{ route('select2.principal') }}',0,$('#modal-create'))
                 select2Init("#create-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-create'))
                 select2Init("#create-insurance-type-id",'{{ route('select2.insuranceType') }}',0,$('#modal-create'))
                 select2Init("#create-bank-id",'{{ route('select2.bank') }}',0,$('#modal-create'))
 
-                select2Init("#edit-agent-id",'{{ route('select2.agent') }}',0,$('#modal-edit'))
+                select2Init("#edit-agent-id",'{{ route('select2.agent') }}',0,$('#modal-edit'),'-- Pilih --',false,function(params) {
+                    return {
+                        search: params.term ?? '',
+                        branchId: '{{ $global->branch->id }}',
+                    }
+                })
                 select2Init("#edit-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-edit'))
                 select2Init("#edit-principal-id",'{{ route('select2.principal') }}',0,$('#modal-edit'))
                 select2Init("#edit-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-edit'))

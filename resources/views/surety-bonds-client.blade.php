@@ -105,7 +105,12 @@
     <script>
         $(document).ready(function () {
             select2Init("#create-branch-id",'{{ route('select2.branchClient') }}',0)
-            select2Init("#create-agent-id",'{{ route('select2.agent') }}',0)
+            select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,'-- Pilih --',false,function(params) {
+                return {
+                    search: params.term ?? '',
+                    branchId: $('#create-branch-id').val(),
+                }
+            })
             select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0)
             select2Init("#create-principal-id",'{{ route('select2.principal') }}',0)
             select2Init("#create-insurance-id",'{{ route('select2.insurance') }}',0)

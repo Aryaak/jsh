@@ -108,7 +108,7 @@
         let guaranteeBank = null
         $(document).ready(function () {
             select2Init("#create-branch-id",'{{ route('select2.branchClient') }}',0)
-            select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,'-- Pilih --',false,function(params) {
+            select2Init("#create-agent-id",'{{ route('select2.agent') }}',null,0,'-- Pilih --',false,function(params) {
                 return {
                     search: params.term ?? '',
                     branchId: $('#create-branch-id').val(),
@@ -121,6 +121,9 @@
             select2Init("#create-bank-id",'{{ route('select2.bank') }}',0)
         })
 
+        $(document).on('change', '#create-branch-id', function () {
+            $("#create-agent-id").val(null).trigger('change')
+        })
         $(document).on('input', '#create-service-charge, #create-admin-charge', function () {
             const creadit = $(this).attr('id').split('-')[0] //create or edit
             const serviceCharge = parseInt($('#'+creadit+'-service-charge').val() ? $('#'+creadit+'-service-charge').val().replaceAll('.','') : 0)

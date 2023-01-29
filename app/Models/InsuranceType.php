@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +35,10 @@ class InsuranceType extends Model
         return $this->update(self::fetch((object)$params));
     }
     public function hapus(): bool{
-        return $this->delete();
+        try {
+            return $this->delete();
+        } catch (Exception $ex) {
+            throw new Exception("Data ini tidak dapat dihapus karena sedang digunakan di data lain!", 422);
+        }
     }
 }

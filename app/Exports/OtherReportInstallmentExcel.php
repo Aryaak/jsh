@@ -42,10 +42,10 @@ class OtherReportInstallmentExcel implements FromView, ShouldAutoSize, WithColum
     {
         return [
             'A' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'B' => '"Rp"#,##0.00',
-            'C' => '"Rp"#,##0.00',
+            'B' => '"Rp"#,##0.000',
+            'C' => '"Rp"#,##0.000',
             'D' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'E' => '"Rp"#,##0.00',
+            'E' => '"Rp"#,##0.000',
         ];
     }
 
@@ -64,9 +64,9 @@ class OtherReportInstallmentExcel implements FromView, ShouldAutoSize, WithColum
         $sheet->getStyle('D'.$this->totalRows + 2)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         $sheet->getStyle('D'.$this->totalRows + 3)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         $sheet->getStyle('D'.$this->totalRows + 4)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-        $sheet->getStyle('D'.$this->totalRows + 2)->getNumberFormat()->setFormatCode('"Rp"#,##0.00');
-        $sheet->getStyle('D'.$this->totalRows + 3)->getNumberFormat()->setFormatCode('"Rp"#,##0.00');
-        $sheet->getStyle('D'.$this->totalRows + 4)->getNumberFormat()->setFormatCode('"Rp"#,##0.00');
+        $sheet->getStyle('D'.$this->totalRows + 2)->getNumberFormat()->setFormatCode('"Rp"#,##0.000');
+        $sheet->getStyle('D'.$this->totalRows + 3)->getNumberFormat()->setFormatCode('"Rp"#,##0.000');
+        $sheet->getStyle('D'.$this->totalRows + 4)->getNumberFormat()->setFormatCode('"Rp"#,##0.000');
 
         $tableBorder = [
             'borders' => [

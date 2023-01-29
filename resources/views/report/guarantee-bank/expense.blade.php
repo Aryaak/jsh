@@ -25,6 +25,7 @@
                     'bond_number' => "No. Bond",
                     'polish_number' => "No. Polis",
                     'insurance_value' => "Nominal",
+                    'insurance_name' => "Nama Asuransi",
                 ];
 
                 $operators = [
@@ -77,6 +78,7 @@
                     <th>No. Bond</th>
                     <th>No. Polis</th>
                     <th>Nominal</th>
+                    <th>Asuransi</th>
                 </tr>
             @endslot
         </x-table>
@@ -116,7 +118,8 @@
                 {data: 'receipt_number',name: 'receipt_number'},
                 {data: 'bond_number',name: 'bond_number'},
                 {data: 'polish_number',name: 'polish_number'},
-                {data: 'nominal', name: 'insurance_net_total'}
+                {data: 'nominal', name: 'insurance_net_total'},
+                {data: 'insurance_name', name: 'i.name'},
             ],{},null,false,false)
 
             drawChart()

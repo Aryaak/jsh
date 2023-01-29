@@ -29,12 +29,12 @@ return new class extends Migration
             $table->decimal('profit',20,5);
             $table->unsignedInteger('insurance_polish_cost');
             $table->unsignedInteger('insurance_stamp_cost');
-            $table->unsignedDecimal('insurance_rate');
+            $table->unsignedDecimal('insurance_rate', 8, 3);
             $table->unsignedDecimal('insurance_net',10,2);
             $table->unsignedDecimal('insurance_net_total',10,2);
             $table->unsignedInteger('office_polish_cost');
             $table->unsignedInteger('office_stamp_cost');
-            $table->unsignedDecimal('office_rate');
+            $table->unsignedDecimal('office_rate', 8, 3);
             $table->unsignedDecimal('office_net',10,2);
             $table->unsignedDecimal('office_net_total',10,2);
             $table->foreignId('bank_id')->constrained();

@@ -29,13 +29,13 @@
 @section('modals')
     <x-modal id="modal-create" title="Tambah Obligee">
         <x-form id="form-create" method="post">
-            <x-form-input label="Nama" id="create-name" name="name" class="mb-3" required />
-            <x-form-select label="Provinsi" id="create-province-id" name="province_id" class="mb-3" required/>
-            <x-form-select label="Kota" id="create-city-id" name="city_id" class="mb-3" />
-            <x-form-select label="Jenis" id="create-type" name="type" class="mb-3" required :options="$types"/>
-            <x-form-input label="JamsyarID" id="create-jamsyar-id" name="jamsyar_id" class="mb-3" required />
-            <x-form-input label="JamsyarCode" id="create-jamsyar-code" name="jamsyar_code" class="mb-3" required />
-            <x-form-textarea label="Alamat" id="create-address" name="address" />
+            <x-form-input label="Nama" id="create-name" name="name" class="mb-3" required/>
+            <x-form-select label="Provinsi" id="create-province-id" name="province_id" class="mb-3"/>
+            <x-form-select label="Kota" id="create-city-id" name="city_id" class="mb-3"/>
+            <x-form-select label="Jenis" id="create-type" name="type" class="mb-3" :options="$types"/>
+            <x-form-input label="JamsyarID" id="create-jamsyar-id" name="jamsyar_id" class="mb-3"/>
+            <x-form-input label="JamsyarCode" id="create-jamsyar-code" name="jamsyar_code" class="mb-3"/>
+            <x-form-textarea label="Alamat" id="create-address" name="address" required/>
         </x-form>
 
         @slot('footer')
@@ -83,13 +83,13 @@
 
     <x-modal id="modal-edit" title="Ubah Obligee">
         <x-form id="form-edit" method="put">
-            <x-form-input label="Nama" id="edit-name" name="name" class="mb-3" required />
-            <x-form-select label="Provinsi" id="edit-province-id" name="province_id" class="mb-3" required/>
-            <x-form-select label="Kota" id="edit-city-id" name="city_id" class="mb-3" />
-            <x-form-select label="Jenis" id="edit-type" name="type" class="mb-3" required :options="$types"/>
-            <x-form-input label="JamsyarID" id="edit-jamsyar-id" name="jamsyar_id" class="mb-3" required />
-            <x-form-input label="JamsyarCode" id="edit-jamsyar-code" name="jamsyar_code" class="mb-3" required />
-            <x-form-textarea label="Alamat" id="edit-address" name="address" />
+            <x-form-input label="Nama" id="edit-name" name="name" class="mb-3" required/>
+            <x-form-select label="Provinsi" id="edit-province-id" name="province_id" class="mb-3"/>
+            <x-form-select label="Kota" id="edit-city-id" name="city_id" class="mb-3"/>
+            <x-form-select label="Jenis" id="edit-type" name="type" class="mb-3" :options="$types"/>
+            <x-form-input label="JamsyarID" id="edit-jamsyar-id" name="jamsyar_id" class="mb-3"/>
+            <x-form-input label="JamsyarCode" id="edit-jamsyar-code" name="jamsyar_code" class="mb-3"/>
+            <x-form-textarea label="Alamat" id="edit-address" name="address" required/>
         </x-form>
 
         @slot('footer')

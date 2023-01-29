@@ -87,7 +87,11 @@
     z-index: 1100 !important;
 }
 
-.swal2-html-container {
+.swal2-popup.swal2-toast .swal2-html-container {
+    line-height: 2em;
+}
+
+.swal2-html-container:has(#loading-state) {
     padding: 15px !important;
 }
 

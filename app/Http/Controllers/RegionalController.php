@@ -13,7 +13,7 @@ class RegionalController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Branch::where('is_regional',true)->select('branches.*')->orderBy('created_at','desc');
+            $data = Branch::where('is_regional',true)->select('branches.*');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-regional')

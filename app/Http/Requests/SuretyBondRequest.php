@@ -20,8 +20,8 @@ class SuretyBondRequest extends FormRequest
             'insuranceTypeId' => 'required',
             'obligeeId' => 'required',
             'principalId' => 'required',
-            'serviceCharge' => 'required|integer',
-            'adminCharge' => 'required|integer',
+            'serviceCharge' => 'nullable|integer',
+            'adminCharge' => 'nullable|integer',
             'contractValue' => 'required|integer',
             'insuranceValue' => 'required|integer',
             'startDate' => 'required|date',
@@ -56,8 +56,8 @@ class SuretyBondRequest extends FormRequest
             'dayCount' => 'Jumlah Hari',
             'projectName' => 'Nama Proyek',
             'documentTitle' => 'Dokumen Pendukung',
-            'documentNumber' => 'Dokumen Pendukung',
-            'documentExpiredAt' => 'Tanggal Berakhir Dokumen',
+            'documentNumber' => 'No. Dokumen Pendukung',
+            'documentExpiredAt' => 'Tanggal Dokumen Pendukung',
             'scoring' => 'Scoring Bank Garansi',
         ];
     }

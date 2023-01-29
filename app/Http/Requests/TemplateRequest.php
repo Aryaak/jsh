@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class InsuranceTypeRequest extends FormRequest
+class TemplateRequest extends FormRequest
 {
     /**
      * @return array<string, mixed>
@@ -12,17 +12,15 @@ class InsuranceTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'code' => 'required',
+            'title' => 'required',
+            'text' => 'required',
         ];
-
     }
     public function attributes(): array
     {
         return [
-            'name' => 'Nama',
-            'code' => 'Kode',
+            'title' => 'Judul',
+            'text' => 'Template',
         ];
-
     }
 }

@@ -33,7 +33,7 @@ class Select2Controller extends Controller
     }
 
     public function agent(Request $request){
-        return response()->json(Select2::agent($request->search));
+        return response()->json(Select2::agent($request->search,$request->branchId));
     }
 
     public function insurance(Request $request){

@@ -13,7 +13,7 @@ class ObligeeController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = Obligee::with('city')->orderBy('created_at','desc');
+            $data = Obligee::with('city')->select('obligees.*');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('action', 'datatables.actions-sync-show-delete')

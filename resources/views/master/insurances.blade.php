@@ -31,9 +31,9 @@
         <x-form id="form-create" method="post">
             <x-form-input id="create-name" name="name" label="Nama" class="mb-3" required />
             <x-form-input id="create-alias" name="alias" label="Alias" class="mb-3" required />
-            <x-form-textarea id="create-address" name="address" label="Alamat" class="mb-3" />
-            <x-form-input id="create-pic-name" name="pc_name" label="Nama PIC" class="mb-3" />
-            <x-form-input id="create-pic-position" name="pc_position" label="Jabatan PIC" />
+            <x-form-textarea id="create-address" name="address" label="Alamat" class="mb-3" required />
+            <x-form-input id="create-pic-name" name="pc_name" label="Nama PIC" class="mb-3" required />
+            <x-form-input id="create-pic-position" name="pc_position" label="Jabatan PIC" required />
         </x-form>
 
         @slot('footer')
@@ -72,9 +72,9 @@
         <x-form id="form-edit" method="put">
             <x-form-input id="edit-name" name="name" label="Nama" class="mb-3" required />
             <x-form-input id="edit-alias" name="alias" label="Alias" class="mb-3" required />
-            <x-form-textarea id="edit-address" name="address" label="Alamat" class="mb-3" />
-            <x-form-input id="edit-pic-name" name="pc_name" label="Nama PIC" class="mb-3" />
-            <x-form-input id="edit-pic-position" name="pc_position" label="Jabatan PIC" />
+            <x-form-textarea id="edit-address" name="address" label="Alamat" class="mb-3" required />
+            <x-form-input id="edit-pic-name" name="pc_name" label="Nama PIC" class="mb-3" required />
+            <x-form-input id="edit-pic-position" name="pc_position" label="Jabatan PIC" required />
         </x-form>
 
         @slot('footer')

@@ -45,11 +45,11 @@ class PaymentController extends Controller
         $type = $request->type;
         $data = null;
         if($type == 'principal_to_branch'){
-            $data = Payment::with('principal','branch')->select('payments.*')->where('branch_id', session()->get('branch')?->id)->whereType($type)->orderBy('created_at','desc');
+            $data = Payment::with('principal','branch')->select('payments.*')->where('branch_id', session()->get('branch')?->id)->whereType($type);
         }else if($type == 'regional_to_insurance'){
-            $data = Payment::with('insurance','regional')->select('payments.*')->where('regional_id', session()->get('regional')?->id)->whereType($type)->orderBy('created_at','desc');
+            $data = Payment::with('insurance','regional')->select('payments.*')->where('regional_id', session()->get('regional')?->id)->whereType($type);
         }else if($type == 'branch_to_agent'){
-            $data = Payment::with('branch','agent')->select('payments.*')->where('branch_id', session()->get('branch')?->id)->whereType($type)->orderBy('created_at','desc');
+            $data = Payment::with('branch','agent')->select('payments.*')->where('branch_id', session()->get('branch')?->id)->whereType($type);
         }
         return datatables()->of($data)
         ->addIndexColumn()

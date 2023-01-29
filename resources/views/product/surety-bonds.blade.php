@@ -27,6 +27,9 @@
                     <th>Status Jaminan</th>
                     <th>Nilai Jaminan</th>
                     <th>Tanggal</th>
+                    @if ($global->currently_on == 'regional')
+                        <th>Cabang</th>
+                    @endif
                     <th width="125px">Tindakan</th>
                 </tr>
             @endslot
@@ -85,8 +88,8 @@
                         </div>
                         <div class="w-100 mb-3">
                             <x-card header="Tambahan" smallHeader>
-                                <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-                                <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
+                                <x-form-input label="Service Charge" id="create-service-charge" name="serviceCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" />
+                                <x-form-input label="Biaya Admin" id="create-admin-charge" name="adminCharge" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" />
                                 <div>
                                     <x-form-label>Premi Bayar</x-form-label>
                                     <div id="create-premi-charge">Rp0,-</div>
@@ -123,7 +126,7 @@
                                 <x-form-input label="Nama Proyek" id="create-project-name" name="projectName" class="mb-3" required />
                                 <x-form-input label="Dokumen Pendukung" id="create-document-title" name="documentTitle" class="mb-3" />
                                 <x-form-input label="No. Dokumen Pendukung" id="create-document-number" name="documentNumber" class="mb-3" />
-                                <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
+                                <x-form-input label="Tanggal Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
                             </x-card>
                         </div>
                     </div>
@@ -347,7 +350,7 @@
                                 <div id="show-document-number">-</div>
                             </div>
                             <div>
-                                <x-form-label>Tanggal Berakhir Dokumen Pendukung</x-form-label>
+                                <x-form-label>Tanggal Dokumen Pendukung</x-form-label>
                                 <div id="show-document-expired-at">-</div>
                             </div>
                         </x-card>
@@ -498,7 +501,7 @@
                                 <x-form-input label="Nama Proyek" id="edit-project-name" name="projectName" class="mb-3" required />
                                 <x-form-input label="Dokumen Pendukung" id="edit-document-title" name="documentTitle" class="mb-3" />
                                 <x-form-input label="No. Dokumen Pendukung" id="edit-document-number" name="documentNumber" class="mb-3" />
-                                <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="edit-document-expired-at" name="documentExpiredAt" type="date" />
+                                <x-form-input label="Tanggal Dokumen Pendukung" id="edit-document-expired-at" name="documentExpiredAt" type="date" />
                             </x-card>
                         </div>
                     </div>
@@ -775,7 +778,7 @@
                                 <div id="show-document-number">-</div>
                             </div>
                             <div>
-                                <x-form-label>Tanggal Berakhir Dokumen Pendukung</x-form-label>
+                                <x-form-label>Tanggal Dokumen Pendukung</x-form-label>
                                 <div id="show-document-expired-at">-</div>
                             </div>
                         </x-card>
@@ -913,17 +916,32 @@
                 {data: 'principal.name', name: 'principal.name'},
                 {data: 'insurance_status.status.name', name: 'insurance_status.status.name',orderable:false},
                 {data: 'insurance_value', name: 'insurance_value'},
-                {data: 'start_date', name: 'start_date'},
-            ])
+                {data: 'created_at', name: 'created_at'},
+                @if ($global->currently_on == 'regional')
+                    {data: 'branch.name', name: 'branch.name'},
+                @endif
+            ],{
+              order: [[7,'desc']],
+            })
 
             @if ($global->currently_on == 'branch')
-                select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,$('#modal-create'))
+                select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,$('#modal-create'),'-- Pilih --',false,function(params) {
+                    return {
+                        search: params.term ?? '',
+                        branchId: '{{ $global->branch->id }}',
+                    }
+                })
                 select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-create'))
                 select2Init("#create-principal-id",'{{ route('select2.principal') }}',0,$('#modal-create'))
                 select2Init("#create-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-create'))
                 select2Init("#create-insurance-type-id",'{{ route('select2.insuranceType') }}',0,$('#modal-create'))
 
-                select2Init("#edit-agent-id",'{{ route('select2.agent') }}',0,$('#modal-edit'))
+                select2Init("#edit-agent-id",'{{ route('select2.agent') }}',0,$('#modal-edit'),'-- Pilih --',false,function(params) {
+                    return {
+                        search: params.term ?? '',
+                        branchId: '{{ $global->branch->id }}',
+                    }
+                })
                 select2Init("#edit-obligee-id",'{{ route('select2.obligee') }}',0,$('#modal-edit'))
                 select2Init("#edit-principal-id",'{{ route('select2.principal') }}',0,$('#modal-edit'))
                 select2Init("#edit-insurance-id",'{{ route('select2.insurance') }}',0,$('#modal-edit'))
@@ -975,9 +993,7 @@
             ajaxGet("{{ route($global->currently_on.'.products.surety-bonds.show', ['regional' => $global->regional->slug, 'branch' => $global->branch->slug ?? '', 'surety_bond' => '-id-']) }}".replace('-id-',$(this).data('id')),'',function(response){
                 if(response.success){
                     suretyBond = response.data
-
                     statuses = {};
-
                     $('#show-receipt-number').html(suretyBond.receipt_number)
                     $('#show-bond-number').html(suretyBond.bond_number)
                     $('#show-polish-number').html(suretyBond.polish_number)

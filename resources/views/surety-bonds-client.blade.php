@@ -84,7 +84,7 @@
                                 <x-form-input label="Nama Proyek" id="create-project-name" name="projectName" class="mb-3" required />
                                 <x-form-input label="Dokumen Pendukung" id="create-document-title" name="documentTitle" class="mb-3" />
                                 <x-form-input label="No. Dokumen Pendukung" id="create-document-number" name="documentNumber" class="mb-3" />
-                                <x-form-input label="Tanggal Berakhir Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
+                                <x-form-input label="Tanggal Dokumen Pendukung" id="create-document-expired-at" name="documentExpiredAt" type="date" />
                             </x-card>
                         </div>
                     </div>
@@ -105,13 +105,21 @@
     <script>
         $(document).ready(function () {
             select2Init("#create-branch-id",'{{ route('select2.branchClient') }}',0)
-            select2Init("#create-agent-id",'{{ route('select2.agent') }}',0)
+            select2Init("#create-agent-id",'{{ route('select2.agent') }}',0,null,'-- Pilih --',false,function(params) {
+                return {
+                    search: params.term ?? '',
+                    branchId: $('#create-branch-id').val(),
+                }
+            })
             select2Init("#create-obligee-id",'{{ route('select2.obligee') }}',0)
             select2Init("#create-principal-id",'{{ route('select2.principal') }}',0)
             select2Init("#create-insurance-id",'{{ route('select2.insurance') }}',0)
             select2Init("#create-insurance-type-id",'{{ route('select2.insuranceType') }}',0)
         })
 
+        $(document).on('change', '#create-branch-id', function () {
+            $("#create-agent-id").val(null).trigger('change')
+        })
         $(document).on('input', '#create-service-charge, #create-admin-charge', function () {
             const creadit = $(this).attr('id').split('-')[0] //create or edit
             const serviceCharge = parseInt($('#'+creadit+'-service-charge').val() ? $('#'+creadit+'-service-charge').val().replaceAll('.','') : 0)
@@ -142,15 +150,6 @@
                 ajaxGet('{{ route('client.obligee','-id-') }}'.replace('-id-',$(this).val()),null,function(response){
                     $('#'+creadit+'-obligee-address').html(response.data.address)
                 })
-            }
-        })
-        $(document).on('change', '#create-branch-id', function () {
-            if($(this).val() != ''){
-                ajaxGet("{{  route('surety-bonds-draft.request-receipt-number', ['branch' => '-id-']) }}".replace('-id-',$(this).val()),null,function(response){
-                    if(response.success){
-                        $('#create-receipt-number').val(response.data.receiptNumber)
-                    }
-                },null)
             }
         })
         $(document).on('change', '#create-principal-id', function () {

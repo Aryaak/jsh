@@ -14,7 +14,7 @@ class BankRateController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = BankRate::with('bank','insurance','insurance_type')->select('bank_rates.*')->orderBy('created_at','desc');
+            $data = BankRate::with('bank','insurance','insurance_type')->select('bank_rates.*');
             return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('min_value', fn($rate) => Sirius::toRupiah($rate->min_value))

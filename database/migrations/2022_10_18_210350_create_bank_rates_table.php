@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('bank_rates', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('min_value');
-            $table->float('rate_value');
+            $table->decimal('rate_value', 8, 3);
             $table->unsignedInteger('polish_cost');
             $table->unsignedInteger('stamp_cost');
             $table->string('desc')->nullable();

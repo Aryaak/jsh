@@ -10,15 +10,15 @@
 <body>
     <table>
         <tr>
-            <th colspan="19"><b>Laporan Sisa Agen</b></th>
+            <th colspan="20"><b>Laporan Sisa Agen</b></th>
         </tr>
         @if ($name !== '')
             <tr>
-                <th colspan="19"><b>{{ $name }}</b></th>
+                <th colspan="20"><b>{{ $name }}</b></th>
             </tr>
         @endif
         <tr>
-            <th colspan="19"><b>Periode: {{ $start }} - {{ $end }}</b></th>
+            <th colspan="20"><b>Periode: {{ $start }} - {{ $end }}</b></th>
         </tr>
     </table>
     <table>
@@ -27,7 +27,8 @@
                 <th rowspan="2"><b>No.</b></th>
                 <th rowspan="2"><b>No. Kwitansi</b></th>
                 <th rowspan="2"><b>No. Bond</b></th>
-                <th rowspan="2"><b>Nama Principals</b></th>
+                <th rowspan="2"><b>Nama Principal</b></th>
+                <th rowspan="2"><b>Nama Asuransi</b></th>
                 <th rowspan="2"><b>Nilai Bond</b></th>
                 <th colspan="2"><b>Jangka Waktu</b></th>
                 <th rowspan="2"><b>Jml Hari</b></th>
@@ -60,6 +61,7 @@
                     <td>{{ $d->receipt_number }}</td>
                     <td>{{ $d->bond_number }}</td>
                     <td>{{ $d->principal_name }}</td>
+                    <td>{{ $d->insurance_name }}</td>
                     <td>{{ $d->insurance_value }}</td>
                     <td>{{ \PhpOffice\PhpSpreadsheet\Shared\Date::dateTimeToExcel(\Carbon\Carbon::make($d->start_date)) }}</td>
                     <td>{{ \PhpOffice\PhpSpreadsheet\Shared\Date::dateTimeToExcel(\Carbon\Carbon::make($d->end_date)) }}</td>
@@ -93,11 +95,11 @@
                 @endphp
             @empty
                 <tr>
-                    <td colspan="19">Tidak ada data.</td>
+                    <td colspan="20">Tidak ada data.</td>
                 </tr>
             @endforelse
             <tr>
-                <td colspan="4"></td>
+                <td colspan="5"></td>
                 <td><b>{{ $sum_insurance_value }}</b></td>
                 <td colspan="4"></td>
                 <td><b>{{ $sum_office_net }}</b></td>

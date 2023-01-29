@@ -59,7 +59,7 @@
             <x-form-select label="Nama Asuransi" id="create-insurance-id-sb" name="insuranceId" class="mb-3" required/>
             <x-form-select label="Jenis Jaminan" id="create-insurance-type-id-sb" name="insuranceTypeId" class="mb-3" required/>
             <x-form-input label="Nilai Minimal" id="create-min-value-sb" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Nilai Rate" id="create-rate-value-sb" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
+            <x-form-input label="Nilai Rate" id="create-rate-value-sb" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="3" required />
             <x-form-input label="Biaya Polis" id="create-polish-cost-sb" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Materai" id="create-stamp-cost-sb" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="create-desc-sb" name="desc" />
@@ -111,7 +111,7 @@
             <x-form-select label="Nama Asuransi" id="edit-insurance-id-sb" :options="[]" name="insuranceId" class="mb-3" required/>
             <x-form-select label="Jenis Jaminan" id="edit-insurance-type-id-sb" :options="[]" name="insuranceTypeId" class="mb-3" required/>
             <x-form-input label="Nilai Minimal" id="edit-min-value-sb" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Nilai Rate" id="edit-rate-value-sb" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
+            <x-form-input label="Nilai Rate" id="edit-rate-value-sb" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="3" required />
             <x-form-input label="Biaya Polis" id="edit-polish-cost-sb" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Materai" id="edit-stamp-cost-sb" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="edit-desc-sb" name="desc" />
@@ -134,7 +134,7 @@
             <x-form-select label="Jenis Jaminan" id="create-insurance-type-id-bg" name="insuranceTypeId" class="mb-3" required/>
             <x-form-select label="Bank" id="create-bank-id-bg" name="bankId" class="mb-3" required/>
             <x-form-input label="Nilai Minimal" id="create-min-value-bg" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Nilai Rate" id="create-rate-value-bg" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
+            <x-form-input label="Nilai Rate" id="create-rate-value-bg" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="3" required />
             <x-form-input label="Biaya Polis" id="create-polish-cost-bg" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Materai" id="create-stamp-cost-bg" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="create-desc-bg" name="desc" />
@@ -191,7 +191,7 @@
             <x-form-select label="Jenis Jaminan" id="edit-insurance-type-id-bg" :options="[]" name="insuranceTypeId" class="mb-3" required/>
             <x-form-select label="Bank" id="edit-bank-id-bg" name="bankId" class="mb-3" required/>
             <x-form-input label="Nilai Minimal" id="edit-min-value-bg" name="minValue" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
-            <x-form-input label="Nilai Rate" id="edit-rate-value-bg" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="2" required />
+            <x-form-input label="Nilai Rate" id="edit-rate-value-bg" name="rateValue" class="mb-3" classInput="to-unit" data-decimals="3" required />
             <x-form-input label="Biaya Polis" id="edit-polish-cost-bg" name="polishCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-input label="Materai" id="edit-stamp-cost-bg" name="stampCost" prefix="Rp" suffix=",-" class="mb-3" classInput="to-rupiah" required />
             <x-form-textarea label="Keterangan" id="edit-desc-bg" name="desc" />
